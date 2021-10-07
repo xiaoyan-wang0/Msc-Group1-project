@@ -9,7 +9,14 @@
         class="featured-img"
         @click="dialogVisible = true"
       />
-
+        <el-tag class="tag-group"
+          style="magin-right: 8px"
+          v-for="item in movie.genres"
+          :key="item.id"
+          :color="orange"
+        >
+          {{ item.name }}
+        </el-tag>
       <p>{{ movie.overview }}</p>
       <a-rate :value="start" disabled allowHalf />
       <p>{{ movie.vote_average }}</p>
@@ -21,7 +28,7 @@
       :closable="false"
       :footer="null"
       :destroyOnClose="true"
-        :width="700"
+      :width="700"
       @cancel="handleCancel"
     >
       <YoutubeVue3
@@ -190,7 +197,12 @@ export default {
 
 <style lang="scss" >
 .movie-detail {
-  padding: 16px;
+  padding: 50px;
+  
+  .tag-group {
+  margin-right: 20px ;
+  margin-bottom: 10px ;
+  }
   h2 {
     color: #fff;
     font-size: 28px;
