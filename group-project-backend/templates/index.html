@@ -1,0 +1,16 @@
+{% extends "common/layout.html" %}
+{% block content %}
+
+<p> flask</p>
+<p>
+    {% for item in result %}
+    {{ item['email'] }}
+    {% endfor %}
+</p>
+<p> flask</p>
+<p>
+    {% for item in result %}
+    {{ item['userName'] }}
+    {% endfor %}
+</p>
+{% endblock %}
