@@ -1,7 +1,7 @@
 <template>
   <header>
     <router-link to="/">
-      <h1><span>Vue</span>Movie</h1>
+      <h1><span>AM</span>DB</h1>
     </router-link>
   </header>
   <main>
@@ -15,8 +15,10 @@
 
 <style lang="scss">
 body {
-  // background-color: #35495e !important;
-  background-color: #222b32 !important;
+  // background-color: #222b32 !important;
+
+  background-color: #080808 !important;
+
   // background-image: radial-gradient(
   //     white,
   //     rgba(255, 255, 255, 0.2) 2px,

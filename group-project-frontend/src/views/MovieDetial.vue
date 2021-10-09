@@ -9,17 +9,39 @@
         class="featured-img"
         @click="dialogVisible = true"
       />
-        <el-tag class="tag-group"
-          style="magin-right: 8px"
-          v-for="item in movie.genres"
-          :key="item.id"
-          :color="orange"
-        >
-          {{ item.name }}
-        </el-tag>
+      <el-tag
+        class="tag-group"
+        style="magin-right: 8px"
+        v-for="item in movie.genres"
+        :key="item.id"
+      >
+        {{ item.name }}
+      </el-tag>
       <p>{{ movie.overview }}</p>
       <a-rate :value="start" disabled allowHalf />
       <p>{{ movie.vote_average }}</p>
+    </div>
+
+    <div class="movie-casts">
+      <div class="cast" v-for="item in casts.cast" :key="item.id">
+        <router-link :to="'/movie/' + movie.imdbID" class="cast-link">
+          <a-card hoverable style="width: 150px">
+            <template #cover>
+              <img
+                alt="profile"
+                :src="
+                  item.profile_path != null
+                    ? moviePoster + item.profile_path
+                    : emptyprofile
+                "
+              />
+            </template>
+            <a-card-meta :title="item.character">
+              <template #description>{{ item.name }}</template>
+            </a-card-meta>
+          </a-card>
+        </router-link>
+      </div>
     </div>
 
     <a-modal
@@ -41,9 +63,51 @@
         @paused="onPaused"
         @played="onPlayed"
       />
-
-      <!-- </el-dialog> -->
     </a-modal>
+    <div class="commonts">
+      <a-list
+        v-if="comments.length"
+        :data-source="comments"
+        :header="`${comments.length} ${
+          comments.length > 1 ? 'replies' : 'reply'
+        }`"
+        item-layout="horizontal"
+      >
+        <template #renderItem="{ item }">
+          <a-list-item>
+            <a-comment
+              :author="item.author"
+              :avatar="item.avatar"
+              :content="item.content"
+              :datetime="item.datetime"
+            />
+          </a-list-item>
+        </template>
+      </a-list>
+      <a-comment>
+        <template #avatar>
+          <a-avatar
+            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            alt="Han Solo"
+          />
+        </template>
+        <template #content>
+          <a-form-item>
+            <a-textarea  v-model:value="value" :rows="4"/>
+          </a-form-item>
+          <a-form-item>
+            <a-button
+              html-type="submit"
+              :loading="submitting"
+              type="primary"
+              @click="handleSubmit"
+            >
+              Add Comment
+            </a-button>
+          </a-form-item>
+        </template>
+      </a-comment>
+    </div>
   </div>
 </template>
 
@@ -70,55 +134,31 @@ export default {
     YoutubeVue3,
   },
 
-  methods: {
-    stopCurrentVideo() {
-      this.$refs.youtube.player.stopVideo();
-    },
-    onEnded() {
-      console.log("## OnEnded");
-    },
-    onPaused() {
-      console.log("## OnPaused");
-    },
-    onPlayed() {
-      console.log("## OnPlayed");
-      // this.$refs.youtube.player.stopVideo();
-    },
-    onReady() {
-      this.$refs.youtube.player.stopVideo();
-    },
-  },
   setup() {
     const axios = inject("axios"); // inject axios
     const movie = ref({});
+    const casts = ref({});
     const start = ref();
     const route = useRoute();
+    const movieid = ref();
     const moviePoster = ref("");
     const video_id = ref("");
+    const emptyprofile = ref("");
     const dialogVisible = ref(false);
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
-
-    // Comments
+    movieid.value = route.params.id;
+    emptyprofile.value =
+      "https://img1.sc115.com/uploads/sc/jpg/HD/49/21850.jpg";
+    //comments
     const comments = ref([]);
     const submitting = ref(false);
     const value = ref("");
-
-    const action = ref();
     onBeforeMount(() => {
-      // fetch(
-      //   `http://www.omdbapi.com/?apikey=${env.omdbkey}&i=${route.params.id}&plot=full`
-      // )
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //     console.log(data);
-      //     movie.value = data;
-      //     start.value = movie.value.imdbRating / 2;
-      //   });
 
       // fetch movie detail
       axios
-        .get(env.tmdbmovieapi + route.params.id + "?" + env.tmdbkey)
+        .get(env.tmdbmovieapi + movieid.value + "?" + env.tmdbkey)
         .then((response) => {
           movie.value = response.data;
           console.log("movie detail");
@@ -126,10 +166,11 @@ export default {
           start.value = movie.value.vote_average / 2;
         });
 
+      //Fetch trailer
       axios
         .get(
           env.tmdbmovieapi +
-            route.params.id +
+            movieid.value +
             env.tmdbvideo +
             env.tmdbkey +
             env.tmdbtail
@@ -139,8 +180,22 @@ export default {
           console.log("video_id");
           console.log(video);
           video_id.value = video[0].key;
-          // video_id.value = "Vd2sm63Xwfw"
           console.log(video_id.value);
+        });
+
+      //Fetch casts
+      axios
+        .get(
+          env.tmdbmovieapi +
+            movieid.value +
+            env.tmdbcredits +
+            env.tmdbkey +
+            env.tmdbtail
+        )
+        .then((response) => {
+          casts.value = response.data;
+          console.log("casts detail");
+          console.log(casts.value);
         });
 
       // onEnded();
@@ -148,10 +203,13 @@ export default {
 
     onMounted(() => {
       console.log("onMounted");
-      // console.log(youtube.value.autoplay);
-      // youtube.value = ;
     });
 
+    const handleCancel = () => {
+      dialogVisible.value = false;
+    };
+
+    // commonts
     const handleSubmit = () => {
       if (!value.value) {
         return;
@@ -174,22 +232,23 @@ export default {
       }, 1000);
     };
 
-    const handleCancel = () => {
-      dialogVisible.value = false;
-    };
     return {
       movie,
       start,
-      comments,
-      submitting,
-      value,
-      handleSubmit,
+      casts,
+
       handleCancel,
-      action,
+
       moviePoster,
       video_id,
       youtube,
       dialogVisible,
+      emptyprofile,
+      // commonts
+      comments,
+      submitting,
+      value,
+      handleSubmit,
     };
   },
 };
@@ -198,10 +257,10 @@ export default {
 <style lang="scss" >
 .movie-detail {
   padding: 50px;
-  
+
   .tag-group {
-  margin-right: 20px ;
-  margin-bottom: 10px ;
+    margin-right: 20px;
+    margin-bottom: 10px;
   }
   h2 {
     color: #fff;
@@ -218,6 +277,22 @@ export default {
     color: #fff;
     font-size: 18px;
     line-height: 1.4;
+  }
+}
+.movie-casts {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 30px;
+  .cast {
+    max-width: 10%;
+    flex: 1 1 50%;
+    padding: 16px 8px;
+
+    .cast-link {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
   }
 }
 </style>

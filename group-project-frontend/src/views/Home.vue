@@ -107,7 +107,7 @@ export default {
           env.omdbapi + env.omdbkey + env.omdbapisearch + search.value
         );
         axios
-          .get(env.omdbapi + env.omdbkey + env.omdbapisearch + search.value)
+          .get(env.omdbapi + env.omdbkey + env.omdbapisearch + search.value + "&plot=full")
           .then(response => {
             movies.value = response.data.Search;
             search.value = "";

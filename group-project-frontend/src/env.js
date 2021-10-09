@@ -6,6 +6,7 @@ export default {
     tmdbmovieapi: "https://api.themoviedb.org/3/movie/",
     tmdbpopular: "popular?",
     tmdbhighscore: "top_rated?",
+    tmdbcredits: "/credits?",
     tmdbupcoming: "upcoming?",
     tmdblatest: "latest?",
     tmdbkey: "api_key=a3c878682c5c16b8e95b3db4b725a447",
