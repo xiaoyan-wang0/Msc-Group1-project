@@ -14,4 +14,6 @@ export default {
     tmdbtail: "&language=en-US&page=1",
     tmdbpic: "https://image.tmdb.org/t/p/w500/",
     tmdbvideo: "/videos?",
+    tmdbperson: "https://api.themoviedb.org/3/person/",
+    
 }

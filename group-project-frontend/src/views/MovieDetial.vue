@@ -1,7 +1,7 @@
  <template>
   <div class="detail-page">
     <a-modal
-      :visible="dialogVisible"
+      :visible="isShowTrailer"
       :maskClosable="true"
       :closable="false"
       :footer="null"
@@ -24,7 +24,7 @@
         :src="moviePoster + movie.poster_path"
         alt="Movie Poster"
         class="featured-img"
-        @click="dialogVisible = true"
+        @click="isShowTrailer = true"
       />
       <el-tag
         class="tag-group"
@@ -39,7 +39,7 @@
       <p>{{ movie.vote_average }}</p>
     </div>
 
-    <div class="movie-casts">
+    <!-- <div class="movie-casts">
       <div class="cast" v-for="item in casts.cast" :key="item.id">
         <router-link :to="'/movie/' + item.imdbID" class="cast-link">
           <div class="product-image">
@@ -51,7 +51,6 @@
               "
               alt="Cast profile"
             />
-            <!-- <div class="type">{{ movie.Type }}</div> -->
           </div>
           <div class="detail">
             <p class="character">{{ item.character }}</p>
@@ -59,7 +58,61 @@
           </div>
         </router-link>
       </div>
+    </div> -->
+
+    <div class="movie-casts">
+      <div
+        class="card"
+        v-for="item in casts.cast"
+        :key="item.id"
+        @click="showCastDetail(item.id)"
+      >
+        <div class="photo">
+          <img
+            :src="
+              item.profile_path != null
+                ? moviePoster + item.profile_path
+                : emptyprofile
+            "
+            alt="Cast profile"
+          />
+        </div>
+        <h2>{{ item.name }}</h2>
+        <h3>{{ item.character }}</h3>
+        <p></p>
+      </div>
     </div>
+
+    <el-dialog
+      v-model="isShowCastDetail"
+      title="Detail"
+      :before-close="handleClose"
+    >
+      <el-descriptions class="margin-top" :column="1">
+        <el-descriptions-item label="Name:"
+          >{{castDetail.name}}</el-descriptions-item
+        >
+        <el-descriptions-item label="Birthday:"
+          >{{castDetail.birthday}}</el-descriptions-item        >
+        <el-descriptions-item label="Department:">
+          <el-tag size="small" >{{castDetail.known_for_department}}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="Popularity:"
+          >{{castDetail.popularity}}</el-descriptions-item        >
+        <el-descriptions-item label="Also known as:">{{castDetail.also_known_as}}</el-descriptions-item>
+        <el-descriptions-item label="Biography:"
+          >{{castDetail.biography}}</el-descriptions-item
+        >
+      </el-descriptions>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="isShowCastDetail = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
 
     <div class="comments">
       <div
@@ -67,7 +120,7 @@
         v-for="item in tmdbreview.results"
         :key="item.id"
       >
-        <div class="photo">
+        <div class="photo-avatar">
           <div class="avatar">
             <a-avatar :src="item.author_details.avatar_path" />
           </div>
@@ -113,7 +166,7 @@
 </template>
 
 <script>
-import { ref, inject, onBeforeMount, onMounted } from "vue";
+import { ref, inject, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import env from "@/env.js";
 import moment from "moment";
@@ -139,6 +192,7 @@ export default {
     const axios = inject("axios"); // inject axios
     const movie = ref({});
     const casts = ref({});
+    const castDetail = ref({});
     const start = ref();
     const route = useRoute();
     const movieid = ref();
@@ -146,7 +200,8 @@ export default {
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
-    const dialogVisible = ref(false);
+    const isShowTrailer = ref(false);
+    const isShowCastDetail = ref(false);
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
     movieid.value = route.params.id;
@@ -221,7 +276,7 @@ export default {
     // });
 
     const handleCancel = () => {
-      dialogVisible.value = false;
+      isShowTrailer.value = false;
     };
 
     // comments
@@ -247,24 +302,38 @@ export default {
       }, 1000);
     };
 
+    const showCastDetail = (id) => {
+      isShowCastDetail.value = true;
+      console.log("showCastDetail");
+      console.log(id);
+      //Fetch Cast Detials
+      axios
+        .get(env.tmdbperson + id +"?"+ env.tmdbkey + env.tmdbtail)
+        .then((response) => {
+          castDetail.value = response.data;
+          console.log("castDetail detail");
+          console.log(castDetail.value);
+        });
+    };
     return {
       movie,
       start,
       casts,
-
-      handleCancel,
-
       moviePoster,
       video_id,
       youtube,
-      dialogVisible,
+      isShowTrailer,
       emptyprofile,
       // comments
       comments,
       submitting,
       value,
       tmdbreview,
+      castDetail,
+      isShowCastDetail,
+      handleCancel,
       handleSubmit,
+      showCastDetail,
     };
   },
 };
@@ -358,12 +427,12 @@ export default {
     width: 100%;
     min-height: 5.3125rem;
   }
-  .photo {
+  .photo-avatar {
     padding-top: 0.625rem;
     display: table-cell;
     width: 3.5rem;
   }
-  .photo .avatar {
+  .photo-avatar .avatar {
     height: 2.25rem;
     width: 2.25rem;
     border-radius: 50%;
@@ -400,5 +469,118 @@ export default {
   .comment-actions li.reply {
     padding-left: 0.625rem;
   }
+}
+
+.card {
+  /* flex布局下元素不按比例缩放 */
+  flex-shrink: 0;
+  flex-grow: 0;
+  position: relative;
+  width: 220px;
+  height: 350px;
+  overflow: hidden;
+  margin: 20px;
+  background-color: var(--border-color);
+  border-radius: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  /* flex 子元素 纵向排列 */
+  // flex-direction: column;
+  /* 增加个阴影 */
+  box-shadow: 0 0 30px #5c5b5b;
+  /* 同意给字体价格颜色 */
+  color: var(--font_color);
+
+  .photo {
+    position: absolute;
+    /* 默认为放大 */
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    // border-radius: 0%;
+    overflow: hidden;
+    transition: 0.5s;
+    border-radius: 18px;
+  }
+
+  h2 {
+    position: absolute;
+    top: 280px;
+    color: #fff;
+    transition: 0.5s;
+  }
+  h3 {
+    margin-top: 210px;
+    width: 100%;
+    color: #fff;
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--h2_border_color);
+  }
+  p {
+    width: 90%;
+    /* 段落缩进2个字符大小 */
+    text-indent: 2em;
+    font-size: 8px;
+    color: #ffffff;
+    margin-bottom: 10px;
+    line-height: 30px;
+  }
+
+  a {
+    color: var(--font_color);
+    text-decoration: none;
+    // padding: 12px 36px;
+    border: 1px solid var(--a_border_color);
+    border-radius: 8px;
+  }
+}
+.photo::before {
+  /* 通过before增加渐变背景实现遮罩，让文字默认看起来清晰一些 */
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to top,
+    rgb(51, 50, 50),
+    transparent,
+    transparent
+  );
+}
+.card:hover .photo::before {
+  /* 缩小时隐藏 */
+  display: none;
+}
+
+.photo img {
+  /* 图片高宽均为100% */
+  /* 然后按照cover缩放，裁切长边 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card:hover .photo {
+  /* 鼠标移上变小 */
+  width: 120px;
+  height: 120px;
+  top: 10px;
+  left: 40px;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #111;
+}
+
+.card:hover h2 {
+  position: absolute;
+  top: 170px;
+}
+
+a:hover {
+  color: #fff;
+  background-color: var(--a_hover_background_color);
 }
 </style>

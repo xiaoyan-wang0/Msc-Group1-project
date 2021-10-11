@@ -1,4 +1,5 @@
 <template>
+<div>
   <header>
     <router-link to="/">
       <h1><span>AM</span>DB</h1>
@@ -11,6 +12,7 @@
   <footer>
     <div class="footer"></div>
   </footer>
+</div>
 </template>
 
 <style lang="scss">

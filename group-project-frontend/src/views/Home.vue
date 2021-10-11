@@ -219,9 +219,9 @@ export default {
     }
   }
 
-  .main-menu li ul {
+  // .main-menu li ul {
     // font-size: 500px;
-  }
+  // }
   .search-box {
     display: flex;
     flex-direction: column;
