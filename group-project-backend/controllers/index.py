@@ -31,6 +31,19 @@ def json():
     response.headers["Content-Type"] = "application/json"
     return response
 
+@index_page.route("/userInfo")
+def test():
+    import json
+    data = {}
+    result = User.query.all()
+    #data['result'] = result
+    data['code'] = '100'
+    data['result'] = User.serialize_list(result)
+    #response = make_response( json.dumps( data ) )
+    response = make_response( json.dumps( data ) )
+    response.headers["Content-Type"] = "application/json"
+    return response
+
 @index_page.route( "/json2" )
 def json_same():
     data = { "a":"b" }
