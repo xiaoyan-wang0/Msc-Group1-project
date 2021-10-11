@@ -9,6 +9,7 @@ export default {
     tmdbcredits: "/credits?",
     tmdbupcoming: "upcoming?",
     tmdblatest: "latest?",
+    tmdbreviews: "/reviews?",
     tmdbkey: "api_key=a3c878682c5c16b8e95b3db4b725a447",
     tmdbtail: "&language=en-US&page=1",
     tmdbpic: "https://image.tmdb.org/t/p/w500/",

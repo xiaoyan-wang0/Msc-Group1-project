@@ -35,6 +35,7 @@ body {
   // background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
   .ant-modal-body {
     padding:  0 !important;
+    background-color: black;
   }
 }
 * {

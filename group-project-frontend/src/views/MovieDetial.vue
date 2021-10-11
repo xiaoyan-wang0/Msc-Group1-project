@@ -1,5 +1,22 @@
  <template>
-  <div class="detail">
+  <div class="detail-page">
+    <a-modal
+      :visible="dialogVisible"
+      :maskClosable="true"
+      :closable="false"
+      :footer="null"
+      :destroyOnClose="true"
+      :width="700"
+      @cancel="handleCancel"
+    >
+      <YoutubeVue3
+        ref="youtube"
+        :videoid="video_id"
+        :width="700"
+        :autoplay="0"
+        :height="400"
+      />
+    </a-modal>
     <div class="movie-detail">
       <h2>{{ movie.original_title }}</h2>
       <p>{{ movie.release_date }}</p>
@@ -24,66 +41,50 @@
 
     <div class="movie-casts">
       <div class="cast" v-for="item in casts.cast" :key="item.id">
-        <router-link :to="'/movie/' + movie.imdbID" class="cast-link">
-          <a-card hoverable style="width: 150px">
-            <template #cover>
-              <img
-                alt="profile"
-                :src="
-                  item.profile_path != null
-                    ? moviePoster + item.profile_path
-                    : emptyprofile
-                "
-              />
-            </template>
-            <a-card-meta :title="item.character">
-              <template #description>{{ item.name }}</template>
-            </a-card-meta>
-          </a-card>
+        <router-link :to="'/movie/' + item.imdbID" class="cast-link">
+          <div class="product-image">
+            <img
+              :src="
+                item.profile_path != null
+                  ? moviePoster + item.profile_path
+                  : emptyprofile
+              "
+              alt="Cast profile"
+            />
+            <!-- <div class="type">{{ movie.Type }}</div> -->
+          </div>
+          <div class="detail">
+            <p class="character">{{ item.character }}</p>
+            <h3>{{ item.name }}</h3>
+          </div>
         </router-link>
       </div>
     </div>
 
-    <a-modal
-      :visible="dialogVisible"
-      :maskClosable="true"
-      :closable="false"
-      :footer="null"
-      :destroyOnClose="true"
-      :width="700"
-      @cancel="handleCancel"
-    >
-      <YoutubeVue3
-        ref="youtube"
-        :videoid="video_id"
-        :width="700"
-        :autoplay="0"
-        :height="400"
-        @ended="onEnded"
-        @paused="onPaused"
-        @played="onPlayed"
-      />
-    </a-modal>
-    <div class="commonts">
-      <a-list
-        v-if="comments.length"
-        :data-source="comments"
-        :header="`${comments.length} ${
-          comments.length > 1 ? 'replies' : 'reply'
-        }`"
-        item-layout="horizontal"
+    <div class="comments">
+      <div
+        class="comment-wrap"
+        v-for="item in tmdbreview.results"
+        :key="item.id"
       >
-        <template #renderItem="{ item }">
-          <a-list-item>
-            <a-comment
-              :author="item.author"
-              :avatar="item.avatar"
-              :content="item.content"
-              :datetime="item.datetime"
-            />
-          </a-list-item>
-        </template>
-      </a-list>
+        <div class="photo">
+          <div class="avatar">
+            <a-avatar :src="item.author_details.avatar_path" />
+          </div>
+        </div>
+        <div class="comment-block">
+          <p class="comment-author">{{ item.author }}</p>
+          <p class="comment-text">{{ item.content }}</p>
+          <div class="bottom-comment">
+            <div class="comment-date">{{ item.updated_at }}</div>
+            <ul class="comment-actions">
+              <li class="complain">Complain</li>
+              <li class="reply">Reply</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <a-comment>
         <template #avatar>
           <a-avatar
@@ -93,7 +94,7 @@
         </template>
         <template #content>
           <a-form-item>
-            <a-textarea  v-model:value="value" :rows="4"/>
+            <a-textarea v-model:value="value" :rows="4" />
           </a-form-item>
           <a-form-item>
             <a-button
@@ -141,6 +142,7 @@ export default {
     const start = ref();
     const route = useRoute();
     const movieid = ref();
+    const tmdbreview = ref();
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
@@ -155,7 +157,6 @@ export default {
     const submitting = ref(false);
     const value = ref("");
     onBeforeMount(() => {
-
       // fetch movie detail
       axios
         .get(env.tmdbmovieapi + movieid.value + "?" + env.tmdbkey)
@@ -179,6 +180,7 @@ export default {
           const video = response.data.results;
           console.log("video_id");
           console.log(video);
+          // TODO no videos
           video_id.value = video[0].key;
           console.log(video_id.value);
         });
@@ -198,18 +200,31 @@ export default {
           console.log(casts.value);
         });
 
-      // onEnded();
+      //Fetch TMDB Comments
+      axios
+        .get(
+          env.tmdbmovieapi +
+            movieid.value +
+            env.tmdbreviews +
+            env.tmdbkey +
+            env.tmdbtail
+        )
+        .then((response) => {
+          tmdbreview.value = response.data;
+          console.log("tmdbreview detail");
+          console.log(tmdbreview.value);
+        });
     });
 
-    onMounted(() => {
-      console.log("onMounted");
-    });
+    // onMounted(() => {
+    //   console.log("onMounted");
+    // });
 
     const handleCancel = () => {
       dialogVisible.value = false;
     };
 
-    // commonts
+    // comments
     const handleSubmit = () => {
       if (!value.value) {
         return;
@@ -244,10 +259,11 @@ export default {
       youtube,
       dialogVisible,
       emptyprofile,
-      // commonts
+      // comments
       comments,
       submitting,
       value,
+      tmdbreview,
       handleSubmit,
     };
   },
@@ -255,44 +271,134 @@ export default {
 </script>
 
 <style lang="scss" >
-.movie-detail {
-  padding: 50px;
+.detail-page {
+  .movie-detail {
+    padding: 50px;
 
-  .tag-group {
-    margin-right: 20px;
-    margin-bottom: 10px;
-  }
-  h2 {
-    color: #fff;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 16px;
-  }
-  .featured-img {
-    display: block;
-    max-width: 200px;
-    margin-bottom: 16px;
-  }
-  p {
-    color: #fff;
-    font-size: 18px;
-    line-height: 1.4;
-  }
-}
-.movie-casts {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: 30px;
-  .cast {
-    max-width: 10%;
-    flex: 1 1 50%;
-    padding: 16px 8px;
-
-    .cast-link {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+    .tag-group {
+      margin-right: 20px;
+      margin-bottom: 10px;
     }
+    h2 {
+      color: #fff;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .featured-img {
+      display: block;
+      max-width: 200px;
+      margin-bottom: 16px;
+    }
+    p {
+      color: #fff;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+  }
+  .movie-casts {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 30px;
+    .cast {
+      max-width: 20%;
+      flex: 1 1 50%;
+      padding: 16px 8px;
+
+      .cast-link {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        .product-image {
+          position: relative;
+          display: block;
+          img {
+            display: block;
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+          }
+          .type {
+            position: absolute;
+            padding: 8px 16px;
+            background-color: rgba(86, 98, 168, 0.8);
+            color: #fff;
+            bottom: 16px;
+            left: 0px;
+            text-transform: capitalize;
+          }
+        }
+        .detail {
+          background-color: #111111;
+          padding: 16px 8px;
+          flex: 1 1 100%;
+          border-radius: 0px 0px 8px 8px;
+          .character {
+            color: #aaa;
+            font-size: 14px;
+          }
+          h3 {
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  .comments {
+    margin: 2.5rem auto 0;
+    max-width: 90%;
+    padding: 0 1.25rem;
+  }
+  .comment-wrap {
+    margin-bottom: 1.25rem;
+    display: table;
+    width: 100%;
+    min-height: 5.3125rem;
+  }
+  .photo {
+    padding-top: 0.625rem;
+    display: table-cell;
+    width: 3.5rem;
+  }
+  .photo .avatar {
+    height: 2.25rem;
+    width: 2.25rem;
+    border-radius: 50%;
+    background-size: contain;
+  }
+  .comment-block {
+    padding: 5px;
+    background-color: #fff;
+    display: table-cell;
+    vertical-align: top;
+    border-radius: 0.1875rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  }
+  .comment-text {
+    margin-bottom: 1.25rem;
+  }
+  .bottom-comment {
+    color: #acb4c2;
+    font-size: 0.875rem;
+  }
+  .comment-date {
+    float: left;
+  }
+  .comment-actions {
+    float: right;
+  }
+  .comment-actions li {
+    display: inline;
+  }
+  .comment-actions li.complain {
+    padding-right: 0.625rem;
+    border-right: 1px solid #e1e5eb;
+  }
+  .comment-actions li.reply {
+    padding-left: 0.625rem;
   }
 }
 </style>
