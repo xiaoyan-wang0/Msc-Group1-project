@@ -1,5 +1,3 @@
-![](https://github.com/kuhung/flask_vue_ML/blob/master/flask_vue_ml.jpg?raw=true)
-
 
 ## Build Setup
 
@@ -23,6 +21,3 @@ npm run build
 npm run build --report
 ```
 
-## Refer
-- https://github.com/smutuvi/flask_vue_ML
-- https://github.com/oleg-agapov/flask-vue-spa
