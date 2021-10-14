@@ -1,18 +1,29 @@
 <template>
   <div class="login-page">
     <div id="loginDiv">
-      <form action="" id="login-form" method="post">
+      <form id="login-form" @submit.prevent="onSubmitLogin()">
         <h1 style="text-align: center; color: aliceblue">Login</h1>
-        <p>
-          Username:<input id="userNname" type="text" /><label
-            id="name_trip"
-          ></label>
-        </p>
+        <!-- <p>
+          Username:<input id="username" type="text" required 
+            v-model="loginMes.username"/>
+        </p> -->
 
         <p>
-          Password: <input id="password" type="password" /><label
-            id="password_trip"
-          ></label>
+          Email&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+            id="email"
+            type="email"
+            required
+            v-model="loginMes.email"
+          />
+        </p>
+        <p>
+          Password:
+          <input
+            id="password"
+            type="password"
+            required
+            v-model="loginMes.password"
+          />
         </p>
 
         <div style="text-align: center; margin-top: 30px">
@@ -28,23 +39,66 @@
 </template>
 
 <script>
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-} from "@ant-design/icons-vue";
-import { ref, defineComponent, reactive } from "vue";
+import { ref, defineComponent, inject } from "vue";
+import { message } from "ant-design-vue";
+import router from "@/router";
 export default defineComponent({
   name: "Login",
-  components: { UserOutlined, LockOutlined, MailOutlined },
+  components: {},
 
   setup() {
-    return {};
+    const axios = inject("axios"); // inject axios
+
+    const loginMes = ref({
+      username: "",
+      password: "",
+      email: "",
+    });
+
+    //Login event
+    const onSubmitLogin = () => {
+      const loginFormData = new FormData();
+      console.log("resploginMes.email");
+      console.log(loginMes.value.email);
+      console.log("loginMes.password");
+      console.log(loginMes.value.password);
+      loginFormData.append("email", loginMes.value.email);
+      loginFormData.append("password", loginMes.value.password);
+      //Login
+      axios({
+        method: "post",
+        url: "/api/member/login",
+        data: loginFormData,
+        headers: { "Content-Type": "multipart/form-data" },
+      }).then(
+        (response) => {
+          console.log("response");
+          console.log(response);
+          if (response.data.code === -1) {
+            message.error(response.data.msg, () => {
+              console.log("onClose");
+            });
+          } else if (response.data.code === 200) {
+            message.success(response.data.msg + ", Will return in 3s.", () => {
+              router.push({ name: "Home" });
+            });
+          }
+        },
+        (error) => {
+          console.log("error");
+          console.log(error);
+        }
+      );
+    };
+    return { loginMes, onSubmitLogin };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.ant-modal-body {
+  background-color: rgb(235, 235, 235) !important;
+}
 .login-page {
   display: flex;
   align-items: center;
@@ -52,7 +106,7 @@ export default defineComponent({
   height: 100%;
 }
 #loginDiv {
-  width: 37%;
+  width: 45%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,7 +132,7 @@ input {
   border-radius: 5px;
   border-style: hidden;
   height: 30px;
-  width: 140px;
+  width: 240px;
   background-color: rgba(216, 191, 216, 0.5);
   outline: none;
   color: #f0edf3;

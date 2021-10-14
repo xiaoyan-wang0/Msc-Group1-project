@@ -9,7 +9,7 @@
             type="text"
             autofocus
             required
-            v-model="formMess.username"
+            v-model="registerMess.username"
             placeholder="Please enter username"
           />
         </p>
@@ -18,7 +18,7 @@
           Password:<input
             id="password"
             type="password"
-            v-model="formMess.password"
+            v-model="registerMess.password"
             required
             placeholder="Must have at least 6 characters "
           />
@@ -28,7 +28,7 @@
           Password:<input
             id="surePassword"
             type="password"
-            v-model="formMess.surePassword"
+            v-model="registerMess.surePassword"
             placeholder="Enter password again"
             required
           />
@@ -40,36 +40,38 @@
             id="birthday"
             type="date"
             placeholder="Enter password again"
-            v-model="formMess.birthday"
+            v-model="registerMess.birthday"
           />
         </p>
 
         <p class="interests">
           Interests:
-          <a-checkable-tag v-model:checked="formMess.isAction" effect="light"
+          <a-checkable-tag
+            v-model:checked="registerMess.isAction"
+            effect="light"
             >Action</a-checkable-tag
           >
-          <a-checkable-tag v-model:checked="formMess.isComedy"
+          <a-checkable-tag v-model:checked="registerMess.isComedy"
             >Comedy</a-checkable-tag
           >
-          <a-checkable-tag v-model:checked="formMess.isFantasy"
+          <a-checkable-tag v-model:checked="registerMess.isFantasy"
             >Fantasy</a-checkable-tag
           >
-          <a-checkable-tag v-model:checked="formMess.isThriller"
+          <a-checkable-tag v-model:checked="registerMess.isThriller"
             >Thriller</a-checkable-tag
           >
         </p>
         <p class="interests2">
-          <a-checkable-tag v-model:checked="formMess.isHorror"
+          <a-checkable-tag v-model:checked="registerMess.isHorror"
             >Horror</a-checkable-tag
           >
-          <a-checkable-tag v-model:checked="formMess.isMystery"
+          <a-checkable-tag v-model:checked="registerMess.isMystery"
             >Mystery</a-checkable-tag
           >
-          <a-checkable-tag v-model:checked="formMess.isDrama"
+          <a-checkable-tag v-model:checked="registerMess.isDrama"
             >Drama</a-checkable-tag
           >
-          <a-checkable-tag v-model:checked="formMess.isRomance"
+          <a-checkable-tag v-model:checked="registerMess.isRomance"
             >Romance</a-checkable-tag
           >
         </p>
@@ -80,6 +82,7 @@
             class="email"
             type="email"
             required
+            v-model="registerMess.email"
             placeholder="Please enter email address"
           />
         </p>
@@ -101,13 +104,16 @@ import {
   LockOutlined,
   MailOutlined,
 } from "@ant-design/icons-vue";
-import { ref, defineComponent, reactive } from "vue";
+import { ref, defineComponent, inject } from "vue";
+import { message } from "ant-design-vue";
+import router from "@/router";
 export default defineComponent({
   name: "Login",
   components: { UserOutlined, LockOutlined, MailOutlined },
 
   setup() {
-    const formMess = ref({
+    const axios = inject("axios"); // inject axios
+    const registerMess = ref({
       username: "",
       password: "",
       birthday: "",
@@ -124,10 +130,40 @@ export default defineComponent({
       isThriller: false,
     });
     const submitRegister = () => {
-      console.log("formMess");
-      console.log(formMess.value);
+      console.log("registerMess");
+      console.log(registerMess.value);
+      const registerFormData = new FormData();
+      registerFormData.append("userName", registerMess.value.username);
+      registerFormData.append("email", registerMess.value.email);
+      registerFormData.append("password", registerMess.value.password);
+      //Login
+      axios({
+        method: "post",
+        url: "/api/member/reg",
+        data: registerFormData,
+        headers: { "Content-Type": "multipart/form-data" },
+      }).then(
+        (response) => {
+          console.log("response");
+          console.log(response);
+          if (response.data.code === -1) {
+            message.error(response.data.msg, () => {
+              console.log("onClose");
+            });
+          } else if (response.data.code === 200) {
+            message.success(response.data.msg + ", Will return in 3s.", () => {
+              router.push({ name: "Login" });
+              console.log("onClose");
+            });
+          }
+        },
+        (error) => {
+          console.log("error");
+          console.log(error);
+        }
+      );
     };
-    return { formMess, submitRegister };
+    return { registerMess, submitRegister };
   },
 });
 </script>
