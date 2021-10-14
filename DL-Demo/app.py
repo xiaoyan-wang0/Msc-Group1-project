@@ -35,11 +35,6 @@ expose.secret_key = "super_secret_key"
 
 
 
-@expose.route('/', methods=['GET'])
-def index():
-    return jsonify("welcome to Arafa API")
-
-
 @expose.route('/api/tasks', methods=['GET'])
 def get_result():
     result = []
