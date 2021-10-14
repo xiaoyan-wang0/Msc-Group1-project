@@ -7,10 +7,3 @@
 # Flask for backend.
 
 # Main functions include toxic detector and entertainment recommodation.
-
-
-
-
-
-
-
