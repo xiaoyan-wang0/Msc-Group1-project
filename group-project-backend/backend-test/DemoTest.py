@@ -28,4 +28,6 @@ for t in movieids:
 with open('data.txt', 'w') as outfile:
     json.dump(reviewDictionary, outfile)
 
-print(reviewDictionary)
+response3 = requests.get('https://api.themoviedb.org/3/movie/580489/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
+cast = jsonpath(response3.json(),'$..name')
+

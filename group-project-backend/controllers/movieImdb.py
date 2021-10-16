@@ -9,9 +9,9 @@ from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 import requests
 
-movie_page = Blueprint( "movie_page",__name__ )
+movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
 
-@movie_page.route("/movieImdbInfo")
+@movie_page_Imdb.route("/movieImdbInfo")
 def test():
     import json
     from jsonpath import jsonpath
@@ -33,12 +33,19 @@ def test():
     response3 = requests.get('https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + movieId)
     rating = jsonpath(response3.json(),'$..imDb')
 
+    response4 = requests.get('https://imdb-api.com/en/API/FullCast/k_ds7a1ynu/' + movieId)
+    cast = jsonpath(response4.json(),'$..actors')
+
+    response5 = requests.get('https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId)
+    posters = jsonpath(response5.json(),'$..posters')
+
+    
+
+    # Eliminates empty plots
     plotFinal = ''
     for p in plot:
         if p != '':
             plotFinal = p
-   
-   
    
 
     #movieInfoDictionary[exampleMovieId] = title
@@ -49,6 +56,8 @@ def test():
         "type": type,
         "plot": plotFinal,
         "reviews": reviews,
+        "cast (actors)": cast,
+        "posters": posters,
         "Imdb Rating": rating
     }
     
