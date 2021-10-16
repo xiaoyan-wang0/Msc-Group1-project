@@ -7,7 +7,7 @@
 
 
 
-## bankend （Ege/Pingan）
+## backend （Ege/Pingan）
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | Get movie and review interface combined with front-end   | 18/10/2021    | The web page displays movie information and review information    |
