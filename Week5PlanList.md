@@ -1,4 +1,4 @@
-## frontend （XiaoYan）
+## frontend （Xiaoyan）
 | Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | UI iteration  | ---     | Continuously improve and perfect webpage content     |
@@ -35,7 +35,7 @@
 | Help front and back ends if needed | --- | --- |
 
 
-## Data (yilin)
+## Data (Yilin)
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | Make a presentation ppt next week | 21/10/2021 | create slide |
