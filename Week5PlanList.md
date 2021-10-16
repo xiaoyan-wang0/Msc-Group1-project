@@ -27,7 +27,7 @@
 | Help front and back ends if needed | --- | --- |
 
 
-## Data （Tengkai）
+## Data-recommendation （Tengkai）
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | Research recommendation system based on content, based on reviews | 1/11/2021 | Recommend system develop the next main function |
