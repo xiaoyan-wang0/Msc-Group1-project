@@ -12,7 +12,7 @@
 | ---------- | :-----------:  | :-----------: |
 | Get movie and review interface combined with front-end   | 18/10/2021    | The web page displays movie information and review information    |
 | Use the model interface to detect movie reviews | 19/10/2021 | Model detect movie review information is displayed and returned to the front end |
-| combine current backend content | 19/10/2021 | display comment content/detection content |
+| combine all current backend content | 19/10/2021 | display movie information & users review & comment detection |
 | Website's own user comment function and Toxic comment detect | 21/10/2021 | User comment function implementation |
 
 
