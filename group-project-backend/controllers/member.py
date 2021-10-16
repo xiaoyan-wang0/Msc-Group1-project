@@ -5,6 +5,7 @@ from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 from common.libs.DataHelper import getCurrentTime
 from common.models.user import User
+from common.models.usercomments import Usercomment
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 
@@ -66,3 +67,33 @@ def logOut():
     response = make_response( ops_renderJSON( msg="logout successfully!" ) )
     response.delete_cookie(  app.config['AUTH_COOKIE_NAME'] )
     return response
+
+
+@member_page.route("/addComments")
+def addComments():
+    import json
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    comment = req['comment'] if "comment" in req else ""
+    movieId = req['movieId'] if "movieId" in req else ""
+    
+    model_comments = Usercomment()
+    model_comments.userId = userId
+    model_comments.comment = comment
+    model_comments.movieId = movieId
+    db.session.add( model_comments )
+    db.session.commit()
+    
+    return ops_renderJSON( msg = "addComments successfully!")
+
+@member_page.route("/showComments")
+def showComments():
+    import json
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    movieId = req['movieId'] if "movieId" in req else ""
+    textsql = " 1=1 and userId = '"+userId+"' and movieId = '"+movieId+"'"
+    result = Usercomment.query.filter(text(textsql)).all()
+    usercomments = Usercomment.serialize_list(result)
+    #response = make_response( json.dumps( data ) )
+    return ops_renderJSON( msg = "showComments successfully!",data = usercomments )
