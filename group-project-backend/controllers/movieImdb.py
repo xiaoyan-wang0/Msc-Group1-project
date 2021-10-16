@@ -11,8 +11,28 @@ import requests
 
 movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
 
+@movie_page_Imdb.route("/movieImdbReviews")
+def review():
+    import json
+    from jsonpath import jsonpath
+
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
+
+    exampleMovieId = 'tt1375666'
+
+    response = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + movieId)
+    reviews = jsonpath(response.json(),'$..items')
+
+    movieReviewsDictionary = {
+        "reviews": reviews,
+    }
+    
+    return ops_renderJSON(msg = "Show Comments Successfull!", data = movieReviewsDictionary)
+    
+
 @movie_page_Imdb.route("/movieImdbInfo")
-def test():
+def Info():
     import json
     from jsonpath import jsonpath
 
@@ -25,7 +45,6 @@ def test():
     title = jsonpath(response.json(),'$..fullTitle')
     type = jsonpath(response.json(),'$..type')
     year = jsonpath(response.json(),'$..year')
-    reviews = jsonpath(response.json(),'$..content')
 
     response2 = requests.get('https://imdb-api.com/en/API/Title/k_ds7a1ynu/' + movieId)
     plot = jsonpath(response2.json(),'$..plot')
@@ -38,9 +57,7 @@ def test():
 
     response5 = requests.get('https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId)
     posters = jsonpath(response5.json(),'$..posters')
-
     
-
     # Eliminates empty plots
     plotFinal = ''
     for p in plot:
@@ -55,14 +72,9 @@ def test():
         "year": year,
         "type": type,
         "plot": plotFinal,
-        "reviews": reviews,
         "cast (actors)": cast,
         "posters": posters,
         "Imdb Rating": rating
     }
-    
-        
+
     return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
-
-
-    #a[key].append(2)

@@ -17,8 +17,31 @@ from jsonpath import jsonpath
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
 
+@movie_page_Tmdb.route("/movieTmdbReviews")
+def review():
+  # I am using a Python Library for the TMDB API which is very convinient and easy to use.
+    tmdb = TMDb()
+    tmdb.language = 'en'
+    tmdb.debug = True
+    tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
+    movie = Movie()
+
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
+
+    theId = str(movieId)
+
+    response = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/reviews?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
+    reviews = jsonpath(response.json(),'$..results')
+
+    movieInfoDictionary = {
+        "reviews": reviews
+    }
+        
+    return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
+
 @movie_page_Tmdb.route("/movieTmdbInfo")
-def test():
+def Info():
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -32,9 +55,6 @@ def test():
     theId = str(movieId)
 
     # examplemovieId = 580489
-
-    response = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/reviews?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
-    reviews = jsonpath(response.json(),'$..content')
 
     response2 = requests.get('https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
     genres = jsonpath(response2.json(),'$..genres')
@@ -63,7 +83,7 @@ def test():
         "runtime": runtime,
         "cast": cast,
         "popularity": popularity,
-        "reviews": reviews
     }
         
     return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
+
