@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint,render_template,request,make_response,jsonify,redirect
+import requests
 from sqlalchemy import  text
 from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
@@ -8,6 +9,18 @@ from common.models.user import User
 from common.models.usercomments import Usercomment
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
+from common.libs.ToxicComments import do_pe,detector
+
+
+from json import load as json_load
+import json
+import re
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
+import pickle
+
+import numpy as np
+
 
 member_page = Blueprint( "member_page",__name__ )
 
@@ -97,3 +110,15 @@ def showComments():
     usercomments = Usercomment.serialize_list(result)
     #response = make_response( json.dumps( data ) )
     return ops_renderJSON( msg = "showComments successfully!",data = usercomments )
+
+@member_page.route("/toxic")
+def toxic():
+
+    req = request.values
+    title = [req['title'] if "title" in req else ""]
+    
+    result = detector(title)
+    
+    return ops_renderJSON( msg = "comments detected successfully!",data = result )
+
+
