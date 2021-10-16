@@ -30,8 +30,8 @@
 ## Data （Tengkai）
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
-| Research recommendation system based on content, based on reviews | --- | Recommend system develop the next main function |
-| Prepare next week’s report  | --- | --- |
+| Research recommendation system based on content, based on reviews | 1/11/2021 | Recommend system develop the next main function |
+| Prepare next week’s report  | 24/10/2021 | --- |
 | Help front and back ends if needed | --- | --- |
 
 
