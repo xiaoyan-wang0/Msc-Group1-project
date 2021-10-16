@@ -1,4 +1,4 @@
-## frontend （Xiaoyan）
+## Frontend （Xiaoyan）
 | Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | UI iteration  | ---     | Continuously improve and perfect webpage content     |
@@ -7,7 +7,7 @@
 
 
 
-## backend （Ege/Pingan）
+## Backend （Ege/Pingan）
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | Get movie and review interface combined with front-end   | 18/10/2021    | The web page displays movie information and review information    |
@@ -35,7 +35,7 @@
 | Help front and back ends if needed | --- | --- |
 
 
-## Data (Yilin)
+## Data-UI (Yilin)
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
 | Make a presentation ppt next week | 21/10/2021 | Create slide |
