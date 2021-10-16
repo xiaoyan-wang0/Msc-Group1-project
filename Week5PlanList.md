@@ -3,7 +3,7 @@
 | ---------- | :-----------:  | :-----------: |
 | UI iteration  | ---     | Continuously improve and perfect webpage content     |
 | Perfect login and registration | 18/10/2021 | Fix the current login and registration problem |
-| combine current backend content | 19/10/2021&21/10/2021 | display movie&comment content/detection content |
+| combine current backend content | 19/10/2021&21/10/2021 | Display movie&comment content/detection content |
 
 
 
@@ -12,7 +12,7 @@
 | ---------- | :-----------:  | :-----------: |
 | Get movie and review interface combined with front-end   | 18/10/2021    | The web page displays movie information and review information    |
 | Use the model interface to detect movie reviews | 19/10/2021 | Model detect movie review information is displayed and returned to the front end |
-| combine all current backend content | 19/10/2021 | display movie information & users review & comment detection |
+| combine all current backend content | 19/10/2021 | Display movie information & users review & comment detection |
 | Website's own user comment function and Toxic comment detect | 21/10/2021 | User comment function implementation |
 
 
@@ -23,7 +23,7 @@
 | ---------- | :-----------:  | :-----------: |
 | Train and test sentiment analysis model   | 18/10/2021    | Complete the preservation of the sentiment analysis model    |
 | Complete the deployment of the two models in one docker image | 21/10/2021 | Realize one text prediction through two models |
-| Make a presentation ppt next week | 21/10/2021 | create slide |
+| Make a presentation ppt next week | 21/10/2021 | Create slide |
 | Help front and back ends if needed | --- | --- |
 
 
@@ -38,7 +38,7 @@
 ## Data (Yilin)
 |  Todo    | Deadline    | Describe     |
 | ---------- | :-----------:  | :-----------: |
-| Make a presentation ppt next week | 21/10/2021 | create slide |
+| Make a presentation ppt next week | 21/10/2021 | Create slide |
 | user evaluation | --- | UX improvement and research |
 | Grabbing reviews data set from IMDB| ---| --- |
 | Help the front end to improve the UI | --- | ---- |
