@@ -44,20 +44,7 @@ for res in search:
     print(res.poster_path)
     print(res.vote_average)
 
-# To get similar movies to a specidif movie id:
-similar = movie.similar(777)
 
-for result in similar:
-    print(result.title)
-    print(result.overview)
-
-# To search a tv show by id
-tv = TV()
-show = tv.search('Breaking Bad')
-
-for result in show:
-    print(result.name)
-    print(result.overview)
 
 
 
