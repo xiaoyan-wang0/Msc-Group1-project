@@ -1,19 +1,46 @@
 <template>
-<div>
-  <header>
-    <router-link to="/">
-      <h1><span>AM</span>DB</h1>
-    </router-link>
-  </header>
-  <main>
-    <router-view />
-  </main>
+  <div>
+    <header>
+      <router-link to="/">
+        <h1><span>AM</span>DB</h1>
+      </router-link>
+      <div class="logicon">
+        <router-link to="/login">
+          <a-tooltip placement="topLeft" :color="blue">
+            <template #title>
+              <span>LOGIN</span>
+            </template>
+            <LoginOutlined :spin="true" style="margin-right: 20px" />
+          </a-tooltip>
+        </router-link>
 
-  <footer>
-    <div class="footer"></div>
-  </footer>
-</div>
+        <router-link to="/">
+          <a-tooltip placement="topLeft" :color="blue">
+            <template #title>
+              <span>LOGOUT</span>
+            </template>
+            <LogoutOutlined :spin="true" /> </a-tooltip
+        ></router-link>
+      </div>
+    </header>
+    <main>
+      <router-view />
+    </main>
+
+    <footer>
+      <div class="footer"></div>
+    </footer>
+  </div>
 </template>
+
+<script>
+import { LoginOutlined, LogoutOutlined } from "@ant-design/icons-vue";
+
+export default {
+  components: { LoginOutlined, LogoutOutlined },
+  setup() {},
+};
+</script>
 
 <style lang="scss">
 body {
@@ -36,7 +63,7 @@ body {
   // background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
   // background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
   .ant-modal-body {
-    padding:  0 !important;
+    padding: 0 !important;
     background-color: black;
   }
 }
@@ -65,10 +92,18 @@ body {
     h1 {
       color: #fff;
       font-size: 28px;
+      margin-top: 20px;
 
       span {
         color: #42b883;
       }
+    }
+
+    .logicon {
+      color: #fff;
+      font-size: 40px;
+      position: absolute;
+      right: 30px;
     }
   }
 }

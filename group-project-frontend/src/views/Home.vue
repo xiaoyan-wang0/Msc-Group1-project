@@ -5,8 +5,7 @@
       <div class="main-carousel" v-if="upComingMovieData.results">
         <el-carousel :interval="3000" type="card" height="500px">
           <el-carousel-item v-for="item in upComingMovieData.results.slice(0,6)" :key="item.id">
-            <!-- <router-link :to="'/movie/' + item.id"> -->
-            <router-link :to="'/login/'">
+            <router-link :to="'/movie/' + item.id">
               <img :src="moviePoster + item.poster_path" :alt="item.title" class="featured-img" />
               <div class="detail">
                 <p>{{item.overview}}</p>
@@ -197,7 +196,7 @@ export default {
       display: block;
       width: 100%;
       height: 500px;
-      object-fit: cover;
+      // object-fit: cover;
       position: relative;
       z-index: 0;
     }
