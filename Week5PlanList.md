@@ -40,7 +40,7 @@
 | ---------- | :-----------:  | :-----------: |
 | Make a presentation ppt next week | 21/10/2021 | Create slide |
 | Collect 300 toxic comments |23/10/2021|----|
-| user eva----|luation | --- | UX improvement and research |
+| user evaluation | --- | UX improvement and research |
 | Grabbing reviews data set from IMDB| ---| --- |
 | Help the front end to improve the UI | --- | ---- |
 | Prepare next week’s report  | --- | --- |
