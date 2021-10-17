@@ -34,6 +34,6 @@ def detector(title):
 
     text1 =  title
 
-    label =  json.loads(response.text)['predictions']
+    label =  json.loads(response.text)['predictions'][0]
     result = {'title' : text1, 'tag' : label}
     return result

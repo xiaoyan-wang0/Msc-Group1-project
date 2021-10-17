@@ -3,3 +3,6 @@ flask-sqlalchemy
 mysqlclient
 flask-script
 flask_debugtoolbar
+tmdbv3api
+tensorflow
+numpy

@@ -12,14 +12,6 @@ from common.libs.UserService import UserService
 from common.libs.ToxicComments import do_pe,detector
 
 
-from json import load as json_load
-import json
-import re
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import tokenizer_from_json
-import pickle
-
-import numpy as np
 
 
 member_page = Blueprint( "member_page",__name__ )
@@ -81,44 +73,5 @@ def logOut():
     response.delete_cookie(  app.config['AUTH_COOKIE_NAME'] )
     return response
 
-
-@member_page.route("/addComments")
-def addComments():
-    import json
-    req = request.values
-    userId = req['userId'] if "userId" in req else ""
-    comment = req['comment'] if "comment" in req else ""
-    movieId = req['movieId'] if "movieId" in req else ""
-    
-    model_comments = Usercomment()
-    model_comments.userId = userId
-    model_comments.comment = comment
-    model_comments.movieId = movieId
-    db.session.add( model_comments )
-    db.session.commit()
-    
-    return ops_renderJSON( msg = "addComments successfully!")
-
-@member_page.route("/showComments")
-def showComments():
-    import json
-    req = request.values
-    userId = req['userId'] if "userId" in req else ""
-    movieId = req['movieId'] if "movieId" in req else ""
-    textsql = " 1=1 and userId = '"+userId+"' and movieId = '"+movieId+"'"
-    result = Usercomment.query.filter(text(textsql)).all()
-    usercomments = Usercomment.serialize_list(result)
-    #response = make_response( json.dumps( data ) )
-    return ops_renderJSON( msg = "showComments successfully!",data = usercomments )
-
-@member_page.route("/toxic")
-def toxic():
-
-    req = request.values
-    title = [req['title'] if "title" in req else ""]
-    
-    result = detector(title)
-    
-    return ops_renderJSON( msg = "comments detected successfully!",data = result )
 
 
