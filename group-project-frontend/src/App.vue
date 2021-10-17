@@ -4,9 +4,9 @@
       <router-link to="/">
         <h1><span>AM</span>DB</h1>
       </router-link>
-      <div class="logicon">
+      <div class="logicon" v-if="!currentUser">
         <router-link to="/login">
-          <a-tooltip placement="topLeft" :color="blue">
+          <a-tooltip placement="topLeft" color="blue">
             <template #title>
               <span>LOGIN</span>
             </template>
@@ -15,16 +15,29 @@
         </router-link>
 
         <router-link to="/">
-          <a-tooltip placement="topLeft" :color="blue">
+          <a-tooltip placement="topLeft" color="blue">
             <template #title>
               <span>LOGOUT</span>
             </template>
             <LogoutOutlined :spin="true" /> </a-tooltip
         ></router-link>
       </div>
+      <div v-if="currentUser" class="logicon">
+        <li class="nav-item">
+          <router-link to="/profile" class="nav-link">
+            <font-awesome-icon icon="user" />
+            {{ currentUser.username }}
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" @click.prevent="logOut">
+            <font-awesome-icon icon="sign-out-alt" /> LogOut
+          </a>
+        </li>
+      </div>
     </header>
     <main>
-      <router-view />
+        <router-view />
     </main>
 
     <footer>
@@ -34,34 +47,28 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import router from "@/router";
 import { LoginOutlined, LogoutOutlined } from "@ant-design/icons-vue";
 
 export default {
   components: { LoginOutlined, LogoutOutlined },
-  setup() {},
+  setup() {
+    const store = useStore();
+    const currentUser = computed(() => store.state.auth.user);
+    const logOut = () => {
+      store.dispatch("auth/logout");
+      router.push("/");
+    };
+    return { currentUser, logOut };
+  },
 };
 </script>
 
 <style lang="scss">
 body {
-  // background-color: #222b32 !important;
-
   background-color: #080808 !important;
-
-  // background-image: radial-gradient(
-  //     white,
-  //     rgba(255, 255, 255, 0.2) 2px,
-  //     transparent 40px
-  //   ),
-  //   radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px),
-  //   radial-gradient(white, rgba(255, 255, 255, 0.1) 2px, transparent 40px),
-  //   radial-gradient(
-  //     rgba(255, 255, 255, 0.4),
-  //     rgba(255, 255, 255, 0.1) 2px,
-  //     transparent 30px
-  //   );
-  // background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
-  // background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
   .ant-modal-body {
     padding: 0 !important;
     background-color: black;

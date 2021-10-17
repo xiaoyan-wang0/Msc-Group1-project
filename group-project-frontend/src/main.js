@@ -8,10 +8,11 @@ import ElementPlus from 'element-plus'
 import VueAxios from 'vue-axios'
 import 'element-plus/dist/index.css'
 import 'ant-design-vue/dist/antd.css';
+import { FontAwesomeIcon } from './plugins/font-awesome'
 
 
 const app = createApp(App);
 app.config.productionTip = false;
 app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios)  // provide 'axios'
-app.use(store).use(router).use(Antd).use(ElementPlus).mount('#app')
+app.use(store).use(router).use(Antd).use(ElementPlus).component("font-awesome-icon", FontAwesomeIcon).mount('#app')

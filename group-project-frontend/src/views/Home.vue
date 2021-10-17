@@ -3,51 +3,34 @@
     <div class="feature-card">
       <!-- carousel -->
       <div class="main-carousel" v-if="upComingMovieData.results">
-        <el-carousel :interval="3000" type="card" height="500px">
-          <el-carousel-item v-for="item in upComingMovieData.results.slice(0,6)" :key="item.id">
+        <el-carousel :interval="3000" type="card" height="350px">
+          <el-carousel-item
+            v-for="item in upComingMovieData.results.slice(0, 6)"
+            :key="item.id"
+          >
             <router-link :to="'/movie/' + item.id">
-              <img :src="moviePoster + item.poster_path" :alt="item.title" class="featured-img" />
+              <img
+                :src="moviePoster + item.poster_path"
+                :alt="item.title"
+                class="featured-img"
+              />
               <div class="detail">
-                <p>{{item.overview}}</p>
+                <p>{{ item.overview }}</p>
               </div>
             </router-link>
           </el-carousel-item>
         </el-carousel>
       </div>
     </div>
-    <!-- MENU -->
-    <div class="mainpage-menu">
-      <el-menu
-        :default-active="activeIndex"
-        class="main-menu"
-        mode="horizontal"
-        background-color="#35495e 0.7"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-        @select="handleSelect"
-      >
-        <el-menu-item index="1">Movies</el-menu-item>
-        <el-sub-menu index="2" disabled>
-          <template #title>Entertainment</template>
-          <el-menu-item index="2-1">item one</el-menu-item>
-          <el-menu-item index="2-2">item two</el-menu-item>
-          <el-menu-item index="2-3">item three</el-menu-item>
-          <el-sub-menu index="2-4">
-            <template #title>item four</template>
-            <el-menu-item index="2-4-1">item one</el-menu-item>
-            <el-menu-item index="2-4-2">item two</el-menu-item>
-            <el-menu-item index="2-4-3">item three</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
-        <el-menu-item index="3" disabled>Info</el-menu-item>
-        <el-menu-item index="4">Comment Detector</el-menu-item>
-      </el-menu>
-    </div>
 
     <!-- SEACH BAR -->
     <div class="search-bar">
       <form @submit.prevent="SearchMovies()" class="search-box">
-        <input type="text" placeholder="What are you looking for?" v-model="search" />
+        <input
+          type="text"
+          placeholder="What are you looking for?"
+          v-model="search"
+        />
         <input type="submit" value="Search" />
       </form>
     </div>
@@ -106,8 +89,14 @@ export default {
           env.omdbapi + env.omdbkey + env.omdbapisearch + search.value
         );
         axios
-          .get(env.omdbapi + env.omdbkey + env.omdbapisearch + search.value + "&plot=full")
-          .then(response => {
+          .get(
+            env.omdbapi +
+              env.omdbkey +
+              env.omdbapisearch +
+              search.value +
+              "&plot=full"
+          )
+          .then((response) => {
             movies.value = response.data.Search;
             search.value = "";
             itemdata.value = response.data.Search;
@@ -123,9 +112,9 @@ export default {
 
     onBeforeMount(() => {
       //Upcoming moveis
-       axios
+      axios
         .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
-        .then(response => {
+        .then((response) => {
           upComingMovieData.value = response.data;
           console.log(upComingMovieData.value.results);
         });
@@ -140,14 +129,14 @@ export default {
       // Popular movies
       axios
         .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
-        .then(response => {
+        .then((response) => {
           popularMovieData.value = response.data;
           console.log(popularMovieData.value.results);
         });
       // High score moveis
       axios
         .get(env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail)
-        .then(response => {
+        .then((response) => {
           // popularMovieData.value = JSON.stringify(response.data);
           hignScoreMovieData.value = response.data;
           // console.log(hignScoreMovieData.value.results);
@@ -165,13 +154,14 @@ export default {
       popularMovieData,
       lastestMovieData,
       hignScoreMovieData,
-      upComingMovieData
+      upComingMovieData,
     };
-  }
+  },
 };
 </script>
 
 <style lang="scss">
+
 .home {
   .el-carousel__item h3 {
     color: #475669;
@@ -219,7 +209,7 @@ export default {
   }
 
   // .main-menu li ul {
-    // font-size: 500px;
+  // font-size: 500px;
   // }
   .search-box {
     display: flex;
@@ -289,7 +279,7 @@ export default {
           img {
             display: block;
             width: 100%;
-            height: 350px;
+            height: 300px;
             object-fit: cover;
           }
           .type {

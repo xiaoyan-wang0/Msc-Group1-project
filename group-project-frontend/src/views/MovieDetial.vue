@@ -86,7 +86,6 @@
     <el-dialog
       v-model="isShowCastDetail"
       title="Detail"
-      :before-close="handleClose"
     >
       <el-descriptions class="margin-top" :column="1">
         <el-descriptions-item label="Name:"
@@ -131,8 +130,8 @@
           <div class="bottom-comment">
             <div class="comment-date">{{ item.updated_at }}</div>
             <ul class="comment-actions">
-              <li class="complain">Complain</li>
-              <li class="reply">Reply</li>
+              <li class="toxicrate">Toxic Rate</li>
+              <li class="report">Report</li>
             </ul>
           </div>
         </div>
@@ -462,11 +461,11 @@ export default {
   .comment-actions li {
     display: inline;
   }
-  .comment-actions li.complain {
+  .comment-actions li.toxicrate {
     padding-right: 0.625rem;
     border-right: 1px solid #e1e5eb;
   }
-  .comment-actions li.reply {
+  .comment-actions li.report {
     padding-left: 0.625rem;
   }
 }

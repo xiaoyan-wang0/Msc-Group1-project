@@ -3,6 +3,7 @@
     <div class="item-list">
       <div class="item-title">
         <span>{{spacename}}</span>
+        <a>more</a>
       </div>
       <div class="movies-list" v-if=" itemdata.results!== undefined">
         <div class="movie" v-for="item in itemdata.results.slice(0,10)" :key="item.id">
@@ -45,7 +46,17 @@ export default {
   margin: 0 50px;
 }
 .item-title {
-  font-size: 50px;
+  color: white;
+  span {
+
+    font-size: 50px;
+  }
+  a {
+    margin-top: 25px;
+    margin-right: 30px;
+    float: right;
+    font-size: 25px;
+  }
   // background: #eee
   //   url(data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAHklEQVQImWNkYGBgYGD4//8/A5wF5SBYyAr+//8PAPOCFO0Q2zq7AAAAAElFTkSuQmCC)
   //   repeat;
@@ -57,7 +68,6 @@ export default {
 
   // text-shadow: 6px 6px 0px rgb(248, 246, 246);
 
-  color: white;
   
   // text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9,
   //   0 5px 0 #aaa, 0 6px 1px rgba(216, 213, 213, 0.911), 0 0 5px rgba(241, 238, 238, 0.979),
@@ -83,7 +93,7 @@ export default {
         img {
           display: block;
           width: 100%;
-          height: 350px;
+          height: 300px;
           object-fit: cover;
         }
         .type {
