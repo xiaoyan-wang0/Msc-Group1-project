@@ -1,4 +1,4 @@
-# This is the group 1 project at TUDblin.
+# This is the group 1 project at TUDublin.
 
 # We splite the frontend and backend in two floders.
 
