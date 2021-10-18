@@ -6,3 +6,4 @@ flask_debugtoolbar
 tmdbv3api
 tensorflow
 numpy
+jsonpath

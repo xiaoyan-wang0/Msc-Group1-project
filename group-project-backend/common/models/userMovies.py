@@ -11,7 +11,7 @@ class Usermovy(db.Model):
 
     Id = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, nullable=False)
-    moiveId = db.Column(db.Integer)
+    moiveId = db.Column(db.String(16))
     type = db.Column(db.Integer)
     #createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
 
