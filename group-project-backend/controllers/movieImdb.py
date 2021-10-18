@@ -80,7 +80,7 @@ def Info():
     return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
 
 
-@movie_page_Imdb.route("/movieImdbBottom25Info")
+@movie_page_Imdb.route("/movieImdbBottom10Info")
 def bottom():
     import json
     from jsonpath import jsonpath
