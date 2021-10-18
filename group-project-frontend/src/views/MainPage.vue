@@ -64,7 +64,7 @@ export default {
 }
 .div-main-left {
   float: left;
-  background-color: rgb(136, 136, 161);
+  // background-color: rgb(136, 136, 161);
   width: 20%;
   height: 180px;
   text-align: center;

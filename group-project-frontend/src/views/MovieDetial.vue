@@ -83,25 +83,26 @@
       </div>
     </div>
 
-    <el-dialog
-      v-model="isShowCastDetail"
-      title="Detail"
-    >
+    <el-dialog v-model="isShowCastDetail" title="Detail">
       <el-descriptions class="margin-top" :column="1">
-        <el-descriptions-item label="Name:"
-          >{{castDetail.name}}</el-descriptions-item
-        >
-        <el-descriptions-item label="Birthday:"
-          >{{castDetail.birthday}}</el-descriptions-item        >
+        <el-descriptions-item label="Name:">{{
+          castDetail.name
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Birthday:">{{
+          castDetail.birthday
+        }}</el-descriptions-item>
         <el-descriptions-item label="Department:">
-          <el-tag size="small" >{{castDetail.known_for_department}}</el-tag>
+          <el-tag size="small">{{ castDetail.known_for_department }}</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="Popularity:"
-          >{{castDetail.popularity}}</el-descriptions-item        >
-        <el-descriptions-item label="Also known as:">{{castDetail.also_known_as}}</el-descriptions-item>
-        <el-descriptions-item label="Biography:"
-          >{{castDetail.biography}}</el-descriptions-item
-        >
+        <el-descriptions-item label="Popularity:">{{
+          castDetail.popularity
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Also known as:">{{
+          castDetail.also_known_as
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Biography:">{{
+          castDetail.biography
+        }}</el-descriptions-item>
       </el-descriptions>
 
       <template #footer>
@@ -114,14 +115,17 @@
     </el-dialog>
 
     <div class="comments">
-      <div
-        class="comment-wrap"
-        v-for="item in tmdbreview.results"
-        :key="item.id"
-      >
+      <h1>TMDB reviews</h1>
+      <div class="comment-wrap" v-for="item in tmdbreview" :key="item.id">
         <div class="photo-avatar">
           <div class="avatar">
-            <a-avatar :src="item.author_details.avatar_path" />
+            <a-avatar
+              :src="
+                item.author_details.avatar_path !== null
+                  ? moviePoster + item.profile_path
+                  : emptyprofile
+              "
+            />
           </div>
         </div>
         <div class="comment-block">
@@ -130,8 +134,50 @@
           <div class="bottom-comment">
             <div class="comment-date">{{ item.updated_at }}</div>
             <ul class="comment-actions">
-              <li class="toxicrate">Toxic Rate</li>
+              <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
               <li class="report">Report</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h1>IMDB reviews</h1>
+      <div class="comment-wrap" v-for="item in imdbreview" :key="item.id">
+        <div class="photo-avatar">
+          <div class="avatar">
+            <a-avatar :src="emptyprofile" />
+          </div>
+        </div>
+        <div class="comment-block">
+          <p class="comment-author">{{ item.username }}</p>
+          <p class="comment-text">{{ item.content }}</p>
+          <div class="bottom-comment">
+            <div class="comment-date">{{ item.date }}</div>
+            <ul class="comment-actions">
+              <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
+              <li class="report">Report</li>
+              <li class="report">warningSpoilers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h1>AMDB reviews</h1>
+      <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
+        <div class="photo-avatar">
+          <div class="avatar">
+            <a-avatar :src="emptyprofile" />
+          </div>
+        </div>
+        <div class="comment-block">
+          <p class="comment-author">{{ item.userName }}</p>
+          <p class="comment-text">{{ item.comment }}</p>
+          <div class="bottom-comment">
+            <!-- <div class="comment-date">{{ item.date }}</div> -->
+            <ul class="comment-actions">
+              <!-- <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li> -->
+              <li class="report">Report</li>
+              <li class="report">warningSpoilers</li>
             </ul>
           </div>
         </div>
@@ -146,7 +192,7 @@
         </template>
         <template #content>
           <a-form-item>
-            <a-textarea v-model:value="value" :rows="4" />
+            <a-textarea v-model:value="commentsValue" :rows="4" />
           </a-form-item>
           <a-form-item>
             <a-button
@@ -194,8 +240,11 @@ export default {
     const castDetail = ref({});
     const start = ref();
     const route = useRoute();
-    const movieid = ref();
-    const tmdbreview = ref();
+    const movieid = ref("");
+    const imdbmovieid = ref("");
+    const tmdbreview = ref([]);
+    const amdbreview = ref([]);
+    const imdbreview = ref([]);
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
@@ -209,7 +258,7 @@ export default {
     //comments
     const comments = ref([]);
     const submitting = ref(false);
-    const value = ref("");
+    const commentsValue = ref("");
     onBeforeMount(() => {
       // fetch movie detail
       axios
@@ -219,6 +268,17 @@ export default {
           console.log("movie detail");
           console.log(movie.value);
           start.value = movie.value.vote_average / 2;
+          console.log("imdbmovieid");
+          console.log(imdbmovieid.value);
+          imdbmovieid.value = response.data.imdb_id;
+          //Fetch IMDB Comments
+          axios
+            .get("/api/movieImdb/movieImdbReviews?movieId=" + imdbmovieid.value)
+            .then((response) => {
+              imdbreview.value = response.data.data.reviews.items;
+              console.log("imdbreview detail");
+              console.log(response.data);
+            });
         });
 
       //Fetch trailer
@@ -256,17 +316,21 @@ export default {
 
       //Fetch TMDB Comments
       axios
-        .get(
-          env.tmdbmovieapi +
-            movieid.value +
-            env.tmdbreviews +
-            env.tmdbkey +
-            env.tmdbtail
-        )
+        .get("/api/movieTmdb/movieTmdbReviews?movieId=" + movieid.value)
         .then((response) => {
-          tmdbreview.value = response.data;
+          tmdbreview.value = response.data.data.reviews[0];
           console.log("tmdbreview detail");
           console.log(tmdbreview.value);
+        });
+
+      //Fetch AMDB Comments
+
+      axios
+        .get("/api/comments/showComments?movieId=" + movieid.value)
+        .then((response) => {
+          amdbreview.value = response.data.data;
+          console.log("amdbreview detail");
+          console.log(amdbreview.value);
         });
     });
 
@@ -280,25 +344,40 @@ export default {
 
     // comments
     const handleSubmit = () => {
-      if (!value.value) {
+      if (!commentsValue.value) {
         return;
       }
-
       submitting.value = true;
-      setTimeout(() => {
-        submitting.value = false;
-        comments.value = [
-          {
-            author: "Han Solo",
-            avatar:
-              "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-            content: value.value,
-            datetime: moment().fromNow(),
-          },
-          ...comments.value,
-        ];
-        value.value = "";
-      }, 1000);
+      // Add comments
+      axios
+        .get(
+          "/api/comments/addComments?movieId=" +
+            movieid.value +
+            "&comment=" +
+            commentsValue.value
+        )
+        .then((response) => {
+          // tmdbreview.value = response.data;
+          console.log("Add comments ");
+          console.log(response.data);
+          submitting.value = false;
+        });
+
+      // submitting.value = true;
+      // setTimeout(() => {
+      //   submitting.value = false;
+      //   comments.value = [
+      //     {
+      //       author: "Han Solo",
+      //       avatar:
+      //         "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+      //       content: commentsValue.value,
+      //       datetime: moment().fromNow(),
+      //     },
+      //     ...comments.commentsValue,
+      //   ];
+      //   commentsValue.value = "";
+      // }, 1000);
     };
 
     const showCastDetail = (id) => {
@@ -307,7 +386,7 @@ export default {
       console.log(id);
       //Fetch Cast Detials
       axios
-        .get(env.tmdbperson + id +"?"+ env.tmdbkey + env.tmdbtail)
+        .get(env.tmdbperson + id + "?" + env.tmdbkey + env.tmdbtail)
         .then((response) => {
           castDetail.value = response.data;
           console.log("castDetail detail");
@@ -320,14 +399,18 @@ export default {
       casts,
       moviePoster,
       video_id,
+      imdbmovieid,
+      movieid,
       youtube,
       isShowTrailer,
       emptyprofile,
       // comments
       comments,
       submitting,
-      value,
+      commentsValue,
       tmdbreview,
+      imdbreview,
+      amdbreview,
       castDetail,
       isShowCastDetail,
       handleCancel,
@@ -419,6 +502,9 @@ export default {
     margin: 2.5rem auto 0;
     max-width: 90%;
     padding: 0 1.25rem;
+    h1 {
+      color: #fff;
+    }
   }
   .comment-wrap {
     margin-bottom: 1.25rem;
