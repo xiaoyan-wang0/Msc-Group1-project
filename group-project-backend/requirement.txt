@@ -7,3 +7,5 @@ tmdbv3api
 tensorflow
 numpy
 jsonpath
+bs4
+lxml
