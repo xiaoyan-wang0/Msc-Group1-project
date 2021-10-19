@@ -157,4 +157,4 @@ def bottom():
                 "link": links[index]}
         list.append(data)
     
-    return ops_renderJSON(msg = "Show Comments Successfull!", data = list)
+    return ops_renderJSON(msg = "Show Comments Successfll!", data = list)
