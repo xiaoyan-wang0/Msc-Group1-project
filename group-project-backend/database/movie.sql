@@ -11,7 +11,7 @@
  Target Server Version : 80023
  File Encoding         : 65001
 
- Date: 18/10/2021 11:48:57
+ Date: 19/10/2021 20:29:05
 */
 
 SET NAMES utf8mb4;
@@ -47,16 +47,18 @@ CREATE TABLE `usercomments`  (
   `comment` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `movieId` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `toxic` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usercomments
 -- ----------------------------
-INSERT INTO `usercomments` VALUES (1, 5, NULL, 'hello', '2021-10-15 08:16:36', '335983');
-INSERT INTO `usercomments` VALUES (2, 5, NULL, 'hey', '2021-10-15 08:17:33', '335983');
-INSERT INTO `usercomments` VALUES (3, 5, NULL, '12', '2021-10-15 08:18:49', '123456');
-INSERT INTO `usercomments` VALUES (5, 5, NULL, 'good actor', '2021-10-15 08:38:11', '123456');
+INSERT INTO `usercomments` VALUES (1, 5, NULL, 'hello', '2021-10-15 08:16:36', '335983', NULL);
+INSERT INTO `usercomments` VALUES (2, 5, NULL, 'hey', '2021-10-15 08:17:33', '335983', NULL);
+INSERT INTO `usercomments` VALUES (3, 5, NULL, '12', '2021-10-15 08:18:49', '123456', NULL);
+INSERT INTO `usercomments` VALUES (5, 5, NULL, 'good actor', '2021-10-15 08:38:11', '123456', NULL);
+INSERT INTO `usercomments` VALUES (6, NULL, NULL, 'good actor', '2021-10-19 20:27:58', '1', '0.658997297');
 
 -- ----------------------------
 -- Table structure for userinfo

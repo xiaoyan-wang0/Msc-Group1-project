@@ -28,9 +28,10 @@ def addComments():
     userId = str(current_user.userId)
     comment = req['comment'] if "comment" in req else ""
     movieId = req['movieId'] if "movieId" in req else ""
-    
+    result = detector(comment)
+    toxic = result['tag']
     model_comments = Usercomment()
-    model_comments.userId = userId
+    model_comments.toxic = toxic
     model_comments.comment = comment
     model_comments.movieId = movieId
     db.session.add( model_comments )
