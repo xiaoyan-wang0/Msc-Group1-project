@@ -13,7 +13,7 @@ class Usercomment(db.Model):
     userId = db.Column(db.Integer)
     tagId = db.Column(db.Integer)
     comment = db.Column(db.String(1024))
-    #createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
+    createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
     movieId = db.Column(db.String(16))
     toxic = db.Column(db.String(16))
 
