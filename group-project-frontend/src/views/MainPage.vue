@@ -22,11 +22,11 @@
             <i class="el-icon-menu"></i>
             <span>Entertaiment</span>
           </el-menu-item>
-          <el-menu-item index="profile">
+          <el-menu-item index="/main/profile">
             <i class="el-icon-document"></i>
             <span>Profile</span>
           </el-menu-item>
-          <el-menu-item index="detector">
+          <el-menu-item index="/main/detector">
             <i class="el-icon-setting"></i>
             <span>Detector</span>
           </el-menu-item>
