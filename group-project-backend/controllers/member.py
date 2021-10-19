@@ -60,10 +60,11 @@ def login():
 
     if user.password != UserService.genePwd( password ):
         return ops_renderErrJSON("password error")
-
-    response = make_response( ops_renderJSON( msg="login successfully!" ) )
+    userJson = User.serialize(user)
+    response = make_response( ops_renderJSON( msg="login successfully!",data = userJson ) )
     response.set_cookie(app.config['AUTH_COOKIE_NAME'],
                         "%s#%s"%( UserService.geneAuthCode( user ), user.userId ),60 * 60 *24 *7 )
+    
     return response
 
 @member_page.route("/logout")

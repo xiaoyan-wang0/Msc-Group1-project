@@ -34,6 +34,7 @@ def addComments():
     model_comments.toxic = toxic
     model_comments.comment = comment
     model_comments.movieId = movieId
+    model_comments.userId = current_user.userId
     db.session.add( model_comments )
     db.session.commit()
     
