@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint,render_template,request,make_response,jsonify,redirect
+from flask import Blueprint,render_template,request,make_response,jsonify,redirect,g
 from sqlalchemy import  text
 from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
@@ -8,6 +8,8 @@ from common.models.user import User
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 import requests
+from common.libs.ToxicComments import do_pe,detector
+
 
 movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
 
@@ -16,26 +18,41 @@ def review():
     import json
     from jsonpath import jsonpath
 
+    if 'current_user' in  g:
+        current_user = g.current_user
+    if current_user == None : 
+        return ops_renderErrJSON( msg ="please login first")
+
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
-    #exampleMovieId = 'tt1375666'
+    exampleMovieId = 'tt1375666'
 
     response = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + movieId)
     #reviews = jsonpath(response.json(),'$..items')
+    reviews = response.json()
+
+    for review in reviews['items']:
+        content = [review['content']]
+        result = detector(content)
+        review['toxic'] = result
 
     movieReviewsDictionary = {
-        "reviews": response.json()
+        "reviews": reviews
     }
     
-    return ops_renderJSON(msg = "Show Comments Successfull!", data = movieReviewsDictionary)
+    return ops_renderJSON(msg = "Show Successfull!", data = movieReviewsDictionary)
     
-
 @movie_page_Imdb.route("/movieImdbInfo")
 def Info():
     import json
     from jsonpath import jsonpath
 
+    if 'current_user' in  g:
+        current_user = g.current_user
+    if current_user == None : 
+        return ops_renderErrJSON( msg ="please login first")
+    
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
@@ -77,16 +94,18 @@ def Info():
         "Imdb Rating": rating
     }
 
-    return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
+    return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
-
-@movie_page_Imdb.route("/movieImdbBottom25Info")
+@movie_page_Imdb.route("/movieImdbBottomInfo")
 def bottom():
     import json
     from jsonpath import jsonpath
     from bs4 import BeautifulSoup
     import requests
     import re
+
+    req = request.values
+    numberOfMovies = req['numberOfMovies'] 
  
     # Getting imdb top 250 movie's data
     #url = 'http://www.imdb.com/chart/top'
@@ -110,7 +129,8 @@ def bottom():
     list = []
  
     # Iterating over movies to extract each movie's details
-    for index in range(0, 10):
+    # Max has to br 100!!!,
+    for index in range(0, int(numberOfMovies)):
      
         # Separating movie into: 'place', title', 'year'
         movie_string = movies[index].get_text()
@@ -136,12 +156,5 @@ def bottom():
                 "vote": votes[index],
                 "link": links[index]}
         list.append(data)
- 
-    # printing movie details with its rating.
-    for movie in list:
-        print(movie['place'], '-', movie['movie_title'], '('+movie['year'] + ') -', 'Starring:', movie['star_cast'], movie['rating'])
-    
-
-
     
     return ops_renderJSON(msg = "Show Comments Successfull!", data = list)
