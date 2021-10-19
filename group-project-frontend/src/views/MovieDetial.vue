@@ -115,97 +115,103 @@
     </el-dialog>
 
     <div class="comments">
-      <h1>TMDB reviews</h1>
-      <div class="comment-wrap" v-for="item in tmdbreview" :key="item.id">
-        <div class="photo-avatar">
-          <div class="avatar">
-            <a-avatar
-              :src="
-                item.author_details.avatar_path !== null
-                  ? moviePoster + item.profile_path
-                  : emptyprofile
-              "
-            />
+      <a-tabs type="card" v-model:activeKey="activeKey">
+        <a-tab-pane key="amdb" tab="AMDB reviews">
+          <h1>AMDB reviews</h1>
+          <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
+            <div class="photo-avatar">
+              <div class="avatar">
+                <a-avatar :src="emptyprofile" />
+              </div>
+            </div>
+            <div class="comment-block">
+              <p class="comment-author">{{ item.userName }}</p>
+              <p class="comment-text">{{ item.comment }}</p>
+              <div class="bottom-comment">
+                <!-- <div class="comment-date">{{ item.date }}</div> -->
+                <ul class="comment-actions">
+                  <!-- <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li> -->
+                  <li class="report">Report</li>
+                  <li class="report">warningSpoilers</li>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="comment-block">
-          <p class="comment-author">{{ item.author }}</p>
-          <p class="comment-text">{{ item.content }}</p>
-          <div class="bottom-comment">
-            <div class="comment-date">{{ item.updated_at }}</div>
-            <ul class="comment-actions">
-              <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
-              <li class="report">Report</li>
-            </ul>
-          </div>
-        </div>
-      </div>
 
-      <h1>IMDB reviews</h1>
-      <div class="comment-wrap" v-for="item in imdbreview" :key="item.id">
-        <div class="photo-avatar">
-          <div class="avatar">
-            <a-avatar :src="emptyprofile" />
+          <a-comment>
+            <template #avatar>
+              <a-avatar
+                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                alt="Han Solo"
+              />
+            </template>
+            <template #content>
+              <a-form-item>
+                <a-textarea v-model:value="commentsValue" :rows="4" />
+              </a-form-item>
+              <a-form-item>
+                <a-button
+                  html-type="submit"
+                  :loading="submitting"
+                  type="primary"
+                  @click="handleSubmit"
+                >
+                  Add Comment
+                </a-button>
+              </a-form-item>
+            </template>
+          </a-comment>
+        </a-tab-pane>
+        <a-tab-pane key="tmdb" tab="TMDB reviews">
+          <h1>TMDB reviews</h1>
+          <div class="comment-wrap" v-for="item in tmdbreview" :key="item.id">
+            <div class="photo-avatar">
+              <div class="avatar">
+                <a-avatar
+                  :src="
+                    item.author_details.avatar_path !== null
+                      ? moviePoster + item.profile_path
+                      : emptyprofile
+                  "
+                />
+              </div>
+            </div>
+            <div class="comment-block">
+              <p class="comment-author">{{ item.author }}</p>
+              <p class="comment-text">{{ item.content }}</p>
+              <div class="bottom-comment">
+                <div class="comment-date">{{ item.updated_at }}</div>
+                <ul class="comment-actions">
+                  <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
+                  <li class="report">Report</li>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="comment-block">
-          <p class="comment-author">{{ item.username }}</p>
-          <p class="comment-text">{{ item.content }}</p>
-          <div class="bottom-comment">
-            <div class="comment-date">{{ item.date }}</div>
-            <ul class="comment-actions">
-              <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
-              <li class="report">Report</li>
-              <li class="report">warningSpoilers</li>
-            </ul>
+        </a-tab-pane>
+        <a-tab-pane key="imdb" tab="IMDB reviews"
+          ><h1>IMDB reviews</h1>
+          <div class="comment-wrap" v-for="item in imdbreview" :key="item.id">
+            <div class="photo-avatar">
+              <div class="avatar">
+                <a-avatar :src="emptyprofile" />
+              </div>
+            </div>
+            <div class="comment-block">
+              <p class="comment-author">{{ item.username }}</p>
+              <p class="comment-text">{{ item.content }}</p>
+              <div class="bottom-comment">
+                <div class="comment-date">{{ item.date }}</div>
+                <ul class="comment-actions">
+                  <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
+                  <li class="report">Report</li>
+                  <li class="report">warningSpoilers</li>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <h1>AMDB reviews</h1>
-      <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
-        <div class="photo-avatar">
-          <div class="avatar">
-            <a-avatar :src="emptyprofile" />
-          </div>
-        </div>
-        <div class="comment-block">
-          <p class="comment-author">{{ item.userName }}</p>
-          <p class="comment-text">{{ item.comment }}</p>
-          <div class="bottom-comment">
-            <!-- <div class="comment-date">{{ item.date }}</div> -->
-            <ul class="comment-actions">
-              <!-- <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li> -->
-              <li class="report">Report</li>
-              <li class="report">warningSpoilers</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <a-comment>
-        <template #avatar>
-          <a-avatar
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            alt="Han Solo"
-          />
-        </template>
-        <template #content>
-          <a-form-item>
-            <a-textarea v-model:value="commentsValue" :rows="4" />
-          </a-form-item>
-          <a-form-item>
-            <a-button
-              html-type="submit"
-              :loading="submitting"
-              type="primary"
-              @click="handleSubmit"
-            >
-              Add Comment
-            </a-button>
-          </a-form-item>
-        </template>
-      </a-comment>
+        </a-tab-pane>
+      </a-tabs>
     </div>
   </div>
 </template>

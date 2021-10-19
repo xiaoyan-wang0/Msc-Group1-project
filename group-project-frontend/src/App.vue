@@ -73,6 +73,9 @@ body {
     padding: 0 !important;
     background-color: black;
   }
+  textarea.ant-input{
+    height: 150px !important;
+  }
 }
 * {
   margin: 0;
