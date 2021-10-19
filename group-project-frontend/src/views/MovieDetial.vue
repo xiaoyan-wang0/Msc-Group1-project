@@ -128,9 +128,9 @@
               <p class="comment-author">{{ item.userName }}</p>
               <p class="comment-text">{{ item.comment }}</p>
               <div class="bottom-comment">
-                <!-- <div class="comment-date">{{ item.date }}</div> -->
+                <div class="comment-date">{{ item.createTime }}</div>
                 <ul class="comment-actions">
-                  <!-- <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li> -->
+                  <li class="toxicrate">Toxic Rate :{{ item.toxic }}</li>
                   <li class="report">Report</li>
                   <li class="report">warningSpoilers</li>
                 </ul>
@@ -330,12 +330,12 @@ export default {
         });
 
       //Fetch AMDB Comments
-
       axios
         .get("/api/comments/showComments?movieId=" + movieid.value)
         .then((response) => {
           amdbreview.value = response.data.data;
           console.log("amdbreview detail");
+          console.log(response.data);
           console.log(amdbreview.value);
         });
     });

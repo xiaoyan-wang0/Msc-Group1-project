@@ -12,6 +12,8 @@ export const auth = {
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {
+          console.log("user store");
+          console.log(user);
           if(user.code != -1){
             commit('loginSuccess', user);
           }

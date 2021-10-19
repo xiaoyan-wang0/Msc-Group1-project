@@ -81,7 +81,7 @@ export default {
         .get("/api/comments/toxic?title=" + commentValue.value)
         .then((response) => {
           commentStatus.value = response.data.data;
-          toxicPercent.value = Number((commentStatus.tag)[0].value*100).toFixed(2)
+          toxicPercent.value = Number(commentStatus.value.tag[0]*100).toFixed(2)
           console.log("Comment detect");
           console.log(response.data);
         });

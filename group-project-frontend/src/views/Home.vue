@@ -43,6 +43,32 @@
     <!-- High score movies -->
     <Showpart :itemdata="hignScoreMovieData" spacename="High Score Movie" />
 
+    <!-- IMDB TOP 10 movies  -->
+    <div class="show-items">
+      <div class="item-list">
+        <div class="item-title">
+          <span>IMDB TOP 10 movies</span>
+          <a>more</a>
+        </div>
+        <div class="movies-list">
+          <div class="movie" v-for="item in imdbBotMovies" :key="item.Imdb_Id">
+            <router-link :to="'/movie/' + item.Imdb_Id" class="movie-link">
+            <div class="product-image">
+              <img :src="item.posters[0].link" alt="Movie Poster" />
+              <div class="type">{{ item.Imdb_Rating[0] }}</div>
+            </div>
+            <div class="detail">
+              <p class="year">{{ item.year }}</p>
+              <h3>{{ item.movie_title }}</h3>
+            </div>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
     <!--  movies searched -->
     <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbID">
@@ -78,6 +104,7 @@ export default {
     const popularMovieData = ref([]);
     const lastestMovieData = ref([]);
     const hignScoreMovieData = ref([]);
+    const imdbBotMovies = ref([]);
     const upComingMovieData = ref([]);
     const moviePoster = ref("");
     moviePoster.value = env.tmdbpic;
@@ -141,6 +168,17 @@ export default {
           hignScoreMovieData.value = response.data;
           // console.log(hignScoreMovieData.value.results);
         });
+
+      // IMDB BOT 10 movies
+      axios
+        .get("/api/movieImdb/movieImdbBottomInfo?numberOfMovies=10")
+        .then((response) => {
+          // popularMovieData.value = JSON.stringify(response.data);
+          imdbBotMovies.value = response.data.data;
+          console.log("IMDB BOT 10 movies");
+          console.log(imdbBotMovies.value);
+          // console.log(hignScoreMovieData.value.results);
+        });
     });
 
     return {
@@ -148,20 +186,20 @@ export default {
       movies,
       moviePoster,
       activeIndex,
-      SearchMovies,
-      handleSelect,
       itemdata,
       popularMovieData,
       lastestMovieData,
       hignScoreMovieData,
       upComingMovieData,
+      imdbBotMovies,
+      handleSelect,
+      SearchMovies,
     };
   },
 };
 </script>
 
 <style lang="scss">
-
 .home {
   .el-carousel__item h3 {
     color: #475669;
@@ -259,6 +297,18 @@ export default {
   }
   .item-list {
     margin: 0 50px;
+  }
+  .item-title {
+    color: white;
+    span {
+      font-size: 50px;
+    }
+    a {
+      margin-top: 25px;
+      margin-right: 30px;
+      float: right;
+      font-size: 25px;
+    }
   }
 
   .movies-list {
