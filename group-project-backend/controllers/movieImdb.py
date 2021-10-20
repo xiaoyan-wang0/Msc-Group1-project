@@ -32,10 +32,10 @@ def review():
     #reviews = jsonpath(response.json(),'$..items')
     reviews = response.json()
 
-    for review in reviews['items']:
-        content = [review['content']]
-        result = detector(content)
-        review['toxic'] = result
+    # for review in reviews['items']:
+    #     content = [review['content']]
+    #     result = detector(content)
+    #     review['toxic'] = result
 
     movieReviewsDictionary = {
         "reviews": reviews
@@ -107,8 +107,6 @@ def bottom():
     req = request.values
     numberOfMovies = req['numberOfMovies'] 
  
-    # Getting imdb top 250 movie's data
-    #url = 'http://www.imdb.com/chart/top'
     url = 'https://www.imdb.com/chart/bottom'
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')
@@ -153,7 +151,6 @@ def bottom():
                 "place": place,
                 "star_cast": crew[index],
                 "rating": ratings[index],
-                "vote": votes[index],
                 "link": links[index]}
         list.append(data)
     
