@@ -90,6 +90,8 @@ export default {
 <style lang="scss">
 body {
   background-color: #080808 !important;
+  
+    min-width: 600px;
   .ant-modal-body {
     padding: 0 !important;
     background-color: black;

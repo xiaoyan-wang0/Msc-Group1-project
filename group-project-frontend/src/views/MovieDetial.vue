@@ -130,7 +130,9 @@
               <div class="bottom-comment">
                 <div class="comment-date">{{ item.createTime }}</div>
                 <ul class="comment-actions">
-                  <li class="toxicrate">Toxic Rate :{{ item.toxic }}</li>
+                  <li class="toxicrate">
+                    {{ showToxicText(item.toxic[0]) }} :{{ item.toxic[0] }}
+                  </li>
                   <li class="report">Report</li>
                   <li class="report">warningSpoilers</li>
                 </ul>
@@ -182,7 +184,9 @@
               <div class="bottom-comment">
                 <div class="comment-date">{{ item.updated_at }}</div>
                 <ul class="comment-actions">
-                  <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
+                  <li class="toxicrate">
+                    {{ showToxicText(item.toxic.tag[0]) }}:{{ item.toxic.tag }}
+                  </li>
                   <li class="report">Report</li>
                 </ul>
               </div>
@@ -203,7 +207,9 @@
               <div class="bottom-comment">
                 <div class="comment-date">{{ item.date }}</div>
                 <ul class="comment-actions">
-                  <li class="toxicrate">Toxic Rate :{{ item.toxic.tag }}</li>
+                  <li class="toxicrate">
+                    {{ showToxicText(item.toxic.tag[0]) }} :{{ item.toxic.tag }}
+                  </li>
                   <li class="report">Report</li>
                   <li class="report">warningSpoilers</li>
                 </ul>
@@ -220,8 +226,8 @@
 import { ref, inject, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import env from "@/env.js";
-import moment from "moment";
 import { YoutubeVue3 } from "youtube-vue3";
+import ToolMethod from "../tools.js"
 
 import {
   LikeFilled,
@@ -348,6 +354,10 @@ export default {
       isShowTrailer.value = false;
     };
 
+    const showToxicText = (rate) => {
+      return ToolMethod.showToxicText(rate);
+    };
+
     // comments
     const handleSubmit = () => {
       if (!commentsValue.value) {
@@ -422,6 +432,7 @@ export default {
       handleCancel,
       handleSubmit,
       showCastDetail,
+      showToxicText,
     };
   },
 };
