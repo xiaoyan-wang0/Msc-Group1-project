@@ -60,10 +60,13 @@
       </div>
     </div> -->
 
+    <div class="morebutton">
+      <a @click="changeText()">{{ isMore }}</a>
+    </div>
     <div class="movie-casts">
       <div
         class="card"
-        v-for="item in casts.cast"
+        v-for="item in castList"
         :key="item.id"
         @click="showCastDetail(item.id)"
       >
@@ -82,7 +85,6 @@
         <p></p>
       </div>
     </div>
-
     <el-dialog v-model="isShowCastDetail" title="Detail">
       <el-descriptions class="margin-top" :column="1">
         <el-descriptions-item label="Name:">{{
@@ -256,6 +258,8 @@ export default {
     const axios = inject("axios"); // inject axios
     const movie = ref({});
     const casts = ref({});
+    const castList = ref([]);
+    const isMore = ref("");
     const castDetail = ref({});
     const start = ref();
     const route = useRoute();
@@ -332,6 +336,13 @@ export default {
           casts.value = response.data;
           console.log("casts detail");
           console.log(casts.value);
+          if (response.data.cast.length <= 10) {
+            castList.value = casts.value.cast;
+            isMore.value = "";
+          } else {
+            castList.value = response.data.cast.slice(0, 10);
+            isMore.value = "More";
+          }
         });
 
       //Fetch TMDB Comments
@@ -369,6 +380,19 @@ export default {
 
     const changeToPercent = (value) => {
       return ToolMethod.changeToPercent(value);
+    };
+
+    const changeText = () => {
+      console.log("castList.value.length")
+      console.log(castList.value.length)
+      console.log(casts.value.cast)
+      if (castList.value.length <= 10) {
+        castList.value = casts.value.cast;
+        isMore.value = "Less";
+      } else {
+        castList.value = casts.value.cast.slice(0, 10);
+        isMore.value = "More";
+      }
     };
 
     // comments
@@ -435,6 +459,8 @@ export default {
       youtube,
       isShowTrailer,
       emptyprofile,
+      isMore,
+      castList,
       // comments
       comments,
       submitting,
@@ -450,6 +476,7 @@ export default {
       showCastDetail,
       showToxicText,
       changeToPercent,
+      changeText,
     };
   },
 };
@@ -472,7 +499,7 @@ export default {
     }
     .featured-img {
       display: block;
-      max-width: 200px;
+      max-width: 300px;
       margin-bottom: 16px;
     }
     p {
@@ -480,6 +507,11 @@ export default {
       font-size: 18px;
       line-height: 1.4;
     }
+  }
+  .morebutton {
+    font-size: 40px;
+    text-align: right;
+    margin-right: 150px;
   }
   .movie-casts {
     display: flex;

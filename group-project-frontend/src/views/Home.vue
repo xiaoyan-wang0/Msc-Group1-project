@@ -3,7 +3,7 @@
     <div class="feature-card">
       <!-- carousel -->
       <div class="main-carousel" v-if="upComingMovieData.results">
-        <el-carousel :interval="3000"  height="350px" direction="vertical">
+        <el-carousel :interval="3000"  height="500px" direction="vertical">
           <el-carousel-item
             v-for="item in upComingMovieData.results.slice(0, 6)"
             :key="item.id"
@@ -15,7 +15,7 @@
                 class="featured-img"
               />
               <div class="detail">
-                <p>{{ item.overview }}</p>
+                <p>{{ item.title }}</p>
               </div>
             </router-link>
           </el-carousel-item>
@@ -218,6 +218,10 @@ export default {
   .feature-card {
     position: relative;
     padding: 0 30px;
+    .main-carousel{
+    margin: auto;
+      width: 60%;
+    }
     .featured-img {
       display: block;
       width: 100%;
@@ -228,6 +232,8 @@ export default {
     }
     .detail {
       position: absolute;
+      text-align: center;
+      font-size: 40px;
       left: 0;
       right: 0;
       bottom: 0;

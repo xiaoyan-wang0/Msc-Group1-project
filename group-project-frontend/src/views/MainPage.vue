@@ -1,7 +1,7 @@
 <template>
   <div class="div-main">
     <div class="div-main-left">
-      <img class="logo-icon" src="../assets/steam.jpg" />
+      <img class="logo-icon" src="../assets/TUD_White.png" />
       <!-- MENU -->
       <div class="mainpage-menu">
         <el-menu

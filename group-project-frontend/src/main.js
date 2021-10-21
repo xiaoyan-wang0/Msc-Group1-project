@@ -9,6 +9,10 @@ import VueAxios from 'vue-axios'
 import 'element-plus/dist/index.css'
 import 'ant-design-vue/dist/antd.css';
 
+// Import Bootstrap an BootstrapVue CSS files (order is important)
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap/dist/js/bootstrap.bundle.js'
+
 
 const app = createApp(App);
 app.config.productionTip = false;
