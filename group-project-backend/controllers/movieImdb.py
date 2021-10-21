@@ -32,10 +32,10 @@ def review():
     #reviews = jsonpath(response.json(),'$..items')
     reviews = response.json()
 
-    # for review in reviews['items']:
-    #     content = [review['content']]
-    #     result = detector(content)
-    #     review['toxic'] = result
+    for review in reviews['items']:
+        content = [review['content']]
+        result = detector(content)
+        review['toxic'] = result
 
     movieReviewsDictionary = {
         "reviews": reviews

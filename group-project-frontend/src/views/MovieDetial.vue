@@ -131,7 +131,7 @@
                 <div class="comment-date">{{ item.createTime }}</div>
                 <ul class="comment-actions">
                   <li class="toxicrate">
-                    {{ showToxicText(item.toxic[0]) }} :{{ item.toxic[0] }}
+                    {{ showToxicText(item.toxic) }} : {{ item.toxic }}
                   </li>
                   <li class="report">Report</li>
                   <li class="report">warningSpoilers</li>

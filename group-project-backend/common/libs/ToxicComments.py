@@ -10,7 +10,7 @@ import numpy as np
 
 def do_pe(rs):
     pr=[]
-    with open('./tokenizer2.pickle', 'rb') as f:
+    with open('./tokenizer_4.pickle', 'rb') as f:
         tokenizer = pickle.load(f)
     for r in rs:
         r = r.lower()

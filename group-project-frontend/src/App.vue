@@ -6,37 +6,23 @@
       </router-link>
       <div class="logicon" v-if="!currentUser">
         <router-link to="/login" class="header-login">
-          <a-tooltip placement="topLeft" color="blue">
-            <template #title>
-              <span>LOGIN</span>
-            </template>
-            <LoginOutlined style="margin-right: 10px" />
-
-            <span> Sign In</span>
-          </a-tooltip>
+          <span> Sign In</span>
         </router-link>
 
         <router-link to="/register">
-          <a-tooltip placement="topLeft" color="blue">
-            <template #title>
-              <span>Sign Up</span>
-            </template>
-            <LogoutOutlined />
-            <span> Sign Up</span>
-          </a-tooltip>
+          <span> Sign Up</span>
         </router-link>
       </div>
       <div v-if="currentUser" class="logouticon">
         <router-link to="/main/profile" class="header-profile">
-          <a-tooltip placement="topLeft" color="blue">
+          <a-tooltip placement="topLeft" color="white">
             <template #title>
               <span>{{ currentUser.data.userName }}</span>
             </template>
-            <UserOutlined style="margin-right: 5px" />
             <span> {{ currentUser.data.userName }}</span></a-tooltip
           >
         </router-link>
-        <a-tooltip placement="topLeft" color="blue">
+        <a-tooltip placement="topLeft" color="white">
           <template #title>
             <span>LOGOUT</span>
           </template>
@@ -90,8 +76,8 @@ export default {
 <style lang="scss">
 body {
   background-color: #080808 !important;
-  
-    min-width: 600px;
+
+  min-width: 600px;
   .ant-modal-body {
     padding: 0 !important;
     background-color: black;
