@@ -2,11 +2,10 @@
   <div class="show-items">
     <div class="item-list">
       <div class="item-title">
-        <span>{{spacename}}</span>
-        <a>more</a>
+        <span>{{ resultName }}</span>
       </div>
-      <div class="movies-list" v-if=" itemdata.results!== undefined">
-        <div class="movie" v-for="item in itemdata.results" :key="item.id">
+      <div class="movies-list" v-if="itemdata !== undefined">
+        <div class="movie" v-for="item in itemdata" :key="item.id">
           <router-link :to="'/movie/' + item.id" class="movie-link">
             <div class="product-image">
               <img :src="poster + item.poster_path" alt="Movie Poster" />
@@ -25,19 +24,53 @@
 
 <script>
 import env from "@/env.js";
-import { ref } from "vue";
+import { ref, inject, onMounted } from "vue";
+import router from "@/router";
 
 export default {
-  name: "Showpart",
+  name: "ResultPage",
   props: {
-    spacename: String,
-    itemdata: JSON
+    name: String,
+    isPopularorHighScore: Number,
   },
-  setup() {
+  setup(props) {
     const poster = ref("");
+    const resultName = ref("Result");
+    const itemdata = ref();
+    const axios = inject("axios"); // inject axios
     poster.value = env.tmdbpic;
-    return { poster };
-  }
+
+    onMounted(() => {
+      console.log("RESULT props.isPopularorHighScore");
+      console.log( props.isPopularorHighScore);
+      if (props.isPopularorHighScore == 1) {
+        // Popular movies
+        resultName.value = "Popular movies";
+        axios
+          .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
+          .then((response) => {
+            itemdata.value = response.data.results;
+            console.log("REsult page Popula");
+            console.log(itemdata.value);
+          });
+      } else {
+        resultName.value = "High score moveis";
+        // High score moveis
+        axios
+          .get(
+            env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail
+          )
+          .then((response) => {
+            // popularMovieData.value = JSON.stringify(response.data);
+            itemdata.value = response.data.results;
+            console.log("REsult page score moveis");
+            console.log(itemdata.value);
+            // console.log(hignScoreMovieData.value.results);
+          });
+      }
+    });
+    return { poster, itemdata ,resultName};
+  },
 };
 </script>
 
@@ -48,7 +81,6 @@ export default {
 .item-title {
   color: white;
   span {
-
     font-size: 50px;
   }
   a {

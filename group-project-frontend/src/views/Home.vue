@@ -3,7 +3,7 @@
     <div class="feature-card">
       <!-- carousel -->
       <div class="main-carousel" v-if="upComingMovieData.results">
-        <el-carousel :interval="3000"  height="500px" direction="vertical">
+        <el-carousel :interval="3000" height="500px" direction="vertical">
           <el-carousel-item
             v-for="item in upComingMovieData.results.slice(0, 6)"
             :key="item.id"
@@ -34,38 +34,8 @@
         <input type="submit" value="Search" />
       </form>
     </div>
-    <!-- the lastest movies -->
-    <!-- <Showpart :itemdata="lastestMovieData" spacename="The lastest movies" /> -->
 
-    <!-- Upcoming movies -->
-    <Showpart :itemdata="popularMovieData" spacename="Popular Movies" />
-
-    <!-- High score movies -->
-    <Showpart :itemdata="hignScoreMovieData" spacename="High Score Movie" />
-
-    <!-- IMDB TOP 10 movies  -->
-    <div class="show-items">
-      <div class="item-list">
-        <div class="item-title">
-          <span>IMDB TOP 10 movies</span>
-          <a>more</a>
-        </div>
-        <div class="movies-list">
-          <div class="movie" v-for="item in imdbBotMovies" :key="item.Imdb_Id">
-            <router-link :to="'/movie/' + item.Imdb_Id" class="movie-link">
-              <div class="product-image">
-                <img :src="item.posters[0].link" alt="Movie Poster" />
-                <div class="type">{{ item.Imdb_Rating[0] }}</div>
-              </div>
-              <div class="detail">
-                <p class="year">{{ item.year }}</p>
-                <h3>{{ item.movie_title }}</h3>
-              </div>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <router-view />
 
     <!--  movies searched -->
     <div class="movies-list">
@@ -99,10 +69,7 @@ export default {
     const movies = ref([]);
     const activeIndex = ref("1");
     const itemdata = ref([]);
-    const popularMovieData = ref([]);
     const lastestMovieData = ref([]);
-    const hignScoreMovieData = ref([]);
-    const imdbBotMovies = ref([]);
     const upComingMovieData = ref([]);
     const moviePoster = ref("");
     moviePoster.value = env.tmdbpic;
@@ -151,32 +118,6 @@ export default {
       //     console.log(response.data);
       //     console.log(lastestMovieData.value);
       // });
-      // Popular movies
-      axios
-        .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
-        .then((response) => {
-          popularMovieData.value = response.data;
-          console.log(popularMovieData.value.results);
-        });
-      // High score moveis
-      axios
-        .get(env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail)
-        .then((response) => {
-          // popularMovieData.value = JSON.stringify(response.data);
-          hignScoreMovieData.value = response.data;
-          // console.log(hignScoreMovieData.value.results);
-        });
-
-      // IMDB BOT 10 movies
-      axios
-        .get("/api/movieImdb/movieImdbBottomInfo?numberOfMovies=10")
-        .then((response) => {
-          // popularMovieData.value = JSON.stringify(response.data);
-          imdbBotMovies.value = response.data.data;
-          console.log("IMDB BOT 10 movies");
-          console.log(imdbBotMovies.value);
-          // console.log(hignScoreMovieData.value.results);
-        });
     });
 
     return {
@@ -185,11 +126,8 @@ export default {
       moviePoster,
       activeIndex,
       itemdata,
-      popularMovieData,
       lastestMovieData,
-      hignScoreMovieData,
       upComingMovieData,
-      imdbBotMovies,
       handleSelect,
       SearchMovies,
     };
@@ -218,8 +156,8 @@ export default {
   .feature-card {
     position: relative;
     padding: 0 30px;
-    .main-carousel{
-    margin: auto;
+    .main-carousel {
+      margin: auto;
       width: 60%;
     }
     .featured-img {

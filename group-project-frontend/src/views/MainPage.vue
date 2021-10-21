@@ -40,10 +40,6 @@
 </template>
 
 <script>
-import { ElCarousel } from "element-plus";
-import { ref, inject, onBeforeMount } from "vue";
-import env from "@/env.js";
-import Showpart from "@/components/ShowPart.vue";
 export default {
   name: "Home",
   components: {},

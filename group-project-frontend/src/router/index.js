@@ -6,6 +6,8 @@ import MovieDetial from '../views/MovieDetial.vue'
 import MainPage from '../views/MainPage.vue'
 import Profile from '../components/Profile.vue'
 import CommentDetector from '../components/CommentDetector.vue'
+import MainDisplay from '../components/MainDisplay.vue'
+import ResultDisplay from '../components/ResultPage.vue'
 
 const routes = [
   {
@@ -16,7 +18,23 @@ const routes = [
       {
         path: 'home',
         name: 'Home',
-        component: Home
+        component: Home,
+        children: [
+          {
+          path: 'maindisplay',
+          name: 'MainDisplay',
+          component: MainDisplay,
+          props: true
+        },
+        {
+          path: 'reslut',
+          name: 'ResultDisplay',
+          component: ResultDisplay,
+          props: true
+        },
+
+        ],
+        redirect: '/main/home/maindisplay',
       },
       {
         path: '/movie/:id',

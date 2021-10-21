@@ -2,11 +2,15 @@
   <div class="show-items">
     <div class="item-list">
       <div class="item-title">
-        <span>{{spacename}}</span>
-        <a>more</a>
+        <span>{{ spacename }}</span>
+        <a @click="showResultPage()">more</a>
       </div>
-      <div class="movies-list" v-if=" itemdata.results!== undefined">
-        <div class="movie" v-for="item in itemdata.results.slice(0,10)" :key="item.id">
+      <div class="movies-list" v-if="itemdata.results !== undefined">
+        <div
+          class="movie"
+          v-for="item in itemdata.results.slice(0, 10)"
+          :key="item.id"
+        >
           <router-link :to="'/movie/' + item.id" class="movie-link">
             <div class="product-image">
               <img :src="poster + item.poster_path" alt="Movie Poster" />
@@ -26,18 +30,31 @@
 <script>
 import env from "@/env.js";
 import { ref } from "vue";
+import router from "@/router";
 
 export default {
   name: "Showpart",
   props: {
     spacename: String,
-    itemdata: JSON
+    itemdata: JSON,
+    isPopularorHighScore: String
   },
-  setup() {
+  setup(props) {
     const poster = ref("");
     poster.value = env.tmdbpic;
-    return { poster };
-  }
+    //show Result Page
+    const showResultPage = () => {
+      console.log('isPopularorHighScore');
+      console.log( props.isPopularorHighScore);
+      router.push({
+        name: "ResultDisplay",
+        params: {
+          isPopularorHighScore: props.isPopularorHighScore,
+        },
+      });
+    };
+    return { poster, showResultPage };
+  },
 };
 </script>
 
@@ -48,7 +65,6 @@ export default {
 .item-title {
   color: white;
   span {
-
     font-size: 50px;
   }
   a {
