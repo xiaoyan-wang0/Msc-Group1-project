@@ -10,6 +10,10 @@ class ToolMethod {
             return "Obsence toxic";
         }
     }
+
+    changeToPercent(number) {
+        return Number(number * 100).toFixed(2) + "%";
+    }
     // add more
 }
 

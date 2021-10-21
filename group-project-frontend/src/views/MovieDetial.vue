@@ -116,7 +116,8 @@
 
     <div class="comments">
       <a-tabs type="card" v-model:activeKey="activeKey">
-        <a-tab-pane key="amdb" tab="AMDB reviews">
+        <a-tab-pane key="amdb" tab="AMDB reviews" v-loading="isCommnetLoading"
+          >>
           <h1>AMDB reviews</h1>
           <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
             <div class="photo-avatar">
@@ -131,10 +132,10 @@
                 <div class="comment-date">{{ item.createTime }}</div>
                 <ul class="comment-actions">
                   <li class="toxicrate">
-                    {{ showToxicText(item.toxic) }} : {{ item.toxic }}
+                    {{ showToxicText(item.toxic) }} :
+                    {{ changeToPercent(item.toxic) }}
                   </li>
                   <li class="report">Report</li>
-                  <li class="report">warningSpoilers</li>
                 </ul>
               </div>
             </div>
@@ -185,7 +186,9 @@
                 <div class="comment-date">{{ item.updated_at }}</div>
                 <ul class="comment-actions">
                   <li class="toxicrate">
-                    {{ showToxicText(item.toxic.tag[0]) }}:{{ item.toxic.tag }}
+                    {{ showToxicText(item.toxic.tag[0]) }}:{{
+                      changeToPercent(item.toxic.tag)
+                    }}
                   </li>
                   <li class="report">Report</li>
                 </ul>
@@ -208,10 +211,14 @@
                 <div class="comment-date">{{ item.date }}</div>
                 <ul class="comment-actions">
                   <li class="toxicrate">
-                    {{ showToxicText(item.toxic.tag[0]) }} :{{ item.toxic.tag }}
+                    {{ showToxicText(item.toxic.tag[0]) }} :{{
+                      changeToPercent(item.toxic.tag[0])
+                    }}
                   </li>
                   <li class="report">Report</li>
-                  <li class="report">warningSpoilers</li>
+                  <li class="report">
+                    {{ item.warningSpoilers ? "warningSpoilers" : "" }}
+                  </li>
                 </ul>
               </div>
             </div>
@@ -227,7 +234,7 @@ import { ref, inject, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import env from "@/env.js";
 import { YoutubeVue3 } from "youtube-vue3";
-import ToolMethod from "../tools.js"
+import ToolMethod from "../tools.js";
 
 import {
   LikeFilled,
@@ -261,6 +268,7 @@ export default {
     const video_id = ref("");
     const emptyprofile = ref("");
     const isShowTrailer = ref(false);
+    const isCommnetLoading = ref(false);
     const isShowCastDetail = ref(false);
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
@@ -334,7 +342,10 @@ export default {
           console.log("tmdbreview detail");
           console.log(tmdbreview.value);
         });
+      getAMDBComments();
+    });
 
+    const getAMDBComments = () => {
       //Fetch AMDB Comments
       axios
         .get("/api/comments/showComments?movieId=" + movieid.value)
@@ -343,12 +354,10 @@ export default {
           console.log("amdbreview detail");
           console.log(response.data);
           console.log(amdbreview.value);
-        });
-    });
 
-    // onMounted(() => {
-    //   console.log("onMounted");
-    // });
+          isCommnetLoading.value = false;
+        });
+    };
 
     const handleCancel = () => {
       isShowTrailer.value = false;
@@ -358,11 +367,16 @@ export default {
       return ToolMethod.showToxicText(rate);
     };
 
+    const changeToPercent = (value) => {
+      return ToolMethod.changeToPercent(value);
+    };
+
     // comments
     const handleSubmit = () => {
       if (!commentsValue.value) {
         return;
       }
+      isCommnetLoading.value = true;
       submitting.value = true;
       // Add comments
       axios
@@ -377,6 +391,7 @@ export default {
           console.log("Add comments ");
           console.log(response.data);
           submitting.value = false;
+          getAMDBComments();
         });
 
       // submitting.value = true;
@@ -429,10 +444,12 @@ export default {
       amdbreview,
       castDetail,
       isShowCastDetail,
+      isCommnetLoading,
       handleCancel,
       handleSubmit,
       showCastDetail,
       showToxicText,
+      changeToPercent,
     };
   },
 };

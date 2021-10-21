@@ -313,11 +313,10 @@ export default {
   .movies-list {
     display: flex;
     flex-wrap: wrap;
-        flex-direction: row;
     margin: 0px 50px;
     .movie {
       max-width: 20%;
-      min-width: 200px;
+      min-width: 180px;
       flex: 1 1 50%;
       padding: 16px 8px;
       .movie-link {
