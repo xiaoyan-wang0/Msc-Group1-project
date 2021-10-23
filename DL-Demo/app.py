@@ -77,7 +77,7 @@ def input_predict_text():
 
 if __name__ == '__main__':
 
-    with open('tokenizer2.pickle', 'rb') as f:
+    with open('tokenizer_4.pickle', 'rb') as f:
          tokenizer = pickle.load(f)
 
    ## with open('tokenizer.json') as f:
