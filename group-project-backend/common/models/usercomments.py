@@ -6,16 +6,15 @@ db = SQLAlchemy()
 
 
 
-class Usermovy(db.Model):
-    __tablename__ = 'usermovies'
+class Usercomment(db.Model):
+    __tablename__ = 'usercomments'
 
-    Id = db.Column(db.Integer, primary_key=True)
-    userId = db.Column(db.Integer, nullable=False)
-    moiveId = db.Column(db.Integer)
-    type = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer)
+    tagId = db.Column(db.Integer)
+    comment = db.Column(db.String(1024))
     #createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
-
-
+    movieId = db.Column(db.Integer)
 
     def serialize(self):
         d = Serializer.serialize(self)

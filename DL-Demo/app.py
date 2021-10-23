@@ -34,7 +34,6 @@ expose.secret_key = "super_secret_key"
 
 
 
-
 @expose.route('/', methods=['GET'])
 def index():
     return jsonify("DL API")
