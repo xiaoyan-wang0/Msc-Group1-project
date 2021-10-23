@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint,render_template,request,make_response,jsonify,redirect
+from flask import Blueprint,render_template,request,make_response,jsonify,redirect,g
 from sqlalchemy import  text
 from sqlalchemy.sql.expression import over
 from application import app,db
@@ -14,11 +14,19 @@ from tmdbv3api import Movie
 import requests
 import json
 from jsonpath import jsonpath
+from common.libs.ToxicComments import do_pe,detector
+
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
 
 @movie_page_Tmdb.route("/movieTmdbReviews")
 def review():
+
+    if 'current_user' in  g:
+        current_user = g.current_user
+    if current_user == None : 
+        return ops_renderErrJSON( msg ="please login first")
+
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -34,14 +42,26 @@ def review():
     response = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/reviews?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
     reviews = jsonpath(response.json(),'$..results')
 
+    for review in reviews[0]:
+        content = [review['content']]
+        result = detector(content)
+        review['toxic'] = result
+
     movieInfoDictionary = {
         "reviews": reviews
     }
-        
-    return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
+
+
+    return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
 @movie_page_Tmdb.route("/movieTmdbInfo")
 def Info():
+
+    if 'current_user' in  g:
+        current_user = g.current_user
+    if current_user == None : 
+        return ops_renderErrJSON( msg ="please login first")
+
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -85,5 +105,5 @@ def Info():
         "popularity": popularity,
     }
         
-    return ops_renderJSON(msg = "Show Comments Successfull!", data = movieInfoDictionary)
+    return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 

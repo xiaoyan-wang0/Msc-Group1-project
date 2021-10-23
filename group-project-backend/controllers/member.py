@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint,render_template,request,make_response,jsonify,redirect
+import requests
 from sqlalchemy import  text
 from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
@@ -8,6 +9,10 @@ from common.models.user import User
 from common.models.usercomments import Usercomment
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
+from common.libs.ToxicComments import do_pe,detector
+
+
+
 
 member_page = Blueprint( "member_page",__name__ )
 
@@ -55,10 +60,11 @@ def login():
 
     if user.password != UserService.genePwd( password ):
         return ops_renderErrJSON("password error")
-
-    response = make_response( ops_renderJSON( msg="login successfully!" ) )
+    userJson = User.serialize(user)
+    response = make_response( ops_renderJSON( msg="login successfully!",data = userJson ) )
     response.set_cookie(app.config['AUTH_COOKIE_NAME'],
                         "%s#%s"%( UserService.geneAuthCode( user ), user.userId ),60 * 60 *24 *7 )
+    
     return response
 
 @member_page.route("/logout")
@@ -69,31 +75,4 @@ def logOut():
     return response
 
 
-@member_page.route("/addComments")
-def addComments():
-    import json
-    req = request.values
-    userId = req['userId'] if "userId" in req else ""
-    comment = req['comment'] if "comment" in req else ""
-    movieId = req['movieId'] if "movieId" in req else ""
-    
-    model_comments = Usercomment()
-    model_comments.userId = userId
-    model_comments.comment = comment
-    model_comments.movieId = movieId
-    db.session.add( model_comments )
-    db.session.commit()
-    
-    return ops_renderJSON( msg = "addComments successfully!")
 
-@member_page.route("/showComments")
-def showComments():
-    import json
-    req = request.values
-    userId = req['userId'] if "userId" in req else ""
-    movieId = req['movieId'] if "movieId" in req else ""
-    textsql = " 1=1 and userId = '"+userId+"' and movieId = '"+movieId+"'"
-    result = Usercomment.query.filter(text(textsql)).all()
-    usercomments = Usercomment.serialize_list(result)
-    #response = make_response( json.dumps( data ) )
-    return ops_renderJSON( msg = "showComments successfully!",data = usercomments )
