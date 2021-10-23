@@ -1,6 +1,11 @@
 <template>
   <div class="login-page">
     <div id="loginDiv">
+      <!-- <a-tabs type="card" v-model:activeKey="activeKey">
+        <a-tab-pane key="1" tab="Tab 1">Content of Tab Pane 1</a-tab-pane>
+        <a-tab-pane key="2" tab="Tab 2">Content of Tab Pane 2</a-tab-pane>
+        <a-tab-pane key="3" tab="Tab 3">Content of Tab Pane 3</a-tab-pane>
+      </a-tabs> -->
       <form id="login-form" @submit.prevent="onSubmitLogin()">
         <h1 style="text-align: center; color: aliceblue">Login</h1>
         <!-- <p>
@@ -8,6 +13,11 @@
             v-model="loginMes.username"/>
         </p> -->
 
+        <div class="login-icon">
+          <GoogleOutlined :style="{ fontSize: '50px', color: '#fff' }" />
+          <FacebookOutlined :style="{ fontSize: '50px', color: '#fff' }" />
+          <TwitterOutlined :style="{ fontSize: '50px', color: '#fff' }" />
+        </div>
         <p>
           Email&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
             id="email"
@@ -39,15 +49,21 @@
 </template>
 
 <script>
-import { ref, defineComponent, inject } from "vue";
+import { ref, defineComponent } from "vue";
 import { message } from "ant-design-vue";
+import {
+  GoogleOutlined,
+  FacebookOutlined,
+  TwitterOutlined,
+} from "@ant-design/icons-vue";
 import router from "@/router";
+import { useStore } from "vuex";
 export default defineComponent({
   name: "Login",
-  components: {},
+  components: { GoogleOutlined, FacebookOutlined, TwitterOutlined },
 
   setup() {
-    const axios = inject("axios"); // inject axios
+    const store = useStore();
 
     const loginMes = ref({
       username: "",
@@ -64,33 +80,52 @@ export default defineComponent({
       console.log(loginMes.value.password);
       loginFormData.append("email", loginMes.value.email);
       loginFormData.append("password", loginMes.value.password);
-      //Login
-      axios({
-        method: "post",
-        url: "/api/member/login",
-        data: loginFormData,
-        headers: { "Content-Type": "multipart/form-data" },
-      }).then(
+
+      store.dispatch("auth/login", loginFormData).then(
         (response) => {
-          console.log("response");
+          console.log("LOGIN");
           console.log(response);
-          if (response.data.code === -1) {
-            message.error(response.data.msg, () => {
+
+          if (response.code === -1) {
+            message.error(response.msg, () => {
               console.log("onClose");
             });
-          } else if (response.data.code === 200) {
-            message.success(response.data.msg + ", Will return in 3s.", () => {
+          } else if (response.code === 200) {
+            message.success(response.msg + ", Will return in 3s.", () => {
               router.push({ name: "Home" });
             });
           }
         },
         (error) => {
-          console.log("error");
+          console.log("login error");
           console.log(error);
         }
       );
+      //Login
+      // axios({
+      //   method: "post",
+      //   url: "/api/member/login",
+      //   data: loginFormData,
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // }).then(
+      //   (response) => {
+      //     console.log("response");
+      //     console.log(response);
+      //     if (response.data.code === -1) {
+      //       message.error(response.data.msg, () => {
+      //         console.log("onClose");
+      //       });
+      //     } else if (response.data.code === 200) {
+      //       message.success(response.data.msg + ", Will return in 3s.", () => {
+      //         router.push({ name: "Home" });
+      //       });
+      //     }
+      //   },
+      //   (error) => {
+      //   }
+      // );
     };
-    return { loginMes, onSubmitLogin };
+    return { loginMes, onSubmitLogin, activeKey: ref("1") };
   },
 });
 </script>
@@ -110,10 +145,16 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  height: 400px;
   background-color: rgba(75, 81, 95, 0.3);
   box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
   border-radius: 5px;
+  .login-icon {
+    display: flex;
+    padding-left: 70px;
+    padding-right: 50px;
+    justify-content: space-between;
+  }
 }
 
 #name_trip {

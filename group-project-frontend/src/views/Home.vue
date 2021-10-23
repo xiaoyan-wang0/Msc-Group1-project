@@ -3,62 +3,39 @@
     <div class="feature-card">
       <!-- carousel -->
       <div class="main-carousel" v-if="upComingMovieData.results">
-        <el-carousel :interval="3000" type="card" height="500px">
-          <el-carousel-item v-for="item in upComingMovieData.results.slice(0,6)" :key="item.id">
+        <el-carousel :interval="3000" height="500px" direction="vertical">
+          <el-carousel-item
+            v-for="item in upComingMovieData.results.slice(0, 6)"
+            :key="item.id"
+          >
             <router-link :to="'/movie/' + item.id">
-              <img :src="moviePoster + item.poster_path" :alt="item.title" class="featured-img" />
+              <img
+                :src="moviePoster + item.poster_path"
+                :alt="item.title"
+                class="featured-img"
+              />
               <div class="detail">
-                <p>{{item.overview}}</p>
+                <p>{{ item.title }}</p>
               </div>
             </router-link>
           </el-carousel-item>
         </el-carousel>
       </div>
     </div>
-    <!-- MENU -->
-    <div class="mainpage-menu">
-      <el-menu
-        :default-active="activeIndex"
-        class="main-menu"
-        mode="horizontal"
-        background-color="#35495e 0.7"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-        @select="handleSelect"
-      >
-        <el-menu-item index="1">Movies</el-menu-item>
-        <el-sub-menu index="2" disabled>
-          <template #title>Entertainment</template>
-          <el-menu-item index="2-1">item one</el-menu-item>
-          <el-menu-item index="2-2">item two</el-menu-item>
-          <el-menu-item index="2-3">item three</el-menu-item>
-          <el-sub-menu index="2-4">
-            <template #title>item four</template>
-            <el-menu-item index="2-4-1">item one</el-menu-item>
-            <el-menu-item index="2-4-2">item two</el-menu-item>
-            <el-menu-item index="2-4-3">item three</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
-        <el-menu-item index="3" disabled>Info</el-menu-item>
-        <el-menu-item index="4">Comment Detector</el-menu-item>
-      </el-menu>
-    </div>
 
     <!-- SEACH BAR -->
     <div class="search-bar">
       <form @submit.prevent="SearchMovies()" class="search-box">
-        <input type="text" placeholder="What are you looking for?" v-model="search" />
+        <input
+          type="text"
+          placeholder="What are you looking for?"
+          v-model="search"
+        />
         <input type="submit" value="Search" />
       </form>
     </div>
-    <!-- the lastest movies -->
-    <!-- <Showpart :itemdata="lastestMovieData" spacename="The lastest movies" /> -->
 
-    <!-- Upcoming movies -->
-    <Showpart :itemdata="popularMovieData" spacename="Popular Movies" />
-
-    <!-- High score movies -->
-    <Showpart :itemdata="hignScoreMovieData" spacename="High Score Movie" />
+    <router-view />
 
     <!--  movies searched -->
     <div class="movies-list">
@@ -92,9 +69,7 @@ export default {
     const movies = ref([]);
     const activeIndex = ref("1");
     const itemdata = ref([]);
-    const popularMovieData = ref([]);
     const lastestMovieData = ref([]);
-    const hignScoreMovieData = ref([]);
     const upComingMovieData = ref([]);
     const moviePoster = ref("");
     moviePoster.value = env.tmdbpic;
@@ -106,8 +81,14 @@ export default {
           env.omdbapi + env.omdbkey + env.omdbapisearch + search.value
         );
         axios
-          .get(env.omdbapi + env.omdbkey + env.omdbapisearch + search.value + "&plot=full")
-          .then(response => {
+          .get(
+            env.omdbapi +
+              env.omdbkey +
+              env.omdbapisearch +
+              search.value +
+              "&plot=full"
+          )
+          .then((response) => {
             movies.value = response.data.Search;
             search.value = "";
             itemdata.value = response.data.Search;
@@ -123,9 +104,9 @@ export default {
 
     onBeforeMount(() => {
       //Upcoming moveis
-       axios
+      axios
         .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
-        .then(response => {
+        .then((response) => {
           upComingMovieData.value = response.data;
           console.log(upComingMovieData.value.results);
         });
@@ -137,21 +118,6 @@ export default {
       //     console.log(response.data);
       //     console.log(lastestMovieData.value);
       // });
-      // Popular movies
-      axios
-        .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
-        .then(response => {
-          popularMovieData.value = response.data;
-          console.log(popularMovieData.value.results);
-        });
-      // High score moveis
-      axios
-        .get(env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail)
-        .then(response => {
-          // popularMovieData.value = JSON.stringify(response.data);
-          hignScoreMovieData.value = response.data;
-          // console.log(hignScoreMovieData.value.results);
-        });
     });
 
     return {
@@ -159,15 +125,13 @@ export default {
       movies,
       moviePoster,
       activeIndex,
-      SearchMovies,
-      handleSelect,
       itemdata,
-      popularMovieData,
       lastestMovieData,
-      hignScoreMovieData,
-      upComingMovieData
+      upComingMovieData,
+      handleSelect,
+      SearchMovies,
     };
-  }
+  },
 };
 </script>
 
@@ -175,9 +139,9 @@ export default {
 .home {
   .el-carousel__item h3 {
     color: #475669;
-    font-size: 14px;
+    font-size: 18px;
     opacity: 0.75;
-    line-height: 200px;
+    line-height: 300px;
     margin: 0;
     text-align: center;
   }
@@ -192,6 +156,10 @@ export default {
   .feature-card {
     position: relative;
     padding: 0 30px;
+    .main-carousel {
+      margin: auto;
+      width: 60%;
+    }
     .featured-img {
       display: block;
       width: 100%;
@@ -202,6 +170,8 @@ export default {
     }
     .detail {
       position: absolute;
+      text-align: center;
+      font-size: 40px;
       left: 0;
       right: 0;
       bottom: 0;
@@ -219,7 +189,7 @@ export default {
   }
 
   // .main-menu li ul {
-    // font-size: 500px;
+  // font-size: 500px;
   // }
   .search-box {
     display: flex;
@@ -269,6 +239,19 @@ export default {
   }
   .item-list {
     margin: 0 50px;
+    min-width: 400px;
+  }
+  .item-title {
+    color: white;
+    span {
+      font-size: 50px;
+    }
+    a {
+      margin-top: 25px;
+      margin-right: 30px;
+      float: right;
+      font-size: 25px;
+    }
   }
 
   .movies-list {
@@ -277,6 +260,7 @@ export default {
     margin: 0px 50px;
     .movie {
       max-width: 20%;
+      min-width: 180px;
       flex: 1 1 50%;
       padding: 16px 8px;
       .movie-link {
@@ -289,7 +273,7 @@ export default {
           img {
             display: block;
             width: 100%;
-            height: 350px;
+            height: 300px;
             object-fit: cover;
           }
           .type {

@@ -43,38 +43,6 @@
             v-model="registerMess.birthday"
           />
         </p>
-
-        <p class="interests">
-          Interests:
-          <a-checkable-tag
-            v-model:checked="registerMess.isAction"
-            effect="light"
-            >Action</a-checkable-tag
-          >
-          <a-checkable-tag v-model:checked="registerMess.isComedy"
-            >Comedy</a-checkable-tag
-          >
-          <a-checkable-tag v-model:checked="registerMess.isFantasy"
-            >Fantasy</a-checkable-tag
-          >
-          <a-checkable-tag v-model:checked="registerMess.isThriller"
-            >Thriller</a-checkable-tag
-          >
-        </p>
-        <p class="interests2">
-          <a-checkable-tag v-model:checked="registerMess.isHorror"
-            >Horror</a-checkable-tag
-          >
-          <a-checkable-tag v-model:checked="registerMess.isMystery"
-            >Mystery</a-checkable-tag
-          >
-          <a-checkable-tag v-model:checked="registerMess.isDrama"
-            >Drama</a-checkable-tag
-          >
-          <a-checkable-tag v-model:checked="registerMess.isRomance"
-            >Romance</a-checkable-tag
-          >
-        </p>
         <p>
           Email:
           <input
@@ -107,27 +75,19 @@ import {
 import { ref, defineComponent, inject } from "vue";
 import { message } from "ant-design-vue";
 import router from "@/router";
+import { useStore } from "vuex";
 export default defineComponent({
   name: "Login",
   components: { UserOutlined, LockOutlined, MailOutlined },
 
   setup() {
-    const axios = inject("axios"); // inject axios
+    const store = useStore();
     const registerMess = ref({
       username: "",
       password: "",
       birthday: "",
       interests: "",
       email: "",
-      surePassword: "",
-      isAction: false,
-      isComedy: false,
-      isDrama: false,
-      isFantasy: false,
-      isHorror: false,
-      isMystery: false,
-      isRomance: false,
-      isThriller: false,
     });
     const submitRegister = () => {
       console.log("registerMess");
@@ -136,22 +96,18 @@ export default defineComponent({
       registerFormData.append("userName", registerMess.value.username);
       registerFormData.append("email", registerMess.value.email);
       registerFormData.append("password", registerMess.value.password);
-      //Login
-      axios({
-        method: "post",
-        url: "/api/member/reg",
-        data: registerFormData,
-        headers: { "Content-Type": "multipart/form-data" },
-      }).then(
+      //Register
+
+      store.dispatch("auth/register", registerFormData).then(
         (response) => {
           console.log("response");
           console.log(response);
-          if (response.data.code === -1) {
-            message.error(response.data.msg, () => {
+          if (response.code === -1) {
+            message.error(response.msg, () => {
               console.log("onClose");
             });
-          } else if (response.data.code === 200) {
-            message.success(response.data.msg + ", Will return in 3s.", () => {
+          } else if (response.code === 200) {
+            message.success(response.msg + ", Will return in 3s.", () => {
               router.push({ name: "Login" });
               console.log("onClose");
             });
@@ -163,6 +119,33 @@ export default defineComponent({
         }
       );
     };
+
+    //   axios({
+    //     method: "post",
+    //     url: "/api/member/reg",
+    //     data: registerFormData,
+    //     headers: { "Content-Type": "multipart/form-data" },
+    //   }).then(
+    //     (response) => {
+    //       console.log("response");
+    //       console.log(response);
+    //       if (response.data.code === -1) {
+    //         message.error(response.data.msg, () => {
+    //           console.log("onClose");
+    //         });
+    //       } else if (response.data.code === 200) {
+    //         message.success(response.data.msg + ", Will return in 3s.", () => {
+    //           router.push({ name: "Login" });
+    //           console.log("onClose");
+    //         });
+    //       }
+    //     },
+    //     (error) => {
+    //       console.log("error");
+    //       console.log(error);
+    //     }
+    //   );
+    // };
     return { registerMess, submitRegister };
   },
 });
@@ -182,7 +165,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 650px;
+  height: 450px;
   background-color: rgba(75, 81, 95, 0.3);
   box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
   border-radius: 5px;
