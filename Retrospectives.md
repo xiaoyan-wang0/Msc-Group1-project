@@ -27,4 +27,11 @@ Good backend framwork
 All teammates are working on project and they all dedicated
 
 ### Retrospectives（week 5）
+## mad
+Tengkai:The progress of deployment in the cloud needs to be completed as soon as possible
 
+## sad
+Tengkai:The front-end interface needs to improve
+
+## glad
+Everyone is working hard, and the presentation performance of last week has improved significantly
