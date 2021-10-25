@@ -34,92 +34,15 @@
       >
         {{ item.name }}
       </el-tag>
-      <p>{{ movie.overview }}</p>
+      <p style="font-size:20px">{{ movie.overview }}</p>
       <a-rate :value="start" disabled allowHalf />
       <p>{{ movie.vote_average }}</p>
     </div>
 
-    <!-- <div class="movie-casts">
-      <div class="cast" v-for="item in casts.cast" :key="item.id">
-        <router-link :to="'/movie/' + item.imdbID" class="cast-link">
-          <div class="product-image">
-            <img
-              :src="
-                item.profile_path != null
-                  ? moviePoster + item.profile_path
-                  : emptyprofile
-              "
-              alt="Cast profile"
-            />
-          </div>
-          <div class="detail">
-            <p class="character">{{ item.character }}</p>
-            <h3>{{ item.name }}</h3>
-          </div>
-        </router-link>
-      </div>
-    </div> -->
-
-    <div class="morebutton">
-      <a @click="changeText()">{{ isMore }}</a>
-    </div>
-    <div class="movie-casts">
-      <div
-        class="card"
-        v-for="item in castList"
-        :key="item.id"
-        @click="showCastDetail(item.id)"
-      >
-        <div class="photo">
-          <img
-            :src="
-              item.profile_path != null
-                ? moviePoster + item.profile_path
-                : emptyprofile
-            "
-            alt="Cast profile"
-          />
-        </div>
-        <h2>{{ item.name }}</h2>
-        <h3>{{ item.character }}</h3>
-        <p></p>
-      </div>
-    </div>
-    <el-dialog v-model="isShowCastDetail" title="Detail">
-      <el-descriptions class="margin-top" :column="1">
-        <el-descriptions-item label="Name:">{{
-          castDetail.name
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Birthday:">{{
-          castDetail.birthday
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Department:">
-          <el-tag size="small">{{ castDetail.known_for_department }}</el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="Popularity:">{{
-          castDetail.popularity
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Also known as:">{{
-          castDetail.also_known_as
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Biography:">{{
-          castDetail.biography
-        }}</el-descriptions-item>
-      </el-descriptions>
-
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button type="primary" @click="isShowCastDetail = false"
-            >Confirm</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
-
     <div class="comments">
       <a-tabs type="card" v-model:activeKey="activeKey">
         <a-tab-pane key="amdb" tab="AMDB reviews" v-loading="isCommnetLoading"
-          >>
+           style="height:600px">
           <h1>AMDB reviews</h1>
           <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
             <div class="photo-avatar">
@@ -228,6 +151,62 @@
         </a-tab-pane>
       </a-tabs>
     </div>
+
+    <div class="morebutton">
+      <a @click="changeText()">{{ isMore }}</a>
+    </div>
+    <div class="movie-casts">
+      <div
+        class="card"
+        v-for="item in castList"
+        :key="item.id"
+        @click="showCastDetail(item.id)"
+      >
+        <div class="photo">
+          <img
+            :src="
+              item.profile_path != null
+                ? moviePoster + item.profile_path
+                : emptyprofile
+            "
+            alt="Cast profile"
+          />
+        </div>
+        <h2>{{ item.name }}</h2>
+        <h3>{{ item.character }}</h3>
+        <p></p>
+      </div>
+    </div>
+    <el-dialog v-model="isShowCastDetail" title="Detail">
+      <el-descriptions class="margin-top" :column="1">
+        <el-descriptions-item label="Name:">{{
+          castDetail.name
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Birthday:">{{
+          castDetail.birthday
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Department:">
+          <el-tag size="small">{{ castDetail.known_for_department }}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="Popularity:">{{
+          castDetail.popularity
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Also known as:">{{
+          castDetail.also_known_as
+        }}</el-descriptions-item>
+        <el-descriptions-item label="Biography:">{{
+          castDetail.biography
+        }}</el-descriptions-item>
+      </el-descriptions>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="isShowCastDetail = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -383,9 +362,9 @@ export default {
     };
 
     const changeText = () => {
-      console.log("castList.value.length")
-      console.log(castList.value.length)
-      console.log(casts.value.cast)
+      console.log("castList.value.length");
+      console.log(castList.value.length);
+      console.log(casts.value.cast);
       if (castList.value.length <= 10) {
         castList.value = casts.value.cast;
         isMore.value = "Less";
@@ -510,6 +489,7 @@ export default {
   }
   .morebutton {
     font-size: 40px;
+    color: #fff;
     text-align: right;
     margin-right: 150px;
   }
@@ -518,7 +498,7 @@ export default {
     flex-wrap: wrap;
     margin-left: 30px;
     .cast {
-      max-width: 20%;
+      max-width: 25%;
       flex: 1 1 50%;
       padding: 16px 8px;
 
@@ -627,8 +607,8 @@ export default {
   flex-shrink: 0;
   flex-grow: 0;
   position: relative;
-  width: 220px;
-  height: 350px;
+  width: 150px;
+  height: 200px;
   overflow: hidden;
   margin: 20px;
   background-color: var(--border-color);
@@ -662,7 +642,8 @@ export default {
     transition: 0.5s;
   }
   h3 {
-    margin-top: 210px;
+    margin-top: 170px;
+    font-size: 16px;
     width: 100%;
     color: #fff;
     font-weight: normal;
@@ -720,14 +701,15 @@ export default {
   width: 120px;
   height: 120px;
   top: 10px;
-  left: 40px;
+  left: 10px;
   border-radius: 50%;
   box-shadow: 0 0 20px #111;
 }
 
 .card:hover h2 {
+  font-size: 15px;
   position: absolute;
-  top: 170px;
+  top: 140px;
 }
 
 a:hover {

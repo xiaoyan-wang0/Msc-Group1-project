@@ -1,9 +1,9 @@
 <template>
   <div class="div-main">
-    <div class="div-main-left">
-      <img class="logo-icon" src="../assets/TUD_White.png" />
+    <!-- <div class="div-main-left"> -->
+      <!-- <img class="logo-icon" src="./assets/logo.png" /> -->
       <!-- MENU -->
-      <div class="mainpage-menu">
+      <!-- <div class="mainpage-menu">
         <el-menu
           active-text-color="#ffd04b"
           background-color="#545c64"
@@ -31,9 +31,9 @@
             <span>Detector</span>
           </el-menu-item>
         </el-menu>
-      </div>
-    </div>
-    <div class="div-main-right">
+      </div> -->
+    <!-- </div> -->
+    <div class="div-main-content">
       <router-view />
     </div>
   </div>
@@ -53,23 +53,10 @@ export default {
 .div-main {
   float: left;
   width: 100%;
-  height: 180px;
-  .mainpage-menu {
-    margin-top: 100px;
-  }
-}
-.div-main-left {
-  float: left;
-  // background-color: rgb(136, 136, 161);
-  width: 20%;
-  height: 180px;
-  text-align: center;
-  .logo-icon {
-    width: 50%;
-  }
-}
-.div-main-right {
+  margin: auto;
+  margin-top: 10px;
+  .div-main-content{
   width: 80%;
-  float: right;
+  margin: auto;}
 }
 </style>

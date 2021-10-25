@@ -1,55 +1,90 @@
 <template>
   <div class="login-page">
-    <div id="loginDiv">
-      <!-- <a-tabs type="card" v-model:activeKey="activeKey">
-        <a-tab-pane key="1" tab="Tab 1">Content of Tab Pane 1</a-tab-pane>
-        <a-tab-pane key="2" tab="Tab 2">Content of Tab Pane 2</a-tab-pane>
-        <a-tab-pane key="3" tab="Tab 3">Content of Tab Pane 3</a-tab-pane>
-      </a-tabs> -->
-      <form id="login-form" @submit.prevent="onSubmitLogin()">
-        <h1 style="text-align: center; color: aliceblue">Login</h1>
-        <!-- <p>
-          Username:<input id="username" type="text" required 
-            v-model="loginMes.username"/>
-        </p> -->
+    <div class="form-body">
+      <div class="row">
+        <div class="form-holder">
+          <div class="form-content">
+            <div class="form-items">
+              <h3>Sign In</h3>
+              <p></p>
+              <form class="login-requires-validation" novalidate>
+                <!-- <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="name"
+                    placeholder="Username"
+                    required
+                    v-model="loginMes.username"
+                  />
+                  <div class="valid-feedback">Username field is valid!</div>
+                  <div class="invalid-feedback">
+                    Username field cannot be blank!
+                  </div>
+                </div> -->
 
-        <div class="login-icon">
-          <GoogleOutlined :style="{ fontSize: '50px', color: '#fff' }" />
-          <FacebookOutlined :style="{ fontSize: '50px', color: '#fff' }" />
-          <TwitterOutlined :style="{ fontSize: '50px', color: '#fff' }" />
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="email"
+                    name="email"
+                    v-model="loginMes.email"
+                    placeholder="E-mail Address"
+                    required
+                  />
+                  <div class="valid-feedback">Email field is valid!</div>
+                  <div class="invalid-feedback">
+                    Email field cannot be blank!
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    v-model="loginMes.password"
+                    required
+                  />
+                  <div class="valid-feedback">Password field is valid!</div>
+                  <div class="invalid-feedback">
+                    Password field cannot be blank!
+                  </div>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="invalidCheck"
+                    required
+                  />
+                  <label class="form-check-label"
+                    >I confirm that all data are correct</label
+                  >
+                  <div class="invalid-feedback">
+                    Please confirm that the entered data are all correct!
+                  </div>
+                </div>
+
+                <div class="form-button mt-3">
+                  <button id="submit" type="submit" class="btn btn-primary">
+                    Register
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <p>
-          Email&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-            id="email"
-            type="email"
-            required
-            v-model="loginMes.email"
-          />
-        </p>
-        <p>
-          Password:
-          <input
-            id="password"
-            type="password"
-            required
-            v-model="loginMes.password"
-          />
-        </p>
-
-        <div style="text-align: center; margin-top: 30px">
-          <input type="submit" class="button" value="Login" />
-
-          <router-link to="/register">
-            <input type="register" class="register-button" value="Register"
-          /></router-link>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, onMounted } from "vue";
 import { message } from "ant-design-vue";
 import {
   GoogleOutlined,
@@ -101,104 +136,188 @@ export default defineComponent({
           console.log(error);
         }
       );
-      //Login
-      // axios({
-      //   method: "post",
-      //   url: "/api/member/login",
-      //   data: loginFormData,
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // }).then(
-      //   (response) => {
-      //     console.log("response");
-      //     console.log(response);
-      //     if (response.data.code === -1) {
-      //       message.error(response.data.msg, () => {
-      //         console.log("onClose");
-      //       });
-      //     } else if (response.data.code === 200) {
-      //       message.success(response.data.msg + ", Will return in 3s.", () => {
-      //         router.push({ name: "Home" });
-      //       });
-      //     }
-      //   },
-      //   (error) => {
-      //   }
-      // );
     };
+
+    onMounted(() => {
+      const forms = document.querySelectorAll(".login-requires-validation");
+      Array.from(forms).forEach(function (form) {
+        form.addEventListener(
+          "submit",
+          function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            } else {
+              event.preventDefault();
+              event.stopPropagation();
+              onSubmitLogin();
+            }
+
+            form.classList.add("was-validated");
+          },
+          false
+        );
+      });
+    });
     return { loginMes, onSubmitLogin, activeKey: ref("1") };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.ant-modal-body {
-  background-color: rgb(235, 235, 235) !important;
-}
 .login-page {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-#loginDiv {
-  width: 45%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 400px;
-  background-color: rgba(75, 81, 95, 0.3);
-  box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
-  border-radius: 5px;
-  .login-icon {
+
+  overflow: hidden;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  .form-holder {
     display: flex;
-    padding-left: 70px;
-    padding-right: 50px;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
   }
-}
 
-#name_trip {
-  margin-left: 50px;
-  color: red;
-}
+  .form-holder .form-content {
+    position: relative;
+    text-align: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    padding: 60px;
+  }
 
-p {
-  margin-top: 30px;
-  margin-left: 20px;
-  color: azure;
-}
+  .form-content .form-items {
+    border: 3px solid #fff;
+    padding: 40px;
+    display: inline-block;
+    width: 100%;
+    min-width: 540px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-align: left;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+  }
 
-input {
-  margin-left: 15px;
-  border-radius: 5px;
-  border-style: hidden;
-  height: 30px;
-  width: 240px;
-  background-color: rgba(216, 191, 216, 0.5);
-  outline: none;
-  color: #f0edf3;
-}
+  .form-content h3 {
+    color: #fff;
+    text-align: left;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
 
-.button {
-  border-color: cornsilk;
-  background-color: rgba(55, 98, 179, 0.7);
-  color: aliceblue;
-  border-style: hidden;
-  border-radius: 5px;
-  width: 80px;
-  height: 31px;
-  font-size: 16px;
-}
-.register-button {
-  padding: 10px;
-  margin-left: 15px;
-  border-color: cornsilk;
-  background-color: rgba(55, 98, 179, 0.7);
-  color: aliceblue;
-  border-style: hidden;
-  border-radius: 5px;
-  width: 80px;
-  height: 31px;
-  font-size: 16px;
+  .form-content h3.form-title {
+    margin-bottom: 30px;
+  }
+
+  .form-content p {
+    color: #fff;
+    text-align: left;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 20px;
+    margin-bottom: 30px;
+  }
+
+  .form-content label,
+  .was-validated .form-check-input:invalid ~ .form-check-label,
+  .was-validated .form-check-input:valid ~ .form-check-label {
+    color: #fff;
+  }
+  .form-check {
+    margin-top: 15px;
+  }
+
+  .form-content input[type="text"],
+  .form-content input[type="password"],
+  .form-content input[type="email"],
+  .form-content select {
+    width: 100%;
+    padding: 9px 20px;
+    text-align: left;
+    border: 0;
+    outline: 0;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+    color: #8d8d8d;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    background-color: #6c757d;
+    outline: none;
+    border: 0px;
+    box-shadow: none;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus,
+  .btn-primary:active {
+    background-color: #495056;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none;
+  }
+
+  .form-content textarea {
+    position: static !important;
+    width: 100%;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-align: left;
+    background-color: #fff;
+    border: 0;
+    font-size: 15px;
+    font-weight: 300;
+    color: #8d8d8d;
+    outline: none;
+    resize: none;
+    height: 120px;
+    -webkit-transition: none;
+    transition: none;
+    margin-bottom: 14px;
+  }
+
+  .form-content textarea:hover,
+  .form-content textarea:focus {
+    border: 0;
+    background-color: #ebeff8;
+    color: #8d8d8d;
+  }
+
+  .mv-up {
+    margin-top: -9px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .invalid-feedback {
+    color: #ff606e;
+  }
+
+  .valid-feedback {
+    color: #2acc80;
+  }
 }
 </style>

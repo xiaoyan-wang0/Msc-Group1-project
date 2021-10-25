@@ -19,6 +19,16 @@
         </div>
       </div>
     </div>
+    <div class="result-pagiantion">
+      <a-pagination
+        class="result-pagiantion-content"
+        size="large"
+        v-model:current="current"
+        :total="itemtotal"
+      pageSize="20"
+        @change="onChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -37,24 +47,26 @@ export default {
     const poster = ref("");
     const resultName = ref("Result");
     const itemdata = ref();
+    const itemtotal = ref(0);
     const axios = inject("axios"); // inject axios
     poster.value = env.tmdbpic;
 
     onMounted(() => {
       console.log("RESULT props.isPopularorHighScore");
-      console.log( props.isPopularorHighScore);
+      console.log(props.isPopularorHighScore);
       if (props.isPopularorHighScore == 1) {
         // Popular movies
-        resultName.value = "Popular movies";
+        resultName.value = "Popular movies Result";
         axios
           .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
           .then((response) => {
             itemdata.value = response.data.results;
             console.log("REsult page Popula");
             console.log(itemdata.value);
+            itemtotal.value = response.data.total_results;
           });
-      } else {
-        resultName.value = "High score moveis";
+      } else if (props.isPopularorHighScore == 2) {
+        resultName.value = "High score moveis Result";
         // High score moveis
         axios
           .get(
@@ -63,13 +75,98 @@ export default {
           .then((response) => {
             // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.results;
-            console.log("REsult page score moveis");
+            console.log("REsult page score moveis Result");
+            console.log(itemdata.value);
+            // console.log(hignScoreMovieData.value.results);
+            itemtotal.value = response.data.total_results;
+          });
+      } else {
+        resultName.value = "Upcoming Movies Result";
+        // High score moveis
+        axios
+          .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
+
+          .then((response) => {
+            // popularMovieData.value = JSON.stringify(response.data);
+            itemdata.value = response.data.results;
+            console.log("Result page score moveis");
+            console.log(itemdata.value);
+            console.log(itemdata.value);
+            // console.log(hignScoreMovieData.value.results);
+            itemtotal.value = response.data.total_results;
+            console.log(itemtotal.value )
+          });
+      }
+    });
+
+    const onChange = (pageNumber) => {
+      console.log("Page: ", pageNumber);
+      if (props.isPopularorHighScore == 1) {
+        // Popular movies
+        resultName.value = "Popular movies Result";
+        axios
+          .get(
+            env.tmdbmovieapi +
+              env.tmdbpopular +
+              env.tmdbkey +
+              env.tmdbtail +
+              "&page= " +
+              pageNumber
+          )
+          .then((response) => {
+            itemdata.value = response.data.results;
+            console.log("REsult page Popula");
+            console.log(itemdata.value);
+          });
+      } else if (props.isPopularorHighScore == 2) {
+        resultName.value = "High score moveis Result";
+        // High score moveis
+        axios
+          .get(
+            env.tmdbmovieapi +
+              env.tmdbhighscore +
+              env.tmdbkey +
+              env.tmdbtail +
+              "&page= " +
+              pageNumber
+          )
+          .then((response) => {
+            // popularMovieData.value = JSON.stringify(response.data);
+            itemdata.value = response.data.results;
+            console.log("REsult page score moveis Result");
+            console.log(itemdata.value);
+            // console.log(hignScoreMovieData.value.results);
+          });
+      } else {
+        resultName.value = "Upcoming Movies Result";
+        // High score moveis
+        axios
+          .get(
+            env.tmdbmovieapi +
+              env.tmdbupcoming +
+              env.tmdbkey +
+              env.tmdbtail +
+              "&page= " +
+              pageNumber
+          )
+
+          .then((response) => {
+            // popularMovieData.value = JSON.stringify(response.data);
+            itemdata.value = response.data.results;
+            console.log("Result page score moveis");
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
           });
       }
-    });
-    return { poster, itemdata ,resultName};
+    };
+    return {
+      poster,
+      itemdata,
+      resultName,
+      itemtotal,
+      current: ref(1),
+      onChange,
+    };
   },
 };
 </script>
@@ -95,7 +192,7 @@ export default {
   flex-wrap: wrap;
   margin: 0px 50px;
   .movie {
-    max-width: 25%;
+    max-width: 20%;
     flex: 1 1 50%;
     padding: 16px 8px;
     .movie-link {
@@ -108,7 +205,7 @@ export default {
         img {
           display: block;
           width: 100%;
-          height: 300px;
+          height: 250px;
           object-fit: cover;
         }
         .type {
@@ -137,6 +234,14 @@ export default {
         }
       }
     }
+  }
+}
+.result-pagiantion {
+  .result-pagiantion-content {
+    justify-content: center;
+    width: 520px;
+    margin: auto;
+    float: right;
   }
 }
 </style>

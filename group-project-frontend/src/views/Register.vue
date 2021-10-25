@@ -1,67 +1,137 @@
 <template>
   <div class="register-page">
-    <div class="registerDiv">
-      <form @submit.prevent="submitRegister(this.params)">
-        <h1>Register</h1>
-        <p>
-          Username:<input
-            id="username"
-            type="text"
-            autofocus
-            required
-            v-model="registerMess.username"
-            placeholder="Please enter username"
-          />
-        </p>
+    <div class="form-body">
+      <div class="row">
+        <div class="form-holder">
+          <div class="form-content">
+            <div class="form-items">
+              <h3>Register</h3>
+              <p></p>
+              <form class="requires-validation" novalidate>
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="name"
+                    v-model="registerMess.username"
+                    placeholder="Username"
+                    required
+                  />
+                  <div class="valid-feedback">Username field is valid!</div>
+                  <div class="invalid-feedback">
+                    Username field cannot be blank!
+                  </div>
+                </div>
 
-        <p>
-          Password:<input
-            id="password"
-            type="password"
-            v-model="registerMess.password"
-            required
-            placeholder="Must have at least 6 characters "
-          />
-        </p>
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="email"
+                    name="email"
+                    v-model="registerMess.email"
+                    placeholder="E-mail Address"
+                    required
+                  />
+                  <div class="valid-feedback">Email field is valid!</div>
+                  <div class="invalid-feedback">
+                    Email field cannot be blank!
+                  </div>
+                </div>
+                <!-- 
+                <div class="col-md-12">
+                  <input data-provide="datepicker">
+                  <div class="valid-feedback">You selected a position!</div>
+                  <div class="invalid-feedback">Please select a position!</div>
+                </div> -->
 
-        <p>
-          Password:<input
-            id="surePassword"
-            type="password"
-            v-model="registerMess.surePassword"
-            placeholder="Enter password again"
-            required
-          />
-        </p>
+                <div class="col-md-12">
+                  <input
+                    class="form-control"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    v-model="registerMess.password"
+                    required
+                  />
+                  <div class="valid-feedback">Password field is valid!</div>
+                  <div class="invalid-feedback">
+                    Password field cannot be blank!
+                  </div>
+                </div>
 
-        <p>
-          Birthday:
-          <input
-            id="birthday"
-            type="date"
-            placeholder="Enter password again"
-            v-model="registerMess.birthday"
-          />
-        </p>
-        <p>
-          Email:
-          <input
-            id="email"
-            class="email"
-            type="email"
-            required
-            v-model="registerMess.email"
-            placeholder="Please enter email address"
-          />
-        </p>
+                <div class="col-md-12 mt-3">
+                  <label class="mb-3 mr-1" for="gender">Gender: </label>
 
-        <p style="text-align: center">
-          <input type="submit" class="button" value="submit" />
-          <router-link to="/login">
-            <input type="reset" class="button" value="return"
-          /></router-link>
-        </p>
-      </form>
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="gender"
+                    id="male"
+                    v-model="registerMess.gender"
+                    autocomplete="off"
+                    required
+                  />
+                  <label class="btn btn-sm btn-outline-secondary" for="male"
+                    >Male</label
+                  >
+
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="gender"
+                    id="female"
+                    v-model="registerMess.gender"
+                    autocomplete="off"
+                    required
+                  />
+                  <label class="btn btn-sm btn-outline-secondary" for="female"
+                    >Female</label
+                  >
+
+                  <input
+                    type="radio"
+                    class="btn-check"
+                    name="gender"
+                    id="secret"
+                    v-model="registerMess.gender"
+                    autocomplete="off"
+                    required
+                  />
+                  <label class="btn btn-sm btn-outline-secondary" for="secret"
+                    >Secret</label
+                  >
+                  <div class="valid-feedback mv-up">You selected a gender!</div>
+                  <div class="invalid-feedback mv-up">
+                    Please select a gender!
+                  </div>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="invalidCheck"
+                    required
+                  />
+                  <label class="form-check-label"
+                    >I confirm that all data are correct</label
+                  >
+                  <div class="invalid-feedback">
+                    Please confirm that the entered data are all correct!
+                  </div>
+                </div>
+
+                <div class="form-button mt-3">
+                  <button id="submit" type="submit" class="btn btn-primary">
+                    Register
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -72,7 +142,7 @@ import {
   LockOutlined,
   MailOutlined,
 } from "@ant-design/icons-vue";
-import { ref, defineComponent, inject } from "vue";
+import { ref, defineComponent, inject, onMounted } from "vue";
 import { message } from "ant-design-vue";
 import router from "@/router";
 import { useStore } from "vuex";
@@ -85,8 +155,7 @@ export default defineComponent({
     const registerMess = ref({
       username: "",
       password: "",
-      birthday: "",
-      interests: "",
+      gender: "",
       email: "",
     });
     const submitRegister = () => {
@@ -96,6 +165,7 @@ export default defineComponent({
       registerFormData.append("userName", registerMess.value.username);
       registerFormData.append("email", registerMess.value.email);
       registerFormData.append("password", registerMess.value.password);
+      registerFormData.append("gender", registerMess.value.gender);
       //Register
 
       store.dispatch("auth/register", registerFormData).then(
@@ -120,32 +190,28 @@ export default defineComponent({
       );
     };
 
-    //   axios({
-    //     method: "post",
-    //     url: "/api/member/reg",
-    //     data: registerFormData,
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   }).then(
-    //     (response) => {
-    //       console.log("response");
-    //       console.log(response);
-    //       if (response.data.code === -1) {
-    //         message.error(response.data.msg, () => {
-    //           console.log("onClose");
-    //         });
-    //       } else if (response.data.code === 200) {
-    //         message.success(response.data.msg + ", Will return in 3s.", () => {
-    //           router.push({ name: "Login" });
-    //           console.log("onClose");
-    //         });
-    //       }
-    //     },
-    //     (error) => {
-    //       console.log("error");
-    //       console.log(error);
-    //     }
-    //   );
-    // };
+    onMounted(() => {
+      const forms = document.querySelectorAll(".requires-validation");
+      Array.from(forms).forEach(function (form) {
+        form.addEventListener(
+          "submit",
+          function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            } else {
+              event.preventDefault();
+              event.stopPropagation();
+              submitRegister();
+            }
+
+            form.classList.add("was-validated");
+          },
+          false
+        );
+      });
+    });
+
     return { registerMess, submitRegister };
   },
 });
@@ -159,83 +225,151 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-.registerDiv {
-  width: 37%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 450px;
-  background-color: rgba(75, 81, 95, 0.3);
-  box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
-  border-radius: 5px;
-}
 
-p {
-  margin-top: 10px;
-  margin-left: 20px;
-  color: azure;
-}
-.interests2 {
-  margin-left: 76px;
-}
-.interests2 > input {
-  width: 30px;
-  height: 17px;
-}
-.interests > input {
-  width: 30px;
-  height: 17px;
-}
+  overflow: hidden;
 
-input,
-select {
-  margin-left: 15px;
-  border-radius: 5px;
-  border-style: hidden;
-  height: 30px;
-  width: 200px;
-  outline: none;
-  color: #000000;
-  padding-left: 10px;
-}
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  .form-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+  }
 
-.button {
-  border-color: cornsilk;
-  background-color: rgba(100, 149, 237, 0.7);
-  color: aliceblue;
-  border-style: hidden;
-  border-radius: 5px;
-  width: 100px;
-  height: 31px;
-  font-size: 16px;
-}
+  .form-holder .form-content {
+    position: relative;
+    text-align: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    padding: 60px;
+  }
 
-.introduce {
-  margin-left: 110px;
-}
+  .form-content .form-items {
+    border: 3px solid #fff;
+    padding: 40px;
+    display: inline-block;
+    width: 100%;
+    min-width: 540px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-align: left;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+  }
 
-.introduce > textarea {
-  background-color: rgba(216, 191, 216, 0.5);
-  border-style: hidden;
-  outline: none;
-  border-radius: 5px;
-}
+  .form-content h3 {
+    color: #fff;
+    text-align: left;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  margin-top: 20px;
-  color: #f0edf3;
-}
+  .form-content h3.form-title {
+    margin-bottom: 30px;
+  }
 
-b {
-  margin-left: 50px;
-  color: #ffeb3b;
-  font-size: 10px;
-  font-weight: initial;
-}
-.email {
-  margin-left: 30px;
+  .form-content p {
+    color: #fff;
+    text-align: left;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 20px;
+    margin-bottom: 30px;
+  }
+
+  .form-content label,
+  .was-validated .form-check-input:invalid ~ .form-check-label,
+  .was-validated .form-check-input:valid ~ .form-check-label {
+    color: #fff;
+  }
+
+  .form-content input[type="text"],
+  .form-content input[type="password"],
+  .form-content input[type="email"],
+  .form-content select {
+    width: 100%;
+    padding: 9px 20px;
+    text-align: left;
+    border: 0;
+    outline: 0;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+    color: #8d8d8d;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    background-color: #6c757d;
+    outline: none;
+    border: 0px;
+    box-shadow: none;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus,
+  .btn-primary:active {
+    background-color: #495056;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none;
+  }
+
+  .form-content textarea {
+    position: static !important;
+    width: 100%;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-align: left;
+    background-color: #fff;
+    border: 0;
+    font-size: 15px;
+    font-weight: 300;
+    color: #8d8d8d;
+    outline: none;
+    resize: none;
+    height: 120px;
+    -webkit-transition: none;
+    transition: none;
+    margin-bottom: 14px;
+  }
+
+  .form-content textarea:hover,
+  .form-content textarea:focus {
+    border: 0;
+    background-color: #ebeff8;
+    color: #8d8d8d;
+  }
+
+  .mv-up {
+    margin-top: -9px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .invalid-feedback {
+    color: #ff606e;
+  }
+
+  .valid-feedback {
+    color: #2acc80;
+  }
 }
 </style>

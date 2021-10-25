@@ -1,25 +1,69 @@
 <template>
   <div class="home">
     <div class="feature-card">
-      <!-- carousel -->
-      <div class="main-carousel" v-if="upComingMovieData.results">
-        <el-carousel :interval="3000" height="500px" direction="vertical">
-          <el-carousel-item
-            v-for="item in upComingMovieData.results.slice(0, 6)"
-            :key="item.id"
-          >
-            <router-link :to="'/movie/' + item.id">
-              <img
-                :src="moviePoster + item.poster_path"
-                :alt="item.title"
-                class="featured-img"
-              />
-              <div class="detail">
-                <p>{{ item.title }}</p>
+      <div>
+        <div id="1" style="border: black solid 1px">
+          <div class="home-carousel-div" style="">
+            <div class="home-carousel-left" id="2" style="">
+              <div class="main-carousel" v-if="upComingMovieData">
+                <el-carousel
+                  :interval="3000"
+                  height="400px"
+                  direction="vertical"
+                >
+                  <el-carousel-item
+                    v-for="item in upComingMovieData.slice(0, 3)"
+                    :key="item.id"
+                  >
+                    <router-link :to="'/movie/' + item.id">
+                      <img
+                        :src="moviePoster + item.backdrop_path"
+                        :alt="item.title"
+                        class="featured-img"
+                      />
+                      <div class="detail">
+                        <p>{{ item.title }}</p>
+                      </div>
+                    </router-link>
+                  </el-carousel-item>
+                </el-carousel>
               </div>
-            </router-link>
-          </el-carousel-item>
-        </el-carousel>
+            </div>
+            <div class="home-carousel-right" id="3" style="">
+              <div class="home-carousel-right-title" style="">
+                <span style="margin-left: 5px">Upcoming</span>
+                <span style="margin-right: 5px; float: right" @click="showResultPage()">More</span>
+              </div>
+              <div
+                class="home-carousel-right-list"
+                style=""
+                v-for="item in upComingMovieData.slice(0, 3)"
+                :key="item.id"
+              >
+                <router-link :to="'/movie/' + item.id">
+                  <div class="home-carousel-right-list-img" style="float: left">
+                    <img
+                      style="object-fit: fill; width: 74px"
+                      :src="moviePoster + item.poster_path"
+                      :alt="item.title"
+                    />
+                  </div>
+                  <div class="home-carousel-right-list-right" style="">
+                    <div class="home-carousel-right-list-right-title" style="">
+                      {{ item.title }}
+                    </div>
+                    <div
+                      class="home-carousel-right-list-right-content"
+                      style=""
+                    >
+                      {{ item.overview }}
+                    </div>
+                  </div></router-link
+                >
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -59,7 +103,10 @@
 import { ElCarousel } from "element-plus";
 import { ref, inject, onBeforeMount } from "vue";
 import env from "@/env.js";
+import router from "@/router";
 import Showpart from "@/components/ShowPart.vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.bundle.js";
 export default {
   name: "Home",
   components: { ElCarousel, Showpart },
@@ -107,7 +154,7 @@ export default {
       axios
         .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
         .then((response) => {
-          upComingMovieData.value = response.data;
+          upComingMovieData.value = response.data.results;
           console.log(upComingMovieData.value.results);
         });
       //THe lastest moveis
@@ -120,6 +167,17 @@ export default {
       // });
     });
 
+     //show Result Page
+    const showResultPage = () => {
+      router.push({
+        name: "ResultDisplay",
+        params: {
+        //   resultName: "IMDB TOP 10 movies"
+        isPopularorHighScore:3
+        },
+      });
+    };
+
     return {
       search,
       movies,
@@ -129,7 +187,7 @@ export default {
       lastestMovieData,
       upComingMovieData,
       handleSelect,
-      SearchMovies,
+      SearchMovies,showResultPage,
     };
   },
 };
@@ -154,11 +212,12 @@ export default {
     background-color: #d3dce6;
   }
   .feature-card {
-    position: relative;
+    // position: relative;
     padding: 0 30px;
+    width: 100%;
     .main-carousel {
       margin: auto;
-      width: 60%;
+      width: 100%;
     }
     .featured-img {
       display: block;
@@ -203,10 +262,9 @@ export default {
       border: none;
       outline: none;
       background: none;
-
-      border: rgb(241, 238, 238) solid 0.5px;
+      border: rgb(241, 238, 238) solid 2px;
       &[type="text"] {
-        width: 100%;
+        width: 90%;
         color: #fff;
         background-color: #161616 0.5;
         font-size: 20px;
@@ -227,7 +285,8 @@ export default {
         background-color: #3d3d3d;
         padding: 16px;
         border-radius: 8px;
-        color: #fff;
+        font-weight: 600;
+        color: #f5c518;;
         font-size: 20px;
         text-transform: uppercase;
         transition: 0.4s;
@@ -253,7 +312,6 @@ export default {
       font-size: 25px;
     }
   }
-
   .movies-list {
     display: flex;
     flex-wrap: wrap;
@@ -302,6 +360,81 @@ export default {
           }
         }
       }
+    }
+  }
+  .home-carousel-div {
+    position: relative;
+    margin: 8px auto;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    max-width: 1280px;
+    .home-carousel-left {
+      flex: 846 1 0%;
+      margin: 0px 8px;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+    }
+    .home-carousel-right {
+      flex: 402 1 0%;
+      margin: 0px 8px 0px 4px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-box-pack: justify;
+      justify-content: space-between;
+      background: #000;
+      .home-carousel-right-title {
+        background-color: #111111;
+        height: 35px;
+        span {
+          font-family: Roboto, Helvetica, Arial, sans-serif;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: rgb(245, 197, 24);
+        }
+      }
+      .home-carousel-right-list {
+        background-color: #111111;
+        height: 110px;
+        .home-carousel-right-list-right {
+          width: calc(100% - 74px);
+          height: 100%;
+          float: right;
+
+          padding: 5px;
+          display: table-cell;
+          vertical-align: top;
+          border-radius: 0.1875rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+          .home-carousel-right-list-right-title {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+          }
+          .home-carousel-right-list-right-content {
+            margin-top: 20px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            color: white;
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+          }
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 798px) {
+    .home-carousel-right {
+      display: none !important;
     }
   }
 }
