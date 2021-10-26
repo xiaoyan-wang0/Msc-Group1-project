@@ -4,6 +4,8 @@ from sqlalchemy import  text
 from application import db
 from common.models.user import User
 from common.models.serializer import Serializer
+from common.libs.Sentiment import sentiment
+
 index_page = Blueprint( "index_page",__name__ )
 
 @index_page.route("/")
@@ -68,3 +70,15 @@ def ret():
 
     response = make_response( jsonify( data )  )
     return response
+
+@index_page.route("/sen")
+def sen():
+    import json
+    data = {}
+    req = request.values
+    title = req['title'] if "title" in req else ""
+    result = sentiment(title)
+    #response = make_response( json.dumps( data ) )
+    response = make_response( result )
+    response.headers["Content-Type"] = "application/json"
+    return response 
