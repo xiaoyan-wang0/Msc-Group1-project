@@ -1,5 +1,6 @@
  <template>
-  <div class="detail-page">
+  <div class="detail-page" 
+          v-loading="isCommnetLoading">
     <a-modal
       :visible="isShowTrailer"
       :maskClosable="true"
@@ -34,17 +35,20 @@
       >
         {{ item.name }}
       </el-tag>
-      <p style="font-size:20px">{{ movie.overview }}</p>
+      <p style="font-size: 20px">{{ movie.overview }}</p>
       <a-rate :value="start" disabled allowHalf />
       <p>{{ movie.vote_average }}</p>
     </div>
 
     <div class="comments">
       <a-tabs type="card" v-model:activeKey="activeKey">
-        <a-tab-pane key="amdb" tab="AMDB reviews" v-loading="isCommnetLoading"
-           style="height:600px">
+        <a-tab-pane
+          key="amdb"
+          tab="AMDB reviews"
+          style=""
+        >
           <h1>AMDB reviews</h1>
-          <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
+          <div class="comment-wrap" v-for="item in amdbreview" :key="item.id" >
             <div class="photo-avatar">
               <div class="avatar">
                 <a-avatar :src="emptyprofile" />
@@ -54,11 +58,17 @@
               <p class="comment-author">{{ item.userName }}</p>
               <p class="comment-text">{{ item.comment }}</p>
               <div class="bottom-comment">
-                <div class="comment-date">{{ item.createTime }}</div>
+                <div class="comment-date">
+                  {{ formatDate(item.createTime) }}
+                </div>
                 <ul class="comment-actions">
                   <li class="toxicrate">
                     {{ showToxicText(item.toxic) }} :
                     {{ changeToPercent(item.toxic) }}
+                  </li>
+                  <li class="sentiemnt-rate">
+                    {{ showSentiemntText(item.sentiment) }} :
+                    {{ changeToPercent(item.sentiment) }}
                   </li>
                   <li class="report">Report</li>
                 </ul>
@@ -357,6 +367,13 @@ export default {
       return ToolMethod.showToxicText(rate);
     };
 
+    const showSentiemntText = (rate) => {
+      return ToolMethod.showSentiemntText(rate);
+    };
+
+    const formatDate = (value) => {
+      return ToolMethod.formatDate(value);
+    };
     const changeToPercent = (value) => {
       return ToolMethod.changeToPercent(value);
     };
@@ -454,8 +471,10 @@ export default {
       handleSubmit,
       showCastDetail,
       showToxicText,
+      showSentiemntText,
       changeToPercent,
       changeText,
+      formatDate,
     };
   },
 };
@@ -496,7 +515,7 @@ export default {
   .movie-casts {
     display: flex;
     flex-wrap: wrap;
-    margin-left: 30px;
+    margin-left: 100px;
     .cast {
       max-width: 25%;
       flex: 1 1 50%;
@@ -594,7 +613,11 @@ export default {
     display: inline;
   }
   .comment-actions li.toxicrate {
-    padding-right: 0.625rem;
+    padding-right: 5px;
+    border-right: 1px solid #e1e5eb;
+  }.comment-actions li.sentiemnt-rate {
+    padding-left: 5px;
+    padding-right: 5px;
     border-right: 1px solid #e1e5eb;
   }
   .comment-actions li.report {

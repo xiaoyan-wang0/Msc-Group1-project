@@ -71,7 +71,7 @@
 
                 <div class="form-button mt-3">
                   <button id="submit" type="submit" class="btn btn-primary">
-                    Register
+                    LogIn
                   </button>
                 </div>
               </form>

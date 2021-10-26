@@ -23,10 +23,10 @@
                   <a href="#">Pricing</a>
                 </li>
                 <li>
-                  <a href="#">Porfile</a>
+                  <a href="#">Profile</a>
                 </li>
                 <li>
-                  <a href="/main/porfile">Porfile</a>
+                  <a href="/main/porfile">Profile</a>
                 </li>
 
                 <li>
@@ -159,7 +159,7 @@ body {
     }
     .header-login {
       span {
-        margin-left: 180px;
+        margin-left: 50px;
         vertical-align: middle;
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <div class="detector-div">
     <div class="detector-text">
-      <h1>Please enter the character to be detected！</h1>
+      <h3>Please enter the character to be detected！</h3>
       <a-textarea
         v-model:value="commentValue"
         showCount
@@ -31,16 +31,16 @@
         }"
       />
       <div class="toxic-rate">
-        <span>Toxic rate :</span>
-        <a :style="{ color: 'red' }">{{toxicPercent + "%"}}</a>
+        <span>Toxic extent :</span>
+        <a :style="{ color: 'red' }">{{ toxicText }}</a>
       </div>
     </div>
     <div class="detector-sentiemnt">
       <a-progress
         width="250px"
         type="circle"
-        :percent="50"
-        :format="(percent) => `${percent} % Sentiemnt`"
+        :percent="sentiemntPercent"
+        :format="(percent) => `${sentiemntPercent} % Sentiment`"
         :stroke-color="{
           '0%': 'white',
           '0%': 'green',
@@ -49,16 +49,8 @@
       />
       <div class="sentiemnt-rate">
         <div class="">
-          <span>Positive :</span>
-          <a :style="{ color: 'red' }">-</a>
-        </div>
-        <div class="">
-          <span>Neutral :</span>
-          <a :style="{ color: 'red' }">-</a>
-        </div>
-        <div class="">
-          <span>Negative :</span>
-          <a :style="{ color: 'red' }">-</a>
+          <span>Sentiment :</span>
+          <a :style="{ color: 'red' }">{{ sentiemntText }}</a>
         </div>
       </div>
     </div>
@@ -67,6 +59,7 @@
 
 <script>
 import { ref, inject } from "vue";
+import ToolMethod from "../tools.js";
 export default {
   name: "Detector",
   components: {},
@@ -75,18 +68,41 @@ export default {
     const commentValue = ref("");
     const commentStatus = ref();
     const toxicPercent = ref(0);
+    const toxicText = ref("~");
+    const sentiemntPercent = ref(0);
+    const sentiemntText = ref("~");
     const submitDetect = () => {
       //  Comment detect
       axios
         .get("/api/comments/toxic?title=" + commentValue.value)
         .then((response) => {
           commentStatus.value = response.data.data;
-          toxicPercent.value = Number(commentStatus.value.tag[0]*100).toFixed(2)
+          toxicPercent.value = Number(
+            commentStatus.value.toxic[0] * 100
+          ).toFixed(2);
+
+          toxicText.value = ToolMethod.showToxicText(
+            commentStatus.value.toxic[0]
+          );
+          sentiemntPercent.value = Number(
+            commentStatus.value.sentiment[0] * 100
+          ).toFixed(2);
+          sentiemntText.value = ToolMethod.showSentiemntText(
+            commentStatus.value.sentiment[0]
+          );
           console.log("Comment detect");
           console.log(response.data);
         });
     };
-    return { commentValue,commentStatus,toxicPercent, submitDetect };
+    return {
+      commentValue,
+      commentStatus,
+      toxicPercent,
+      toxicText,
+      sentiemntPercent,
+      sentiemntText,
+      submitDetect,
+    };
   },
 };
 </script>
@@ -114,7 +130,7 @@ export default {
     span,
     a {
       margin-left: 30px;
-      font-size: 25px;
+      font-size: 20px;
       font-weight: bold;
     }
     .toxic-rate {
@@ -131,16 +147,15 @@ export default {
     span,
     a {
       margin-left: 30px;
-      font-size: 25px;
+      font-size: 20px;
       font-weight: bold;
     }
     .sentiemnt-rate {
       float: right;
       display: flex;
       justify-content: center;
-      flex-direction: column;
       align-items: center;
-      margin-top: 60px;
+      margin-top: 110px;
     }
   }
 }
