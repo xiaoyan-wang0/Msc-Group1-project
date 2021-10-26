@@ -16,6 +16,7 @@ class Usercomment(db.Model):
     createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
     movieId = db.Column(db.String(16))
     toxic = db.Column(db.String(16))
+    sentiment = db.Column(db.String(16))
 
     def serialize(self):
         d = Serializer.serialize(self)

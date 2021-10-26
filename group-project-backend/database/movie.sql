@@ -11,7 +11,7 @@
  Target Server Version : 80023
  File Encoding         : 65001
 
- Date: 19/10/2021 20:29:05
+ Date: 26/10/2021 15:46:30
 */
 
 SET NAMES utf8mb4;
@@ -48,17 +48,14 @@ CREATE TABLE `usercomments`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `movieId` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `toxic` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `sentiment` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usercomments
 -- ----------------------------
-INSERT INTO `usercomments` VALUES (1, 5, NULL, 'hello', '2021-10-15 08:16:36', '335983', NULL);
-INSERT INTO `usercomments` VALUES (2, 5, NULL, 'hey', '2021-10-15 08:17:33', '335983', NULL);
-INSERT INTO `usercomments` VALUES (3, 5, NULL, '12', '2021-10-15 08:18:49', '123456', NULL);
-INSERT INTO `usercomments` VALUES (5, 5, NULL, 'good actor', '2021-10-15 08:38:11', '123456', NULL);
-INSERT INTO `usercomments` VALUES (6, NULL, NULL, 'good actor', '2021-10-19 20:27:58', '1', '0.658997297');
+INSERT INTO `usercomments` VALUES (18, 5, NULL, 'good actor', '2021-10-26 15:45:41', '1', '0.0570992827', '0.828175545');
 
 -- ----------------------------
 -- Table structure for userinfo
@@ -75,7 +72,7 @@ CREATE TABLE `userinfo`  (
   `constellation` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `movieTags` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`userInfoId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of userinfo
@@ -93,7 +90,7 @@ CREATE TABLE `usermovies`  (
   `type` int(0) NULL DEFAULT NULL,
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usermovies

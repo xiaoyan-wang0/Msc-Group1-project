@@ -32,8 +32,6 @@ def sentiment(title):
 
     with open('tokenizer_4.pickle', 'rb') as f:
          tokenizer = pickle.load(f)
-         
-    title = [title]
 
 
     input_data_json = json.dumps({"signature_name": "serving_default",
@@ -49,4 +47,4 @@ def sentiment(title):
 
     result = {'title' : text1, 'tag' :  label}
     
-    return jsonify(result)
+    return result

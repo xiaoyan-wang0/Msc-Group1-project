@@ -9,6 +9,7 @@ from common.models.usercomments import Usercomment
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 from common.libs.ToxicComments import do_pe,detector
+from common.libs.Sentiment import sentiment
 
 import requests
 
@@ -30,9 +31,12 @@ def addComments():
     movieId = req['movieId'] if "movieId" in req else ""
     comment = [comment]
     result = detector(comment)
+    senti = sentiment(comment)
     toxic = result['tag']
+    sentiment2 = senti['tag']
     model_comments = Usercomment()
     model_comments.toxic = toxic
+    model_comments.sentiment = sentiment2
     model_comments.comment = comment
     model_comments.movieId = movieId
     model_comments.userId = current_user.userId
@@ -77,7 +81,8 @@ def toxic():
     
     req = request.values
     title = [req['title'] if "title" in req else ""]
-    
-    result = detector(title)
-    
+    toxic = detector(title)
+    senti = sentiment(title)
+    result = {"toxic" : toxic['tag']}
+    result['sentiment'] = senti['tag']
     return ops_renderJSON( msg = "comments detected successfully!",data = result )
