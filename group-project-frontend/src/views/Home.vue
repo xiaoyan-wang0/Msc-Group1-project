@@ -32,7 +32,11 @@
             <div class="home-carousel-right" id="3" style="">
               <div class="home-carousel-right-title" style="">
                 <span style="margin-left: 5px">Upcoming</span>
-                <span style="margin-right: 5px; float: right" @click="showResultPage()">More</span>
+                <span
+                  style="margin-right: 5px; float: right"
+                  @click="showResultPage()"
+                  >more</span
+                >
               </div>
               <div
                 class="home-carousel-right-list"
@@ -124,23 +128,18 @@ export default {
     //Search event
     const SearchMovies = () => {
       if (search.value != "") {
-        console.log(
-          env.omdbapi + env.omdbkey + env.omdbapisearch + search.value
-        );
-        axios
-          .get(
-            env.omdbapi +
-              env.omdbkey +
-              env.omdbapisearch +
-              search.value +
-              "&plot=full"
-          )
-          .then((response) => {
-            movies.value = response.data.Search;
-            search.value = "";
-            itemdata.value = response.data.Search;
-            console.log(itemdata);
-          });
+        console
+          .log
+          // env.omdbapi + env.omdbkey + env.omdbapisearch + search.value
+          ();
+        router.push({
+          name: "ResultDisplay",
+          params: {
+            //   resultName: "IMDB TOP 10 movies"
+            isPopularorHighScore: 4,
+            searchValue: search.value,
+          },
+        });
       }
     };
 
@@ -167,13 +166,13 @@ export default {
       // });
     });
 
-     //show Result Page
+    //show Result Page
     const showResultPage = () => {
       router.push({
         name: "ResultDisplay",
         params: {
-        //   resultName: "IMDB TOP 10 movies"
-        isPopularorHighScore:3
+          //   resultName: "IMDB TOP 10 movies"
+          isPopularorHighScore: 3,
         },
       });
     };
@@ -187,7 +186,8 @@ export default {
       lastestMovieData,
       upComingMovieData,
       handleSelect,
-      SearchMovies,showResultPage,
+      SearchMovies,
+      showResultPage,
     };
   },
 };
@@ -286,7 +286,9 @@ export default {
         padding: 16px;
         border-radius: 8px;
         font-weight: 600;
-        color: #f5c518;;
+        // color: #f5c518;
+
+        color: #42b883;
         font-size: 20px;
         text-transform: uppercase;
         transition: 0.4s;
@@ -393,7 +395,9 @@ export default {
           font-family: Roboto, Helvetica, Arial, sans-serif;
           font-size: 1.25rem;
           font-weight: 600;
-          color: rgb(245, 197, 24);
+          // color: rgb(245, 197, 24);
+
+        color: #42b883;
         }
       }
       .home-carousel-right-list {

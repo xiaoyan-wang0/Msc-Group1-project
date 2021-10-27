@@ -25,7 +25,7 @@
         size="large"
         v-model:current="current"
         :total="itemtotal"
-      pageSize="20"
+        :pageSize="pageSize"
         @change="onChange"
       />
     </div>
@@ -42,6 +42,7 @@ export default {
   props: {
     name: String,
     isPopularorHighScore: Number,
+    searchValue: String,
   },
   setup(props) {
     const poster = ref("");
@@ -80,7 +81,7 @@ export default {
             // console.log(hignScoreMovieData.value.results);
             itemtotal.value = response.data.total_results;
           });
-      } else {
+      } else if (props.isPopularorHighScore == 3) {
         resultName.value = "Upcoming Movies Result";
         // High score moveis
         axios
@@ -94,7 +95,21 @@ export default {
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
             itemtotal.value = response.data.total_results;
-            console.log(itemtotal.value )
+            console.log(itemtotal.value);
+          });
+      } else {
+        resultName.value = "Search result";
+        // Search moveis result
+        axios
+          .get(env.tmdbSearch + env.tmdbkey + env.tmdbquery + props.searchValue)
+
+          .then((response) => {
+            itemdata.value = response.data.results;
+            console.log("Search moveis result");
+            console.log(itemdata.value);
+            console.log(itemdata.value);
+            itemtotal.value = response.data.total_results;
+            console.log(itemtotal.value);
           });
       }
     });
@@ -137,7 +152,7 @@ export default {
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
           });
-      } else {
+      } else if (props.isPopularorHighScore == 3) {
         resultName.value = "Upcoming Movies Result";
         // High score moveis
         axios
@@ -157,6 +172,27 @@ export default {
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
           });
+      } else {
+        resultName.value = "Search result";
+        // Search moveis result
+        axios
+          .get(
+            env.tmdbSearch +
+              env.tmdbkey +
+              env.tmdbquery +
+              props.searchValue +
+              "&page= " +
+              pageNumber
+          )
+
+          .then((response) => {
+            itemdata.value = response.data.results;
+            console.log("Search moveis result");
+            console.log(itemdata.value);
+            console.log(itemdata.value);
+            itemtotal.value = response.data.total_results;
+            console.log(itemtotal.value);
+          });
       }
     };
     return {
@@ -165,6 +201,7 @@ export default {
       resultName,
       itemtotal,
       current: ref(1),
+      pageSize: ref(20),
       onChange,
     };
   },

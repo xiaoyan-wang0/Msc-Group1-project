@@ -1,6 +1,5 @@
  <template>
-  <div class="detail-page" 
-          v-loading="isCommnetLoading">
+  <div class="detail-page" v-loading="isCommnetLoading">
     <a-modal
       :visible="isShowTrailer"
       :maskClosable="true"
@@ -10,45 +9,48 @@
       :width="700"
       @cancel="handleCancel"
     >
-      <YoutubeVue3
+      <!-- <YoutubeVue3
         ref="youtube"
         :videoid="video_id"
         :width="700"
         :autoplay="0"
         :height="400"
-      />
+      /> -->
     </a-modal>
     <div class="movie-detail">
       <h2>{{ movie.original_title }}</h2>
       <p>{{ movie.release_date }}</p>
-      <img
-        :src="moviePoster + movie.poster_path"
-        alt="Movie Poster"
-        class="featured-img"
-        @click="isShowTrailer = true"
-      />
-      <el-tag
-        class="tag-group"
-        style="magin-right: 8px"
-        v-for="item in movie.genres"
-        :key="item.id"
-      >
-        {{ item.name }}
-      </el-tag>
+      <div class="img-trailer">
+        <img
+          :src="moviePoster + movie.poster_path"
+          alt="Movie Poster"
+          class="featured-img"
+          @click="isShowTrailer = true"
+        />
+        <YoutubeVue3
+          class="youtube"
+          ref="youtube"
+          :videoid="video_id"
+          width="65%"
+          :autoplay="0"
+          :height="400"
+        />
+      </div>
+      <div class="movie-tag-group">
+        <span v-for="item in movie.genres" :key="item.id" style="">{{
+          item.name
+        }}</span>
+      </div>
       <p style="font-size: 20px">{{ movie.overview }}</p>
       <a-rate :value="start" disabled allowHalf />
       <p>{{ movie.vote_average }}</p>
     </div>
 
     <div class="comments">
-      <a-tabs type="card" v-model:activeKey="activeKey">
-        <a-tab-pane
-          key="amdb"
-          tab="AMDB reviews"
-          style=""
-        >
+      <a-tabs type="card">
+        <a-tab-pane key="amdb" tab="AMDB reviews" style="">
           <h1>AMDB reviews</h1>
-          <div class="comment-wrap" v-for="item in amdbreview" :key="item.id" >
+          <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
             <div class="photo-avatar">
               <div class="avatar">
                 <a-avatar :src="emptyprofile" />
@@ -163,7 +165,7 @@
     </div>
 
     <div class="morebutton">
-      <a @click="changeText()">{{ isMore }}</a>
+      <span>Actors </span><a @click="changeText()">{{ isMore }}</a>
     </div>
     <div class="movie-casts">
       <div
@@ -485,9 +487,17 @@ export default {
   .movie-detail {
     padding: 50px;
 
-    .tag-group {
+    .movie-tag-group {
+      margin: 450px 20px 10px 10px;
       margin-right: 20px;
       margin-bottom: 10px;
+      span {
+        border: 2px solid #bbe1f1;
+        padding: 5px;
+        border-radius: 50px;
+        margin-right: 8px;
+        color: white;
+      }
     }
     h2 {
       color: #fff;
@@ -495,9 +505,19 @@ export default {
       font-weight: 600;
       margin-bottom: 16px;
     }
+    .img-trailer {
+      // margin-bottom: 50px;
+    }
     .featured-img {
       display: block;
-      max-width: 300px;
+      max-width: 30%;
+      float: left;
+      margin-bottom: 16px;
+      height: 400px;
+    }
+    .youtube {
+      float: right;
+
       margin-bottom: 16px;
     }
     p {
@@ -507,10 +527,19 @@ export default {
     }
   }
   .morebutton {
-    font-size: 40px;
-    color: #fff;
-    text-align: right;
-    margin-right: 150px;
+    span {
+      font-size: 40px;
+      color: #fff;
+      margin-left: 80px;
+    }
+    a {
+      font-size: 20px;
+      color: #fff;
+      text-align: center;
+      float: right;
+      margin-right: 80px;
+      margin-top: 20px;
+    }
   }
   .movie-casts {
     display: flex;
@@ -615,7 +644,8 @@ export default {
   .comment-actions li.toxicrate {
     padding-right: 5px;
     border-right: 1px solid #e1e5eb;
-  }.comment-actions li.sentiemnt-rate {
+  }
+  .comment-actions li.sentiemnt-rate {
     padding-left: 5px;
     padding-right: 5px;
     border-right: 1px solid #e1e5eb;
