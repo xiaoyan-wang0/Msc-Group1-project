@@ -17,6 +17,8 @@ movie_page_Youtube = Blueprint( "movie_page_Youtube",__name__ )
 @movie_page_Youtube.route("/movieYoutubeReviews")
 def review():
 
+    import json
+
     # if 'current_user' in  g:
     #     current_user = g.current_user
     # if current_user == None : 
@@ -41,7 +43,12 @@ def review():
 
     list = []
 
-    for i in range(0, 20):
+    #item_dict = json.loads(names)
+
+    #print(len(item_dict['authorDisplayName']))
+
+
+    for i in range(0, len(names)):
         youtubeInfoDictionary = {
         "username": names[i],
         "review": reviews[i],
@@ -50,4 +57,4 @@ def review():
         }
         list.append(youtubeInfoDictionary)
 
-    return ops_renderJSON(msg = "Show Successfull!", data = list)
+    return ops_renderJSON(msg = "Show Successfull!", data = names)
