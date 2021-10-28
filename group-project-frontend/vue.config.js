@@ -1,10 +1,10 @@
 const webpack = require('webpack')
 module.exports = {
     devServer: {
-        disableHostCheck: true,
-        host: '3.10.181.15',
-        // host: 'localhost',
-        port: 80,
+        // disableHostCheck: true,
+    
+        host: 'localhost',
+        port: 8080,
         //以上的ip和端口是我们本机的;下面为需要跨域的
         proxy: {//配置跨域
             '/api': {
