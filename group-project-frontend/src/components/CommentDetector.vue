@@ -5,7 +5,7 @@
       <a-textarea
         v-model:value="commentValue"
         showCount
-        :maxlength="200"
+        :maxlength="500"
         class="detect-input"
       />
       <a-button

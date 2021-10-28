@@ -21,7 +21,7 @@
     <div class="show-items">
       <div class="item-list">
         <div class="item-title">
-          <span>IMDB BOT 10 Movies</span>
+          <span>IMDB Bottom Movies</span>
           <a @click="showResultPage()">more</a>
         </div>
         <div class="movies-list">
