@@ -140,8 +140,9 @@ def bottom():
         theMovieId = test[7:16]
         response3 = requests.get('https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + theMovieId)
         rating = jsonpath(response3.json(),'$..imDb')
-        response5 = requests.get('https://imdb-api.com/API/Posters/k_ds7a1ynu/' + theMovieId)
-        posters = jsonpath(response5.json(),'$..posters')
+
+        response5 = requests.get('https://api.themoviedb.org/3/movie/' + theMovieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
+        posters = jsonpath(response5.json(),'$..poster_path')
         
         data = {"movie_title": movie_title,
                 "Imdb_Rating": rating,

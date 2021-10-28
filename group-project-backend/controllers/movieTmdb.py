@@ -82,7 +82,7 @@ def Info():
     response3 = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
     cast = jsonpath(response3.json(),'$..cast')
 
-    m = movie.details(343611)
+    m = movie.details(movieId)
     imdb_id = m.imdb_id
     title = m.title
     overview = m.overview
@@ -106,4 +106,5 @@ def Info():
     }
         
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
+
 
