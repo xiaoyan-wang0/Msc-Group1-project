@@ -20,10 +20,10 @@
                 </li>
 
                 <li>
-                  <a href="#">Pricing</a>
+                  <a href="#"></a>
                 </li>
                 <li>
-                  <a href="#">Profile</a>
+                  <a href="#"></a>
                 </li>
                 <li>
                   <a href="/main/porfile">Profile</a>

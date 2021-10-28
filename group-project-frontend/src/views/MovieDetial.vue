@@ -161,11 +161,39 @@
             </div>
           </div>
         </a-tab-pane>
+        <a-tab-pane key="youtube" tab="Youtube reviews"
+          ><h1>Youtube reviews</h1>
+          <div class="comment-wrap" v-for="item in youtubereview" :key="item.id">
+            <div class="photo-avatar">
+              <div class="avatar">
+                <a-avatar :src="item.profile_picture" />
+              </div>
+            </div>
+            <div class="comment-block">
+              <p class="comment-author">{{ item.username }}</p>
+              <p class="comment-text">{{ item.review }}</p>
+              <div class="bottom-comment">
+                <div class="comment-date">{{ item.time }}</div>
+                <ul class="comment-actions">
+                  <li class="toxicrate">
+                    <!-- {{ showToxicText(item.toxic.tag[0]) }} :{{
+                      changeToPercent(item.toxic.tag[0])
+                    }} -->
+                  </li>
+                  <li class="report">Report</li>
+                  <li class="report">
+                    {{ item.warningSpoilers ? "warningSpoilers" : "" }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </a-tab-pane>
       </a-tabs>
     </div>
 
     <div class="morebutton">
-      <span>Actors </span><a @click="changeText()">{{ isMore }}</a>
+      <span>Casts </span><a @click="changeText()">{{ isMore }}</a>
     </div>
     <div class="movie-casts">
       <div
@@ -259,6 +287,7 @@ export default {
     const tmdbreview = ref([]);
     const amdbreview = ref([]);
     const imdbreview = ref([]);
+    const youtubereview = ref([]);
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
@@ -293,6 +322,18 @@ export default {
               imdbreview.value = response.data.data.reviews.items;
               console.log("imdbreview detail");
               console.log(response.data);
+            });
+
+          //Fetch Youtube Comments
+          axios
+            .get(
+              "/api/movieYoutube/movieYoutubeReviews?movieName=" +
+                movie.value.original_title
+            )
+            .then((response) => {
+              youtubereview.value = response.data.data;
+              console.log("youtubereview detail");
+              console.log(youtubereview.value);
             });
         });
 
@@ -344,6 +385,7 @@ export default {
           console.log("tmdbreview detail");
           console.log(tmdbreview.value);
         });
+
       getAMDBComments();
     });
 
@@ -466,6 +508,7 @@ export default {
       tmdbreview,
       imdbreview,
       amdbreview,
+      youtubereview,
       castDetail,
       isShowCastDetail,
       isCommnetLoading,
