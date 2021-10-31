@@ -9,3 +9,4 @@ numpy
 jsonpath
 bs4
 lxml
+flask_cors
