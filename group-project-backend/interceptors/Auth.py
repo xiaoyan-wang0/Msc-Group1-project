@@ -17,9 +17,8 @@ def before_request():
 @app.after_request
 def after_request( response ):
     app.logger.info("--------after_request--------")
-    response.headers.add('Access-Control-Allow-Origin', ' http://amdb-frontend.s3-website-eu-west-1.amazonaws.com')
+    response.headers.add('Access-Control-Allow-Origin', 'http://amdb-frontend.s3-website-eu-west-1.amazonaws.com')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
