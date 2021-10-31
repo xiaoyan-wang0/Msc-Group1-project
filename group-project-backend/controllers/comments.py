@@ -18,15 +18,17 @@ comments_page = Blueprint( "comments_page",__name__ )
 @comments_page.route("/addComments")
 def addComments():
     import json
-'''
+
+    '''
     if 'current_user' in  g:
         current_user = g.current_user
-    else: 
+    if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-'''
+    ''' 
 
     req = request.values
-    userId = str(current_user.userId)
+    userId = req['userId'] if "userId" in req else ""
+    #userId = str(current_user.userId)
     comment = req['comment'] if "comment" in req else ""
     movieId = req['movieId'] if "movieId" in req else ""
     comment = [comment]
@@ -39,7 +41,7 @@ def addComments():
     model_comments.sentiment = sentiment2
     model_comments.comment = comment
     model_comments.movieId = movieId
-    model_comments.userId = current_user.userId
+    model_comments.userId = userId
     db.session.add( model_comments )
     db.session.commit()
     
@@ -48,15 +50,15 @@ def addComments():
 @comments_page.route("/showComments")
 def showComments():
     import json
-'''
+    '''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-'''
-
+    '''
+    userId = req['userId'] if "userId" in req else ""
     req = request.values
-    userId = str(current_user.userId)
+    #userId = str(current_user.userId)
     movieId = req['movieId'] if "movieId" in req else ""
     textsql = " 1=1 and movieId = '"+movieId+"'"
     result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
@@ -73,12 +75,12 @@ def showComments():
 
 @comments_page.route("/toxic")
 def toxic():
-'''
+    '''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-'''    
+    '''    
     req = request.values
     title = [req['title'] if "title" in req else ""]
     toxic = detector(title)

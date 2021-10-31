@@ -17,12 +17,13 @@ movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
 def review():
     import json
     from jsonpath import jsonpath
-'''
+    
+    '''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-'''
+    ''' 
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
@@ -47,12 +48,12 @@ def review():
 def Info():
     import json
     from jsonpath import jsonpath
-'''
+    '''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-'''    
+    '''    
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
