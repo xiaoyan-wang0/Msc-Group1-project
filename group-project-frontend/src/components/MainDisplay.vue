@@ -79,7 +79,7 @@ export default {
 
       // IMDB BOT 10 movies
       axios
-        .get("/api/movieImdb/movieImdbBottomInfo?numberOfMovies=10")
+        .get(env.AMDBAPI +"movieImdb/movieImdbBottomInfo?numberOfMovies=10")
         .then((response) => {
           // popularMovieData.value = JSON.stringify(response.data);
           imdbBotMovies.value = response.data.data;

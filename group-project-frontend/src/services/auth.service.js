@@ -1,6 +1,8 @@
 import axios from 'axios';
+import env from "@/env.js";
 
-const API_URL = '/api/member/';
+// const API_URL = '/api/member/';
+const API_URL = env.AMDBAPI + 'member/';
 
 class AuthService {
   login(user) {
