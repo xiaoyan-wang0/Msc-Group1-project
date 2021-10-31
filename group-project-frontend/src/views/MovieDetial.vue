@@ -255,10 +255,11 @@
 </template>
 
 <script>
-import { ref, inject, onBeforeMount } from "vue";
+import { ref, inject, onBeforeMount, computed } from "vue";
 import { useRoute } from "vue-router";
-import env from "@/env.js";
+import { useStore } from "vuex";
 import { YoutubeVue3 } from "youtube-vue3";
+import env from "@/env.js";
 import ToolMethod from "../tools.js";
 
 import {
@@ -279,6 +280,8 @@ export default {
 
   setup() {
     const axios = inject("axios"); // inject axios
+    const store = useStore();
+    const currentUser = computed(() => store.state.auth.user);
     const movie = ref({});
     const casts = ref({});
     const castList = ref([]);
@@ -324,7 +327,8 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieImdb/movieImdbReviews?movieId=" +
-                imdbmovieid.value, {withCredentials: true}
+                imdbmovieid.value,
+              { withCredentials: true }
             )
             .then((response) => {
               imdbreview.value = response.data.data.reviews.items;
@@ -337,7 +341,8 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieYoutube/movieYoutubeReviews?movieName=" +
-                movie.value.original_title, {withCredentials: true}
+                movie.value.original_title,
+              { withCredentials: true }
             )
             .then((response) => {
               youtubereview.value = response.data.data;
@@ -389,7 +394,8 @@ export default {
       //Fetch TMDB Comments
       axios
         .get(
-          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value, {withCredentials: true}
+          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value,
+          { withCredentials: true }
         )
         .then((response) => {
           tmdbreview.value = response.data.data.reviews[0];
@@ -403,7 +409,16 @@ export default {
     const getAMDBComments = () => {
       //Fetch AMDB Comments
       axios
-        .get(env.AMDBAPI + "comments/showComments?movieId=" + movieid.value, {withCredentials: true})
+        .get(
+          env.AMDBAPI +
+            "comments/showComments?movieId=" +
+            movieid.value +
+            "&userId=" +
+            currentUser.value.data.userId,
+          {
+            withCredentials: true,
+          }
+        )
         .then((response) => {
           amdbreview.value = response.data.data;
           console.log("amdbreview detail");
@@ -460,14 +475,17 @@ export default {
             "comments/addComments?movieId=" +
             movieid.value +
             "&comment=" +
-            commentsValue.value, {withCredentials: true}
+            commentsValue.value +
+            "&userId=" +
+            currentUser.value.data.userId,
+          { withCredentials: true }
         )
         .then((response) => {
           // tmdbreview.value = response.data;
           console.log("Add comments ");
           console.log(response.data);
           submitting.value = false;
-          getAMDBComments();
+          getAMDBComments(); 
         });
 
       // submitting.value = true;

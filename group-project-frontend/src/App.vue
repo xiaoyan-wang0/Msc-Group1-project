@@ -32,13 +32,20 @@
                 <li>
                   <a href="/main/detector">Detector</a>
                 </li>
-                <li></li>
-                <li class="header-login-li">
+                <li class="header-login-li" v-if="currentUser">
+                  <router-link to="/login" class="header-login">
+                    <span> {{ currentUser.data.userName }}</span>
+                  </router-link>
+                </li>
+                <li v-if="currentUser">
+                  <a href="/" @click="logOut()">Log Out</a>
+                </li>
+                <li class="header-login-li" v-if="!currentUser">
                   <router-link to="/login" class="header-login">
                     <span> Sign In</span>
                   </router-link>
                 </li>
-                <li class="header-login-li">
+                <li class="header-login-li" v-if="!currentUser">
                   <router-link to="/register" class="header-register">
                     <span> Sign Up</span>
                   </router-link>
@@ -91,6 +98,8 @@ export default {
       router.push("/");
     };
     onMounted(() => {
+      console.log("currentUser.data");
+      console.log(currentUser);
       navfunction();
     });
     return { currentUser, active, logOut };
