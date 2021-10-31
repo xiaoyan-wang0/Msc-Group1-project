@@ -11,7 +11,7 @@ class AuthService {
       url: API_URL + "login",
       data: user,
       headers: { "Content-Type": "multipart/form-data" },
-    })
+    }, { withCredentials: true })
       .then(response => {
         // if (response.data.accessToken) {
         console.log("2222222");
@@ -34,7 +34,7 @@ class AuthService {
       url: API_URL + "reg",
       data: user,
       headers: { "Content-Type": "multipart/form-data" },
-    })
+    }, { withCredentials: true })
       .then(response => {
         // if (response.data.accessToken) {
         console.log("REG");

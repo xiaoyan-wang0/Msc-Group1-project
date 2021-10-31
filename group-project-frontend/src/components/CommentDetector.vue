@@ -75,7 +75,7 @@ export default {
     const submitDetect = () => {
       //  Comment detect
       axios
-        .get(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value)
+        .get(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value, {withCredentials: true})
         .then((response) => {
           commentStatus.value = response.data.data;
           toxicPercent.value = Number(
