@@ -63,7 +63,7 @@ def login():
     userJson = User.serialize(user)
     response = make_response( ops_renderJSON( msg="login successfully!",data = userJson ) )
     response.set_cookie(app.config['AUTH_COOKIE_NAME'],
-                        "%s#%s"%( UserService.geneAuthCode( user ), user.userId ),60 * 60 *24 *7,samesite='None',secure= 'true' )
+                        "%s#%s"%( UserService.geneAuthCode( user ), user.userId ),60 * 60 *24 *7,samesite='None',secure= 'false' )
     
     return response
 
