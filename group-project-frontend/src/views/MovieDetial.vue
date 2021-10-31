@@ -324,7 +324,7 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieImdb/movieImdbReviews?movieId=" +
-                imdbmovieid.value
+                imdbmovieid.value, {withCredentials: true}
             )
             .then((response) => {
               imdbreview.value = response.data.data.reviews.items;
@@ -337,7 +337,7 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieYoutube/movieYoutubeReviews?movieName=" +
-                movie.value.original_title
+                movie.value.original_title, {withCredentials: true}
             )
             .then((response) => {
               youtubereview.value = response.data.data;
@@ -389,7 +389,7 @@ export default {
       //Fetch TMDB Comments
       axios
         .get(
-          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value
+          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value, {withCredentials: true}
         )
         .then((response) => {
           tmdbreview.value = response.data.data.reviews[0];
@@ -403,7 +403,7 @@ export default {
     const getAMDBComments = () => {
       //Fetch AMDB Comments
       axios
-        .get(env.AMDBAPI + "comments/showComments?movieId=" + movieid.value)
+        .get(env.AMDBAPI + "comments/showComments?movieId=" + movieid.value, {withCredentials: true})
         .then((response) => {
           amdbreview.value = response.data.data;
           console.log("amdbreview detail");
@@ -460,7 +460,7 @@ export default {
             "comments/addComments?movieId=" +
             movieid.value +
             "&comment=" +
-            commentsValue.value
+            commentsValue.value, {withCredentials: true}
         )
         .then((response) => {
           // tmdbreview.value = response.data;
