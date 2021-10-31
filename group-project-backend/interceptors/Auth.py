@@ -18,15 +18,14 @@ def before_request():
 def after_request( response ):
     app.logger.info("--------after_request--------")
     white_list ={'http://amdb-frontend.s3-website-eu-west-1.amazonaws.com', 'http://localhost:8080'}
-    
-    if( request.headers['Origin'] in white_list ):
-        response.headers.add('Access-Control-Allow-Origin', request.headers.origin)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Headers', 'Cache-Control')
-        response.headers.add('Access-Control-Allow-Headers', 'X-Requested-With')
-        response.headers.add('Access-Control-Allow-Headers', 'Authorization')
+    response.headers.add('Access-Control-Allow-Origin', 'http://amdb-frontend.s3-website-eu-west-1.amazonaws.com')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    response.headers.add('Access-Control-Allow-Headers', 'Cache-Control')
+    response.headers.add('Access-Control-Allow-Headers', 'X-Requested-With')
+    response.headers.add('Access-Control-Allow-Headers', 'Authorization')
+
     return response
 
 '''
