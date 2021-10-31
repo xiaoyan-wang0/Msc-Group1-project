@@ -60,6 +60,7 @@
 <script>
 import { ref, inject } from "vue";
 import ToolMethod from "../tools.js";
+import env from "@/env.js";
 export default {
   name: "Detector",
   components: {},
@@ -74,7 +75,7 @@ export default {
     const submitDetect = () => {
       //  Comment detect
       axios
-        .get("/api/comments/toxic?title=" + commentValue.value)
+        .get(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value)
         .then((response) => {
           commentStatus.value = response.data.data;
           toxicPercent.value = Number(

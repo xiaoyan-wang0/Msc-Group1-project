@@ -52,9 +52,9 @@ def review():
         youtubeInfoDictionary = {
         "username": names[i],
         "review": reviews[i],
-        "profile picture": profileImages[i],
+        "profile_picture": profileImages[i],
         "time": times[i]
         }
         list.append(youtubeInfoDictionary)
 
-    return ops_renderJSON(msg = "Show Successfull!", data = names)
+    return ops_renderJSON(msg = "Show Successfull!", data = list)

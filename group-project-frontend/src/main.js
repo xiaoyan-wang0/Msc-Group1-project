@@ -16,6 +16,7 @@ import 'ant-design-vue/dist/antd.css';
 
 const app = createApp(App);
 app.config.productionTip = false;
+axios.defaults.withCredentials=true;//让ajax携带cookie 
 app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios)  // provide 'axios'
 app.use(store).use(router).use(Antd).use(ElementPlus).mount('#app')

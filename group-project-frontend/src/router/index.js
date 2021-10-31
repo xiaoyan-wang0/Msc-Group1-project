@@ -21,17 +21,17 @@ const routes = [
         component: Home,
         children: [
           {
-          path: 'maindisplay',
-          name: 'MainDisplay',
-          component: MainDisplay,
-          props: true
-        },
-        {
-          path: 'reslut',
-          name: 'ResultDisplay',
-          component: ResultDisplay,
-          props: true
-        },
+            path: 'maindisplay',
+            name: 'MainDisplay',
+            component: MainDisplay,
+            props: true
+          },
+          {
+            path: 'reslut',
+            name: 'ResultDisplay',
+            component: ResultDisplay,
+            props: true
+          },
 
         ],
         redirect: '/main/home/maindisplay',
@@ -77,18 +77,18 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   const publicPages = ['/login', '/register', '/'];
-//   const authRequired = !publicPages.includes(to.path);
-//   const loggedIn = localStorage.getItem('user');
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register', '/', '/main/home/maindisplay', '/main/home/reslut'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('user');
 
-//   // trying to access a restricted page + not logged in
-//   // redirect to login page
-//   if (authRequired && !loggedIn) {
-//     next('/login');
-//   } else {
-//     next();
-//   }
-// });
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 export default router

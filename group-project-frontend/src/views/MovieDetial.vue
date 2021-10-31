@@ -163,7 +163,11 @@
         </a-tab-pane>
         <a-tab-pane key="youtube" tab="Youtube reviews"
           ><h1>Youtube reviews</h1>
-          <div class="comment-wrap" v-for="item in youtubereview" :key="item.id">
+          <div
+            class="comment-wrap"
+            v-for="item in youtubereview"
+            :key="item.id"
+          >
             <div class="photo-avatar">
               <div class="avatar">
                 <a-avatar :src="item.profile_picture" />
@@ -317,7 +321,11 @@ export default {
           imdbmovieid.value = response.data.imdb_id;
           //Fetch IMDB Comments
           axios
-            .get("/api/movieImdb/movieImdbReviews?movieId=" + imdbmovieid.value)
+            .get(
+              env.AMDBAPI +
+                "movieImdb/movieImdbReviews?movieId=" +
+                imdbmovieid.value
+            )
             .then((response) => {
               imdbreview.value = response.data.data.reviews.items;
               console.log("imdbreview detail");
@@ -327,7 +335,8 @@ export default {
           //Fetch Youtube Comments
           axios
             .get(
-              "/api/movieYoutube/movieYoutubeReviews?movieName=" +
+              env.AMDBAPI +
+                "movieYoutube/movieYoutubeReviews?movieName=" +
                 movie.value.original_title
             )
             .then((response) => {
@@ -379,7 +388,9 @@ export default {
 
       //Fetch TMDB Comments
       axios
-        .get("/api/movieTmdb/movieTmdbReviews?movieId=" + movieid.value)
+        .get(
+          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value
+        )
         .then((response) => {
           tmdbreview.value = response.data.data.reviews[0];
           console.log("tmdbreview detail");
@@ -392,7 +403,7 @@ export default {
     const getAMDBComments = () => {
       //Fetch AMDB Comments
       axios
-        .get("/api/comments/showComments?movieId=" + movieid.value)
+        .get(env.AMDBAPI + "comments/showComments?movieId=" + movieid.value)
         .then((response) => {
           amdbreview.value = response.data.data;
           console.log("amdbreview detail");
@@ -445,7 +456,8 @@ export default {
       // Add comments
       axios
         .get(
-          "/api/comments/addComments?movieId=" +
+          env.AMDBAPI +
+            "comments/addComments?movieId=" +
             movieid.value +
             "&comment=" +
             commentsValue.value
