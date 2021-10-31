@@ -56,8 +56,8 @@ def showComments():
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
     '''
-    userId = req['userId'] if "userId" in req else ""
     req = request.values
+    userId = req['userId'] if "userId" in req else ""
     #userId = str(current_user.userId)
     movieId = req['movieId'] if "movieId" in req else ""
     textsql = " 1=1 and movieId = '"+movieId+"'"
