@@ -21,12 +21,12 @@ movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
 
 @movie_page_Tmdb.route("/movieTmdbReviews")
 def review():
-
+'''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-
+'''
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -56,12 +56,12 @@ def review():
 
 @movie_page_Tmdb.route("/movieTmdbInfo")
 def Info():
-
+'''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-
+'''
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'

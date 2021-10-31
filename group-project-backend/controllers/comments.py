@@ -18,12 +18,12 @@ comments_page = Blueprint( "comments_page",__name__ )
 @comments_page.route("/addComments")
 def addComments():
     import json
-
+'''
     if 'current_user' in  g:
         current_user = g.current_user
     else: 
         return ops_renderErrJSON( msg ="please login first")
-
+'''
 
     req = request.values
     userId = str(current_user.userId)
@@ -48,12 +48,12 @@ def addComments():
 @comments_page.route("/showComments")
 def showComments():
     import json
-
+'''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-
+'''
 
     req = request.values
     userId = str(current_user.userId)
@@ -73,12 +73,12 @@ def showComments():
 
 @comments_page.route("/toxic")
 def toxic():
-
+'''
     if 'current_user' in  g:
         current_user = g.current_user
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
-    
+'''    
     req = request.values
     title = [req['title'] if "title" in req else ""]
     toxic = detector(title)
