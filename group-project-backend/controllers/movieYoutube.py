@@ -10,6 +10,7 @@ from common.libs.UserService import UserService
 import requests
 from common.libs.ToxicComments import do_pe,detector
 from jsonpath import jsonpath
+from common.libs.Sentiment import sentiment
 
 
 movie_page_Youtube = Blueprint( "movie_page_Youtube",__name__ )
@@ -46,6 +47,13 @@ def review():
     #item_dict = json.loads(names)
 
     #print(len(item_dict['authorDisplayName']))
+
+    for review in reviews[0]:
+        content = [review['content']]
+        result = detector(content)
+        senti = sentiment(content)
+        review['toxic'] = result
+        review['sentiment'] = senti
 
 
     for i in range(0, len(names)):
