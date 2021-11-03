@@ -47,7 +47,7 @@ def review():
     #item_dict = json.loads(names)
 
     #print(len(item_dict['authorDisplayName']))
-
+    dic = {}
     for review in reviews:
         content = [review]
         result = detector(content)
@@ -57,9 +57,14 @@ def review():
 
 
     for i in range(0, len(names)):
+        content = [reviews[i]]
+        result = detector(content)
+        senti = sentiment(content)
         youtubeInfoDictionary = {
         "username": names[i],
         "review": reviews[i],
+        "toxic": result['tag'],
+        "sentiment": senti['tag'],
         "profile_picture": profileImages[i],
         "time": times[i]
         }
