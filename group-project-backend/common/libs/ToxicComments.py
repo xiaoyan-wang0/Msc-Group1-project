@@ -31,6 +31,8 @@ def detector(title):
     headers = {"content-type": "application/json"}          
 
     response = requests.post('http://0.0.0.0:8501/v1/models/mymodel:predict', data=input_data_json,headers=headers)
+    #response = requests.post('http://localhost:8501/v1/models/mymodel:predict', data=input_data_json,headers=headers)
+
 
     text1 =  title
 

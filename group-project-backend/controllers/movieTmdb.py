@@ -15,6 +15,7 @@ import requests
 import json
 from jsonpath import jsonpath
 from common.libs.ToxicComments import do_pe,detector
+from common.libs.Sentiment import sentiment
 
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
@@ -41,11 +42,14 @@ def review():
 
     response = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/reviews?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
     reviews = jsonpath(response.json(),'$..results')
+    
 
     for review in reviews[0]:
         content = [review['content']]
         result = detector(content)
-        review['toxic'] = result
+        senti = sentiment(content)
+        review['toxic'] = result['tag']
+        review['sentiment'] = senti['tag']
 
     movieInfoDictionary = {
         "reviews": reviews

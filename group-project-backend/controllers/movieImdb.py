@@ -9,6 +9,7 @@ from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 import requests
 from common.libs.ToxicComments import do_pe,detector
+from common.libs.Sentiment import sentiment
 
 
 movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
@@ -36,7 +37,9 @@ def review():
     for review in reviews['items']:
         content = [review['content']]
         result = detector(content)
-        review['toxic'] = result
+        senti = sentiment(content)
+        review['toxic'] = result['tag']
+        review['sentiment'] = senti['tag']
 
     movieReviewsDictionary = {
         "reviews": reviews
