@@ -48,8 +48,8 @@ def review():
 
     #print(len(item_dict['authorDisplayName']))
 
-    for review in reviews[0]:
-        content = [review['content']]
+    for review in reviews:
+        content = [review]
         result = detector(content)
         senti = sentiment(content)
         review['toxic'] = result
