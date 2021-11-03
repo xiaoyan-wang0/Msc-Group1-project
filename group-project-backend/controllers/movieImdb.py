@@ -38,8 +38,8 @@ def review():
         content = [review['content']]
         result = detector(content)
         senti = sentiment(content)
-        review['toxic'] = result
-        review['sentiment'] = senti
+        review['toxic'] = result['tag']
+        review['sentiment'] = senti['tag']
 
     movieReviewsDictionary = {
         "reviews": reviews

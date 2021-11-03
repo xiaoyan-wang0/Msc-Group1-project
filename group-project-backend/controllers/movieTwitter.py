@@ -35,7 +35,16 @@ def review():
     # To be added: Search tweets according to page number...
     cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended").items(30)
 
-   
+    dic = {}
+    dic2= []
+    for c in cursor:
+        content =  [c.full_text]
+        dic['content'] = c.full_text
+        result = detector(content)
+        dic['toxic'] = result['tag']
+        senti = sentiment(content)
+        dic['sentiment'] = senti['tag']
+        dic2.append(dic)
 
     # for review in resultDictionary[0]:
     #     content = [review['content']]
