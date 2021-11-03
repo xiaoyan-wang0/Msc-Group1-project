@@ -47,13 +47,6 @@ def review():
     #item_dict = json.loads(names)
 
     #print(len(item_dict['authorDisplayName']))
-    dic = {}
-    for review in reviews:
-        content = [review]
-        result = detector(content)
-        senti = sentiment(content)
-        review['toxic'] = result
-        review['sentiment'] = senti
 
 
     for i in range(0, len(names)):
