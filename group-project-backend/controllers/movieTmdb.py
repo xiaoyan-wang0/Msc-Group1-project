@@ -15,6 +15,7 @@ import requests
 import json
 from jsonpath import jsonpath
 from common.libs.ToxicComments import do_pe,detector
+from common.libs.Sentiment import sentiment
 
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
@@ -45,7 +46,9 @@ def review():
     for review in reviews[0]:
         content = [review['content']]
         result = detector(content)
+        senti = sentiment(content)
         review['toxic'] = result
+        review['sentiment'] = senti
 
     movieInfoDictionary = {
         "reviews": reviews
