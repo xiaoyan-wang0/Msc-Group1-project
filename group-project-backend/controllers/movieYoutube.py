@@ -48,18 +48,16 @@ def review():
 
     #print(len(item_dict['authorDisplayName']))
 
-    for review in reviews[0]:
-        content = [review['content']]
-        result = detector(content)
-        senti = sentiment(content)
-        review['toxic'] = result
-        review['sentiment'] = senti
-
 
     for i in range(0, len(names)):
+        content = [reviews[i]]
+        result = detector(content)
+        senti = sentiment(content)
         youtubeInfoDictionary = {
         "username": names[i],
         "review": reviews[i],
+        "toxic": result['tag'],
+        "sentiment": senti['tag'],
         "profile_picture": profileImages[i],
         "time": times[i]
         }
