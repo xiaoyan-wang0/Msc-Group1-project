@@ -2,7 +2,7 @@
   <div class="home">
     <div class="feature-card">
       <div>
-        <div id="1" style="border: black solid 1px">
+        <div id="1" style="">
           <div class="home-carousel-div" style="">
             <div class="home-carousel-left" id="2" style="">
               <div class="main-carousel" v-if="upComingMovieData">
@@ -31,12 +31,17 @@
             </div>
             <div class="home-carousel-right" id="3" style="">
               <div class="home-carousel-right-title" style="">
-                <span style="margin-left: 5px">Upcoming</span>
-                <span
-                  style="margin-right: 5px; float: right"
-                  @click="showResultPage()"
-                  >more</span
-                >
+                <div class="section-title">
+                  <h4>
+                    <span style="margin-left: 5px">Upcoming</span>
+                    <a @click="showResultPage()" class="primary-btn" style="
+                        float: right;
+                        margin-top: 2px;
+                      "
+                      >View All <span class="arrow_right"></span
+                    ></a>
+                  </h4>
+                </div>
               </div>
               <div
                 class="home-carousel-right-list"
@@ -62,44 +67,27 @@
                     >
                       {{ item.overview }}
                     </div>
-                  </div></router-link
-                >
+                  </div>
+                </router-link>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <!-- SEACH BAR -->
     <div class="search-bar">
-      <form @submit.prevent="SearchMovies()" class="search-box">
+      <!-- <form @submit.prevent="SearchMovies()" class="search-box">
         <input
           type="text"
           placeholder="What are you looking for?"
           v-model="search"
         />
         <input type="submit" value="Search" />
-      </form>
+      </form> -->
+      <div class="search-content"></div>
     </div>
-
     <router-view />
-
-    <!--  movies searched -->
-    <div class="movies-list">
-      <div class="movie" v-for="movie in movies" :key="movie.imdbID">
-        <router-link :to="'/movie/' + movie.imdbID" class="movie-link">
-          <div class="product-image">
-            <img :src="movie.Poster" alt="Movie Poster" />
-            <div class="type">{{ movie.Type }}</div>
-          </div>
-          <div class="detail">
-            <p class="year">{{ movie.Year }}</p>
-            <h3>{{ movie.Title }}</h3>
-          </div>
-        </router-link>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -117,7 +105,6 @@ export default {
   setup() {
     const axios = inject("axios"); // inject axios
     const search = ref("");
-    const movies = ref([]);
     const activeIndex = ref("1");
     const itemdata = ref([]);
     const lastestMovieData = ref([]);
@@ -179,7 +166,6 @@ export default {
 
     return {
       search,
-      movies,
       moviePoster,
       activeIndex,
       itemdata,
@@ -213,6 +199,7 @@ export default {
   }
   .feature-card {
     // position: relative;
+    margin-top: 20px;
     padding: 0 30px;
     width: 100%;
     .main-carousel {
@@ -250,6 +237,10 @@ export default {
   // .main-menu li ul {
   // font-size: 500px;
   // }
+  .search-bar {
+    .search-content {
+    }
+  }
   .search-box {
     display: flex;
     flex-direction: column;
@@ -387,7 +378,6 @@ export default {
       flex-direction: column;
       -webkit-box-pack: justify;
       justify-content: space-between;
-      background: #000;
       .home-carousel-right-title {
         background-color: #111111;
         height: 35px;
@@ -397,7 +387,7 @@ export default {
           font-weight: 600;
           // color: rgb(245, 197, 24);
 
-        color: #42b883;
+          color: #fff;
         }
       }
       .home-carousel-right-list {

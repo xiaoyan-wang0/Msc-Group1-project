@@ -1,5 +1,5 @@
  <template>
-  <div class="detail-page" v-loading="isCommnetLoading">
+  <section class="anime-details spad">
     <a-modal
       :visible="isShowTrailer"
       :maskClosable="true"
@@ -9,250 +9,478 @@
       :width="700"
       @cancel="handleCancel"
     >
-      <!-- <YoutubeVue3
+      <YoutubeVue3
         ref="youtube"
         :videoid="video_id"
         :width="700"
         :autoplay="0"
         :height="400"
-      /> -->
+      />
     </a-modal>
-    <div class="movie-detail">
-      <h2>{{ movie.original_title }}</h2>
-      <p>{{ movie.release_date }}</p>
-      <div class="img-trailer">
-        <img
-          :src="moviePoster + movie.poster_path"
-          alt="Movie Poster"
-          class="featured-img"
-          @click="isShowTrailer = true"
-        />
-        <YoutubeVue3
-          class="youtube"
-          ref="youtube"
-          :videoid="video_id"
-          width="65%"
-          :autoplay="0"
-          :height="400"
-        />
-      </div>
-      <div class="movie-tag-group">
-        <span v-for="item in movie.genres" :key="item.id" style="">{{
-          item.name
-        }}</span>
-      </div>
-      <p style="font-size: 20px">{{ movie.overview }}</p>
-      <a-rate :value="start" disabled allowHalf />
-      <p>{{ movie.vote_average }}</p>
-    </div>
-
-    <div class="comments">
-      <a-tabs type="card">
-        <a-tab-pane key="amdb" tab="AMDB reviews" style="">
-          <h1>AMDB reviews</h1>
-          <div class="comment-wrap" v-for="item in amdbreview" :key="item.id">
-            <div class="photo-avatar">
-              <div class="avatar">
-                <a-avatar :src="emptyprofile" />
-              </div>
-            </div>
-            <div class="comment-block">
-              <p class="comment-author">{{ item.userName }}</p>
-              <p class="comment-text">{{ item.comment }}</p>
-              <div class="bottom-comment">
-                <div class="comment-date">
-                  {{ formatDate(item.createTime) }}
-                </div>
-                <ul class="comment-actions">
-                  <li class="toxicrate">
-                    {{ showToxicText(item.toxic) }} :
-                    {{ changeToPercent(item.toxic) }}
-                  </li>
-                  <li class="sentiemnt-rate">
-                    {{ showSentiemntText(item.sentiment) }} :
-                    {{ changeToPercent(item.sentiment) }}
-                  </li>
-                  <li class="report">Report</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <a-comment>
-            <template #avatar>
-              <a-avatar
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                alt="Han Solo"
+    <div class="container">
+      <div class="anime__details__content">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="anime__details__pic set-bg">
+              <img
+                :src="moviePoster + movie.poster_path"
+                alt="Movie Poster"
+                class="anime__details__pic set-bg"
+                @click="isShowTrailer = true"
               />
-            </template>
-            <template #content>
-              <a-form-item>
-                <a-textarea v-model:value="commentsValue" :rows="4" />
-              </a-form-item>
-              <a-form-item>
-                <a-button
-                  html-type="submit"
-                  :loading="submitting"
-                  type="primary"
-                  @click="handleSubmit"
-                >
-                  Add Comment
-                </a-button>
-              </a-form-item>
-            </template>
-          </a-comment>
-        </a-tab-pane>
-        <a-tab-pane key="tmdb" tab="TMDB reviews">
-          <h1>TMDB reviews</h1>
-          <div class="comment-wrap" v-for="item in tmdbreview" :key="item.id">
-            <div class="photo-avatar">
-              <div class="avatar">
-                <a-avatar
-                  :src="
-                    item.author_details.avatar_path !== null
-                      ? moviePoster + item.profile_path
-                      : emptyprofile
-                  "
-                />
-              </div>
-            </div>
-            <div class="comment-block">
-              <p class="comment-author">{{ item.author }}</p>
-              <p class="comment-text">{{ item.content }}</p>
-              <div class="bottom-comment">
-                <div class="comment-date">{{ item.updated_at }}</div>
-                <ul class="comment-actions">
-                  <li class="toxicrate">
-                    {{ showToxicText(item.toxic.tag[0]) }}:{{
-                      changeToPercent(item.toxic.tag)
-                    }}
-                  </li>
-                  <li class="report">Report</li>
-                </ul>
-              </div>
             </div>
           </div>
-        </a-tab-pane>
-        <a-tab-pane key="imdb" tab="IMDB reviews"
-          ><h1>IMDB reviews</h1>
-          <div class="comment-wrap" v-for="item in imdbreview" :key="item.id">
-            <div class="photo-avatar">
-              <div class="avatar">
-                <a-avatar :src="emptyprofile" />
+          <div class="col-lg-9">
+            <div class="anime__details__text">
+              <div class="anime__details__title">
+                <h3>{{ movie.original_title }}</h3>
+                <span>{{ movie.release_date }}</span>
               </div>
-            </div>
-            <div class="comment-block">
-              <p class="comment-author">{{ item.username }}</p>
-              <p class="comment-text">{{ item.content }}</p>
-              <div class="bottom-comment">
-                <div class="comment-date">{{ item.date }}</div>
-                <ul class="comment-actions">
-                  <li class="toxicrate">
-                    {{ showToxicText(item.toxic.tag[0]) }} :{{
-                      changeToPercent(item.toxic.tag[0])
-                    }}
-                  </li>
-                  <li class="report">Report</li>
-                  <li class="report">
-                    {{ item.warningSpoilers ? "warningSpoilers" : "" }}
-                  </li>
-                </ul>
+              <div class="anime__details__rating">
+                <div class="rating">
+                  <a-rate :value="start" disabled allowHalf />
+                  <p>{{ movie.vote_average }}</p>
+                </div>
               </div>
-            </div>
-          </div>
-        </a-tab-pane>
-        <a-tab-pane key="youtube" tab="Youtube reviews"
-          ><h1>Youtube reviews</h1>
-          <div
-            class="comment-wrap"
-            v-for="item in youtubereview"
-            :key="item.id"
-          >
-            <div class="photo-avatar">
-              <div class="avatar">
-                <a-avatar :src="item.profile_picture" />
-              </div>
-            </div>
-            <div class="comment-block">
-              <p class="comment-author">{{ item.username }}</p>
-              <p class="comment-text">{{ item.review }}</p>
-              <div class="bottom-comment">
-                <div class="comment-date">{{ item.time }}</div>
-                <ul class="comment-actions">
-                  <li class="toxicrate">
-                    <!-- {{ showToxicText(item.toxic.tag[0]) }} :{{
-                      changeToPercent(item.toxic.tag[0])
-                    }} -->
-                  </li>
-                  <li class="report">Report</li>
-                  <li class="report">
-                    {{ item.warningSpoilers ? "warningSpoilers" : "" }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </a-tab-pane>
-      </a-tabs>
-    </div>
 
-    <div class="morebutton">
-      <span>Casts </span><a @click="changeText()">{{ isMore }}</a>
-    </div>
-    <div class="movie-casts">
-      <div
-        class="card"
-        v-for="item in castList"
-        :key="item.id"
-        @click="showCastDetail(item.id)"
-      >
-        <div class="photo">
-          <img
-            :src="
-              item.profile_path != null
-                ? moviePoster + item.profile_path
-                : emptyprofile
-            "
-            alt="Cast profile"
-          />
+              <p style="font-size: 20px">{{ movie.overview }}</p>
+
+              <div class="anime__details__widget">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6">
+                    <ul>
+                      <li><span>Type:</span> Movie</li>
+                      <li><span>Adult:</span> {{ movie.adult }}</li>
+                      <li>
+                        <span>Genres:</span>
+                        <span
+                          v-for="item in movie.genres"
+                          :key="item.id"
+                          style="width: fit-content; margin-right: 10px"
+                          >{{ item.name }}</span
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <ul>
+                      <li><span>vote count:</span>{{ movie.vote_count }}</li>
+                      <li><span>Popularity:</span> {{ movie.popularity }}</li>
+                      <li><span>Homepage</span> {{ movie.homepage }}</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="movie-tag-group">
+                  <div class="morebutton"></div>
+                  <div class="movie-casts">
+                    <!-- <div
+                        class="card"
+                        v-for="item in castList"
+                        :key="item.id"
+                        @click="showCastDetail(item.id)"
+                      >
+                        <div class="photo">
+                          <img
+                            :src="
+                              item.profile_path != null
+                                ? moviePoster + item.profile_path
+                                : emptyprofile
+                            "
+                            alt="Cast profile"
+                          />
+                        </div>
+                        <p></p>
+                      </div> -->
+                    <a-avatar
+                      :size="{
+                        xs: 24,
+                        sm: 32,
+                        md: 40,
+                        lg: 64,
+                        xl: 80,
+                        xxl: 100,
+                      }"
+                      v-for="item in castList"
+                      :key="item.id"
+                      @click="showCastDetail(item.id)"
+                      style="margin: 5px"
+                    >
+                      <template #icon>
+                        <img
+                          :src="
+                            item.profile_path != null
+                              ? moviePoster + item.profile_path
+                              : emptyprofile
+                          "
+                          alt="Cast profile"
+                        />
+                      </template>
+                    </a-avatar>
+                  </div>
+                  <el-dialog v-model="isShowCastDetail" title="Detail">
+                    <el-descriptions class="margin-top" :column="1">
+                      <el-descriptions-item label="Name:">{{
+                        castDetail.name
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="Birthday:">{{
+                        castDetail.birthday
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="Department:">
+                        <el-tag size="small">{{
+                          castDetail.known_for_department
+                        }}</el-tag>
+                      </el-descriptions-item>
+                      <el-descriptions-item label="Popularity:">{{
+                        castDetail.popularity
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="Also known as:">{{
+                        castDetail.also_known_as
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="Biography:">{{
+                        castDetail.biography
+                      }}</el-descriptions-item>
+                    </el-descriptions>
+                    <template #footer>
+                      <span class="dialog-footer">
+                        <el-button
+                          type="primary"
+                          @click="isShowCastDetail = false"
+                          >Confirm</el-button
+                        >
+                      </span>
+                    </template>
+                  </el-dialog>
+                  <span v-for="item in movie.genres" :key="item.id" style="">{{
+                    item.name
+                  }}</span>
+                </div>
+              </div>
+
+              <div class="anime__details__btn">
+                <a href="#" class="follow-btn"
+                  ><i class="fa fa-heart"></i> ADD Like list</a
+                >
+                <a @click="isShowTrailer = true" class="follow-btn"
+                  ><i class="fa fa-play"></i> <span>Watch trailer</span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <h2>{{ item.name }}</h2>
-        <h3>{{ item.character }}</h3>
-        <p></p>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8 col-md-8">
+          <div class="anime__details__review">
+            <div class="section-title">
+              <h5>reviews</h5>
+            </div>
+            <a-tabs type="card">
+              <a-tab-pane key="amdb" tab="AMDB reviews" style="">
+                <div
+                  class="comment-wrap"
+                  v-for="item in amdbreview"
+                  :key="item.id"
+                >
+                  <div class="anime__review__item">
+                    <div class="anime__review__item__pic">
+                      <div class="photo-avatar">
+                        <div class="avatar">
+                          <a-avatar :src="emptyprofile" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="anime__review__item__text">
+                      <h6 class="comment-author">
+                        {{ item.userName }}
+                      </h6>
+                      <p class="comment-text">{{ item.comment }}</p>
+                      <div class="bottom-comment">
+                        <div class="comment-date">
+                          {{ formatDate(item.createTime) }}
+                        </div>
+                        <ul class="comment-actions">
+                          <li class="toxicrate">
+                            {{ showToxicText(item.toxic) }} :
+                            {{ changeToPercent(item.toxic) }}
+                            <img
+                              :src="showToxicImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="sentiemnt-rate">
+                            {{ showSentiemntText(item.sentiment) }} :
+                            {{ changeToPercent(item.sentiment) }}
+                            <img
+                              :src="showSentimentImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                            <!-- <img
+                              src="../assets/toxic-red.png"
+                              style="height: 30px"
+                              alt=""
+                            /> -->
+                          </li>
+                          <li class="report">Report</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="anime__details__form">
+                  <div class="section-title">
+                    <h5>Your Comment</h5>
+                  </div>
+                  <a-comment>
+                    <template #avatar>
+                      <a-avatar
+                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                        alt="Han Solo"
+                      />
+                    </template>
+                    <template #content>
+                      <a-form-item>
+                        <a-textarea v-model:value="commentsValue" :rows="4" />
+                      </a-form-item>
+                      <a-form-item>
+                        <button
+                          class="site-btn"
+                          html-type="submit"
+                          :loading="submitting"
+                          @click="handleSubmit()"
+                        >
+                          Add Comment
+                        </button>
+                      </a-form-item>
+                    </template>
+                  </a-comment>
+                </div>
+              </a-tab-pane>
+
+              <a-tab-pane key="tmdb" tab="TMDB reviews" v-if="tmdbreview">
+                <div class="section-title">
+                  <h5>TMDB reviews</h5>
+                </div>
+                <div
+                  class="comment-wrap"
+                  v-for="item in tmdbreview"
+                  :key="item.id"
+                >
+                  <div class="anime__review__item">
+                    <div class="anime__review__item__pic">
+                      <div class="photo-avatar">
+                        <div class="avatar">
+                          <a-avatar
+                            :src="
+                              item.author_details.avatar_path
+                                ? moviePoster + item.author_details.avatar_path
+                                : emptyprofile
+                            "
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="anime__review__item__text">
+                      <h6 class="comment-author">{{ item.author }}</h6>
+                      <p class="comment-text">{{ item.content }}</p>
+                      <div class="bottom-comment">
+                        <div class="comment-date">{{ item.created_at }}</div>
+                        <ul class="comment-actions">
+                          <li class="toxicrate">
+                            {{ showToxicText(item.toxic[0]) }}:{{
+                              changeToPercent(item.toxic)
+                            }}
+                            <img
+                              :src="showToxicImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="sentiemnt-rate">
+                            {{ showSentiemntText(item.sentiment[0]) }} :
+                            {{ changeToPercent(item.sentiment[0]) }}
+                            <img
+                              :src="showSentimentImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="report">Report</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a-tab-pane>
+              <a-tab-pane key="imdb" tab="IMDB reviews">
+                <div class="section-title">
+                  <h5>IMDB reviews</h5>
+                </div>
+                <div
+                  class="comment-wrap"
+                  v-for="item in imdbreview"
+                  :key="item.id"
+                >
+                  <div class="anime__review__item">
+                    <div class="anime__review__item__pic">
+                      <div class="photo-avatar">
+                        <div class="avatar">
+                          <a-avatar :src="emptyprofile" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="anime__review__item__text">
+                      <h6 class="comment-author">{{ item.username }}</h6>
+                      <p class="comment-text">{{ item.content }}</p>
+                      <div class="bottom-comment">
+                        <div class="comment-date">{{ item.date }}</div>
+                        <ul class="comment-actions">
+                          <li class="toxicrate">
+                            {{ showToxicText(item.toxic[0]) }}:{{
+                              changeToPercent(item.toxic)
+                            }}
+                            <img
+                              :src="showToxicImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="sentiemnt-rate">
+                            {{ showSentiemntText(item.sentiment[0]) }} :
+                            {{ changeToPercent(item.sentiment[0]) }}
+                            <img
+                              :src="showSentimentImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="report">Report</li>
+                          <li class="report">
+                            {{ item.warningSpoilers ? "warningSpoilers" : "" }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a-tab-pane>
+              <a-tab-pane key="youtube" tab="Youtube reviews">
+                <div class="section-title">
+                  <h5>Youtube reviews</h5>
+                </div>
+                <div
+                  class="comment-wrap"
+                  v-for="item in youtubereview"
+                  :key="item.id"
+                >
+                  <div class="anime__review__item">
+                    <div class="anime__review__item__pic">
+                      <div class="photo-avatar">
+                        <div class="avatar">
+                          <a-avatar :src="item.profile_picture" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="anime__review__item__text">
+                      <h6 class="comment-author">{{ item.username }}</h6>
+                      <p class="comment-text">{{ item.review }}</p>
+                      <div class="bottom-comment">
+                        <div class="comment-date">{{ item.time }}</div>
+                        <ul class="comment-actions">
+                          <li class="toxicrate">
+                            {{ showToxicText(item.toxic[0]) }}:{{
+                              changeToPercent(item.toxic)
+                            }}
+                            <img
+                              :src="showToxicImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="sentiemnt-rate">
+                            {{ showSentiemntText(item.sentiment[0]) }} :
+                            {{ changeToPercent(item.sentiment[0]) }}
+                            <img
+                              :src="showSentimentImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="report">Report</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a-tab-pane>
+
+              <a-tab-pane key="twitter" tab="Twitter reviews">
+                <div class="section-title">
+                  <h5>Twitter reviews</h5>
+                </div>
+                <div
+                  class="comment-wrap"
+                  v-for="item in twitterreview"
+                  :key="item.id"
+                >
+                  <div class="anime__review__item">
+                    <div class="anime__review__item__pic">
+                      <div class="photo-avatar">
+                        <div class="avatar">
+                          <a-avatar :src="emptyprofile" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="anime__review__item__text">
+                      <!-- <h6 class="comment-author">{{ item.username }}</h6> -->
+                      <p class="comment-text">{{ item.content }}</p>
+                      <div class="bottom-comment">
+                        <!-- <div class="comment-date">{{ item.time }}</div> -->
+                        <ul class="comment-actions">
+                          <li class="toxicrate">
+                            {{ showToxicText(item.toxic[0]) }}:{{
+                              changeToPercent(item.toxic)
+                            }}
+                            <img
+                              :src="showToxicImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="sentiemnt-rate">
+                            {{ showSentiemntText(item.sentiment[0]) }} :
+                            {{ changeToPercent(item.sentiment[0]) }}
+                            <img
+                              :src="showSentimentImg(item.toxic)"
+                              style="height: 30px"
+                              alt=""
+                            />
+                          </li>
+                          <li class="report">Report</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a-tab-pane>
+            </a-tabs>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <div class="anime__details__sidebar">
+            <div class="section-title">
+              <h5>you might like...</h5>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <el-dialog v-model="isShowCastDetail" title="Detail">
-      <el-descriptions class="margin-top" :column="1">
-        <el-descriptions-item label="Name:">{{
-          castDetail.name
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Birthday:">{{
-          castDetail.birthday
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Department:">
-          <el-tag size="small">{{ castDetail.known_for_department }}</el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="Popularity:">{{
-          castDetail.popularity
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Also known as:">{{
-          castDetail.also_known_as
-        }}</el-descriptions-item>
-        <el-descriptions-item label="Biography:">{{
-          castDetail.biography
-        }}</el-descriptions-item>
-      </el-descriptions>
-
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button type="primary" @click="isShowCastDetail = false"
-            >Confirm</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
-  </div>
-</template>
+  </section>
+</template> 
 
 <script>
 import { ref, inject, onBeforeMount, computed } from "vue";
@@ -285,9 +513,8 @@ export default {
     const movie = ref({});
     const casts = ref({});
     const castList = ref([]);
-    const isMore = ref("");
     const castDetail = ref({});
-    const start = ref();
+    const start = ref(0);
     const route = useRoute();
     const movieid = ref("");
     const imdbmovieid = ref("");
@@ -295,6 +522,7 @@ export default {
     const amdbreview = ref([]);
     const imdbreview = ref([]);
     const youtubereview = ref([]);
+    const twitterreview = ref([]);
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
@@ -320,8 +548,10 @@ export default {
           console.log(movie.value);
           start.value = movie.value.vote_average / 2;
           console.log("imdbmovieid");
-          console.log(imdbmovieid.value);
           imdbmovieid.value = response.data.imdb_id;
+          console.log(imdbmovieid.value);
+          console.log("imdbmovie title");
+          console.log(movie.value.original_title);
           //Fetch IMDB Comments
           axios
             .get(
@@ -331,9 +561,12 @@ export default {
               { withCredentials: true }
             )
             .then((response) => {
-              imdbreview.value = response.data.data.reviews.items;
-              console.log("imdbreview detail");
-              console.log(response.data);
+              if (response.data.data.reviews.items) {
+                imdbreview.value = response.data.data.reviews.items;
+                console.log("imdbreview detail");
+                console.log(imdbreview.value);
+                console.log(response.data.data.reviews.items);
+              }
             });
 
           //Fetch Youtube Comments
@@ -345,9 +578,29 @@ export default {
               { withCredentials: true }
             )
             .then((response) => {
-              youtubereview.value = response.data.data;
-              console.log("youtubereview detail");
-              console.log(youtubereview.value);
+              if (response.data.data) {
+                youtubereview.value = response.data.data;
+                console.log("youtubereview detail");
+                console.log(youtubereview.value);
+                console.log(response.data.data);
+              }
+            });
+
+          //Fetch Twitter Comments
+          axios
+            .get(
+              env.AMDBAPI +
+                "movieTwitter/movieTwitterReviews?movieName=" +
+                movie.value.original_title,
+              { withCredentials: true }
+            )
+            .then((response) => {
+              if (response.data.data) {
+                twitterreview.value = response.data.data;
+              }
+              console.log("twitterreview detail");
+              console.log(response.data.data);
+              console.log(twitterreview.value);
             });
         });
 
@@ -382,12 +635,10 @@ export default {
           casts.value = response.data;
           console.log("casts detail");
           console.log(casts.value);
-          if (response.data.cast.length <= 10) {
+          if (response.data.cast.length <= 7) {
             castList.value = casts.value.cast;
-            isMore.value = "";
           } else {
-            castList.value = response.data.cast.slice(0, 10);
-            isMore.value = "More";
+            castList.value = response.data.cast.slice(0, 7);
           }
         });
 
@@ -398,7 +649,9 @@ export default {
           { withCredentials: true }
         )
         .then((response) => {
-          tmdbreview.value = response.data.data.reviews[0];
+          if (response.data.data.reviews) {
+            tmdbreview.value = response.data.data.reviews[0];
+          }
           console.log("tmdbreview detail");
           console.log(tmdbreview.value);
         });
@@ -424,7 +677,6 @@ export default {
           console.log("amdbreview detail");
           console.log(response.data);
           console.log(amdbreview.value);
-
           isCommnetLoading.value = false;
         });
     };
@@ -436,6 +688,24 @@ export default {
     const showToxicText = (rate) => {
       return ToolMethod.showToxicText(rate);
     };
+    const showToxicImg = (rate) => {
+      if (rate > 0 && rate <= 0.53) {
+        return "/img/toxic-green.9c3c9960.png";
+      } else if (rate > 0.53 && rate < 0.9) {
+        return "/img/toxic-yellow.7b8a39b0.png";
+      } else {
+        return "/img/toxic-red.58ceed0f.png";
+      }
+      // return ToolMethod.showToxicImg(rate);
+    };
+    const showSentimentImg = (rate) => {
+      if (rate > 0.5) {
+        return "/img/sentiment-red.d79c31b8.png";
+      } else {
+        return "/img/sentiment-green.fc9ac5f3.png";
+      }
+      // return ToolMethod.showToxicImg(rate);
+    };
 
     const showSentiemntText = (rate) => {
       return ToolMethod.showSentiemntText(rate);
@@ -446,19 +716,6 @@ export default {
     };
     const changeToPercent = (value) => {
       return ToolMethod.changeToPercent(value);
-    };
-
-    const changeText = () => {
-      console.log("castList.value.length");
-      console.log(castList.value.length);
-      console.log(casts.value.cast);
-      if (castList.value.length <= 10) {
-        castList.value = casts.value.cast;
-        isMore.value = "Less";
-      } else {
-        castList.value = casts.value.cast.slice(0, 10);
-        isMore.value = "More";
-      }
     };
 
     // comments
@@ -485,7 +742,7 @@ export default {
           console.log("Add comments ");
           console.log(response.data);
           submitting.value = false;
-          getAMDBComments(); 
+          getAMDBComments();
         });
 
       // submitting.value = true;
@@ -529,7 +786,6 @@ export default {
       youtube,
       isShowTrailer,
       emptyprofile,
-      isMore,
       castList,
       // comments
       comments,
@@ -539,6 +795,7 @@ export default {
       imdbreview,
       amdbreview,
       youtubereview,
+      twitterreview,
       castDetail,
       isShowCastDetail,
       isCommnetLoading,
@@ -548,7 +805,8 @@ export default {
       showToxicText,
       showSentiemntText,
       changeToPercent,
-      changeText,
+      showToxicImg,
+      showSentimentImg,
       formatDate,
     };
   },
@@ -556,152 +814,171 @@ export default {
 </script>
 
 <style lang="scss" >
-.detail-page {
-  .movie-detail {
-    padding: 50px;
+/*---------------------
+   Details
+-----------------------*/
 
-    .movie-tag-group {
-      margin: 450px 20px 10px 10px;
-      margin-right: 20px;
-      margin-bottom: 10px;
-      span {
-        border: 2px solid #bbe1f1;
-        padding: 5px;
-        border-radius: 50px;
-        margin-right: 8px;
-        color: white;
-      }
-    }
-    h2 {
-      color: #fff;
-      font-size: 28px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .img-trailer {
-      // margin-bottom: 50px;
-    }
-    .featured-img {
-      display: block;
-      max-width: 30%;
-      float: left;
-      margin-bottom: 16px;
-      height: 400px;
-    }
-    .youtube {
-      float: right;
+.anime-details {
+  padding-top: 60px;
+}
 
-      margin-bottom: 16px;
-    }
-    p {
-      color: #fff;
-      font-size: 18px;
-      line-height: 1.4;
-    }
-  }
-  .morebutton {
-    span {
-      font-size: 40px;
-      color: #fff;
-      margin-left: 80px;
-    }
-    a {
-      font-size: 20px;
-      color: #fff;
-      text-align: center;
-      float: right;
-      margin-right: 80px;
-      margin-top: 20px;
-    }
-  }
-  .movie-casts {
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: 100px;
-    .cast {
-      max-width: 25%;
-      flex: 1 1 50%;
-      padding: 16px 8px;
+.anime__details__content {
+  margin-bottom: 65px;
+}
 
-      .cast-link {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        .product-image {
-          position: relative;
-          display: block;
-          img {
-            display: block;
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-          }
-          .type {
-            position: absolute;
-            padding: 8px 16px;
-            background-color: rgba(86, 98, 168, 0.8);
-            color: #fff;
-            bottom: 16px;
-            left: 0px;
-            text-transform: capitalize;
-          }
-        }
-        .detail {
-          background-color: #111111;
-          padding: 16px 8px;
-          flex: 1 1 100%;
-          border-radius: 0px 0px 8px 8px;
-          .character {
-            color: #aaa;
-            font-size: 14px;
-          }
-          h3 {
-            color: #fff;
-            font-weight: 600;
-            font-size: 18px;
-          }
-        }
-      }
-    }
-  }
+.anime__details__text {
+  position: relative;
+}
 
-  .comments {
-    margin: 2.5rem auto 0;
-    max-width: 90%;
-    padding: 0 1.25rem;
-    h1 {
-      color: #fff;
-    }
-  }
-  .comment-wrap {
-    margin-bottom: 1.25rem;
-    display: table;
-    width: 100%;
-    min-height: 5.3125rem;
-  }
-  .photo-avatar {
-    padding-top: 0.625rem;
-    display: table-cell;
-    width: 3.5rem;
-  }
-  .photo-avatar .avatar {
-    height: 2.25rem;
-    width: 2.25rem;
-    border-radius: 50%;
-    background-size: contain;
-  }
-  .comment-block {
-    padding: 5px;
-    background-color: #fff;
-    display: table-cell;
-    vertical-align: top;
-    border-radius: 0.1875rem;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-  }
-  .comment-text {
-    margin-bottom: 1.25rem;
-  }
+.anime__details__text p {
+  color: #b7b7b7;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.anime__details__pic {
+  height: 440px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.anime__details__pic .comment {
+  font-size: 13px;
+  color: #ffffff;
+  background: #3d3d3d;
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  position: absolute;
+  left: 10px;
+  bottom: 25px;
+}
+
+.anime__details__pic .view {
+  font-size: 13px;
+  color: #ffffff;
+  background: #3d3d3d;
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
+}
+
+.anime__details__title {
+  margin-bottom: 20px;
+}
+
+.anime__details__title h3 {
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 13px;
+}
+
+.anime__details__title span {
+  font-size: 15px;
+  color: #b7b7b7;
+  display: block;
+}
+
+.anime__details__rating {
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.rating {
+  margin-left: 5px;
+  font-size: 24px;
+  color: #e89f12;
+  display: inline-block;
+}
+
+.anime__details__rating span {
+  display: block;
+  font-size: 18px;
+  // color: #b7b7b7;
+}
+
+.anime__details__widget {
+  margin-bottom: 15px;
+}
+
+.anime__details__widget ul {
+  margin-bottom: 20px;
+}
+
+.anime__details__widget ul li {
+  list-style: none;
+  font-size: 15px;
+  color: #ffffff;
+  line-height: 30px;
+  position: relative;
+  padding-left: 18px;
+}
+
+.anime__details__widget ul li:before {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  height: 6px;
+  width: 6px;
+  background: #b7b7b7;
+  content: "";
+}
+
+.anime__details__widget ul li span {
+  color: #b7b7b7;
+  width: 115px;
+  display: inline-block;
+}
+
+.anime__details__btn .follow-btn {
+  font-size: 13px;
+  color: #ffffff;
+  background: #e53637;
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  border-radius: 4px;
+  margin-right: 11px;
+}
+
+.anime__details__btn .watch-btn span {
+  font-size: 13px;
+  color: #ffffff;
+  background: #e53637;
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  border-radius: 4px 0 0 4px;
+  margin-right: 1px;
+}
+
+.anime__details__btn .watch-btn i {
+  font-size: 20px;
+  display: inline-block;
+  background: #e53637;
+  padding: 11px 5px 16px 8px;
+  color: #ffffff;
+  border-radius: 0 4px 4px 0;
+}
+
+.anime__details__review {
+  margin-bottom: 55px;
+}
+
+.anime__review__item {
+  overflow: hidden;
+  margin-bottom: 15px;
   .bottom-comment {
+    margin-top: 10px;
     color: #acb4c2;
     font-size: 0.875rem;
   }
@@ -728,118 +1005,86 @@ export default {
   }
 }
 
-.card {
-  /* flex布局下元素不按比例缩放 */
-  flex-shrink: 0;
-  flex-grow: 0;
+.anime__review__item__pic {
+  float: left;
+  margin-right: 20px;
   position: relative;
-  width: 150px;
-  height: 200px;
-  overflow: hidden;
-  margin: 20px;
-  background-color: var(--border-color);
-  border-radius: 20px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  /* flex 子元素 纵向排列 */
-  // flex-direction: column;
-  /* 增加个阴影 */
-  box-shadow: 0 0 30px #5c5b5b;
-  /* 同意给字体价格颜色 */
-  color: var(--font_color);
-
-  .photo {
-    position: absolute;
-    /* 默认为放大 */
-    width: 100%;
-    height: 100%;
-    top: 0px;
-    // border-radius: 0%;
-    overflow: hidden;
-    transition: 0.5s;
-    border-radius: 18px;
-  }
-
-  h2 {
-    position: absolute;
-    top: 280px;
-    color: #fff;
-    transition: 0.5s;
-  }
-  h3 {
-    margin-top: 170px;
-    font-size: 16px;
-    width: 100%;
-    color: #fff;
-    font-weight: normal;
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--h2_border_color);
-  }
-  p {
-    width: 90%;
-    /* 段落缩进2个字符大小 */
-    text-indent: 2em;
-    font-size: 8px;
-    color: #ffffff;
-    margin-bottom: 10px;
-    line-height: 30px;
-  }
-
-  a {
-    color: var(--font_color);
-    text-decoration: none;
-    // padding: 12px 36px;
-    border: 1px solid var(--a_border_color);
-    border-radius: 8px;
-  }
 }
-.photo::before {
-  /* 通过before增加渐变背景实现遮罩，让文字默认看起来清晰一些 */
+
+.anime__review__item__pic:before {
   position: absolute;
+  right: -30px;
+  top: 15px;
+  border-top: 15px solid transparent;
+  border-left: 15px solid #494a58;
   content: "";
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(
-    to top,
-    rgb(51, 50, 50),
-    transparent,
-    transparent
-  );
-}
-.card:hover .photo::before {
-  /* 缩小时隐藏 */
-  display: none;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
-.photo img {
-  /* 图片高宽均为100% */
-  /* 然后按照cover缩放，裁切长边 */
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card:hover .photo {
-  /* 鼠标移上变小 */
-  width: 120px;
-  height: 120px;
-  top: 10px;
-  left: 10px;
+.anime__review__item__pic img {
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
-  box-shadow: 0 0 20px #111;
 }
 
-.card:hover h2 {
+.anime__review__item__text {
+  overflow: hidden;
+  background: #494a58;
+  padding: 13px 30px 0px 20px;
+  border-radius: 10px;
+}
+
+.anime__review__item__text h6 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.anime__review__item__text h6 span {
+  color: #b7b7b7;
+  font-weight: 400;
+}
+
+.anime__review__item__text p {
+  color: #b7b7b7;
+  line-height: 23px;
+  margin-bottom: 0;
+}
+
+.anime__details__form form textarea {
+  width: 100%;
   font-size: 15px;
-  position: absolute;
-  top: 140px;
+  color: #b7b7b7;
+  padding-left: 20px;
+  padding-top: 12px;
+  height: 110px;
+  border: none;
+  border-radius: 5px;
+  resize: none;
+  margin-bottom: 24px;
 }
 
-a:hover {
-  color: #fff;
-  background-color: var(--a_hover_background_color);
+.anime__details__form form button {
+  font-size: 11px;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: #e53637;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 2px;
+}
+
+.movie-casts {
+  display: flex;
+  flex-wrap: wrap;
+  // margin-left: 100px;
+}
+.comment-text{
+  // max-height: 500px;
+  // overflow: scroll;
 }
 </style>

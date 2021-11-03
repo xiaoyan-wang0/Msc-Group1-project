@@ -15,6 +15,7 @@ export default {
     tmdbpic: "https://image.tmdb.org/t/p/w500/",
     tmdbvideo: "/videos?",
     tmdbquery: "&query=",
+    tmdbgenrelist: "https://api.themoviedb.org/3/genre/movie/list?",
     
     tmdbperson: "https://api.themoviedb.org/3/person/",
     tmdbSearch: "https://api.themoviedb.org/3/search/movie?",

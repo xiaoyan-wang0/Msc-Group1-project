@@ -58,18 +58,60 @@
     </header>
     <main>
       <router-view />
+      <div>wxy</div>
     </main>
 
-    <footer>
-      <div class="footer"></div>
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+      <div class="page-up">
+        <a href="#" id="scrollToTopButton"
+          ><span class="arrow_carrot-up fa fa-angle-up"></span
+        ></a>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="footer__logo">
+              <a href="./index.html"
+                ><img
+                  class="logo-icon"
+                  src="./assets/logo.png"
+                  style="height: 80px"
+                  alt=""
+              /></a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="footer__nav">
+              <ul>
+                <li class="active"><a href="./index.html">Homepage</a></li>
+                <li><a href="./categories.html">Categories</a></li>
+                <li><a href="./blog.html">Our Blog</a></li>
+                <li><a href="#">Contacts</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <p>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              Copyright All rights reserved | This template is made with
+              <i class="fa fa-heart" aria-hidden="true"></i> by
+              <a href="https://colorlib.com" target="_blank">Colorlib</a>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+        </div>
+      </div>
     </footer>
+    <!-- Footer Section End -->
   </div>
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, inject, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
+import env from "@/env.js";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import {
@@ -89,6 +131,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const axios = inject("axios"); // inject axios
     const currentUser = computed(() => store.state.auth.user);
 
     const active = ref("home");
@@ -102,6 +145,20 @@ export default {
       console.log(currentUser);
       navfunction();
     });
+    onBeforeMount(() => {
+      // Get the list of official genres for movies.
+      axios
+        .get(env.tmdbgenrelist + env.tmdbkey + env.tmdbtail)
+        .then((response) => {
+          console.log("genreList");
+          console.log(response.data.genres);
+          localStorage.setItem(
+            "genreList",
+            JSON.stringify(response.data.genres)
+          );
+        });
+    });
+
     return { currentUser, active, logOut };
   },
 };
@@ -109,15 +166,18 @@ export default {
 
 <style lang="scss">
 body {
-  background-color: #000 !important;
+  background-color: #101018 !important;
 
-  min-width: 600px;
+  min-width: 400px;
   .ant-modal-body {
     padding: 0 !important;
     background-color: black;
   }
   textarea.ant-input {
     height: 150px !important;
+  }
+  .ant-progress-circle .ant-progress-text{
+    color: white !important;
   }
 }
 * {
@@ -148,12 +208,14 @@ body {
         margin: 0 0 0 50px;
         color: #fff;
         vertical-align: middle;
-        font-size: 27px;
+        font-size: 30px;
+        font-weight: 900;
       }
       .span2 {
-        font-size: 27px;
+        font-size: 30px;
         vertical-align: middle;
-        color: #42b883;
+        color: #e53637;
+        font-weight: 900;
       }
     }
 
@@ -186,13 +248,13 @@ body {
       }
     }
     .navbar-div {
-      background-color: #252525;
+      // background-color: #252525;
       width: 100%;
 
       nav {
         display: inline-block;
         margin: 0 auto;
-        background-color: #252525;
+        // background-color: #252525;
         // box-shadow: 0 1px 1px #ccc;
         // border-radius: 2px;
       }
@@ -247,14 +309,15 @@ body {
     $content-width: 70%;
     $breakpoint: 799px;
     $nav-height: 70px;
-    $nav-background: #111010;
+    $nav-background: #0a0a13;
     $nav-font-color: #ffffff;
-    $link-hover-color: #2581dc;
+    $link-hover-color: #e53637;
 
     // Outer navigation wrapper
     .navigation {
       height: $nav-height;
       background: $nav-background;
+      box-shadow: 0px 0px 15px 0px #e53637;
     }
 
     // Logo and branding
@@ -421,6 +484,574 @@ body {
         }
       }
     }
+  }
+
+  /*---------------------
+  Helper CSS
+-----------------------*/
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: #111111;
+    font-weight: 400;
+    font-family: "Mulish", sans-serif;
+  }
+
+  h1 {
+    font-size: 70px;
+  }
+
+  h2 {
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 30px;
+  }
+
+  h4 {
+    font-size: 24px;
+  }
+
+  h5 {
+    font-size: 18px;
+  }
+
+  h6 {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 15px;
+    font-family: "Mulish", sans-serif;
+    color: #3d3d3d;
+    font-weight: 400;
+    line-height: 25px;
+    margin: 0 0 15px 0;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  input:focus,
+  select:focus,
+  button:focus,
+  textarea:focus {
+    outline: none;
+  }
+
+  a:hover,
+  a:focus {
+    text-decoration: none;
+    outline: none;
+    color: #ffffff;
+  }
+
+  ul,
+  ol {
+    padding: 0;
+    margin: 0;
+  }
+
+  .section-title {
+    margin-bottom: 30px;
+  }
+
+  .section-title h4,
+  .section-title h5 {
+    color: #ffffff;
+    font-weight: 600;
+    line-height: 21px;
+    text-transform: uppercase;
+    padding-left: 20px;
+    position: relative;
+    font-family: "Oswald", sans-serif;
+  }
+
+  .section-title h4:after,
+  .section-title h5:after {
+    position: absolute;
+    left: 0;
+    top: -6px;
+    height: 32px;
+    width: 4px;
+    background: #e53637;
+    content: "";
+  }
+
+  .set-bg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+  }
+
+  .spad {
+    padding-bottom: 100px;
+  }
+
+  .text-white h1,
+  .text-white h2,
+  .text-white h3,
+  .text-white h4,
+  .text-white h5,
+  .text-white h6,
+  .text-white p,
+  .text-white span,
+  .text-white li,
+  .text-white a {
+    color: #fff;
+  }
+
+  /* buttons */
+
+  .primary-btn {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    letter-spacing: 2px;
+  }
+
+  .primary-btn span {
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 3px;
+  }
+
+  .site-btn {
+    font-size: 13px;
+    color: #ffffff;
+    background: #e53637;
+    font-weight: 700;
+    border: none;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 12px 30px;
+  }
+}
+
+/*---------------------
+  Footer
+-----------------------*/
+
+.footer {
+      box-shadow: 0px 0px 15px 0px #e53637;
+  background: #0a0a13;
+  padding-top: 60px;
+  padding-bottom: 40px;
+  position: relative;
+}
+
+.page-up {
+  position: absolute;
+  left: 50%;
+  top: -25px;
+  margin-left: -25px;
+}
+
+.page-up a {
+  display: inline-block;
+  font-size: 36px;
+  color: #ffffff;
+  height: 50px;
+  width: 50px;
+  background: #e53637;
+  line-height: 50px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.page-up a span {
+  position: relative;
+  top: 2px;
+  left: -1px;
+}
+
+.footer__nav {
+  text-align: center;
+}
+
+.footer__nav ul li {
+  list-style: none;
+  display: inline-block;
+  position: relative;
+  margin-right: 40px;
+}
+
+.footer__nav ul li:last-child {
+  margin-right: 0;
+}
+
+.footer__nav ul li a {
+  font-size: 15px;
+  color: #b7b7b7;
+  display: block;
+  font-weight: 700;
+}
+
+.footer__copyright__text {
+  color: #b7b7b7;
+  margin-bottom: 0;
+  text-align: right;
+}
+
+.footer__copyright__text a {
+  color: #e53637;
+}
+
+/*--------------------------------- Responsive Media Quaries -----------------------------*/
+
+@media only screen and (min-width: 1200px) and (max-width: 1300px) {
+  .hero {
+    overflow: hidden;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .container {
+    max-width: 1170px;
+  }
+}
+
+/* Medium Device = 1200px */
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .hero {
+    overflow: hidden;
+  }
+  .login__form {
+    position: relative;
+    padding-left: 32px;
+  }
+  .login__social__links ul li a {
+    width: 380px;
+  }
+  .blog__item__text {
+    padding: 0 50px;
+  }
+}
+
+/* Tablet Device = 768px */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .hero {
+    overflow: hidden;
+  }
+  .header {
+    position: relative;
+  }
+  .header .container {
+    position: relative;
+  }
+  .header__right {
+    position: absolute;
+    right: 120px;
+    top: -42px;
+    padding: 0;
+  }
+  .header__menu {
+    display: none;
+  }
+  .slicknav_menu {
+    background: transparent;
+    padding: 0;
+    display: block;
+  }
+  .slicknav_nav {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    width: 100%;
+    background: #ffffff;
+    padding: 15px 30px;
+    z-index: 9;
+  }
+  .slicknav_nav ul {
+    margin: 0;
+  }
+  .slicknav_nav .slicknav_row,
+  .slicknav_nav a {
+    padding: 7px 0;
+    margin: 0;
+    color: #111111;
+    font-weight: 600;
+  }
+  .slicknav_btn {
+    border-radius: 0;
+    background-color: #222;
+    position: absolute;
+    right: 0;
+    top: 9px;
+  }
+  .slicknav_nav .slicknav_arrow {
+    color: #111111;
+  }
+  .slicknav_nav .slicknav_row:hover {
+    border-radius: 0;
+    background: transparent;
+    color: #111111;
+  }
+  .slicknav_nav a:hover {
+    border-radius: 0;
+    background: transparent;
+    color: #111111;
+  }
+  .product__sidebar {
+    padding-top: 50px;
+  }
+  .footer__logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .footer__nav {
+    margin-bottom: 15px;
+  }
+  .footer__copyright__text {
+    text-align: center;
+  }
+  .anime__details__widget ul li span {
+    width: 90px;
+  }
+  .anime__details__pic {
+    margin-bottom: 40px;
+  }
+  .anime__details__sidebar {
+    padding-top: 50px;
+  }
+  .login__form {
+    padding-left: 0;
+    margin-bottom: 40px;
+  }
+  .login__form:after {
+    display: none;
+  }
+  .login__form form .input__item {
+    width: auto;
+  }
+  .login__register {
+    padding-left: 0;
+  }
+  .signup .login__social__links {
+    padding-left: 0;
+  }
+}
+
+/* Wide Mobile = 480px */
+
+@media only screen and (max-width: 767px) {
+  .hero {
+    overflow: hidden;
+  }
+  .header {
+    position: relative;
+  }
+  .header .container {
+    position: relative;
+  }
+  .header__right {
+    position: absolute;
+    right: 120px;
+    top: -42px;
+    padding: 0;
+  }
+  .header__menu {
+    display: none;
+  }
+  .slicknav_menu {
+    background: transparent;
+    padding: 0;
+    display: block;
+  }
+  .slicknav_nav {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    width: 100%;
+    background: #ffffff;
+    padding: 15px 30px;
+    z-index: 9;
+  }
+  .slicknav_nav ul {
+    margin: 0;
+  }
+  .slicknav_nav .slicknav_row,
+  .slicknav_nav a {
+    padding: 7px 0;
+    margin: 0;
+    color: #111111;
+    font-weight: 600;
+  }
+  .slicknav_btn {
+    border-radius: 0;
+    background-color: #222;
+    position: absolute;
+    right: 0;
+    top: 9px;
+  }
+  .slicknav_nav .slicknav_arrow {
+    color: #111111;
+  }
+  .slicknav_nav .slicknav_row:hover {
+    border-radius: 0;
+    background: transparent;
+    color: #111111;
+  }
+  .slicknav_nav a:hover {
+    border-radius: 0;
+    background: transparent;
+    color: #111111;
+  }
+  .product__sidebar {
+    padding-top: 50px;
+  }
+  .footer__logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .footer__nav {
+    margin-bottom: 15px;
+  }
+  .footer__copyright__text {
+    text-align: center;
+  }
+  .blog__details__title h2 {
+    font-size: 34px;
+    line-height: normal;
+  }
+  .anime__details__pic {
+    margin-bottom: 40px;
+  }
+  .anime__details__sidebar {
+    padding-top: 50px;
+  }
+  .btn__all {
+    text-align: left;
+  }
+  .product__page__title .section-title {
+    margin-bottom: 30px;
+  }
+  .product__page__title .product__page__filter {
+    text-align: left;
+  }
+  .anime__details__rating {
+    text-align: left;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .blog__details__social {
+    overflow: hidden;
+  }
+  .blog__details__title .blog__details__social a {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: calc(50% - 10px);
+    float: left;
+  }
+  .login__form {
+    padding-left: 0;
+    margin-bottom: 40px;
+  }
+  .login__form:after {
+    display: none;
+  }
+  .login__form form .input__item {
+    width: auto;
+  }
+  .signup .login__social__links {
+    padding-left: 0;
+  }
+  .login__social__links ul li a {
+    width: auto;
+  }
+  .blog__item__text {
+    padding: 0 30px;
+  }
+  .login__register {
+    padding-left: 0;
+  }
+  .product__sidebar__view .filter__controls li {
+    margin-right: 2px;
+  }
+  .search-model-form input {
+    width: 100%;
+  }
+}
+
+/* Small Device = 320px */
+
+@media only screen and (max-width: 479px) {
+  .hero__slider.owl-carousel .owl-nav {
+    display: none;
+  }
+  .hero__items {
+    padding: 250px 0 42px 15px;
+  }
+  .hero__text h2 {
+    font-size: 32px;
+  }
+  .footer__nav ul li {
+    margin-right: 10px;
+  }
+  .anime__details__btn .follow-btn {
+    padding: 14px 26px;
+    margin-right: 11px;
+    margin-bottom: 25px;
+  }
+  .anime__details__widget ul li span {
+    width: 85px;
+  }
+  .anime__video__player .plyr__volume {
+    left: 65px;
+  }
+  .anime__video__player .plyr__controls .plyr__controls__item.plyr__time {
+    left: 95px;
+  }
+  .anime__video__player .plyr__menu {
+    margin-right: 60px;
+  }
+  .blog__details__title h2 {
+    font-size: 30px;
+    line-height: normal;
+  }
+  .blog__details__title .blog__details__social a {
+    padding: 16px 25px 14px 20px;
+  }
+  .blog__details__comment__item.blog__details__comment__item--reply {
+    padding-left: 0;
+  }
+  .blog__details__comment__item__pic {
+    margin-right: 25px;
+  }
+  .blog__details__comment__item__text a {
+    margin-right: 6px;
+  }
+  .login__social__links ul li a i {
+    left: 20px;
+  }
+  .login__form .forget_pass {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-top: 25px;
+  }
+  .header__right a {
+    margin-right: 10px;
+  }
+  .anime__review__item__text h6 span {
+    font-size: 12px;
+  }
+  .anime__review__item__text {
+    padding: 18px 20px 20px;
   }
 }
 </style>
