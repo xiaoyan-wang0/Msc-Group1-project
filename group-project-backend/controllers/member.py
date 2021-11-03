@@ -10,6 +10,7 @@ from common.models.usercomments import Usercomment
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 from common.libs.ToxicComments import do_pe,detector
+from common.models.userMovies import Usermovy
 
 
 
@@ -74,5 +75,39 @@ def logOut():
     response.delete_cookie(  app.config['AUTH_COOKIE_NAME'] )
     return response
 
+@member_page.route("/movieLikes")
+def movieLikes():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if 'userId' in req else ''
+    movieId = req['movieId'] if 'movieId' in req else ''
+
+    model_movies = Usermovy()
+    model_movies.movieId = movieId
+    model_movies.userId = userId
+    model_movies.type = 1
+
+    db.session.add( model_movies )
+    db.session.commit()
+
+
+    return ops_renderJSON(msg = "Show movieLikes Successfull!")
+
+@member_page.route("/showMovieLikes")
+def showMovieLikes():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    #userId = str(current_user.userId)
+    movieId = req['movieId'] if "movieId" in req else ""
+    textsql = " 1=1 and userId = "+userId+" and movieId = "+ movieId + " and type = 1"
+    result = Usermovy.query.filter(text(textsql)).order_by(Usermovy.Id.desc()).all()
+    movieLikes = []
+    for userMovies in result:
+        userMovie = Serializer.serialize(userMovies)
+        movieLikes.append(userMovie)
+
+
+    return ops_renderJSON( msg = "show movieLikes successfully!",data = movieLikes )
 
 
