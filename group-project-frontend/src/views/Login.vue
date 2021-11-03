@@ -1,28 +1,31 @@
 <template>
-  <div class="login-page">
-    <div class="form-body">
-      <div class="row">
-        <div class="form-holder">
-          <div class="form-content">
-            <div class="form-items">
-              <h3>Sign In</h3>
+  <div>
+    <section
+      class="normal-breadcrumb set-bg"
+      data-setbg="img/normal-breadcrumb.jpg"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <div class="normal__breadcrumb__text">
+              <h2>Login</h2>
+              <p>Welcome to AMDB</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Normal Breadcrumb End -->
+
+    <!-- Login Section Begin -->
+    <section class="login spad">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="login__form">
+              <h3>Login</h3>
               <p></p>
               <form class="login-requires-validation" novalidate>
-                <!-- <div class="col-md-12">
-                  <input
-                    class="form-control"
-                    type="text"
-                    name="name"
-                    placeholder="Username"
-                    required
-                    v-model="loginMes.username"
-                  />
-                  <div class="valid-feedback">Username field is valid!</div>
-                  <div class="invalid-feedback">
-                    Username field cannot be blank!
-                  </div>
-                </div> -->
-
                 <div class="col-md-12">
                   <input
                     class="form-control"
@@ -37,7 +40,7 @@
                     Email field cannot be blank!
                   </div>
                 </div>
-
+                <p></p>
                 <div class="col-md-12">
                   <input
                     class="form-control"
@@ -52,7 +55,7 @@
                     Password field cannot be blank!
                   </div>
                 </div>
-
+                <p></p>
                 <div class="form-check">
                   <input
                     class="form-check-input"
@@ -61,7 +64,7 @@
                     id="invalidCheck"
                     required
                   />
-                  <label class="form-check-label"
+                  <label class="form-check-label" style="color: white"
                     >I confirm that all data are correct</label
                   >
                   <div class="invalid-feedback">
@@ -70,16 +73,49 @@
                 </div>
 
                 <div class="form-button mt-3">
-                  <button id="submit" type="submit" class="btn btn-primary">
+                  <button id="submit" type="submit" class="site-btn">
                     LogIn
                   </button>
                 </div>
               </form>
             </div>
           </div>
+
+          <div class="col-lg-6">
+            <div class="login__register">
+              <h3>Dont’t Have An Account?</h3>
+              <a href="/register" class="primary-btn">Register Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="login__social">
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-6">
+              <div class="login__social__links">
+                <span>or</span>
+                <ul>
+                  <li>
+                    <a href="#" class="facebook"
+                      ><i class="fab fa-facebook"></i> Sign in With Facebook</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="google"
+                      ><i class="fab fa-google"></i> Sign in With Google</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="twitter"
+                      ><i class="fab fa-twitter"></i> Sign in With Twitter</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -165,159 +201,244 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.login-page {
+
+/*---------------------
+  Breadcrumb
+-----------------------*/
+
+.breadcrumb-option {
+  padding-top: 35px;
+}
+
+.breadcrumb__links a {
+  font-size: 15px;
+  color: #ffffff;
+  margin-right: 18px;
+  display: inline-block;
+  position: relative;
+}
+
+.breadcrumb__links a i {
+  margin-right: 5px;
+  color: #e53637;
+}
+
+.breadcrumb__links a:after {
+  position: absolute;
+  right: -14px;
+  top: 0;
+  content: "";
+  font-family: "FontAwesome";
+}
+
+.breadcrumb__links span {
+  font-size: 15px;
+  color: #b7b7b7;
+  display: inline-block;
+}
+
+/*---------------------
+    Normal Breadcrumb
+-----------------------*/
+
+.normal-breadcrumb {
+  height: 300px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
-  height: 100%;
+}
 
-  overflow: hidden;
+.normal__breadcrumb__text h2 {
+  color: #ffffff;
+  font-size: 48px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
 
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  .form-holder {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    min-height: 100vh;
-  }
+.normal__breadcrumb__text p {
+  color: #ffffff;
+  font-size: 24px;
+  margin-bottom: 0;
+}
 
-  .form-holder .form-content {
-    position: relative;
-    text-align: center;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-align-items: center;
-    align-items: center;
-    padding: 60px;
-  }
+/*---------------------
+  Login
+-----------------------*/
 
-  .form-content .form-items {
-    border: 3px solid #fff;
-    padding: 40px;
-    display: inline-block;
-    width: 100%;
-    min-width: 540px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    text-align: left;
-    -webkit-transition: all 0.4s ease;
-    transition: all 0.4s ease;
-  }
+.login {
+  padding-top: 130px;
+  padding-bottom: 120px;
+}
 
-  .form-content h3 {
-    color: #fff;
-    text-align: left;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
+.login__form {
+  position: relative;
+  padding-left: 145px;
+}
 
-  .form-content h3.form-title {
-    margin-bottom: 30px;
-  }
+.login__form:after {
+  position: absolute;
+  right: -14px;
+  top: -40px;
+  height: 330px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  content: "";
+}
 
-  .form-content p {
-    color: #fff;
-    text-align: left;
-    font-size: 17px;
-    font-weight: 300;
-    line-height: 20px;
-    margin-bottom: 30px;
-  }
+.login__form h3 {
+  color: #ffffff;
+  font-weight: 700;
+  font-family: "Oswald", sans-serif;
+  margin-bottom: 30px;
+}
 
-  .form-content label,
-  .was-validated .form-check-input:invalid ~ .form-check-label,
-  .was-validated .form-check-input:valid ~ .form-check-label {
-    color: #fff;
-  }
-  .form-check {
-    margin-top: 15px;
-  }
+.login__form form .input__item {
+  position: relative;
+  width: 370px;
+  margin-bottom: 20px;
+}
 
-  .form-content input[type="text"],
-  .form-content input[type="password"],
-  .form-content input[type="email"],
-  .form-content select {
-    width: 100%;
-    padding: 9px 20px;
-    text-align: left;
-    border: 0;
-    outline: 0;
-    border-radius: 6px;
-    background-color: #fff;
-    font-size: 15px;
-    font-weight: 300;
-    color: #8d8d8d;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    margin-top: 16px;
-  }
+.login__form form .input__item:before {
+  position: absolute;
+  left: 50px;
+  top: 10px;
+  height: 30px;
+  width: 1px;
+  background: #b7b7b7;
+  content: "";
+}
 
-  .btn-primary {
-    background-color: #6c757d;
-    outline: none;
-    border: 0px;
-    box-shadow: none;
-  }
+.login__form form .input__item input {
+  height: 50px;
+  width: 100%;
+  font-size: 15px;
+  color: #b7b7b7;
+  background: #ffffff;
+  border: none;
+  padding-left: 76px;
+}
 
-  .btn-primary:hover,
-  .btn-primary:focus,
-  .btn-primary:active {
-    background-color: #495056;
-    outline: none !important;
-    border: none !important;
-    box-shadow: none;
-  }
+.login__form form .input__item input::-webkit-input-placeholder {
+  color: #b7b7b7;
+}
 
-  .form-content textarea {
-    position: static !important;
-    width: 100%;
-    padding: 8px 20px;
-    border-radius: 6px;
-    text-align: left;
-    background-color: #fff;
-    border: 0;
-    font-size: 15px;
-    font-weight: 300;
-    color: #8d8d8d;
-    outline: none;
-    resize: none;
-    height: 120px;
-    -webkit-transition: none;
-    transition: none;
-    margin-bottom: 14px;
-  }
+.login__form form .input__item input::-moz-placeholder {
+  color: #b7b7b7;
+}
 
-  .form-content textarea:hover,
-  .form-content textarea:focus {
-    border: 0;
-    background-color: #ebeff8;
-    color: #8d8d8d;
-  }
+.login__form form .input__item input:-ms-input-placeholder {
+  color: #b7b7b7;
+}
 
-  .mv-up {
-    margin-top: -9px !important;
-    margin-bottom: 8px !important;
-  }
+.login__form form .input__item input::-ms-input-placeholder {
+  color: #b7b7b7;
+}
 
-  .invalid-feedback {
-    color: #ff606e;
-  }
+.login__form form .input__item input::placeholder {
+  color: #b7b7b7;
+}
 
-  .valid-feedback {
-    color: #2acc80;
-  }
+.login__form form .input__item span {
+  color: #b7b7b7;
+  font-size: 20px;
+  position: absolute;
+  left: 15px;
+  top: 13px;
+}
+
+.login__form form button {
+  border-radius: 0;
+  margin-top: 10px;
+}
+
+.login__form .forget_pass {
+  font-size: 15px;
+  color: #ffffff;
+  display: inline-block;
+  position: absolute;
+  right: 60px;
+  bottom: 12px;
+}
+
+.login__register {
+  padding-left: 30px;
+}
+
+.login__register h3 {
+  color: #ffffff;
+  font-weight: 700;
+  font-family: "Oswald", sans-serif;
+  margin-bottom: 30px;
+}
+
+.login__register .primary-btn {
+  background: #e53637;
+  padding: 12px 42px;
+}
+
+.login__social {
+  padding-top: 52px;
+}
+
+.login__social__links {
+  text-align: center;
+}
+
+.login__social__links span {
+  color: #ffffff;
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.login__social__links ul li {
+  list-style: none;
+  margin-bottom: 15px;
+}
+
+.login__social__links ul li:last-child {
+  margin-bottom: 0;
+}
+
+.login__social__links ul li a {
+  color: #ffffff;
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  width: 460px;
+  padding: 14px 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+.login__social__links ul li a.facebook {
+  background: #4267b2;
+}
+
+.login__social__links ul li a.google {
+  background: #ff4343;
+}
+
+.login__social__links ul li a.twitter {
+  background: #1da1f2;
+}
+
+.login__social__links ul li a i {
+  font-size: 20px;
+  position: absolute;
+  left: 32px;
+  top: 14px;
 }
 </style>

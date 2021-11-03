@@ -1,5 +1,5 @@
 <template>
-  <div class="show-items">
+  <!-- <div class="show-items">
     <div class="item-list">
       <div class="item-title">
         <span>{{ spacename }}</span>
@@ -24,6 +24,61 @@
         </div>
       </div>
     </div>
+  </div> -->
+  <div class="trending__product">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 col-sm-8">
+        <div class="section-title">
+          <h4>{{ spacename }}</h4>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="btn__all">
+          <a @click="showResultPage()" class="primary-btn"
+            >View All <span class="arrow_right"></span
+          ></a>
+        </div>
+      </div>
+    </div>
+    <div class="row" v-if="itemdata.results !== undefined">
+      <div
+        class="col-lg-4 col-md-6 col-sm-6"
+        v-for="item in itemdata.results.slice(0, 6)"
+        :key="item.id"
+      >
+        <router-link :to="'/movie/' + item.id">
+          <div class="product__item">
+            <div
+              class="product__item__pic set-bg"
+              v-bind:style="{
+                'background-image': 'url(' + poster + item.poster_path + ')',
+              }"
+            >
+              <div class="ep">{{ item.vote_average }} / 10</div>
+              <div class="comment">
+                <i class="fa fa-comments"></i> {{ item.vote_count }}
+              </div>
+              <div class="view">
+                <i class="fa fa-eye"></i> {{ item.release_date }}
+              </div>
+            </div>
+            <div class="product__item__text">
+              <ul>
+                <li
+                  v-for="genre in findCategary(item.genre_ids).slice(0, 2)"
+                  :key="genre.id"
+                >
+                  {{ genre }}
+                </li>
+              </ul>
+              <h5>
+                <a href="#">{{ item.title }}</a>
+              </h5>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -37,15 +92,15 @@ export default {
   props: {
     spacename: String,
     itemdata: JSON,
-    isPopularorHighScore: String
+    isPopularorHighScore: String,
   },
   setup(props) {
     const poster = ref("");
     poster.value = env.tmdbpic;
     //show Result Page
     const showResultPage = () => {
-      console.log('isPopularorHighScore');
-      console.log( props.isPopularorHighScore);
+      console.log("isPopularorHighScore");
+      console.log(props.isPopularorHighScore);
       router.push({
         name: "ResultDisplay",
         params: {
@@ -53,7 +108,23 @@ export default {
         },
       });
     };
-    return { poster, showResultPage };
+
+    const findCategary = (genres) => {
+      let categary = [];
+      for (let id of genres) {
+        for (const genrn of JSON.parse(localStorage.getItem("genreList"))) {
+          // console.log("show part findCategary");
+          // console.log(genrn);
+          // console.log(id);
+          if (genrn.id == id) {
+            categary.push(genrn.name);
+          }
+        }
+      }
+      console.log(categary);
+      return categary;
+    };
+    return { poster, showResultPage, findCategary };
   },
 };
 </script>
