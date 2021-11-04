@@ -47,8 +47,8 @@ def review():
     #item_dict = json.loads(names)
 
     #print(len(item_dict['authorDisplayName']))
-    aList = json.loads(names)
-    for i in range(0, iter(aList)):
+    #aList = json.loads(names)
+    for i in range(0, iter(names)):
     #for i in range(0, len(names)):
         content = [reviews[i]]
         result = detector(content)

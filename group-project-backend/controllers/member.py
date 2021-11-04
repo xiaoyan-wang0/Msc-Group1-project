@@ -138,7 +138,7 @@ def showMovieList():
 
         movieInfo['genres'] = genres
         movieInfo['title'] = m.title
-        movieInfo['poster_path'] = m.poster_path
+        movieInfo['poster_path'] = "https://image.tmdb.org/t/p/w500" + m.poster_path
         movieInfo['popularity'] = m.popularity
         movieInfo['release_date'] = m.release_date
         dictMerged2 = dict( userMovie, **movieInfo )
