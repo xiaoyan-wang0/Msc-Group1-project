@@ -157,6 +157,8 @@ def showCommentList():
     result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
     movieComments = []
     for comments in result:
+        comments.toxic = round(float(comments.toxic), 2)
+        comments.sentiment = round(float(comments.sentiment), 2)
         comment = Serializer.serialize(comments)
         movieInfo = {}
 
@@ -168,7 +170,7 @@ def showCommentList():
         m = movie.details(comments.movieId)
 
         movieInfo['title'] = m.title
-        movieInfo['poster_path'] = m.poster_path
+        movieInfo['poster_path'] = "https://image.tmdb.org/t/p/w500"+ m.poster_path
         movieInfo['popularity'] = m.popularity
         movieInfo['release_date'] = m.release_date
         dictMerged2 = dict( comment, **movieInfo )
