@@ -30,12 +30,18 @@ def review():
     req = request.values
     movieName = req['movieName'] 
 
-    response = requests.get('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=' + str(movieName) + ' trailer' + '&type=video&key=AIzaSyCL_TmpbiATD9nisVU-TAbXCOZ6n1mu__E')
+    #There are daily limits for the keys
+    key1 = 'AIzaSyCL_TmpbiATD9nisVU-TAbXCOZ6n1mu__E'
+    key2 = 'AIzaSyC6cz_fRdiwLhdlPBpkhyr0MXzF0PXMA4o'
+
+    response = requests.get('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=' + str(movieName) + ' trailer' + '&type=video&key=' + key2)
     trailerId = jsonpath(response.json(),'$..videoId')
+
+    print(trailerId)
 
     trailerIdToString = str(trailerId)[2:13]
 
-    response2 = requests.get('https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=' + trailerIdToString + '&key=AIzaSyCL_TmpbiATD9nisVU-TAbXCOZ6n1mu__E')
+    response2 = requests.get('https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=' + trailerIdToString + '&key=' + key2)
     reviews = jsonpath(response2.json(),'$..textDisplay')
     names = jsonpath(response2.json(),'$..authorDisplayName')
     profileImages = jsonpath(response2.json(),'$..authorProfileImageUrl')
