@@ -74,24 +74,6 @@
                 <div class="movie-tag-group">
                   <div class="morebutton"></div>
                   <div class="movie-casts">
-                    <!-- <div
-                        class="card"
-                        v-for="item in castList"
-                        :key="item.id"
-                        @click="showCastDetail(item.id)"
-                      >
-                        <div class="photo">
-                          <img
-                            :src="
-                              item.profile_path != null
-                                ? moviePoster + item.profile_path
-                                : emptyprofile
-                            "
-                            alt="Cast profile"
-                          />
-                        </div>
-                        <p></p>
-                      </div> -->
                     <a-avatar
                       :size="{
                         xs: 24,
@@ -146,21 +128,18 @@
                         <el-button
                           type="primary"
                           @click="isShowCastDetail = false"
-                          >Confirm</el-button
                         >
+                          Cancle
+                        </el-button>
                       </span>
                     </template>
                   </el-dialog>
-                  <span v-for="item in movie.genres" :key="item.id" style="">{{
-                    item.name
-                  }}</span>
                 </div>
               </div>
-
               <div class="anime__details__btn">
-                <a href="#" class="follow-btn"
-                  ><i class="fa fa-heart"></i> ADD Like list</a
-                >
+                <a @click="addLikeList()" class="follow-btn">
+                  <i class="fa fa-heart"></i> ADD Like list
+                </a>
                 <a @click="isShowTrailer = true" class="follow-btn"
                   ><i class="fa fa-play"></i> <span>Watch trailer</span>
                 </a>
@@ -178,6 +157,43 @@
             </div>
             <a-tabs type="card">
               <a-tab-pane key="amdb" tab="AMDB reviews" style="">
+                <div class="section-title">
+                  <div class="comment-filter">
+                    <h5>AMDB Comment</h5>
+                    <div class="filter-select">
+                      <a-select
+                        placeholder="Filter"
+                        style="width: 150px"
+                        @change="handleFilterChange"
+                      >
+                        <a-select-option value="all">All</a-select-option>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Toxic Degree </span>
+                          </template>
+                          <a-select-option value="notoxic"
+                            >Non toxic</a-select-option
+                          >
+                          <a-select-option value="toxic">Toxic</a-select-option>
+                          <a-select-option value="severetoxic"
+                            >Severe toxic</a-select-option
+                          >
+                        </a-select-opt-group>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Sentiment Degree </span>
+                          </template>
+                          <a-select-option value="positive"
+                            >Positive</a-select-option
+                          >
+                          <a-select-option value="negative"
+                            >Negative</a-select-option
+                          >
+                        </a-select-opt-group>
+                      </a-select>
+                    </div>
+                  </div>
+                </div>
                 <div
                   class="comment-wrap"
                   v-for="item in amdbreview"
@@ -214,7 +230,7 @@
                             {{ showSentiemntText(item.sentiment) }} :
                             {{ changeToPercent(item.sentiment) }}
                             <img
-                              :src="showSentimentImg(item.toxic)"
+                              :src="showSentimentImg(item.sentiment)"
                               style="height: 30px"
                               alt=""
                             />
@@ -232,9 +248,6 @@
                 </div>
 
                 <div class="anime__details__form">
-                  <div class="section-title">
-                    <h5>Your Comment</h5>
-                  </div>
                   <a-comment>
                     <template #avatar>
                       <a-avatar
@@ -244,17 +257,34 @@
                     </template>
                     <template #content>
                       <a-form-item>
-                        <a-textarea v-model:value="commentsValue" :rows="4" />
+                        <a-textarea
+                          v-model:value="commentsValue"
+                          :rows="4"
+                          @blur="addCommentText"
+                        />
                       </a-form-item>
                       <a-form-item>
-                        <button
-                          class="site-btn"
-                          html-type="submit"
-                          :loading="submitting"
-                          @click="handleSubmit()"
+                        <a-popconfirm
+                          :title="popTitle"
+                          ok-text="Yes"
+                          cancel-text="No"
+                          :disabled="!isPopUp"
+                          @confirm="confirmAddComment"
+                          @cancel="cancelAddComment"
                         >
-                          Add Comment
-                        </button>
+                          <template #icon
+                            ><question-circle-outlined style="color: red"
+                          /></template>
+
+                          <button
+                            class="site-btn"
+                            html-type="submit"
+                            :loading="submitting"
+                            @click="handleSubmit()"
+                          >
+                            Add Comment
+                          </button>
+                        </a-popconfirm>
                       </a-form-item>
                     </template>
                   </a-comment>
@@ -263,7 +293,41 @@
 
               <a-tab-pane key="tmdb" tab="TMDB reviews" v-if="tmdbreview">
                 <div class="section-title">
-                  <h5>TMDB reviews</h5>
+                  <div class="comment-filter">
+                    <h5>TMDB Comment</h5>
+                    <div class="filter-select">
+                      <a-select
+                        placeholder="Filter"
+                        style="width: 150px"
+                        @change="handleTMDBFilterChange"
+                      >
+                        <a-select-option value="all">All</a-select-option>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Toxic Degree </span>
+                          </template>
+                          <a-select-option value="notoxic"
+                            >Non toxic</a-select-option
+                          >
+                          <a-select-option value="toxic">Toxic</a-select-option>
+                          <a-select-option value="severetoxic"
+                            >Severe toxic</a-select-option
+                          >
+                        </a-select-opt-group>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Sentiment Degree </span>
+                          </template>
+                          <a-select-option value="positive"
+                            >Positive</a-select-option
+                          >
+                          <a-select-option value="negative"
+                            >Negative</a-select-option
+                          >
+                        </a-select-opt-group>
+                      </a-select>
+                    </div>
+                  </div>
                 </div>
                 <div
                   class="comment-wrap"
@@ -304,7 +368,7 @@
                             {{ showSentiemntText(item.sentiment[0]) }} :
                             {{ changeToPercent(item.sentiment[0]) }}
                             <img
-                              :src="showSentimentImg(item.toxic)"
+                              :src="showSentimentImg(item.sentiment[0])"
                               style="height: 30px"
                               alt=""
                             />
@@ -318,7 +382,41 @@
               </a-tab-pane>
               <a-tab-pane key="imdb" tab="IMDB reviews">
                 <div class="section-title">
-                  <h5>IMDB reviews</h5>
+                  <div class="comment-filter">
+                    <h5>IMDB Comment</h5>
+                    <div class="filter-select">
+                      <a-select
+                        placeholder="Filter"
+                        style="width: 150px"
+                        @change="handleIMDBFilterChange"
+                      >
+                        <a-select-option value="all">All</a-select-option>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Toxic Degree </span>
+                          </template>
+                          <a-select-option value="notoxic"
+                            >Non toxic</a-select-option
+                          >
+                          <a-select-option value="toxic">Toxic</a-select-option>
+                          <a-select-option value="severetoxic"
+                            >Severe toxic</a-select-option
+                          >
+                        </a-select-opt-group>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Sentiment Degree </span>
+                          </template>
+                          <a-select-option value="positive"
+                            >Positive</a-select-option
+                          >
+                          <a-select-option value="negative"
+                            >Negative</a-select-option
+                          >
+                        </a-select-opt-group>
+                      </a-select>
+                    </div>
+                  </div>
                 </div>
                 <div
                   class="comment-wrap"
@@ -353,7 +451,7 @@
                             {{ showSentiemntText(item.sentiment[0]) }} :
                             {{ changeToPercent(item.sentiment[0]) }}
                             <img
-                              :src="showSentimentImg(item.toxic)"
+                              :src="showSentimentImg(item.sentiment[0])"
                               style="height: 30px"
                               alt=""
                             />
@@ -370,7 +468,41 @@
               </a-tab-pane>
               <a-tab-pane key="youtube" tab="Youtube reviews">
                 <div class="section-title">
-                  <h5>Youtube reviews</h5>
+                  <div class="comment-filter">
+                    <h5>Youtube Comment</h5>
+                    <div class="filter-select">
+                      <a-select
+                        placeholder="Filter"
+                        style="width: 150px"
+                        @change="handleYoutubeFilterChange"
+                      >
+                        <a-select-option value="all">All</a-select-option>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Toxic Degree </span>
+                          </template>
+                          <a-select-option value="notoxic"
+                            >Non toxic</a-select-option
+                          >
+                          <a-select-option value="toxic">Toxic</a-select-option>
+                          <a-select-option value="severetoxic"
+                            >Severe toxic</a-select-option
+                          >
+                        </a-select-opt-group>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Sentiment Degree </span>
+                          </template>
+                          <a-select-option value="positive"
+                            >Positive</a-select-option
+                          >
+                          <a-select-option value="negative"
+                            >Negative</a-select-option
+                          >
+                        </a-select-opt-group>
+                      </a-select>
+                    </div>
+                  </div>
                 </div>
                 <div
                   class="comment-wrap"
@@ -405,7 +537,7 @@
                             {{ showSentiemntText(item.sentiment[0]) }} :
                             {{ changeToPercent(item.sentiment[0]) }}
                             <img
-                              :src="showSentimentImg(item.toxic)"
+                              :src="showSentimentImg(item.sentiment[0])"
                               style="height: 30px"
                               alt=""
                             />
@@ -420,7 +552,41 @@
 
               <a-tab-pane key="twitter" tab="Twitter reviews">
                 <div class="section-title">
-                  <h5>Twitter reviews</h5>
+                  <div class="comment-filter">
+                    <h5>Twitter Comment</h5>
+                    <div class="filter-select">
+                      <a-select
+                        placeholder="Filter"
+                        style="width: 150px"
+                        @change="handleTwitterFilterChange"
+                      >
+                        <a-select-option value="all">All</a-select-option>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Toxic Degree </span>
+                          </template>
+                          <a-select-option value="notoxic"
+                            >Non toxic</a-select-option
+                          >
+                          <a-select-option value="toxic">Toxic</a-select-option>
+                          <a-select-option value="severetoxic"
+                            >Severe toxic</a-select-option
+                          >
+                        </a-select-opt-group>
+                        <a-select-opt-group>
+                          <template #label>
+                            <span> Sentiment Degree </span>
+                          </template>
+                          <a-select-option value="positive"
+                            >Positive</a-select-option
+                          >
+                          <a-select-option value="negative"
+                            >Negative</a-select-option
+                          >
+                        </a-select-opt-group>
+                      </a-select>
+                    </div>
+                  </div>
                 </div>
                 <div
                   class="comment-wrap"
@@ -455,7 +621,7 @@
                             {{ showSentiemntText(item.sentiment[0]) }} :
                             {{ changeToPercent(item.sentiment[0]) }}
                             <img
-                              :src="showSentimentImg(item.toxic)"
+                              :src="showSentimentImg(item.sentiment[0])"
                               style="height: 30px"
                               alt=""
                             />
@@ -483,10 +649,13 @@
 </template> 
 
 <script>
-import { ref, inject, onBeforeMount, computed } from "vue";
+import { ref, inject, onBeforeMount, computed, h } from "vue";
 import { useRoute } from "vue-router";
+import router from "@/router";
 import { useStore } from "vuex";
 import { YoutubeVue3 } from "youtube-vue3";
+import { SmileOutlined, QuestionCircleOutlined } from "@ant-design/icons-vue";
+import { notification } from "ant-design-vue";
 import env from "@/env.js";
 import ToolMethod from "../tools.js";
 
@@ -504,6 +673,7 @@ export default {
     DislikeFilled,
     DislikeOutlined,
     YoutubeVue3,
+    QuestionCircleOutlined,
   },
 
   setup() {
@@ -518,16 +688,21 @@ export default {
     const route = useRoute();
     const movieid = ref("");
     const imdbmovieid = ref("");
+    const popTitle = ref("");
     const tmdbreview = ref([]);
+    const tmdbAllreview = ref([]);
     const amdbreview = ref([]);
+    const amdbAllreview = ref([]);
     const imdbreview = ref([]);
+    const imdbAllreview = ref([]);
     const youtubereview = ref([]);
+    const youtubeAllreview = ref([]);
     const twitterreview = ref([]);
+    const twitterAllreview = ref([]);
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
     const isShowTrailer = ref(false);
-    const isCommnetLoading = ref(false);
     const isShowCastDetail = ref(false);
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
@@ -538,6 +713,7 @@ export default {
     const comments = ref([]);
     const submitting = ref(false);
     const commentsValue = ref("");
+    const isPopUp = ref(false);
     onBeforeMount(() => {
       // fetch movie detail
       axios
@@ -557,12 +733,12 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieImdb/movieImdbReviews?movieId=" +
-                imdbmovieid.value,
-              { withCredentials: true }
+                imdbmovieid.value
             )
             .then((response) => {
               if (response.data.data.reviews.items) {
                 imdbreview.value = response.data.data.reviews.items;
+                imdbAllreview.value = response.data.data.reviews.items;
                 console.log("imdbreview detail");
                 console.log(imdbreview.value);
                 console.log(response.data.data.reviews.items);
@@ -574,12 +750,12 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieYoutube/movieYoutubeReviews?movieName=" +
-                movie.value.original_title,
-              { withCredentials: true }
+                movie.value.original_title
             )
             .then((response) => {
               if (response.data.data) {
                 youtubereview.value = response.data.data;
+                youtubeAllreview.value = response.data.data;
                 console.log("youtubereview detail");
                 console.log(youtubereview.value);
                 console.log(response.data.data);
@@ -591,14 +767,15 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieTwitter/movieTwitterReviews?movieName=" +
-                movie.value.original_title,
-              { withCredentials: true }
+                movie.value.original_title
             )
             .then((response) => {
               if (response.data.data) {
                 twitterreview.value = response.data.data;
+                twitterAllreview.value = response.data.data;
               }
               console.log("twitterreview detail");
+              console.log(response);
               console.log(response.data.data);
               console.log(twitterreview.value);
             });
@@ -645,12 +822,12 @@ export default {
       //Fetch TMDB Comments
       axios
         .get(
-          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value,
-          { withCredentials: true }
+          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value
         )
         .then((response) => {
           if (response.data.data.reviews) {
             tmdbreview.value = response.data.data.reviews[0];
+            tmdbAllreview.value = response.data.data.reviews[0];
           }
           console.log("tmdbreview detail");
           console.log(tmdbreview.value);
@@ -663,21 +840,16 @@ export default {
       //Fetch AMDB Comments
       axios
         .get(
-          env.AMDBAPI +
-            "comments/showComments?movieId=" +
-            movieid.value +
-            "&userId=" +
-            currentUser.value.data.userId,
-          {
-            withCredentials: true,
-          }
+          env.AMDBAPI + "comments/showComments?movieId=" + movieid.value
+          // "&userId=" +
+          // currentUser.value.data.userId,
         )
         .then((response) => {
           amdbreview.value = response.data.data;
+          amdbAllreview.value = response.data.data;
           console.log("amdbreview detail");
           console.log(response.data);
           console.log(amdbreview.value);
-          isCommnetLoading.value = false;
         });
     };
 
@@ -690,19 +862,19 @@ export default {
     };
     const showToxicImg = (rate) => {
       if (rate > 0 && rate <= 0.53) {
-        return "/img/toxic-green.9c3c9960.png";
+        return require("@/assets/toxic-green.png");
       } else if (rate > 0.53 && rate < 0.9) {
-        return "/img/toxic-yellow.7b8a39b0.png";
+        return require("@/assets/toxic-yellow.png");
       } else {
-        return "/img/toxic-red.58ceed0f.png";
+        return require("@/assets/toxic-red.png");
       }
       // return ToolMethod.showToxicImg(rate);
     };
     const showSentimentImg = (rate) => {
       if (rate > 0.5) {
-        return "/img/sentiment-red.d79c31b8.png";
+        return require("@/assets/sentiment-green.png");
       } else {
-        return "/img/sentiment-green.fc9ac5f3.png";
+        return require("@/assets/sentiment-red.png");
       }
       // return ToolMethod.showToxicImg(rate);
     };
@@ -714,16 +886,60 @@ export default {
     const formatDate = (value) => {
       return ToolMethod.formatDate(value);
     };
+
     const changeToPercent = (value) => {
       return ToolMethod.changeToPercent(value);
     };
 
-    // comments
-    const handleSubmit = () => {
+    const addCommentText = () => {
       if (!commentsValue.value) {
         return;
       }
-      isCommnetLoading.value = true;
+      isPopUp.value = true;
+    };
+
+    // comments
+    const handleSubmit = () => {
+      if (!authLogin()|| !commentsValue.value  ) {
+        return;
+      }
+      // submitting.value = true;
+      // // Add comments
+      // axios
+      //   .get(
+      //     env.AMDBAPI +
+      //       "comments/addComments?movieId=" +
+      //       movieid.value +
+      //       "&comment=" +
+      //       commentsValue.value +
+      //       "&userId=" +
+      //       currentUser.value.data.userId
+      //   )
+      //   .then((response) => {
+      //     // tmdbreview.value = response.data;
+      //     console.log("Add comments ");
+      //     console.log(response.data);
+      //     submitting.value = false;
+      //     getAMDBComments();
+      //   });
+
+      //  Comment detect
+      popTitle.value = "Are you sure to publich your comment? ";
+      axios
+        .get(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
+        .then((response) => {
+          const commentStatus = response.data.data;
+          popTitle.value =
+            popTitle.value +
+            "Toxic is " +
+            Number(commentStatus.toxic[0] * 100).toFixed(1) +
+            "% and Sentiment is " +
+            Number(commentStatus.sentiment[0] * 100).toFixed(1) +
+            "%.";
+        });
+    };
+
+    const confirmAddComment = () => {
       submitting.value = true;
       // Add comments
       axios
@@ -734,8 +950,7 @@ export default {
             "&comment=" +
             commentsValue.value +
             "&userId=" +
-            currentUser.value.data.userId,
-          { withCredentials: true }
+            currentUser.value.data.userId
         )
         .then((response) => {
           // tmdbreview.value = response.data;
@@ -743,23 +958,22 @@ export default {
           console.log(response.data);
           submitting.value = false;
           getAMDBComments();
+          isPopUp.value = false;
+          commentsValue.value = "";
+          if (response.data.code === 200) {
+            notification.open({
+              duration: 2,
+              message: "Add comment successfully!",
+              icon: h(SmileOutlined, {
+                style: "color: #108ee9",
+              }),
+            });
+          }
         });
+    };
 
-      // submitting.value = true;
-      // setTimeout(() => {
-      //   submitting.value = false;
-      //   comments.value = [
-      //     {
-      //       author: "Han Solo",
-      //       avatar:
-      //         "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-      //       content: commentsValue.value,
-      //       datetime: moment().fromNow(),
-      //     },
-      //     ...comments.commentsValue,
-      //   ];
-      //   commentsValue.value = "";
-      // }, 1000);
+    const cancelAddComment = () => {
+      return ToolMethod.changeToPercent(value);
     };
 
     const showCastDetail = (id) => {
@@ -775,6 +989,172 @@ export default {
           console.log(castDetail.value);
         });
     };
+    //AMDB filter change
+    const handleFilterChange = (value) => {
+      console.log("handleFilterChange");
+      // console.log(value);
+      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
+      amdbreview.value = commentsFilter(amdbAllreview.value, value);
+    };
+
+    //TMDB filter change
+    const handleTMDBFilterChange = (value) => {
+      console.log("handleFilterChange2");
+      // console.log(data);
+      // console.log(value);
+      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
+      tmdbreview.value = commentsFilter2(tmdbAllreview.value, value);
+    };
+
+    //IMDB filter change
+    const handleIMDBFilterChange = (value) => {
+      console.log("handleFilterChange2");
+      // console.log(data);
+      // console.log(value);
+      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
+      imdbreview.value = commentsFilter2(imdbAllreview.value, value);
+    };
+
+    //Youtube filter change
+    const handleYoutubeFilterChange = (value) => {
+      console.log("handleFilterChange2");
+      // console.log(data);
+      // console.log(value);
+      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
+      youtubereview.value = commentsFilter2(youtubeAllreview.value, value);
+    };
+
+    //Twitter filter change
+    const handleTwitterFilterChange = (value) => {
+      console.log("handleFilterChange2");
+      // console.log(data);
+      // console.log(value);
+      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
+      twitterreview.value = commentsFilter2(twitterAllreview.value, value);
+    };
+
+    const commentsFilter = (value, filter) => {
+      console.log("commentsFilter");
+      console.log(value);
+      let comments = [];
+      if (filter === "notoxic") {
+        for (let i of value) {
+          if (i.toxic < 0.53) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "toxic") {
+        for (let i of value) {
+          if (i.toxic >= 0.53 && i.toxic < 0.9) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "severetoxic") {
+        for (let i of value) {
+          if (i.toxic >= 0.9) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "positive") {
+        for (let i of value) {
+          if (i.sentiment >= 0.5) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "negative") {
+        for (let i of value) {
+          if (i.sentiment < 0.5) {
+            comments.push(i);
+          }
+        }
+      } else {
+        comments = value;
+      }
+      console.log("..............comments");
+      console.log(comments);
+      return comments;
+    };
+
+    const commentsFilter2 = (value, filter) => {
+      console.log("commentsFilter");
+      console.log(value);
+      let comments = [];
+      if (filter === "notoxic") {
+        for (let i of value) {
+          if (i.toxic[0] < 0.53) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "toxic") {
+        for (let i of value) {
+          if (i.toxic[0] >= 0.53 && i.toxic < 0.9) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "severetoxic") {
+        for (let i of value) {
+          if (i.toxic[0] >= 0.9) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "positive") {
+        for (let i of value) {
+          if (i.sentiment[0] >= 0.5) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "negative") {
+        for (let i of value) {
+          if (i.sentiment[0] < 0.5) {
+            comments.push(i);
+          }
+        }
+      } else {
+        comments = value;
+      }
+      console.log("..............comments");
+      console.log(comments);
+      return comments;
+    };
+    // Add to like list
+    const addLikeList = () => {
+      if (!authLogin()) {
+        return;
+      }
+      axios
+        .get(
+          env.AMDBAPI +
+            "member/movieLikes?userId=" +
+            currentUser.value.data.userId,
+          "&movieId=" + movieid.value
+        )
+        .then((response) => {
+          // tmdbreview.value = response.data;
+          console.log("Add like list ");
+          console.log(response.data);
+          if (response.data.code == 200) {
+            notification.open({
+              duration: 2,
+              message: "Add like list successfully!",
+              icon: h(SmileOutlined, {
+                style: "color: #108ee9",
+              }),
+            });
+          }
+        });
+    };
+
+    // Need log in
+    const authLogin = () => {
+      if (!localStorage.getItem("user")) {
+        router.push({
+          name: "Login",
+        });
+        return false;
+      } else {
+        return true;
+      }
+    };
     return {
       movie,
       start,
@@ -787,27 +1167,37 @@ export default {
       isShowTrailer,
       emptyprofile,
       castList,
+      popTitle,
       // comments
       comments,
       submitting,
       commentsValue,
       tmdbreview,
       imdbreview,
+      isPopUp,
       amdbreview,
       youtubereview,
       twitterreview,
       castDetail,
       isShowCastDetail,
-      isCommnetLoading,
       handleCancel,
       handleSubmit,
       showCastDetail,
       showToxicText,
       showSentiemntText,
+      cancelAddComment,
+      confirmAddComment,
       changeToPercent,
       showToxicImg,
       showSentimentImg,
       formatDate,
+      addLikeList,
+      handleFilterChange,
+      handleTMDBFilterChange,
+      handleIMDBFilterChange,
+      handleYoutubeFilterChange,
+      handleTwitterFilterChange,
+      addCommentText,
     };
   },
 };
@@ -972,6 +1362,13 @@ export default {
 
 .anime__details__review {
   margin-bottom: 55px;
+  .comment-filter {
+    .filter-select {
+      position: absolute;
+      right: 0;
+      top: 50px;
+    }
+  }
 }
 
 .anime__review__item {
@@ -1083,7 +1480,7 @@ export default {
   flex-wrap: wrap;
   // margin-left: 100px;
 }
-.comment-text{
+.comment-text {
   // max-height: 500px;
   // overflow: scroll;
 }
