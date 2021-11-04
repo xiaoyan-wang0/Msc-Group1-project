@@ -33,9 +33,14 @@ def review():
     api = tweepy.API(auth)
 
     # To be added: Search tweets according to page number...
-    cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended").items(30)
+    cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended", languages=['en']).items(20)
 
-    
+    list = []
+
+
+    # for c in cursor:
+    #     list.append(c.full_text)
+
     dic2= []
     for c in cursor:
         dic = {}
@@ -46,12 +51,5 @@ def review():
         senti = sentiment(content)
         dic['sentiment'] = senti['tag']
         dic2.append(dic)
-
-    # for review in resultDictionary[0]:
-    #     content = [review['content']]
-    #     result = detector(content)
-    #     senti = sentiment(content)
-    #     review['toxic'] = result
-    #     review['sentiment'] = senti
 
     return ops_renderJSON(msg = "Show Comments Successfull!", data = dic2)

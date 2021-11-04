@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint,render_template,request,make_response,jsonify,redirect,g
 from sqlalchemy import  text
+from sqlalchemy.sql.expression import null
+from tmdbv3api import tmdb
 from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 from common.libs.DataHelper import getCurrentTime
@@ -132,6 +134,7 @@ def bottom():
  
     # Iterating over movies to extract each movie's details
     # Max has to br 100!!!,
+    counter = 0
     for index in range(0, int(numberOfMovies)):
      
         # Separating movie into: 'place', title', 'year'
@@ -147,10 +150,17 @@ def bottom():
 
         response5 = requests.get('https://api.themoviedb.org/3/movie/' + theMovieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
         posters = jsonpath(response5.json(),'$..poster_path')
-        
+        tmdbId = jsonpath(response5.json(),'$..id')
+
+        try:
+           theTmdbId = tmdbId[0]
+        except:
+            theTmdbId = 0
+            
         data = {"movie_title": movie_title,
                 "Imdb_Rating": rating,
                 "Imdb_Id": theMovieId,
+                "tmdb_Id": theTmdbId,
                 "posters": posters,
                 "year": year,
                 "place": place,
