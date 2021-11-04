@@ -60,7 +60,7 @@ def showComments():
     userId = req['userId'] if "userId" in req else ""
     #userId = str(current_user.userId)
     movieId = req['movieId'] if "movieId" in req else ""
-    textsql = " 1=1 and movieId = '"+movieId+"'"
+    textsql = " 1=1 and movieId = "+movieId
     result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
     comments = []
     #usercomments = Usercomment.serialize_list(result)
