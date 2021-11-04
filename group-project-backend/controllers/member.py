@@ -85,6 +85,11 @@ def movieLikes():
     userId = req['userId'] if 'userId' in req else ''
     movieId = req['movieId'] if 'movieId' in req else ''
 
+    textsql = " 1=1 and movieId = "+ movieId + " and useId = "+ userId + " and type = 1"
+    usermovy = Usermovy.query.filter(text(textsql)).all()
+    if usermovy:
+        return ops_renderErrJSON( msg ="user already liked")
+
     model_movies = Usermovy()
     model_movies.movieId = movieId
     model_movies.userId = userId
