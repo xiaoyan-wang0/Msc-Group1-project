@@ -222,6 +222,7 @@ export default {
         name: "ResultDisplay",
         params: {
           //   resultName: "IMDB TOP 10 movies"
+          isPopularorHighScore: 5,
         },
       });
     };

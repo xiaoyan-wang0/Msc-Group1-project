@@ -97,11 +97,18 @@ export default {
             itemtotal.value = response.data.total_results;
             console.log(itemtotal.value);
           });
-      } else {
+      } else if (props.isPopularorHighScore == 4) {
         resultName.value = "Search result";
         // Search moveis result
         axios
-          .get(env.tmdbSearch + env.tmdbkey + env.tmdbquery + props.searchValue)
+          .get(
+            env.tmdbSearch +
+              env.tmdbkey +
+              env.tmdbquery +
+              props.searchValue +
+              "&page= " +
+              pageNumber
+          )
 
           .then((response) => {
             itemdata.value = response.data.results;
@@ -110,6 +117,22 @@ export default {
             console.log(itemdata.value);
             itemtotal.value = response.data.total_results;
             console.log(itemtotal.value);
+          });
+      } else {
+        resultName.value = "IMDB BOTTOM result";
+        axios
+          .get(
+            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
+            {
+              withCredentials: true,
+            }
+          )
+          .then((response) => {
+            // popularMovieData.value = JSON.stringify(response.data);
+            itemdata.value = response.data.data;
+            console.log("IMDB BOT result");
+            console.log(itemdata);
+            // console.log(hignScoreMovieData.value.results);
           });
       }
     });
@@ -172,7 +195,7 @@ export default {
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
           });
-      } else {
+      } else if (props.isPopularorHighScore == 4) {
         resultName.value = "Search result";
         // Search moveis result
         axios
@@ -192,6 +215,22 @@ export default {
             console.log(itemdata.value);
             itemtotal.value = response.data.total_results;
             console.log(itemtotal.value);
+          });
+      } else {
+        resultName.value = "IMDB BOTTOM result";
+        axios
+          .get(
+            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
+            {
+              withCredentials: true,
+            }
+          )
+          .then((response) => {
+            // popularMovieData.value = JSON.stringify(response.data);
+            itemdata.value = response.data.data;
+            console.log("IMDB BOT result");
+            console.log(itemdata);
+            // console.log(hignScoreMovieData.value.results);
           });
       }
     };

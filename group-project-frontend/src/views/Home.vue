@@ -1,15 +1,26 @@
 <template>
   <div class="home">
     <div class="feature-card">
+             
+      <form class="search-model-form" @submit.prevent="SearchMovies()">
+         <input
+          type="text"
+          id="search-input"
+          v-model="search"
+          placeholder="Search here....."
+        /><span class="fa fa-2x fa-search" style="color: #e53637"></span>      
+         
+      </form>
       <div>
         <div id="1" style="">
           <div class="home-carousel-div" style="">
             <div class="home-carousel-left" id="2" style="">
               <div class="main-carousel" v-if="upComingMovieData">
                 <el-carousel
+                  class="carousel-div"
                   :interval="3000"
-                  height="400px"
                   direction="vertical"
+                  height="400px"
                 >
                   <el-carousel-item
                     v-for="item in upComingMovieData.slice(0, 3)"
@@ -34,10 +45,10 @@
                 <div class="section-title">
                   <h4>
                     <span style="margin-left: 5px">Upcoming</span>
-                    <a @click="showResultPage()" class="primary-btn" style="
-                        float: right;
-                        margin-top: 2px;
-                      "
+                    <a
+                      @click="showResultPage()"
+                      class="primary-btn"
+                      style="float: right; margin-top: 2px"
                       >View All <span class="arrow_right"></span
                     ></a>
                   </h4>
@@ -202,6 +213,29 @@ export default {
     margin-top: 20px;
     padding: 0 30px;
     width: 100%;
+    .search-model {
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background: #000;
+      z-index: 99999;
+    }
+
+    .search-model-form {
+      padding: 0 15px;
+    }
+
+    .search-model-form input {
+      width: 500px;
+      font-size: 40px;
+      border: none;
+      border-bottom: 2px solid #333;
+      background: 0 0;
+      color: #999;
+    }
     .main-carousel {
       margin: auto;
       width: 100%;
@@ -237,10 +271,7 @@ export default {
   // .main-menu li ul {
   // font-size: 500px;
   // }
-  .search-bar {
-    .search-content {
-    }
-  }
+
   .search-box {
     display: flex;
     flex-direction: column;
