@@ -100,7 +100,7 @@ def showMovieLikes():
     userId = req['userId'] if "userId" in req else ""
     #userId = str(current_user.userId)
     movieId = req['movieId'] if "movieId" in req else ""
-    textsql = " 1=1 and movieId = "+ movieId + " and type = 1"
+    textsql = " 1=1 and movieId = "+ movieId + " and useId = "+ userId + " and type = 1"
     result = Usermovy.query.filter(text(textsql)).order_by(Usermovy.Id.desc()).all()
     movieLikes = []
     for userMovies in result:
