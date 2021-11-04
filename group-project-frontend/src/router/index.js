@@ -81,6 +81,8 @@ router.beforeEach((to, from, next) => {
   const publicPages = ['/login', '/register', '/', '/main/home/maindisplay', '/main/home/reslut'];
   const authPages = ['/main/porfile'];
   const authRequired = authPages.includes(to.path);
+  console.log("to.path");
+  console.log(to.path);
   const loggedIn = localStorage.getItem('user');
 
   // trying to access a restricted page + not logged in
