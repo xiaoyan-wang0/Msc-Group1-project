@@ -178,4 +178,25 @@ def showCommentList():
         movieComments.append(dictMerged2)
 
 
-    return ops_renderJSON( msg = "show movieLikes successfully!",data = movieComments )
+    return ops_renderJSON( msg = "show commentList successfully!",data = movieComments )
+
+@member_page.route("/deleteComment")
+def deleteComment():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    id = req['id'] if "id" in req else ""
+    if id != "":
+        db.session.query(Usercomment).filter(Usercomment.id == id).delete()
+        db.session.commit()
+    return ops_renderJSON( msg = "delete comment successfully!")
+
+@member_page.route("/deleteMovieLikes")
+def deleteMovieLikes():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    Id = req['Id'] if "Id" in req else ""
+    if id != "":
+        db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
+        db.session.commit()
+
+    return ops_renderJSON( msg = "delete movieLikes successfully!")
