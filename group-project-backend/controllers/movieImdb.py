@@ -151,6 +151,7 @@ def bottom():
         response5 = requests.get('https://api.themoviedb.org/3/movie/' + theMovieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
         posters = jsonpath(response5.json(),'$..poster_path')
         tmdbId = jsonpath(response5.json(),'$..id')
+        genres = jsonpath(response5.json(),'$.genres..name')
 
         try:
            theTmdbId = tmdbId[0]
@@ -162,6 +163,7 @@ def bottom():
                 "Imdb_Id": theMovieId,
                 "tmdb_Id": theTmdbId,
                 "posters": posters,
+                "genres": genres,
                 "year": year,
                 "place": place,
                 "star_cast": crew[index],
