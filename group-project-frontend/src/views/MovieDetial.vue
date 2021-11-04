@@ -39,6 +39,7 @@
               <div class="anime__details__rating">
                 <div class="rating">
                   <a-rate :value="start" disabled allowHalf />
+                  <!-- <el-rate v-model="start" allow-half disabled> </el-rate> -->
                   <p>{{ movie.vote_average }}</p>
                 </div>
               </div>
@@ -749,8 +750,8 @@ export default {
           axios
             .get(
               env.AMDBAPI +
-                "movieYoutube/movieYoutubeReviews?movieName=" +
-                movie.value.original_title
+                "movieYoutube/movieYoutubeReviews?movieName='" +
+                movie.value.original_title+"'"
             )
             .then((response) => {
               if (response.data.data) {
@@ -893,6 +894,7 @@ export default {
 
     const addCommentText = () => {
       if (!commentsValue.value) {
+        isPopUp.value = false;
         return;
       }
       isPopUp.value = true;
@@ -900,29 +902,9 @@ export default {
 
     // comments
     const handleSubmit = () => {
-      if (!authLogin()|| !commentsValue.value  ) {
+      if (!authLogin() || !commentsValue.value) {
         return;
       }
-      // submitting.value = true;
-      // // Add comments
-      // axios
-      //   .get(
-      //     env.AMDBAPI +
-      //       "comments/addComments?movieId=" +
-      //       movieid.value +
-      //       "&comment=" +
-      //       commentsValue.value +
-      //       "&userId=" +
-      //       currentUser.value.data.userId
-      //   )
-      //   .then((response) => {
-      //     // tmdbreview.value = response.data;
-      //     console.log("Add comments ");
-      //     console.log(response.data);
-      //     submitting.value = false;
-      //     getAMDBComments();
-      //   });
-
       //  Comment detect
       popTitle.value = "Are you sure to publich your comment? ";
       axios
@@ -1125,8 +1107,9 @@ export default {
         .get(
           env.AMDBAPI +
             "member/movieLikes?userId=" +
-            currentUser.value.data.userId,
-          "&movieId=" + movieid.value
+            currentUser.value.data.userId +
+            "&movieId=" +
+            movieid.value
         )
         .then((response) => {
           // tmdbreview.value = response.data;
@@ -1139,6 +1122,11 @@ export default {
               icon: h(SmileOutlined, {
                 style: "color: #108ee9",
               }),
+            });
+          } else {
+             notification.open({
+              duration: 2,
+              message: "Already add !!",
             });
           }
         });
@@ -1480,8 +1468,8 @@ export default {
   flex-wrap: wrap;
   // margin-left: 100px;
 }
-.comment-text {
-  // max-height: 500px;
-  // overflow: scroll;
-}
+// .comment-text {
+//   max-height: 500px;
+//   overflow: scroll;
+// }
 </style>

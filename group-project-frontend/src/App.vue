@@ -26,7 +26,7 @@
                   <a href="#"></a>
                 </li>
                 <li>
-                  <a href="/main/porfile">Profile</a>
+                  <a href="/main/profile">Profile</a>
                 </li>
 
                 <li>
@@ -436,11 +436,7 @@ body {
       }
     }
     @media screen and (min-width: $breakpoint) {
-      .header-login {
-        span {
-          // margin-left: 0px;
-        }
-      }
+    
       .nav-list {
         display: block !important;
       }

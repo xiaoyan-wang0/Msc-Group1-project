@@ -46,7 +46,7 @@
           }"
         />
         <div class="toxic-rate">
-          <span style="color:white">Toxic extent :</span>
+          <span style="color: white">Toxic extent :</span>
           <a :style="{ color: 'red' }">{{ toxicText }}</a>
         </div>
       </div>
@@ -64,7 +64,7 @@
         />
         <div class="sentiemnt-rate">
           <div class="">
-            <span style="color:white">Sentiment :</span>
+            <span style="color: white">Sentiment :</span>
             <a :style="{ color: 'red' }">{{ sentiemntText }}</a>
           </div>
         </div>
