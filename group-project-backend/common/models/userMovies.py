@@ -13,7 +13,7 @@ class Usermovy(db.Model):
     userId = db.Column(db.Integer, nullable=False)
     movieId = db.Column(db.String(16))
     type = db.Column(db.Integer)
-    #createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
+    createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
 
 
 

@@ -11,7 +11,10 @@ from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 from common.libs.ToxicComments import do_pe,detector
 from common.models.userMovies import Usermovy
-
+from tmdbv3api import TMDb
+from tmdbv3api import Movie
+import json
+from jsonpath import jsonpath
 
 
 
@@ -111,3 +114,65 @@ def showMovieLikes():
     return ops_renderJSON( msg = "show movieLikes successfully!",data = movieLikes )
 
 
+@member_page.route("/showMovieList")
+def showMovieList():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    textsql = " 1=1 and userId = "+ userId + " and type = 1"
+    result = Usermovy.query.filter(text(textsql)).order_by(Usermovy.Id.desc()).all()
+    movieLikes = []
+    for userMovies in result:
+        userMovie = Serializer.serialize(userMovies)
+        movieInfo = {}
+
+        response2 = requests.get('https://api.themoviedb.org/3/movie/' + userMovies.movieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
+        genres = jsonpath(response2.json(),'$..genres')
+
+        tmdb = TMDb()
+        tmdb.language = 'en'
+        tmdb.debug = True
+        tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
+        movie = Movie()
+        m = movie.details(userMovies.movieId)
+
+        movieInfo['genres'] = genres
+        movieInfo['title'] = m.title
+        movieInfo['poster_path'] = m.poster_path
+        movieInfo['popularity'] = m.popularity
+        movieInfo['release_date'] = m.release_date
+        dictMerged2 = dict( userMovie, **movieInfo )
+        movieLikes.append(dictMerged2)
+
+
+    return ops_renderJSON( msg = "show movieLikes successfully!",data = movieLikes )
+
+@member_page.route("/showCommentList")
+def showCommentList():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    textsql = " 1=1 and userId = "+ userId
+    
+    result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
+    movieComments = []
+    for comments in result:
+        comment = Serializer.serialize(comments)
+        movieInfo = {}
+
+        tmdb = TMDb()
+        tmdb.language = 'en'
+        tmdb.debug = True
+        tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
+        movie = Movie()
+        m = movie.details(comments.movieId)
+
+        movieInfo['title'] = m.title
+        movieInfo['poster_path'] = m.poster_path
+        movieInfo['popularity'] = m.popularity
+        movieInfo['release_date'] = m.release_date
+        dictMerged2 = dict( comment, **movieInfo )
+        movieComments.append(dictMerged2)
+
+
+    return ops_renderJSON( msg = "show movieLikes successfully!",data = movieComments )
