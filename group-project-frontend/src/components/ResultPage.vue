@@ -106,8 +106,7 @@ export default {
               env.tmdbkey +
               env.tmdbquery +
               props.searchValue +
-              "&page= " +
-              pageNumber
+              "&page= "
           )
 
           .then((response) => {

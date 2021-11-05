@@ -136,6 +136,7 @@
 import { ref, inject, onBeforeMount, h } from "vue";
 import { notification } from "ant-design-vue";
 import { SmileOutlined } from "@ant-design/icons-vue";
+import router from "@/router";
 import env from "@/env.js";
 
 export default {
@@ -214,6 +215,12 @@ export default {
       },
     ]);
     onBeforeMount(() => {
+      if (!localStorage.getItem("user")) {
+        router.push({
+          name: "Login",
+        });
+        return;
+      }
       user.value = JSON.parse(localStorage.getItem("user")).data;
       console.log("profile user.value");
       console.log(user.value);
