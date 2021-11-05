@@ -75,6 +75,7 @@ def ret():
 def sen():
     import json
     data = {}
+    data2 = {}
     req = request.values
     title = req['title'] if "title" in req else ""
     result = sentiment(title)

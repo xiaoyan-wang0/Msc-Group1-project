@@ -7,6 +7,7 @@ from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 from common.libs.DataHelper import getCurrentTime
 from common.models.user import User
+from common.models.reviews import Review
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 import requests
@@ -29,6 +30,13 @@ def review():
     ''' 
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
+    type = str(2)
+    textsql = " 1=1 and movieId = '"+movieId+"' and type = "+ type
+    result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON(msg = "Show Successfull!", data = result.content)
+
+
 
     exampleMovieId = 'tt1375666'
 
@@ -46,6 +54,13 @@ def review():
     movieReviewsDictionary = {
         "reviews": reviews
     }
+
+    model_reviews = Review()
+    model_reviews.content = movieReviewsDictionary
+    model_reviews.movieId = movieId
+    model_reviews.type = 2
+    db.session.add( model_reviews )
+    db.session.commit()
     
     return ops_renderJSON(msg = "Show Successfull!", data = movieReviewsDictionary)
     

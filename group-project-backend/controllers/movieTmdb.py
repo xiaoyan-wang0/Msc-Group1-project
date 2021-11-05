@@ -6,6 +6,7 @@ from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 from common.libs.DataHelper import getCurrentTime
 from common.models.user import User
+from common.models.reviews import Review
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 import requests
@@ -28,6 +29,16 @@ def review():
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
     '''
+
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
+    type = str(1)
+    textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
+    result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON(msg = "Show Successfull!", data = result.content)
+
+
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -35,8 +46,6 @@ def review():
     tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
     movie = Movie()
 
-    req = request.values
-    movieId = req['movieId'] if "movieId" in req else ""
 
     theId = str(movieId)
 
@@ -55,6 +64,12 @@ def review():
         "reviews": reviews
     }
 
+    model_reviews = Review()
+    model_reviews.content = movieInfoDictionary
+    model_reviews.movieId = movieId
+    model_reviews.type = 1
+    db.session.add( model_reviews )
+    db.session.commit()
 
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
@@ -66,6 +81,10 @@ def Info():
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
     '''
+
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
+
     # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -73,8 +92,6 @@ def Info():
     tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
     movie = Movie()
 
-    req = request.values
-    movieId = req['movieId'] if "movieId" in req else ""
 
     theId = str(movieId)
 
