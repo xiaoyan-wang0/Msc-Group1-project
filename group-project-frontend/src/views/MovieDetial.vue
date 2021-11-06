@@ -163,7 +163,7 @@
             </div>
             <a-tabs
               v-loading="commentLoading"
-              v-bind:change="changeCommentTab(activeKey)"
+              @change="changeCommentTab(activeKey)"
               v-model:activeKey="activeKey"
               :tabBarStyle="{ color: 'white' }"
             >
@@ -857,94 +857,115 @@ export default {
       console.log("changeCommentTab");
       console.log(value);
       commentLoading.value = true;
-      try {
-        switch (value) {
-          case "tmdb": //Fetch TMDB Comments
-            axios
-              .get(
-                env.AMDBAPI +
-                  "movieTmdb/movieTmdbReviews?movieId=" +
-                  movieid.value
-              )
-              .then((response) => {
-                if (response.data.data.reviews) {
-                  tmdbreview.value = response.data.data.reviews[0];
-                  tmdbAllreview.value = response.data.data.reviews[0];
-                }
-                console.log("tmdbreview detail");
-                console.log(tmdbreview.value);
-                commentLoading.value = false;
-              });
+      switch (value) {
+        case "tmdb": //Fetch TMDB Comments
+          axios
+            .get(
+              env.AMDBAPI +
+                "movieTmdb/movieTmdbReviews?movieId=" +
+                movieid.value
+            )
+            .then((response) => {
+              if (response.data.data.reviews) {
+                tmdbreview.value = response.data.data.reviews[0];
+                tmdbAllreview.value = response.data.data.reviews[0];
+              }
+              console.log("tmdbreview detail");
+              console.log(tmdbreview.value);
+              commentLoading.value = false;
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+              commentLoading.value = false;
+            });
 
-            break;
-          case "imdb":
-            //Fetch IMDB Comments
-            axios
-              .get(
-                env.AMDBAPI +
-                  "movieImdb/movieImdbReviews?movieId=" +
-                  imdbmovieid.value
-              )
-              .then((response) => {
-                if (response.data.data.reviews.items) {
-                  imdbreview.value = response.data.data.reviews.items;
-                  imdbAllreview.value = response.data.data.reviews.items;
-                  console.log("imdbreview detail");
-                  console.log(imdbreview.value);
-                  console.log(response.data.data.reviews.items);
-                }
-                commentLoading.value = false;
-              })
-            break;
-          case "youtube":
-            //Fetch Youtube Comments
-            axios
-              .get(
-                env.AMDBAPI +
-                  "movieYoutube/movieYoutubeReviews?movieName='" +
-                  movie.value.original_title +
-                  "'"
-              )
-              .then((response) => {
-                if (response.data.data) {
-                  youtubereview.value = response.data.data;
-                  youtubeAllreview.value = response.data.data;
-                  console.log("youtubereview detail");
-                  console.log(youtubereview.value);
-                  console.log(response.data.data);
-                }
-                commentLoading.value = false;
-              })
-            break;
-          case "twitter":
-            //Fetch Twitter Comments
-            axios
-              .get(
-                env.AMDBAPI +
-                  "movieTwitter/movieTwitterReviews?movieName=" +
-                  movie.value.original_title
-              )
-              .then((response) => {
-                if (response.data.data) {
-                  twitterreview.value = response.data.data;
-                  twitterAllreview.value = response.data.data;
-                }
-                console.log("twitterreview detail");
-                console.log(response);
+          break;
+        case "imdb":
+          //Fetch IMDB Comments
+          axios
+            .get(
+              env.AMDBAPI +
+                "movieImdb/movieImdbReviews?movieId=" +
+                imdbmovieid.value
+            )
+            .then((response) => {
+              if (response.data.data.reviews.items) {
+                imdbreview.value = response.data.data.reviews.items;
+                imdbAllreview.value = response.data.data.reviews.items;
+                console.log("imdbreview detail");
+                console.log(imdbreview.value);
+                console.log(response.data.data.reviews.items);
+              }
+              commentLoading.value = false;
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+              commentLoading.value = false;
+            });
+          break;
+        case "youtube":
+          //Fetch Youtube Comments
+          axios
+            .get(
+              env.AMDBAPI +
+                "movieYoutube/movieYoutubeReviews?movieName='" +
+                movie.value.original_title +
+                "'"
+            )
+            .then((response) => {
+              if (response.data.data) {
+                youtubereview.value = response.data.data;
+                youtubeAllreview.value = response.data.data;
+                console.log("youtubereview detail");
+                console.log(youtubereview.value);
                 console.log(response.data.data);
-                console.log(twitterreview.value);
-                commentLoading.value = false;
-              })
-            break;
-          default:
-            commentLoading.value = false;
-          // code block
-        }
-      } catch (error) {
-          // 请求失败处理
-          console.log(error);
+              }
+              commentLoading.value = false;
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+              commentLoading.value = false;
+            });
+          break;
+        case "twitter":
+          //Fetch Twitter Comments
+          axios
+            .get(
+              env.AMDBAPI +
+                "movieTwitter/movieTwitterReviews?movieName=" +
+                movie.value.original_title
+            )
+            .then((response) => {
+              if (response.data.data) {
+                twitterreview.value = response.data.data;
+                twitterAllreview.value = response.data.data;
+              }
+              console.log("twitterreview detail");
+              console.log(response);
+              console.log(response.data.data);
+              console.log(twitterreview.value);
+              commentLoading.value = false;
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+              commentLoading.value = false;
+            });
+          break;
+        default:
           commentLoading.value = false;
-        // })
+        // code block
       }
     };
 
