@@ -176,9 +176,20 @@ body {
   textarea.ant-input {
     height: 150px !important;
   }
-  .ant-progress-circle .ant-progress-text{
+  .ant-progress-circle .ant-progress-text {
     color: white !important;
   }
+
+  .ant-tabs-tab-prev-icon,
+  .ant-tabs-tab-next-icon {
+    color: #fff !important;
+  }
+
+  .ant-tabs .ant-tabs-top-content.ant-tabs-content-animated, .ant-tabs .ant-tabs-bottom-content.ant-tabs-content-animated{
+    
+    min-height: 400px !important;
+  }
+  .el-loading-mask{    background-color: rgba(44, 44, 44, 0.9);}
 }
 * {
   margin: 0;
@@ -436,7 +447,6 @@ body {
       }
     }
     @media screen and (min-width: $breakpoint) {
-    
       .nav-list {
         display: block !important;
       }
@@ -641,7 +651,7 @@ body {
 -----------------------*/
 
 .footer {
-      box-shadow: 0px 0px 15px 0px #e53637;
+  box-shadow: 0px 0px 15px 0px #e53637;
   background: #0a0a13;
   padding-top: 60px;
   padding-bottom: 40px;

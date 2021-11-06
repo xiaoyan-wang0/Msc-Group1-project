@@ -67,7 +67,12 @@
                     <ul>
                       <li><span>vote count:</span>{{ movie.vote_count }}</li>
                       <li><span>Popularity:</span> {{ movie.popularity }}</li>
-                      <li><span>Homepage</span> {{ movie.homepage }}</li>
+                      <li>
+                        <span>Homepage</span
+                        ><a :href="movie.homepage" target="_blank">
+                          {{ movie.homepage }}</a
+                        >
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -156,7 +161,12 @@
             <div class="section-title">
               <h5>reviews</h5>
             </div>
-            <a-tabs type="card">
+            <a-tabs
+              v-loading="commentLoading"
+              v-bind:change="changeCommentTab(activeKey)"
+              v-model:activeKey="activeKey"
+              :tabBarStyle="{ color: 'white' }"
+            >
               <a-tab-pane key="amdb" tab="AMDB reviews" style="">
                 <div class="section-title">
                   <div class="comment-filter">
@@ -655,6 +665,7 @@ import { useRoute } from "vue-router";
 import router from "@/router";
 import { useStore } from "vuex";
 import { YoutubeVue3 } from "youtube-vue3";
+import { message } from "ant-design-vue";
 import { SmileOutlined, QuestionCircleOutlined } from "@ant-design/icons-vue";
 import { notification } from "ant-design-vue";
 import env from "@/env.js";
@@ -689,6 +700,7 @@ export default {
     const route = useRoute();
     const movieid = ref("");
     const imdbmovieid = ref("");
+    const activeKey = ref("amdb");
     const popTitle = ref("");
     const tmdbreview = ref([]);
     const tmdbAllreview = ref([]);
@@ -704,6 +716,7 @@ export default {
     const video_id = ref("");
     const emptyprofile = ref("");
     const isShowTrailer = ref(false);
+    const commentLoading = ref(false);
     const isShowCastDetail = ref(false);
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
@@ -729,57 +742,6 @@ export default {
           console.log(imdbmovieid.value);
           console.log("imdbmovie title");
           console.log(movie.value.original_title);
-          //Fetch IMDB Comments
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieImdb/movieImdbReviews?movieId=" +
-                imdbmovieid.value
-            )
-            .then((response) => {
-              if (response.data.data.reviews.items) {
-                imdbreview.value = response.data.data.reviews.items;
-                imdbAllreview.value = response.data.data.reviews.items;
-                console.log("imdbreview detail");
-                console.log(imdbreview.value);
-                console.log(response.data.data.reviews.items);
-              }
-            });
-
-          //Fetch Youtube Comments
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieYoutube/movieYoutubeReviews?movieName='" +
-                movie.value.original_title+"'"
-            )
-            .then((response) => {
-              if (response.data.data) {
-                youtubereview.value = response.data.data;
-                youtubeAllreview.value = response.data.data;
-                console.log("youtubereview detail");
-                console.log(youtubereview.value);
-                console.log(response.data.data);
-              }
-            });
-
-          //Fetch Twitter Comments
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieTwitter/movieTwitterReviews?movieName=" +
-                movie.value.original_title
-            )
-            .then((response) => {
-              if (response.data.data) {
-                twitterreview.value = response.data.data;
-                twitterAllreview.value = response.data.data;
-              }
-              console.log("twitterreview detail");
-              console.log(response);
-              console.log(response.data.data);
-              console.log(twitterreview.value);
-            });
         });
 
       //Fetch trailer
@@ -820,24 +782,11 @@ export default {
           }
         });
 
-      //Fetch TMDB Comments
-      axios
-        .get(
-          env.AMDBAPI + "movieTmdb/movieTmdbReviews?movieId=" + movieid.value
-        )
-        .then((response) => {
-          if (response.data.data.reviews) {
-            tmdbreview.value = response.data.data.reviews[0];
-            tmdbAllreview.value = response.data.data.reviews[0];
-          }
-          console.log("tmdbreview detail");
-          console.log(tmdbreview.value);
-        });
-
       getAMDBComments();
     });
 
     const getAMDBComments = () => {
+      commentLoading.value = true;
       //Fetch AMDB Comments
       axios
         .get(
@@ -851,6 +800,14 @@ export default {
           console.log("amdbreview detail");
           console.log(response.data);
           console.log(amdbreview.value);
+          commentLoading.value = true;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+          commentLoading.value = false;
         });
     };
 
@@ -892,6 +849,105 @@ export default {
       return ToolMethod.changeToPercent(value);
     };
 
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
+    };
+
+    const changeCommentTab = (value) => {
+      console.log("changeCommentTab");
+      console.log(value);
+      commentLoading.value = true;
+      try {
+        switch (value) {
+          case "tmdb": //Fetch TMDB Comments
+            axios
+              .get(
+                env.AMDBAPI +
+                  "movieTmdb/movieTmdbReviews?movieId=" +
+                  movieid.value
+              )
+              .then((response) => {
+                if (response.data.data.reviews) {
+                  tmdbreview.value = response.data.data.reviews[0];
+                  tmdbAllreview.value = response.data.data.reviews[0];
+                }
+                console.log("tmdbreview detail");
+                console.log(tmdbreview.value);
+                commentLoading.value = false;
+              });
+
+            break;
+          case "imdb":
+            //Fetch IMDB Comments
+            axios
+              .get(
+                env.AMDBAPI +
+                  "movieImdb/movieImdbReviews?movieId=" +
+                  imdbmovieid.value
+              )
+              .then((response) => {
+                if (response.data.data.reviews.items) {
+                  imdbreview.value = response.data.data.reviews.items;
+                  imdbAllreview.value = response.data.data.reviews.items;
+                  console.log("imdbreview detail");
+                  console.log(imdbreview.value);
+                  console.log(response.data.data.reviews.items);
+                }
+                commentLoading.value = false;
+              })
+            break;
+          case "youtube":
+            //Fetch Youtube Comments
+            axios
+              .get(
+                env.AMDBAPI +
+                  "movieYoutube/movieYoutubeReviews?movieName='" +
+                  movie.value.original_title +
+                  "'"
+              )
+              .then((response) => {
+                if (response.data.data) {
+                  youtubereview.value = response.data.data;
+                  youtubeAllreview.value = response.data.data;
+                  console.log("youtubereview detail");
+                  console.log(youtubereview.value);
+                  console.log(response.data.data);
+                }
+                commentLoading.value = false;
+              })
+            break;
+          case "twitter":
+            //Fetch Twitter Comments
+            axios
+              .get(
+                env.AMDBAPI +
+                  "movieTwitter/movieTwitterReviews?movieName=" +
+                  movie.value.original_title
+              )
+              .then((response) => {
+                if (response.data.data) {
+                  twitterreview.value = response.data.data;
+                  twitterAllreview.value = response.data.data;
+                }
+                console.log("twitterreview detail");
+                console.log(response);
+                console.log(response.data.data);
+                console.log(twitterreview.value);
+                commentLoading.value = false;
+              })
+            break;
+          default:
+            commentLoading.value = false;
+          // code block
+        }
+      } catch (error) {
+          // 请求失败处理
+          console.log(error);
+          commentLoading.value = false;
+        // })
+      }
+    };
+
     const addCommentText = () => {
       if (!commentsValue.value) {
         isPopUp.value = false;
@@ -922,7 +978,7 @@ export default {
     };
 
     const confirmAddComment = () => {
-      submitting.value = true;
+      commentLoading.value = true;
       // Add comments
       axios
         .get(
@@ -942,6 +998,7 @@ export default {
           getAMDBComments();
           isPopUp.value = false;
           commentsValue.value = "";
+          commentLoading.value = false;
           if (response.data.code === 200) {
             notification.open({
               duration: 2,
@@ -1124,7 +1181,7 @@ export default {
               }),
             });
           } else {
-             notification.open({
+            notification.open({
               duration: 2,
               message: "Already add !!",
             });
@@ -1156,6 +1213,8 @@ export default {
       emptyprofile,
       castList,
       popTitle,
+      activeKey,
+      commentLoading,
       // comments
       comments,
       submitting,
@@ -1186,6 +1245,7 @@ export default {
       handleYoutubeFilterChange,
       handleTwitterFilterChange,
       addCommentText,
+      changeCommentTab,
     };
   },
 };
@@ -1466,10 +1526,5 @@ export default {
 .movie-casts {
   display: flex;
   flex-wrap: wrap;
-  // margin-left: 100px;
 }
-// .comment-text {
-//   max-height: 500px;
-//   overflow: scroll;
-// }
 </style>
