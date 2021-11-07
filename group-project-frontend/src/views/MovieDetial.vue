@@ -858,10 +858,12 @@ export default {
     const changeCommentTab = (value) => {
       console.log("changeCommentTab");
       console.log(value);
+      console.log(tmdbAllreview.value.length );
+      console.log(tmdbAllreview.value.length>0);
       commentLoading.value = true;
       switch (value) {
         case "tmdb": //Fetch TMDB Comments
-          if (tmdbAllreview !== []) {
+          if (tmdbAllreview.value.length>0) {
             commentLoading.value = false;
             return;
           }
@@ -890,7 +892,7 @@ export default {
 
           break;
         case "imdb":
-          if (imdbAllreview !== []) {
+          if (imdbAllreview.value.length>0) {
             commentLoading.value = false;
             return;
           }
@@ -920,7 +922,7 @@ export default {
             });
           break;
         case "youtube":
-          if (youtubeAllreview !== []) {
+          if (youtubeAllreview.value.length>0) {
             commentLoading.value = false;
             return;
           }
@@ -951,7 +953,7 @@ export default {
             });
           break;
         case "twitter":
-          if (twitterAllreview !== []) {
+          if (twitterAllreview.value.length>0) {
             commentLoading.value = false;
             return;
           }
