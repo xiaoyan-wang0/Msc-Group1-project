@@ -858,12 +858,12 @@ export default {
     const changeCommentTab = (value) => {
       console.log("changeCommentTab");
       console.log(value);
-      console.log(tmdbAllreview.value.length );
-      console.log(tmdbAllreview.value.length>0);
+      console.log(tmdbAllreview.value.length);
+      console.log(tmdbAllreview.value.length > 0);
       commentLoading.value = true;
       switch (value) {
         case "tmdb": //Fetch TMDB Comments
-          if (tmdbAllreview.value.length>0) {
+          if (tmdbAllreview.value.length > 0) {
             commentLoading.value = false;
             return;
           }
@@ -892,7 +892,7 @@ export default {
 
           break;
         case "imdb":
-          if (imdbAllreview.value.length>0) {
+          if (imdbAllreview.value.length > 0) {
             commentLoading.value = false;
             return;
           }
@@ -922,7 +922,7 @@ export default {
             });
           break;
         case "youtube":
-          if (youtubeAllreview.value.length>0) {
+          if (youtubeAllreview.value.length > 0) {
             commentLoading.value = false;
             return;
           }
@@ -930,9 +930,10 @@ export default {
           axios
             .get(
               env.AMDBAPI +
-                "movieYoutube/movieYoutubeReviews?movieName='" +
+                "movieYoutube/movieYoutubeReviews?movieName=" +
                 movie.value.original_title +
-                "'"
+                "&movieId=" +
+                movieid.value
             )
             .then((response) => {
               if (response.data.data) {
@@ -953,7 +954,7 @@ export default {
             });
           break;
         case "twitter":
-          if (twitterAllreview.value.length>0) {
+          if (twitterAllreview.value.length > 0) {
             commentLoading.value = false;
             return;
           }
@@ -962,7 +963,9 @@ export default {
             .get(
               env.AMDBAPI +
                 "movieTwitter/movieTwitterReviews?movieName=" +
-                movie.value.original_title
+                movie.value.original_title +
+                "&movieId=" +
+                movieid.value
             )
             .then((response) => {
               if (response.data.data) {
