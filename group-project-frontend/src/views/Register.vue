@@ -39,7 +39,7 @@
                   </div>
                 </div>
 
-              <p></p>
+                <p></p>
                 <div class="col-md-12">
                   <input
                     class="form-control"
@@ -61,7 +61,7 @@
                   <div class="invalid-feedback">Please select a position!</div>
                 </div> -->
 
-              <p></p>
+                <p></p>
                 <div class="col-md-12">
                   <input
                     class="form-control"
@@ -78,7 +78,9 @@
                 </div>
 
                 <div class="col-md-12 mt-3">
-                  <label class="mb-3 mr-1" for="gender">Gender: </label>
+                  <label class="mb-3 mr-1" for="gender" style="color: white"
+                    >Gender:
+                  </label>
 
                   <input
                     type="radio"
@@ -132,7 +134,7 @@
                     id="invalidCheck"
                     required
                   />
-                  <label class="form-check-label"
+                  <label class="form-check-label" style="color: white"
                     >I confirm that all data are correct</label
                   >
                   <div class="invalid-feedback">
@@ -262,7 +264,6 @@ export default defineComponent({
 
 
 <style lang="scss" scoped>
-
 /*---------------------
   Breadcrumb
 -----------------------*/

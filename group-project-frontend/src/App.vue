@@ -72,7 +72,7 @@
         <div class="row">
           <div class="col-lg-3">
             <div class="footer__logo">
-              <a href="./index.html"
+              <a href="/"
                 ><img
                   class="logo-icon"
                   src="./assets/logo.png"
@@ -185,11 +185,13 @@ body {
     color: #fff !important;
   }
 
-  .ant-tabs .ant-tabs-top-content.ant-tabs-content-animated, .ant-tabs .ant-tabs-bottom-content.ant-tabs-content-animated{
-    
+  .ant-tabs .ant-tabs-top-content.ant-tabs-content-animated,
+  .ant-tabs .ant-tabs-bottom-content.ant-tabs-content-animated {
     min-height: 400px !important;
   }
-  .el-loading-mask{    background-color: rgba(44, 44, 44, 0.9);}
+  .el-loading-mask {
+    background-color: rgba(44, 44, 44, 0.9);
+  }
 }
 * {
   margin: 0;

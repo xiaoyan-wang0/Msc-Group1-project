@@ -38,7 +38,7 @@
               </div>
               <div class="anime__details__rating">
                 <div class="rating">
-                  <a-rate :value="start" disabled allowHalf />
+                  <a-rate v-model:value="start" disabled allowHalf />
                   <!-- <el-rate v-model="start" allow-half disabled> </el-rate> -->
                   <p>{{ movie.vote_average }}</p>
                 </div>
@@ -737,6 +737,8 @@ export default {
           console.log("movie detail");
           console.log(movie.value);
           start.value = movie.value.vote_average / 2;
+          console.log("start.value");
+          console.log(start.value);
           console.log("imdbmovieid");
           imdbmovieid.value = response.data.imdb_id;
           console.log(imdbmovieid.value);
@@ -800,7 +802,7 @@ export default {
           console.log("amdbreview detail");
           console.log(response.data);
           console.log(amdbreview.value);
-          commentLoading.value = true;
+          commentLoading.value = false;
         })
         .catch((error) => {
           console.log("error");
@@ -859,6 +861,10 @@ export default {
       commentLoading.value = true;
       switch (value) {
         case "tmdb": //Fetch TMDB Comments
+          if (tmdbAllreview !== []) {
+            commentLoading.value = false;
+            return;
+          }
           axios
             .get(
               env.AMDBAPI +
@@ -884,6 +890,10 @@ export default {
 
           break;
         case "imdb":
+          if (imdbAllreview !== []) {
+            commentLoading.value = false;
+            return;
+          }
           //Fetch IMDB Comments
           axios
             .get(
@@ -910,6 +920,10 @@ export default {
             });
           break;
         case "youtube":
+          if (youtubeAllreview !== []) {
+            commentLoading.value = false;
+            return;
+          }
           //Fetch Youtube Comments
           axios
             .get(
@@ -937,6 +951,10 @@ export default {
             });
           break;
         case "twitter":
+          if (twitterAllreview !== []) {
+            commentLoading.value = false;
+            return;
+          }
           //Fetch Twitter Comments
           axios
             .get(

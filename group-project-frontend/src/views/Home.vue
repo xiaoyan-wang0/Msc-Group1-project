@@ -96,15 +96,15 @@
         />
         <input type="submit" value="Search" />
       </form> -->
-      <div class="search-content"></div>
+      <div class="search-content" v-if="showRouterView"></div>
     </div>
-    <router-view />
+    <router-view v-if="showRouterView" />
   </div>
 </template>
 
 <script>
 import { ElCarousel } from "element-plus";
-import { ref, inject, onBeforeMount } from "vue";
+import { ref, inject, onBeforeMount, nextTick } from "vue";
 import env from "@/env.js";
 import router from "@/router";
 import Showpart from "@/components/ShowPart.vue";
@@ -121,21 +121,22 @@ export default {
     const lastestMovieData = ref([]);
     const upComingMovieData = ref([]);
     const moviePoster = ref("");
+    const showRouterView = ref(true);
     moviePoster.value = env.tmdbpic;
 
     //Search event
     const SearchMovies = () => {
       if (search.value != "") {
-        console
-          .log
-          // env.omdbapi + env.omdbkey + env.omdbapisearch + search.value
-          ();
+        showRouterView.value = false;
+        nextTick(() => (showRouterView.value = true));
+        localStorage.setItem("resultResource", 4);
+        localStorage.setItem("searchValue", search.value);
         router.push({
           name: "ResultDisplay",
           params: {
             //   resultName: "IMDB TOP 10 movies"
-            isPopularorHighScore: 4,
-            searchValue: search.value,
+            // isPopularorHighScore: 4,
+            // searchValue: search.value,
           },
         });
       }
@@ -166,11 +167,14 @@ export default {
 
     //show Result Page
     const showResultPage = () => {
+      showRouterView.value = false;
+      nextTick(() => (showRouterView.value = true));
+      localStorage.setItem("resultResource", 3);
       router.push({
         name: "ResultDisplay",
         params: {
           //   resultName: "IMDB TOP 10 movies"
-          isPopularorHighScore: 3,
+          // isPopularorHighScore: 3,
         },
       });
     };
@@ -182,6 +186,7 @@ export default {
       itemdata,
       lastestMovieData,
       upComingMovieData,
+      showRouterView,
       handleSelect,
       SearchMovies,
       showResultPage,
