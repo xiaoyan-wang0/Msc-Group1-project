@@ -65,7 +65,7 @@
                 v-for="item in imdbBotMovies"
                 :key="item.id"
               >
-                <router-link :to="'/movie/' + item.Imdb_Id">
+                <router-link :to="'/movie/' + item.tmdb_Id">
                   <div class="product__item">
                     <div
                       class="product__item__pic set-bg"
@@ -84,9 +84,8 @@
                     </div>
                     <div class="product__item__text">
                       <ul>
-                        <!-- <li v-for="genre in findCategary(item.genre_ids)" :key="genre.id" >
-                    {genre}
-                  </li>> -->
+                        <li v-for="genre in genres" :key="genre.id">{genre}</li>
+                        >
                       </ul>
                       <h5>
                         <a href="#">{{ item.movie_title }}</a>
@@ -176,6 +175,7 @@ export default {
         .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
         .then((response) => {
           popularMovieData.value = response.data;
+          console.log("popularMovieData.results");
           console.log(popularMovieData.value.results);
         });
       // High score moveis
@@ -218,6 +218,7 @@ export default {
     };
     //show Result Page
     const showResultPage = () => {
+      localStorage.setItem("resultResource", 5);
       router.push({
         name: "ResultDisplay",
         params: {

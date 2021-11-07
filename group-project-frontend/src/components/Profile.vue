@@ -308,7 +308,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .anime-details {
   padding-top: 60px;
 }
@@ -371,25 +371,6 @@ export default {
   font-size: 15px;
   color: #b7b7b7;
   display: block;
-}
-
-.anime__details__rating {
-  text-align: center;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.anime__details__rating .rating i {
-  font-size: 24px;
-  color: #e89f12;
-  display: inline-block;
-}
-
-.anime__details__rating span {
-  display: block;
-  font-size: 18px;
-  color: #b7b7b7;
 }
 
 .anime__details__widget {

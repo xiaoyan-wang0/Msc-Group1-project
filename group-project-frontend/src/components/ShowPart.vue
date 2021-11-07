@@ -1,30 +1,4 @@
 <template>
-  <!-- <div class="show-items">
-    <div class="item-list">
-      <div class="item-title">
-        <span>{{ spacename }}</span>
-        <a @click="showResultPage()">more</a>
-      </div>
-      <div class="movies-list" v-if="itemdata.results !== undefined">
-        <div
-          class="movie"
-          v-for="item in itemdata.results.slice(0, 10)"
-          :key="item.id"
-        >
-          <router-link :to="'/movie/' + item.id" class="movie-link">
-            <div class="product-image">
-              <img :src="poster + item.poster_path" alt="Movie Poster" />
-              <div class="type">{{ item.vote_average }}</div>
-            </div>
-            <div class="detail">
-              <p class="year">{{ item.release_date }}</p>
-              <h3>{{ item.title }}</h3>
-            </div>
-          </router-link>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="trending__product">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
@@ -101,10 +75,11 @@ export default {
     const showResultPage = () => {
       console.log("isPopularorHighScore");
       console.log(props.isPopularorHighScore);
+      localStorage.setItem("resultResource", props.isPopularorHighScore);
       router.push({
         name: "ResultDisplay",
         params: {
-          isPopularorHighScore: props.isPopularorHighScore,
+          // isPopularorHighScore: props.isPopularorHighScore,
         },
       });
     };

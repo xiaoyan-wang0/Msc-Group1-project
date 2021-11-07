@@ -1,19 +1,94 @@
 <template>
   <div class="show-items">
-    <div class="item-list">
-      <div class="item-title">
-        <span>{{ resultName }}</span>
+    <div class="trending__product" v-if="!isIMDBBot">
+      <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8">
+          <div class="section-title">
+            <h4>{{ resultName }}</h4>
+          </div>
+        </div>
       </div>
-      <div class="movies-list" v-if="itemdata !== undefined">
-        <div class="movie" v-for="item in itemdata" :key="item.id">
-          <router-link :to="'/movie/' + item.id" class="movie-link">
-            <div class="product-image">
-              <img :src="poster + item.poster_path" alt="Movie Poster" />
-              <div class="type">{{ item.vote_average }}</div>
+      <div class="row" v-if="itemdata !== undefined">
+        <div
+          class="col-lg-3 col-md-6 col-sm-6"
+          v-for="item in itemdata"
+          :key="item.id"
+        >
+          <router-link :to="'/movie/' + item.id">
+            <div class="product__item">
+              <div
+                class="product__item__pic set-bg"
+                v-bind:style="{
+                  'background-image': 'url(' + poster + item.poster_path + ')',
+                }"
+              >
+                <div class="ep">{{ item.vote_average }} / 10</div>
+                <div class="comment">
+                  <i class="fa fa-comments"></i> {{ item.vote_count }}
+                </div>
+                <div class="view">
+                  <i class="fa fa-eye"></i> {{ item.release_date }}
+                </div>
+              </div>
+              <div class="product__item__text">
+                <ul>
+                  <li
+                    v-for="genre in findCategary(item.genre_ids).slice(0, 2)"
+                    :key="genre.id"
+                  >
+                    {{ genre }}
+                  </li>
+                </ul>
+                <h5>
+                  <a href="#">{{ item.title }}</a>
+                </h5>
+              </div>
             </div>
-            <div class="detail">
-              <p class="year">{{ item.release_date }}</p>
-              <h3>{{ item.title }}</h3>
+          </router-link>
+        </div>
+      </div>
+    </div>
+    <!-- For imdb bot  -->
+    <div class="trending__product" v-else>
+      <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8">
+          <div class="section-title">
+            <h4>{{ resultName }}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="row" v-if="itemdata !== undefined">
+        <div
+          class="col-lg-3 col-md-6 col-sm-6"
+          v-for="item in itemdata"
+          :key="item.tmdb_Id"
+        >
+          <router-link :to="'/movie/' + item.tmdb_Id">
+            <div class="product__item">
+              <div
+                class="product__item__pic set-bg"
+                v-bind:style="{
+                  'background-image': 'url(' + poster + item.posters[0] + ')',
+                }"
+              >
+                <div class="ep">{{ item.rating }} / 10</div>
+                <div class="comment">
+                  <!-- <i class="fa fa-comments"></i> {{ item.vote_count }} -->
+                </div>
+                <div class="view">
+                  <i class="fa fa-eye"></i> {{ item.year }}
+                </div>
+              </div>
+              <div class="product__item__text">
+                <ul>
+                  <li v-for="genre in item.genres" :key="genre.id">
+                    {{ genre }}
+                  </li>
+                </ul>
+                <h5>
+                  <a href="#">{{ item.movie_title }}</a>
+                </h5>
+              </div>
             </div>
           </router-link>
         </div>
@@ -34,7 +109,7 @@
 
 <script>
 import env from "@/env.js";
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, onBeforeMount } from "vue";
 import router from "@/router";
 
 export default {
@@ -42,20 +117,32 @@ export default {
   props: {
     name: String,
     isPopularorHighScore: Number,
-    searchValue: String,
   },
   setup(props) {
     const poster = ref("");
     const resultName = ref("Result");
     const itemdata = ref();
     const itemtotal = ref(0);
+    const isIMDBBot = ref(false);
     const axios = inject("axios"); // inject axios
     poster.value = env.tmdbpic;
+    const resource = localStorage.getItem("resultResource");
+    const searchValue = localStorage.getItem("searchValue");
+
+    onBeforeMount(() => {
+      console.log("onBeforeMount");
+      itemdata.value = [];
+      resultName.value = "";
+      console.log(itemdata.value);
+      console.log(resultName.value);
+    });
 
     onMounted(() => {
+      console.log("onMounted");
       console.log("RESULT props.isPopularorHighScore");
-      console.log(props.isPopularorHighScore);
-      if (props.isPopularorHighScore == 1) {
+      // console.log(props.isPopularorHighScore);
+      console.log(localStorage.getItem("resultResource"));
+      if (resource == 1) {
         // Popular movies
         resultName.value = "Popular movies Result";
         axios
@@ -66,7 +153,7 @@ export default {
             console.log(itemdata.value);
             itemtotal.value = response.data.total_results;
           });
-      } else if (props.isPopularorHighScore == 2) {
+      } else if (resource == 2) {
         resultName.value = "High score moveis Result";
         // High score moveis
         axios
@@ -81,7 +168,7 @@ export default {
             // console.log(hignScoreMovieData.value.results);
             itemtotal.value = response.data.total_results;
           });
-      } else if (props.isPopularorHighScore == 3) {
+      } else if (resource == 3) {
         resultName.value = "Upcoming Movies Result";
         // High score moveis
         axios
@@ -97,7 +184,7 @@ export default {
             itemtotal.value = response.data.total_results;
             console.log(itemtotal.value);
           });
-      } else if (props.isPopularorHighScore == 4) {
+      } else if (resource == 4) {
         resultName.value = "Search result";
         // Search moveis result
         axios
@@ -105,10 +192,8 @@ export default {
             env.tmdbSearch +
               env.tmdbkey +
               env.tmdbquery +
-              props.searchValue +
-              "&page= "
+              searchValue
           )
-
           .then((response) => {
             itemdata.value = response.data.results;
             console.log("Search moveis result");
@@ -119,6 +204,7 @@ export default {
           });
       } else {
         resultName.value = "IMDB BOTTOM result";
+        isIMDBBot.value = true;
         axios
           .get(
             env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
@@ -138,7 +224,7 @@ export default {
 
     const onChange = (pageNumber) => {
       console.log("Page: ", pageNumber);
-      if (props.isPopularorHighScore == 1) {
+      if (resource == 1) {
         // Popular movies
         resultName.value = "Popular movies Result";
         axios
@@ -155,7 +241,7 @@ export default {
             console.log("REsult page Popula");
             console.log(itemdata.value);
           });
-      } else if (props.isPopularorHighScore == 2) {
+      } else if (resource == 2) {
         resultName.value = "High score moveis Result";
         // High score moveis
         axios
@@ -174,7 +260,7 @@ export default {
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
           });
-      } else if (props.isPopularorHighScore == 3) {
+      } else if (resource == 3) {
         resultName.value = "Upcoming Movies Result";
         // High score moveis
         axios
@@ -194,7 +280,7 @@ export default {
             console.log(itemdata.value);
             // console.log(hignScoreMovieData.value.results);
           });
-      } else if (props.isPopularorHighScore == 4) {
+      } else if (resource == 4) {
         resultName.value = "Search result";
         // Search moveis result
         axios
@@ -202,7 +288,7 @@ export default {
             env.tmdbSearch +
               env.tmdbkey +
               env.tmdbquery +
-              props.searchValue +
+              searchValue +
               "&page= " +
               pageNumber
           )
@@ -233,20 +319,41 @@ export default {
           });
       }
     };
+
+    const findCategary = (genres) => {
+      let categary = [];
+      for (let id of genres) {
+        for (const genrn of JSON.parse(localStorage.getItem("genreList"))) {
+          // console.log("findCategary([878,28]");
+          // console.log(genrn);
+          // console.log(id);
+          if (genrn.id == id) {
+            categary.push(genrn.name);
+          }
+        }
+      }
+      // console.log(categary);
+      return categary;
+    };
     return {
       poster,
       itemdata,
       resultName,
       itemtotal,
+      isIMDBBot,
       current: ref(1),
       pageSize: ref(20),
       onChange,
+      findCategary,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.show-items {
+  padding-top: 50px;
+}
 .item-list {
   margin: 0 50px;
 }
