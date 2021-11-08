@@ -12,6 +12,7 @@ from common.libs.UserService import UserService
 import requests
 from common.libs.ToxicComments import do_pe,detector
 from common.libs.Sentiment import sentiment
+from requests_futures.sessions import FuturesSession
 
 
 movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
@@ -62,33 +63,39 @@ def Info():
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
-    exampleMovieId = 'tt1375666'
+    #exampleMovieId = 'tt1375666'
 
-    response = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + movieId)
-    title = jsonpath(response.json(),'$..fullTitle')
-    type = jsonpath(response.json(),'$..type')
-    year = jsonpath(response.json(),'$..year')
+    urls = [
+    'https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + movieId,
+    'https://imdb-api.com/en/API/Title/k_ds7a1ynu/' + movieId,
+    'https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + movieId,
+    'https://imdb-api.com/en/API/FullCast/k_ds7a1ynu/' + movieId,
+    'https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId
+]
 
-    response2 = requests.get('https://imdb-api.com/en/API/Title/k_ds7a1ynu/' + movieId)
-    plot = jsonpath(response2.json(),'$..plot')
+    counter = 0
+    with FuturesSession() as session:
+        futures = [session.get(url) for url in urls]
+        for future in futures:
+            if counter == 0:
+                title = jsonpath(future.result().json(),'$..fullTitle')
+                type = jsonpath(future.result().json(),'$..type')
+                year = jsonpath(future.result().json(),'$..year')
+                print(year)
+            elif counter == 1:
+                plot = jsonpath(future.result().json(),'$..plot')
+            elif counter == 2:
+                rating = jsonpath(future.result().json(),'$..imDb')
+            elif counter == 3:
+                cast = jsonpath(future.result().json(),'$..actors')
+            elif counter == 4:
+                posters = jsonpath(future.result().json(),'$..posters')
+            counter = counter + 1
 
-    response3 = requests.get('https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + movieId)
-    rating = jsonpath(response3.json(),'$..imDb')
-
-    response4 = requests.get('https://imdb-api.com/en/API/FullCast/k_ds7a1ynu/' + movieId)
-    cast = jsonpath(response4.json(),'$..actors')
-
-    response5 = requests.get('https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId)
-    posters = jsonpath(response5.json(),'$..posters')
-    
-    # Eliminates empty plots
     plotFinal = ''
     for p in plot:
         if p != '':
             plotFinal = p
-   
-
-    #movieInfoDictionary[exampleMovieId] = title
 
     movieInfoDictionary = {
         "title": title,
@@ -127,8 +134,6 @@ def bottom():
     votes = [b.attrs.get('data-value')
                 for b in soup.select('td.ratingColumn strong')]
  
-    list = []
- 
     # Create a empty list for storing movie information.
     list = []
  
@@ -145,13 +150,22 @@ def bottom():
         place = movie[:len(str(index))-(len(movie))]
         test = links[index]
         theMovieId = test[7:16]
-        response3 = requests.get('https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + theMovieId)
-        rating = jsonpath(response3.json(),'$..imDb')
 
-        response5 = requests.get('https://api.themoviedb.org/3/movie/' + theMovieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
-        posters = jsonpath(response5.json(),'$..poster_path')
-        tmdbId = jsonpath(response5.json(),'$..id')
-        genres = jsonpath(response5.json(),'$.genres..name')
+        urls = [
+            'https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + theMovieId,
+            'https://api.themoviedb.org/3/movie/' + theMovieId
+        ]
+
+        counter = 0
+        with FuturesSession() as session:
+            futures = [session.get(url) for url in urls]
+            for future in futures:
+                if counter == 0:
+                    rating = jsonpath(future.result().json(),'$..imDb')
+                elif counter == 1:
+                    posters = jsonpath(future.result().json(),'$..poster_path')
+                    tmdbId = jsonpath(future.result().json(),'$..id')
+                counter = counter + 1
 
         try:
            theTmdbId = tmdbId[0]
@@ -163,7 +177,6 @@ def bottom():
                 "Imdb_Id": theMovieId,
                 "tmdb_Id": theTmdbId,
                 "posters": posters,
-                "genres": genres,
                 "year": year,
                 "place": place,
                 "star_cast": crew[index],

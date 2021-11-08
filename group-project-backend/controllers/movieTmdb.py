@@ -16,6 +16,7 @@ import json
 from jsonpath import jsonpath
 from common.libs.ToxicComments import do_pe,detector
 from common.libs.Sentiment import sentiment
+from requests_futures.sessions import FuturesSession
 
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
@@ -80,11 +81,20 @@ def Info():
 
     # examplemovieId = 580489
 
-    response2 = requests.get('https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
-    genres = jsonpath(response2.json(),'$..genres')
+    urls = [
+        'https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1',
+        'https://api.themoviedb.org/3/movie/' + theId + '/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1'
+    ]
 
-    response3 = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
-    cast = jsonpath(response3.json(),'$..cast')
+    counter = 0
+    with FuturesSession() as session:
+        futures = [session.get(url) for url in urls]
+        for future in futures:
+            if counter == 0:
+                genres = jsonpath(future.result().json(),'$..genres')
+            elif counter == 1:
+                cast = jsonpath(future.result().json(),'$..cast')
+            counter = counter + 1
 
     m = movie.details(movieId)
     imdb_id = m.imdb_id
@@ -110,5 +120,3 @@ def Info():
     }
         
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
-
-
