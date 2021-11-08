@@ -62,10 +62,10 @@ def review():
 
 
     model_reviews = Review()
-    model_reviews.content = list
+    model_reviews.content = dic2
     model_reviews.movieId = movieId
     model_reviews.type = 4
-    
+
     db.session.add( model_reviews )
     db.session.commit()
 
