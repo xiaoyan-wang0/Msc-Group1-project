@@ -11,6 +11,7 @@ import requests
 from common.libs.ToxicComments import do_pe,detector
 from jsonpath import jsonpath
 from common.libs.Sentiment import sentiment
+from common.models.reviews import Review
 
 
 movie_page_Youtube = Blueprint( "movie_page_Youtube",__name__ )
@@ -29,6 +30,14 @@ def review():
 
     req = request.values
     movieName = req['movieName'] 
+
+    movieId = req['movieId'] if "movieId" in req else ""
+    type = str(3)
+    textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
+    result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON(msg = "Show Successfull!", data = result.content)
+
 
     #There are daily limits for the keys
     key1 = 'AIzaSyCL_TmpbiATD9nisVU-TAbXCOZ6n1mu__E'
@@ -70,5 +79,12 @@ def review():
         "time": times[i]
         }
         list.append(youtubeInfoDictionary)
+
+    model_reviews = Review()
+    model_reviews.content = list
+    model_reviews.movieId = movieId
+    model_reviews.type = 3
+    db.session.add( model_reviews )
+    db.session.commit()
 
     return ops_renderJSON(msg = "Show Successfull!", data = list)

@@ -12,6 +12,7 @@ from common.libs.ToxicComments import do_pe,detector
 import tweepy
 import pandas as pd
 from common.libs.Sentiment import sentiment
+from common.models.reviews import Review
 import json
 
 
@@ -22,6 +23,13 @@ def review():
 
     req = request.values
     movieName = req['movieName'] if "movieName" in req else ""
+
+    movieId = req['movieId'] if "movieId" in req else ""
+    type = str(4)
+    textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
+    result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON(msg = "Show Successfull!", data = result.content)
 
     consumer_key="BtNMua2cnczTyaCIQ0ZKA01xV"
     consumer_secret="dWWqv17X6XKVYm9SrfLr10WrJQHYCYhUjAhxw8DBKdoHBqaTTZ"
@@ -51,5 +59,14 @@ def review():
         senti = sentiment(content)
         dic['sentiment'] = senti['tag']
         dic2.append(dic)
+
+
+    model_reviews = Review()
+    model_reviews.content = list
+    model_reviews.movieId = movieId
+    model_reviews.type = 4
+    
+    db.session.add( model_reviews )
+    db.session.commit()
 
     return ops_renderJSON(msg = "Show Comments Successfull!", data = dic2)
