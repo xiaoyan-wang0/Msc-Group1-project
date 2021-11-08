@@ -6,7 +6,6 @@ from application import app,db
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 from common.libs.DataHelper import getCurrentTime
 from common.models.user import User
-from common.models.reviews import Review
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 import requests
@@ -17,6 +16,7 @@ import json
 from jsonpath import jsonpath
 from common.libs.ToxicComments import do_pe,detector
 from common.libs.Sentiment import sentiment
+from requests_futures.sessions import FuturesSession
 
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
@@ -29,16 +29,6 @@ def review():
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
     '''
-
-    req = request.values
-    movieId = req['movieId'] if "movieId" in req else ""
-    type = str(1)
-    textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
-    result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
-    if  result:
-        return ops_renderJSON(msg = "Show Successfull!", data = result.content)
-
-
   # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -46,6 +36,8 @@ def review():
     tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
     movie = Movie()
 
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
 
     theId = str(movieId)
 
@@ -64,12 +56,6 @@ def review():
         "reviews": reviews
     }
 
-    model_reviews = Review()
-    model_reviews.content = movieInfoDictionary
-    model_reviews.movieId = movieId
-    model_reviews.type = 1
-    db.session.add( model_reviews )
-    db.session.commit()
 
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
@@ -81,10 +67,6 @@ def Info():
     if current_user == None : 
         return ops_renderErrJSON( msg ="please login first")
     '''
-
-    req = request.values
-    movieId = req['movieId'] if "movieId" in req else ""
-
     # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
@@ -92,16 +74,27 @@ def Info():
     tmdb.api_key = '11fd5ef69d961d91f0f010d0407fd094'
     movie = Movie()
 
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
 
     theId = str(movieId)
 
     # examplemovieId = 580489
 
-    response2 = requests.get('https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
-    genres = jsonpath(response2.json(),'$..genres')
+    urls = [
+        'https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1',
+        'https://api.themoviedb.org/3/movie/' + theId + '/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1'
+    ]
 
-    response3 = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
-    cast = jsonpath(response3.json(),'$..cast')
+    counter = 0
+    with FuturesSession() as session:
+        futures = [session.get(url) for url in urls]
+        for future in futures:
+            if counter == 0:
+                genres = jsonpath(future.result().json(),'$..genres')
+            elif counter == 1:
+                cast = jsonpath(future.result().json(),'$..cast')
+            counter = counter + 1
 
     m = movie.details(movieId)
     imdb_id = m.imdb_id
@@ -127,5 +120,3 @@ def Info():
     }
         
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
-
-
