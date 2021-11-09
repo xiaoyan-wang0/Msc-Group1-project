@@ -70,7 +70,8 @@ def Info():
     'https://imdb-api.com/en/API/Title/k_ds7a1ynu/' + movieId,
     'https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + movieId,
     'https://imdb-api.com/en/API/FullCast/k_ds7a1ynu/' + movieId,
-    'https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId
+    'https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId,
+    'https://api.themoviedb.org/3/movie/' + movieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1'
 ]
 
     counter = 0
@@ -90,6 +91,8 @@ def Info():
                 cast = jsonpath(future.result().json(),'$..actors')
             elif counter == 4:
                 posters = jsonpath(future.result().json(),'$..posters')
+            elif counter == 5:
+                tmdbId = jsonpath(future.result().json(),'$.belongs_to_collection..id')
             counter = counter + 1
 
     plotFinal = ''
@@ -104,7 +107,8 @@ def Info():
         "plot": plotFinal,
         "cast (actors)": cast,
         "posters": posters,
-        "Imdb Rating": rating
+        "Imdb Rating": rating,
+        "Tmdb Id": tmdbId
     }
 
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
