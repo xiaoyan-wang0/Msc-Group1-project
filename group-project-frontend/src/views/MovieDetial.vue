@@ -962,9 +962,9 @@ export default {
           axios
             .get(
               env.AMDBAPI +
-                "movieTwitter/movieTwitterReviews?movieName=" +
+                "movieTwitter/movieTwitterReviews?movieName='" +
                 movie.value.original_title +
-                "&movieId=" +
+                "'&movieId=" +
                 movieid.value
             )
             .then((response) => {
