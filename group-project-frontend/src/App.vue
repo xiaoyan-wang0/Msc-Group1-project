@@ -33,7 +33,7 @@
                   <a href="/main/detector">Detector</a>
                 </li>
                 <li class="header-login-li" v-if="currentUser">
-                  <router-link to="/login" class="header-login">
+                  <router-link to="/main/profile" class="header-login">
                     <span> {{ currentUser.data.userName }}</span>
                   </router-link>
                 </li>
@@ -167,7 +167,6 @@ export default {
 <style lang="scss">
 body {
   background-color: #101018 !important;
-
   min-width: 400px;
   .ant-modal-body {
     padding: 0 !important;
@@ -179,7 +178,9 @@ body {
   .ant-progress-circle .ant-progress-text {
     color: white !important;
   }
-
+  .ant-input-textarea-show-count::after {
+    color: #fff !important;
+  }
   .ant-tabs-tab-prev-icon,
   .ant-tabs-tab-next-icon {
     color: #fff !important;
@@ -192,6 +193,16 @@ body {
   .el-loading-mask {
     background-color: rgba(44, 44, 44, 0.9);
   }
+  .el-input--suffix .el-input__inner {
+    padding-left: 40px !important;
+  }
+  input:required {
+    box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85) !important;
+  }
+  input:required:focus {
+  border: 1px solid red;
+  outline: none;
+}
 }
 * {
   margin: 0;
