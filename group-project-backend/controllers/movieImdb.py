@@ -153,7 +153,7 @@ def bottom():
 
         urls = [
             'https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + theMovieId,
-            'https://api.themoviedb.org/3/movie/' + theMovieId,
+            'https://api.themoviedb.org/3/movie/' + theMovieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1',
             'https://imdb-api.com/API/Posters/k_ds7a1ynu/' + theMovieId
         ]
 
@@ -166,6 +166,7 @@ def bottom():
                 elif counter == 1:
                     #posters = jsonpath(future.result().json(),'$..poster_path')
                     tmdbId = jsonpath(future.result().json(),'$..id')
+                    genres = jsonpath(future.result().json(),'$.genres..name')
                 elif counter == 2:
                     posters = jsonpath(future.result().json(),'$..posters')
                 counter = counter + 1
@@ -184,6 +185,7 @@ def bottom():
                 "place": place,
                 "star_cast": crew[index],
                 "rating": ratings[index],
+                "genres": genres,
                 "link": links[index]}
         list.append(data)
     
