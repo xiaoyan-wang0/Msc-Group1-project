@@ -20,6 +20,7 @@ from controllers.movieImdb import movie_page_Imdb
 from controllers.movieTmdb import movie_page_Tmdb
 from controllers.movieYoutube import movie_page_Youtube
 from controllers.movieTwitter import movie_page_Twitter
+from controllers.movieRecommandation import movie_page_Recommandation
 from controllers.comments import comments_page
 
 app.register_blueprint( index_page,url_prefix = "/" )
@@ -28,6 +29,7 @@ app.register_blueprint( movie_page_Imdb,url_prefix = "/movieImdb" )
 app.register_blueprint( movie_page_Tmdb,url_prefix = "/movieTmdb" )
 app.register_blueprint( movie_page_Youtube,url_prefix = "/movieYoutube" )
 app.register_blueprint( movie_page_Twitter,url_prefix = "/movieTwitter" )
+app.register_blueprint( movie_page_Recommandation,url_prefix = "/movieRecommandation" )
 app.register_blueprint( comments_page,url_prefix = "/comments" )
 
 '''
