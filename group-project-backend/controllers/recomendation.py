@@ -38,7 +38,8 @@ def getRecommadationById():
     return ops_renderJSON( msg = "delete movieLikes successfully!",data = list)
 
 def getRecomendation(movieId, number):
-    train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
+    train_movies_1 = pd.read_csv('C:/final.csv')
+    #train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
     #print(type(train_movies_1))
     train_movies_1.dtypes
     train_movies_1.isnull().sum(axis=0)
@@ -102,6 +103,8 @@ def getTmdbInfo(theId, movieId):
 
     m = movie.details(movieId)
     imdb_id = m.imdb_id
+    id = m.id
+    backdrop_path = m.backdrop_path
     title = m.title
     overview = m.overview
     poster = m.poster_path
@@ -111,6 +114,8 @@ def getTmdbInfo(theId, movieId):
     popularity = m.popularity
 
     movieInfoDictionary = {
+        "id": id,
+        "backdrop_path": backdrop_path,
         "title": title,
         "genres": genres,
         "overview": overview,
