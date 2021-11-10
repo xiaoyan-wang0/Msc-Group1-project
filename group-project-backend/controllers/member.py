@@ -7,6 +7,9 @@ from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 from common.libs.DataHelper import getCurrentTime
 from common.models.user import User
 from common.models.usercomments import Usercomment
+from common.models.userInfo import Userinfo
+#import cv2
+import numpy as np
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
 from common.libs.ToxicComments import do_pe,detector
@@ -15,6 +18,7 @@ from tmdbv3api import TMDb
 from tmdbv3api import Movie
 import json
 from jsonpath import jsonpath
+import base64
 
 
 
@@ -43,6 +47,13 @@ def reg():
     model_user.email = email
     model_user.password = UserService.genePwd( password )
     db.session.add( model_user )
+    db.session.commit()
+
+    newUser = User.query.filter_by( email = email ).first()
+
+    model_userInfo = Userinfo()
+    model_userInfo.userId = newUser.userId
+    db.session.add( model_userInfo )
     db.session.commit()
 
     return ops_renderJSON( msg = "register successfully!")
@@ -205,3 +216,39 @@ def deleteMovieLikes():
         db.session.commit()
 
     return ops_renderJSON( msg = "delete movieLikes successfully!")
+
+@member_page.route("/newUserImage")
+def getRecommadationById():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    image = req['image'] if "image" in req else ""
+    
+    #
+    img = base64.b64decode(str(image))
+    #image_data = np.fromstring(img, np.uint8)
+    #image_data = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
+
+
+    db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":str(img)})
+    db.session.commit()
+
+    return ops_renderJSON( msg = "image updata")
+
+@member_page.route("/getUserInfo")
+def getUserInfo():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    
+    
+    user = User.query.filter_by( userId = userId ).first()
+    userInfo = Userinfo.query.filter_by( userId = userId ).first()
+    userJson = []
+    user = User.serialize(user)
+    userInfo = Userinfo.serialize(userInfo)
+    userJson.append(user)
+    userJson.append(userInfo)
+
+    return ops_renderJSON( msg = "getUserInfo",data = userJson)
+

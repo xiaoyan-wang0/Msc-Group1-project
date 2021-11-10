@@ -1,6 +1,9 @@
 # coding: utf-8
-from application import db
+from flask_sqlalchemy import SQLAlchemy
 from common.models.serializer import Serializer
+
+db = SQLAlchemy()
+
 
 
 class Userinfo(db.Model):
@@ -8,12 +11,12 @@ class Userinfo(db.Model):
 
     userInfoId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, nullable=False)
-    image = db.Column(db.String(1024))
-    pm = db.Column(db.String(255))
+    image = db.Column(db.Text(collation='utf8mb4_0900_ai_ci'))
+    birthday = db.Column(db.DateTime)
     likeNum = db.Column(db.Integer)
     followNum = db.Column(db.Integer)
     age = db.Column(db.Integer)
-    constellation = db.Column(db.String(16))
+    overView = db.Column(db.Text(collation='utf8mb4_0900_ai_ci'))
     movieTags = db.Column(db.String(64))
 
     def serialize(self):
