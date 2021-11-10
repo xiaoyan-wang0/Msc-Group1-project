@@ -297,7 +297,7 @@ def setUserInfo():
         db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"movieTags":str(movieTags)})
 
     if overview != "":
-        db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"overview":str(overview)})
+        db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"overView":str(overview)})
 
     return ops_renderJSON( msg = "update sucessful")
 
