@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint,render_template,request,make_response,jsonify
+import requests
 from sqlalchemy import  text
 from application import db
 from common.models.user import User
@@ -17,6 +18,7 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.metrics.pairwise import pairwise_kernels
+from jsonpath import jsonpath
 
 rec_page = Blueprint( "rec_page",__name__ )
 
@@ -47,11 +49,6 @@ def getRecommadationById():
     idx= indeces[774021]
     id = 19995
 
-    dic = get_recomendation(indeces, id, consine_sim, train_movies_1)
-
-    return ops_renderJSON( msg = "delete movieLikes successfully!",data = dic)
-
-def get_recomendation(indeces, id, consine_sim, train_movies_1):
     idx= indeces[id]
     sim_score= enumerate(consine_sim[idx])
     sim_score= sorted (sim_score, key=lambda x: x[1], reverse= True)
@@ -61,7 +58,29 @@ def get_recomendation(indeces, id, consine_sim, train_movies_1):
     print(type(train_movies_1["id"].iloc[sim_index]))
 
     dic = train_movies_1["id"].iloc[sim_index]
-    lis = []
-    for value  in train_movies_1["id"].iloc[sim_index]:
-        print(value)
+    list = []
+
+    for k in dic:
+        theId = str(k)
+        response = requests.get('https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
+        title = jsonpath(response.json(),'$.belongs_to_collection..name')
+        list.append(title)
+
+    dic = get_recomendation(indeces, id, consine_sim, train_movies_1)
+
+    return ops_renderJSON( msg = "delete movieLikes successfully!",data = list)
+
+# def get_recomendation(indeces, id, consine_sim, train_movies_1):
+#     idx= indeces[id]
+#     sim_score= enumerate(consine_sim[idx])
+#     sim_score= sorted (sim_score, key=lambda x: x[1], reverse= True)
+#     sim_score=sim_score[1:5]
+#     sim_index=[i[0] for i in sim_score]
+#     print(train_movies_1["id"].iloc[sim_index])
+#     print(type(train_movies_1["id"].iloc[sim_index]))
+
+#     dic = train_movies_1["id"].iloc[sim_index]
+#     lis = []
+#     for value  in train_movies_1["id"].iloc[sim_index]:
+#         print(value)
 
