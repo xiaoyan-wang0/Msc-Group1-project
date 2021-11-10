@@ -75,7 +75,11 @@ def login():
 
     if user.password != UserService.genePwd( password ):
         return ops_renderErrJSON("password error")
-    userJson = User.serialize(user)
+    userJson = []
+    userJson.append(User.serialize(user))
+    userInfo = Userinfo.query.filter_by( userId = user.userId ).first()
+    userInfo = Userinfo.serialize(userInfo)
+    userJson.append(userInfo)
     response = make_response( ops_renderJSON( msg="login successfully!",data = userJson ) )
     response.set_cookie(app.config['AUTH_COOKIE_NAME'],
                         "%s#%s"%( UserService.geneAuthCode( user ), user.userId ),60 * 60 *24 *7 )
