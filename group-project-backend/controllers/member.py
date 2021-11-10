@@ -56,7 +56,12 @@ def reg():
     db.session.add( model_userInfo )
     db.session.commit()
 
-    return ops_renderJSON( msg = "register successfully!")
+    userInfo = Userinfo.query.filter_by( userId = newUser.userId ).first()
+    userInfo = Userinfo.serialize(userInfo)
+    # userJson.append(userInfo)
+    dictMerged2 = dict( newUser, **userInfo )
+
+    return ops_renderJSON( msg = "register successfully!",data = dictMerged2)
 
 @member_page.route("/login",methods = ["POST" ])
 def login():
