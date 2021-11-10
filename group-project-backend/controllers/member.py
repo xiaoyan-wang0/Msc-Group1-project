@@ -258,7 +258,7 @@ def getUserInfo():
     return ops_renderJSON( msg = "getUserInfo",data = userJson)
 
 
-@member_page.route("/setUserInfo")
+@member_page.route("/setUserInfo",methods = ["POST" ])
 def setUserInfo():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
