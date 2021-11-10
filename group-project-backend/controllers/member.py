@@ -58,6 +58,7 @@ def reg():
 
     userInfo = Userinfo.query.filter_by( userId = newUser.userId ).first()
     userInfo = Userinfo.serialize(userInfo)
+    newUser = User.serialize(newUser)
     # userJson.append(userInfo)
     dictMerged2 = dict( newUser, **userInfo )
 
@@ -254,13 +255,10 @@ def getUserInfo():
     
     user = User.query.filter_by( userId = userId ).first()
     userInfo = Userinfo.query.filter_by( userId = userId ).first()
-    userJson = []
     user = User.serialize(user)
     userInfo = Userinfo.serialize(userInfo)
-    userJson.append(user)
-    userJson.append(userInfo)
-
-    return ops_renderJSON( msg = "getUserInfo",data = userJson)
+    dictMerged2 = dict( user, **userInfo )
+    return ops_renderJSON( msg = "getUserInfo",data = dictMerged2)
 
 
 @member_page.route("/setUserInfo",methods = ["POST" ])
