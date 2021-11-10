@@ -19,12 +19,12 @@
                   <a href="/">Home</a>
                 </li>
 
-                <li>
+                <!-- <li>
                   <a href="#"></a>
                 </li>
                 <li>
                   <a href="#"></a>
-                </li>
+                </li> -->
                 <li>
                   <a href="/main/profile">Profile</a>
                 </li>
@@ -200,9 +200,9 @@ body {
     box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85) !important;
   }
   input:required:focus {
-  border: 1px solid red;
-  outline: none;
-}
+    border: 1px solid red;
+    outline: none;
+  }
 }
 * {
   margin: 0;

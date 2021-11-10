@@ -95,17 +95,29 @@
                 <span>or</span>
                 <ul>
                   <li>
-                    <a href="#" class="facebook"
-                      ><i class="fab fa-facebook"></i> Sign in With Facebook</a
+                    <v-facebook-login
+                      style="display: none"
+                      @login="faceboogLogin"
+                      @logout="faceboogLogin"
+                      app-id="903265547247503"
+                    ></v-facebook-login>
+                    <a @click="logInWithFacebook" class="facebook"
+                      ><i
+                        class="fab fa-facebook"
+                        @click="logInWithFacebook"
+                      ></i>
+                      Sign in With Facebook</a
                     >
                   </li>
                   <li>
-                    <a href="#" class="google"
+                    <a href="#" class="google" 
+                      style="display: none"
                       ><i class="fab fa-google"></i> Sign in With Google</a
                     >
                   </li>
                   <li>
-                    <a href="#" class="twitter"
+                    <a href="#" class="twitter" 
+                      style="display: none"
                       ><i class="fab fa-twitter"></i> Sign in With Twitter</a
                     >
                   </li>
@@ -129,12 +141,25 @@ import {
 } from "@ant-design/icons-vue";
 import router from "@/router";
 import { useStore } from "vuex";
+import VFacebookLogin from "vue-facebook-login-component-next";
+import { VFBLoginScope as VFacebookLoginScope } from "vue-facebook-login-component-next";
+
 export default defineComponent({
   name: "Login",
-  components: { GoogleOutlined, FacebookOutlined, TwitterOutlined },
-
+  components: {
+    GoogleOutlined,
+    FacebookOutlined,
+    TwitterOutlined,
+    VFacebookLoginScope,
+    VFacebookLogin,
+  },
+  methods: {},
   setup() {
     const store = useStore();
+    const fbSignInParams = ref({
+      scope: "email,user_likes",
+      return_scopes: true,
+    });
 
     const loginMes = ref({
       username: "",
@@ -195,13 +220,72 @@ export default defineComponent({
         );
       });
     });
-    return { loginMes, onSubmitLogin, activeKey: ref("1") };
+
+    const faceboogLogin = (value) => {
+      console.log("faceboogLogin");
+      console.log(value);
+    };
+
+    const logInWithFacebook = async () => {
+      await loadFacebookSDK(document, "script", "facebook-jssdk");
+      await initFacebook();
+      window.FB.login(
+        function (response) {
+          if (response.authResponse) {
+            console.log(response);
+            // alert("You are logged in &amp; cookie set!");
+            FB.api("/me?fields=id,name,email", function (response) {
+              console.log("Good to see you, " + response.name + ".");
+              console.log(response);
+            });
+            window.close();
+            // Now you can redirect the user or do an AJAX request to
+            // a PHP script that grabs the signed request from the cookie.
+          } else {
+            alert("User cancelled login or did not fully authorize.");
+          }
+        },
+        {
+          scope: "email",
+        }
+      );
+      return false;
+    };
+    const initFacebook = async () => {
+      window.fbAsyncInit = function () {
+        window.FB.init({
+          appId: "903265547247503", //You will need to change this
+          cookie: true, // This is important, it's not enabled by default
+          xfbml: true,
+          version: "v13.0",
+        });
+      };
+    };
+    const loadFacebookSDK = async (d, s, id) => {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    };
+
+    return {
+      loginMes,
+      activeKey: ref("1"),
+      fbSignInParams,
+      onSubmitLogin,
+      faceboogLogin,
+      logInWithFacebook,
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-
 /*---------------------
   Breadcrumb
 -----------------------*/
@@ -273,7 +357,7 @@ export default defineComponent({
 -----------------------*/
 
 .login {
-  padding-top: 130px;
+  padding-top: 50px;
   padding-bottom: 120px;
 }
 

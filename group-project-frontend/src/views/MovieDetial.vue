@@ -17,6 +17,23 @@
         :height="400"
       />
     </a-modal>
+    <el-dialog
+      v-model="addCommentsDialog"
+      title="Warning"
+      width="30%"
+      center
+      v-loading="commentConfirmLoading"
+    >
+      <span>{{ popTitle }}</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="addCommentsDialog = false">Cancel</el-button>
+          <el-button type="primary" @click="confirmAddComment"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <div class="container">
       <div class="anime__details__content">
         <div class="row">
@@ -275,7 +292,7 @@
                         />
                       </a-form-item>
                       <a-form-item>
-                        <a-popconfirm
+                        <!-- <a-popconfirm
                           :title="popTitle"
                           ok-text="Yes"
                           cancel-text="No"
@@ -285,17 +302,17 @@
                         >
                           <template #icon
                             ><question-circle-outlined style="color: red"
-                          /></template>
+                          /></template> -->
 
-                          <button
-                            class="site-btn"
-                            html-type="submit"
-                            :loading="submitting"
-                            @click="handleSubmit()"
-                          >
-                            Add Comment
-                          </button>
-                        </a-popconfirm>
+                        <button
+                          class="site-btn"
+                          html-type="submit"
+                          :loading="submitting"
+                          @click="handleSubmit()"
+                        >
+                          Add Comment
+                        </button>
+                        <!-- </a-popconfirm> -->
                       </a-form-item>
                     </template>
                   </a-comment>
@@ -702,6 +719,8 @@ export default {
     const imdbmovieid = ref("");
     const activeKey = ref("amdb");
     const popTitle = ref("");
+    const commentConfirmLoading = ref(false);
+    const addCommentsDialog = ref(false);
     const tmdbreview = ref([]);
     const tmdbAllreview = ref([]);
     const amdbreview = ref([]);
@@ -1005,7 +1024,9 @@ export default {
       if (!authLogin() || !commentsValue.value) {
         return;
       }
-      //  Comment detect
+      //  Comment detectaddCommentsDialog
+      commentConfirmLoading.value = true;
+      addCommentsDialog.value = true;
       popTitle.value = "Are you sure to publich your comment? ";
       axios
         .get(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
@@ -1014,15 +1035,21 @@ export default {
           popTitle.value =
             popTitle.value +
             "Toxic is " +
+            showToxicText(commentStatus.toxic[0]) +
+            "(" +
             Number(commentStatus.toxic[0] * 100).toFixed(1) +
-            "% and Sentiment is " +
+            "%) and Sentiment is " +
+            showSentiemntText(commentStatus.sentiment[0]) +
+            "(" +
             Number(commentStatus.sentiment[0] * 100).toFixed(1) +
-            "%.";
+            "%).";
+          commentConfirmLoading.value = false;
         });
     };
 
     const confirmAddComment = () => {
       commentLoading.value = true;
+      addCommentsDialog.value = false;
       // Add comments
       axios
         .get(
@@ -1053,6 +1080,7 @@ export default {
             });
           }
         });
+      addCommentsDialog.value = false;
     };
 
     const cancelAddComment = () => {
@@ -1257,6 +1285,8 @@ export default {
       emptyprofile,
       castList,
       popTitle,
+      commentConfirmLoading,
+      addCommentsDialog,
       activeKey,
       commentLoading,
       // comments
