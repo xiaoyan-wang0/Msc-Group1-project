@@ -421,7 +421,7 @@ export default {
 .result-pagiantion {
   .result-pagiantion-content {
     justify-content: center;
-    width: 520px;
+    width: 120px;
     margin: auto;
     float: right;
   }

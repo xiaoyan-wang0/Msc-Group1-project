@@ -5,6 +5,7 @@ import Register from '../views/Register.vue'
 import MovieDetial from '../views/MovieDetial.vue'
 import MainPage from '../views/MainPage.vue'
 import Profile from '../components/Profile.vue'
+import PersonalSetting from '../components/PersonalSetting.vue'
 import CommentDetector from '../components/CommentDetector.vue'
 import MainDisplay from '../components/MainDisplay.vue'
 import ResultDisplay from '../components/ResultPage.vue'
@@ -45,6 +46,11 @@ const routes = [
         path: 'profile',
         name: 'Profile',
         component: Profile,
+      },
+      {
+        path: 'setting',
+        name: 'Setting',
+        component: PersonalSetting,
       },
       {
         path: 'detector',

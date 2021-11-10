@@ -18,6 +18,7 @@
                     <h1 class="profile-user-name">{{ user.userName }}</h1>
                     <button
                       class="btn profile-settings-btn"
+                      @click="showSettingPage()"
                       aria-label="profile settings"
                     >
                       <i class="fas fa-cog" aria-hidden="true"></i>
@@ -141,7 +142,7 @@ import env from "@/env.js";
 
 export default {
   name: "Profile",
-  components: {},
+  components: { SmileOutlined },
 
   setup() {
     const user = ref("");
@@ -198,8 +199,8 @@ export default {
       },
       {
         title: "Date",
-        dataIndex: "release_date",
-        key: "release_date",
+        dataIndex: "createTime",
+        key: "createTime",
       },
       {
         title: "Sentiment rate",
@@ -295,6 +296,12 @@ export default {
       });
     };
 
+    const showSettingPage = () => {
+      router.push({
+        name: "Setting",
+      });
+    };
+
     return {
       user,
       likeColumns,
@@ -303,6 +310,7 @@ export default {
       likeListData,
       deleteLike,
       deleteComment,
+      showSettingPage,
     };
   },
 };
@@ -404,45 +412,6 @@ export default {
   color: #b7b7b7;
   width: 115px;
   display: inline-block;
-}
-
-.anime__details__btn .follow-btn {
-  font-size: 13px;
-  color: #ffffff;
-  background: #e53637;
-  display: inline-block;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 14px 20px;
-  border-radius: 4px;
-  margin-right: 11px;
-}
-
-.anime__details__btn .watch-btn span {
-  font-size: 13px;
-  color: #ffffff;
-  background: #e53637;
-  display: inline-block;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 14px 20px;
-  border-radius: 4px 0 0 4px;
-  margin-right: 1px;
-}
-
-.anime__details__btn .watch-btn i {
-  font-size: 20px;
-  display: inline-block;
-  background: #e53637;
-  padding: 11px 5px 16px 8px;
-  color: #ffffff;
-  border-radius: 0 4px 4px 0;
-}
-
-.anime__details__review {
-  margin-bottom: 55px;
 }
 
 .anime__review__item {
