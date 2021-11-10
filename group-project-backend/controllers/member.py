@@ -227,7 +227,7 @@ def getRecommadationById():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     userId = req['userId'] if "userId" in req else ""
-    image = req['image'] if "image" in req else ""
+    image = req['avatar'] if "avatar" in req else ""
     
     #
     img = base64.b64decode(str(image))
@@ -256,4 +256,45 @@ def getUserInfo():
     userJson.append(userInfo)
 
     return ops_renderJSON( msg = "getUserInfo",data = userJson)
+
+
+@member_page.route("/setUserInfo")
+def setUserInfo():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    userName = req['userName'] if "userName" in req else ""
+    email = req['email'] if "email" in req else ""
+    password = req['password'] if "password" in req else ""
+    birthday = req['birthday'] if "birthday" in req else ""
+    movieTags = req['movieTags'] if "movieTags" in req else ""
+    overview = req['overview'] if "overview" in req else ""
+    
+    user = User.query.filter_by( userId = userId ).first()
+    if userId == "":
+        return ops_renderErrJSON( msg ="userId not true")
+    
+    if not user:
+        return ops_renderErrJSON( msg ="userId not true")
+
+    if userName != "":
+        db.session.query(User).filter(User.userId == userId).update({"userName":str(userName)})
+
+    if email != "":
+        db.session.query(User).filter(User.userId == userId).update({"email":str(email)})
+
+    if password != "":
+        password = UserService.genePwd( password )
+        db.session.query(User).filter(User.userId == userId).update({"password":str(password)})
+    
+    if birthday != "":
+        db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"birthday":str(birthday)})
+
+    if movieTags != "":
+        db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"movieTags":str(movieTags)})
+
+    if overview != "":
+        db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"overview":str(overview)})
+
+    return ops_renderJSON( msg = "update sucessful")
 
