@@ -75,12 +75,13 @@ def login():
 
     if user.password != UserService.genePwd( password ):
         return ops_renderErrJSON("password error")
-    userJson = []
-    userJson.append(User.serialize(user))
+    #userJson = []
+    # userJson.append(User.serialize(user))
     userInfo = Userinfo.query.filter_by( userId = user.userId ).first()
     userInfo = Userinfo.serialize(userInfo)
-    userJson.append(userInfo)
-    response = make_response( ops_renderJSON( msg="login successfully!",data = userJson ) )
+    # userJson.append(userInfo)
+    dictMerged2 = dict( User.serialize(user), **userInfo )
+    response = make_response( ops_renderJSON( msg="login successfully!",data = dictMerged2 ) )
     response.set_cookie(app.config['AUTH_COOKIE_NAME'],
                         "%s#%s"%( UserService.geneAuthCode( user ), user.userId ),60 * 60 *24 *7 )
     
@@ -221,7 +222,7 @@ def deleteMovieLikes():
 
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
-@member_page.route("/newUserImage")
+@member_page.route("/newUserImage",methods = ["POST" ])
 def getRecommadationById():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
