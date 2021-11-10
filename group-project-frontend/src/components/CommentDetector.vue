@@ -133,8 +133,8 @@ export default {
   flex-direction: column;
   align-items: center;
   padding-top: 10px;
-  .detect-input{
-padding-bottom: 20px;
+  .detect-input {
+    padding-bottom: 20px;
   }
   .detector {
     align-items: center;

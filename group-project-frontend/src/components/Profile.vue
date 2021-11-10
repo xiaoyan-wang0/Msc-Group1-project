@@ -23,13 +23,15 @@
                     >
                       <i class="fas fa-cog" aria-hidden="true"></i>
                     </button>
+                    <div class="email"><span class="profile-stat-count"></span>
+                        {{ user.email }}</div>
                   </div>
                   <div class="profile-stats">
                     <ul>
-                      <li>
+                      <!-- <li>
                         <span class="profile-stat-count"></span>
                         {{ user.email }}
-                      </li>
+                      </li> -->
                       <li>
                         <span class="profile-stat-count">{{
                           likeListData.length
@@ -594,6 +596,12 @@ export default {
   font-weight: 400;
   line-height: 1.5;
   margin-top: 2.3rem;
+}
+
+.email , .profile-stat-count{
+  font-weight: 600;
+  font-size: 25px;
+  color: #fff;
 }
 
 .profile-real-name,
