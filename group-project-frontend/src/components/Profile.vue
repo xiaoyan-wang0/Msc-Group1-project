@@ -140,7 +140,7 @@
 
 <script>
 import { ref, inject, onBeforeMount, h } from "vue";
-import { notification } from "ant-design-vue";
+import { notification, message } from "ant-design-vue";
 import { SmileOutlined } from "@ant-design/icons-vue";
 import router from "@/router";
 import env from "@/env.js";
@@ -323,6 +323,10 @@ export default {
           style: "color: #108ee9",
         }),
       });
+    };
+
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
     };
 
     const showSettingPage = () => {

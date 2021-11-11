@@ -110,6 +110,7 @@
 <script>
 import env from "@/env.js";
 import { ref, inject, onMounted, onBeforeMount } from "vue";
+import { message } from "ant-design-vue";
 import router from "@/router";
 
 export default {
@@ -325,6 +326,10 @@ export default {
             showErroeMessage();
           });
       }
+    };
+
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
     };
 
     const findCategary = (genres) => {

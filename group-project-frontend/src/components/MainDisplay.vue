@@ -70,8 +70,7 @@
                     <div
                       class="product__item__pic set-bg"
                       v-bind:style="{
-                        'background-image':
-                          'url(' + item.posters[0] + ')',
+                        'background-image': 'url(' + item.posters[0] + ')',
                       }"
                     >
                       <div class="ep">
@@ -176,6 +175,7 @@
 
 <script>
 import { ref, inject, onBeforeMount } from "vue";
+import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
 import router from "@/router";
@@ -221,13 +221,18 @@ export default {
           console.log("IMDB BOT 10 Movies");
           console.log(imdbBotMovies.value);
           // console.log(hignScoreMovieData.value.results);
-        }).catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
-              showErroeMessage();
-            });;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
     });
+
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
+    };
 
     const findCategary = (genres) => {
       let categary = [];
