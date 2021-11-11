@@ -243,6 +243,7 @@ def getRecommadationById():
 
     db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":str(img)})
     db.session.commit()
+    db.session.close()
 
     return ops_renderJSON( msg = "image updata")
 
@@ -298,6 +299,8 @@ def setUserInfo():
 
     if overview != "":
         db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"overView":str(overview)})
+
+    db.session.close()
 
     return ops_renderJSON( msg = "update sucessful")
 
