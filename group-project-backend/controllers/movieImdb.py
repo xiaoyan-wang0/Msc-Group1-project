@@ -34,7 +34,7 @@ def review():
 
 
     type = str(1)
-    textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
+    textsql = " 1=1 and movieId = "+str(movieId)+" and type = "+ type
     result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
     if  result:
         return ops_renderJSON(msg = "Show Successfull!", data = result.content)
