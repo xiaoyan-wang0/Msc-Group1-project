@@ -44,7 +44,7 @@ def addComments():
     model_comments.userId = userId
     db.session.add( model_comments )
     db.session.commit()
-    
+    db.session.close()
     return ops_renderJSON( msg = "addComments successfully!")
 
 @comments_page.route("/showComments")
