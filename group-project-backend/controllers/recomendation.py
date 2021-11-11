@@ -25,7 +25,7 @@ from requests_futures.sessions import FuturesSession
 
 rec_page = Blueprint( "rec_page",__name__ )
 
-@rec_page.route("/getRecommadationById")
+@rec_page.route("/getRecommendationById")
 def getRecommadationById():
     # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
@@ -70,7 +70,7 @@ def getRecomendation(movieId, number):
 
     for k in dic:
         theId = str(k)
-
+        movieId = int(theId)
         # I am using a Python Library for the TMDB API which is very convinient and easy to use.
         movieInfoDictionary = getTmdbInfo(theId, movieId)
         list.append(movieInfoDictionary)
