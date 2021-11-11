@@ -4,6 +4,7 @@ import requests
 from sqlalchemy import  text
 from application import db
 from common.models.user import User
+from common.models.final import Final
 from common.models.serializer import Serializer
 from common.libs.ToxicComments import do_pe,detector
 from common.libs.Sentiment import sentiment
@@ -33,6 +34,10 @@ def getRecommadationById():
     movieId = int(movieId)
     number = 6
 
+    movie = Final.query.filter_by( movieId = movieId ).first()
+    if movie is None:
+        return ops_renderErrJSON( msg ="movie doesn't find")
+
     list = getRecomendation(movieId, number)
 
     return ops_renderJSON( msg = "delete movieLikes successfully!",data = list)
@@ -41,15 +46,16 @@ def getRecomendation(movieId, number):
     #train_movies_1 = pd.read_csv('C:/final.csv')
     train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
     #print(type(train_movies_1))
-    train_movies_1.dtypes
-    train_movies_1.isnull().sum(axis=0)
-    train_movies_1.dropna()
-    train_movies_1.drop(["Unnamed: 0","Unnamed: 0.1",'genre_ids'], axis = 1,inplace = True)
+    # train_movies_1.dtypes
+    # train_movies_1.isnull().sum(axis=0)
+    # train_movies_1.dropna()
+    # train_movies_1.drop(["Unnamed: 0","Unnamed: 0.1",'genre_ids'], axis = 1,inplace = True)
+    # #train_movies_1
+    #train_movies_1=train_movies_1.drop_duplicates()
+    # #train_movies_1
+    #train_movies_1=train_movies_1.reset_index(drop=True)
     #train_movies_1
-    train_movies_1=train_movies_1.drop_duplicates()
-    #train_movies_1
-    train_movies_1=train_movies_1.reset_index(drop=True)
-    #train_movies_1
+
     tf=TfidfVectorizer(stop_words="english")
     tf_matrix= tf.fit_transform(train_movies_1['overview'])
     consine_sim= pairwise_kernels(tf_matrix,tf_matrix)
@@ -62,8 +68,8 @@ def getRecomendation(movieId, number):
     sim_score= sorted (sim_score, key=lambda x: x[1], reverse= True)
     sim_score=sim_score[1:number]
     sim_index=[i[0] for i in sim_score]
-    print(train_movies_1["id"].iloc[sim_index])
-    print(type(train_movies_1["id"].iloc[sim_index]))
+    # print(train_movies_1["id"].iloc[sim_index])
+    # print(type(train_movies_1["id"].iloc[sim_index]))
 
     dic = train_movies_1["id"].iloc[sim_index]
     list = []
