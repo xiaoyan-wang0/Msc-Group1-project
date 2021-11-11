@@ -97,30 +97,39 @@
             <div class="anime__details__form">
               <div class="section-title">
                 <h5>My Comments</h5>
-                div class="movie-like-list">
-                <a-table :columns="commentsColumns" :data-source="commentsData">
-                  <template #name="{ text }">
-                    <a>{{ text }}</a>
-                  </template>
-                  <template #customTitle>
-                    <span>
-                      <smile-outlined />
-                      Name
-                    </span>
-                  </template>
-                  <template #tags="{ text: tags }">
-                    <span>
-                      <a-tag v-for="tag in tags" :key="tag" :color="'volcano'">
-                        {{ tag.toUpperCase() }}
-                      </a-tag>
-                    </span>
-                  </template>
-                  <template #action="{ record }">
-                    <span>
-                      <a @click="deleteComment(record)">Delete</a>
-                    </span>
-                  </template>
-                </a-table>
+                <p></p>
+                <div class="movie-like-list">
+                  <a-table
+                    :columns="commentsColumns"
+                    :data-source="commentsData"
+                  >
+                    <template #name="{ text }">
+                      <a>{{ text }}</a>
+                    </template>
+                    <template #customTitle>
+                      <span>
+                        <smile-outlined />
+                        Name
+                      </span>
+                    </template>
+                    <template #tags="{ text: tags }">
+                      <span>
+                        <a-tag
+                          v-for="tag in tags"
+                          :key="tag"
+                          :color="'volcano'"
+                        >
+                          {{ tag.toUpperCase() }}
+                        </a-tag>
+                      </span>
+                    </template>
+                    <template #action="{ record }">
+                      <span>
+                        <a @click="deleteComment(record)">Delete</a>
+                      </span>
+                    </template>
+                  </a-table>
+                </div>
               </div>
             </div>
           </div>
