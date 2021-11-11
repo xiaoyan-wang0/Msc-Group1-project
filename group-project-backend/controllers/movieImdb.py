@@ -153,7 +153,8 @@ def bottom():
         year = re.search('\((.*?)\)', movie_string).group(1)
         place = movie[:len(str(index))-(len(movie))]
         test = links[index]
-        theMovieId = test[7:16]
+        result = re.search('/title/(.*)/', test)
+        theMovieId = result.group(1)
 
         urls = [
             'https://imdb-api.com/en/API/Ratings/k_ds7a1ynu/' + theMovieId,
@@ -172,7 +173,7 @@ def bottom():
                     tmdbId = jsonpath(future.result().json(),'$..id')
                     genres = jsonpath(future.result().json(),'$.genres..name')
                 elif counter == 2:
-                    posters = jsonpath(future.result().json(),'$..posters')
+                    posters = jsonpath(future.result().json(),'$.posters[0]..link')
                 counter = counter + 1
 
         try:
