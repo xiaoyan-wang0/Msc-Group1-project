@@ -46,6 +46,11 @@ class AuthService {
         localStorage.setItem('user', JSON.stringify(response.data));
         // }
         return response;
+      }).catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
       });;
   }
 }

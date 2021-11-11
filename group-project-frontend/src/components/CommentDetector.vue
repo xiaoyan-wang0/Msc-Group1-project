@@ -111,7 +111,12 @@ export default {
           );
           console.log("Comment detect");
           console.log(response.data);
-        });
+        }).catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+            });;
     };
     return {
       commentValue,

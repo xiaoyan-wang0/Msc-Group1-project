@@ -68,10 +68,10 @@
               <div
                 class="product__item__pic set-bg"
                 v-bind:style="{
-                  'background-image': 'url(' + poster + item.posters[0] + ')',
+                  'background-image': 'url(' + item.posters[0] + ')',
                 }"
               >
-                <div class="ep">{{ item.rating }} / 10</div>
+                <div class="ep">{{ Number(item.rating).toFixed(1) }} / 10</div>
                 <div class="comment">
                   <!-- <i class="fa fa-comments"></i> {{ item.vote_count }} -->
                 </div>
@@ -188,12 +188,7 @@ export default {
         resultName.value = "Search result";
         // Search moveis result
         axios
-          .get(
-            env.tmdbSearch +
-              env.tmdbkey +
-              env.tmdbquery +
-              searchValue
-          )
+          .get(env.tmdbSearch + env.tmdbkey + env.tmdbquery + searchValue)
           .then((response) => {
             itemdata.value = response.data.results;
             console.log("Search moveis result");
@@ -218,6 +213,12 @@ export default {
             console.log("IMDB BOT result");
             console.log(itemdata);
             // console.log(hignScoreMovieData.value.results);
+          })
+          .catch((error) => {
+            console.log("error");
+            console.log(error);
+            console.log("error");
+            showErroeMessage();
           });
       }
     });
@@ -316,6 +317,12 @@ export default {
             console.log("IMDB BOT result");
             console.log(itemdata);
             // console.log(hignScoreMovieData.value.results);
+          })
+          .catch((error) => {
+            console.log("error");
+            console.log(error);
+            console.log("error");
+            showErroeMessage();
           });
       }
     };
@@ -421,7 +428,7 @@ export default {
 .result-pagiantion {
   .result-pagiantion-content {
     justify-content: center;
-    width: 120px;
+    // width: 120px;
     margin: auto;
     float: right;
   }

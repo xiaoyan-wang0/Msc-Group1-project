@@ -309,6 +309,7 @@ export default {
     ]);
     const email = ref("");
     const password = ref("");
+    let initialPassword = "";
     const userId = ref("");
     const userName = ref("");
     const overViewValue = ref("");
@@ -344,7 +345,7 @@ export default {
     });
 
     onBeforeMount(() => {
-    //  location.reload();
+      //  location.reload();
       onInitial();
     });
 
@@ -357,7 +358,8 @@ export default {
       userName.value = user.data.userName;
       email.value = user.data.email;
       password.value = user.data.password;
-      if(user.data.movieTags){
+      initialPassword = user.data.password;
+      if (user.data.movieTags) {
         selectValue.value = user.data.movieTags.split(",");
       }
       overViewValue.value = user.data.overView;
@@ -379,7 +381,11 @@ export default {
       console.log("settingFormData");
       settingFormData.append("userId", userId.value);
       settingFormData.append("userName", userName.value);
-      settingFormData.append("password", password.value);
+      if (password.value !== initialPassword) {
+        console.log("password.value == initialPassword");
+        console.log(password.value == initialPassword);
+        settingFormData.append("password", password.value);
+      }
       settingFormData.append("birthday", formatDate(birthday.value));
       settingFormData.append("movieTags", selectValue.value);
       settingFormData.append("overview", overViewValue.value);

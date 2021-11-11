@@ -57,7 +57,7 @@
       </div>
     </header>
     <main>
-      <router-view />
+      <router-view :key="$route.fullPath"/>
       <div>wxy</div>
     </main>
 
@@ -133,7 +133,6 @@ export default {
     const store = useStore();
     const axios = inject("axios"); // inject axios
     const currentUser = computed(() => store.state.auth.user);
-    
 
     const active = ref("home");
 
@@ -204,6 +203,9 @@ body {
     border: 1px solid red;
     outline: none;
   }
+  a {
+    text-decoration: none;
+  }
 }
 * {
   margin: 0;
@@ -213,10 +215,6 @@ body {
 
   &::selection {
     background: transparentize(#42b883, 0.5);
-  }
-
-  a {
-    text-decoration: none;
   }
 
   header {
