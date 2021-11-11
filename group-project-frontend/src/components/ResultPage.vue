@@ -81,7 +81,7 @@
               </div>
               <div class="product__item__text">
                 <ul>
-                  <li v-for="genre in item.genres" :key="genre.id">
+                  <li v-for="genre in item.genres.slice(0, 2)" :key="genre.id">
                     {{ genre }}
                   </li>
                 </ul>

@@ -21,11 +21,12 @@
                             <div class="form-group has-icon-left">
                               <div class="position-relative">
                                 <a-upload
-                                  v-model:file-list="fileList"
                                   name="avatar"
                                   list-type="picture-card"
                                   class="avatar-uploader"
+                                  :action="uploadImgAct"
                                   :show-upload-list="false"
+                                  :data="{ userId: userId }"
                                   :before-upload="beforeUpload"
                                   @change="handleUploadChange"
                                 >
@@ -54,10 +55,9 @@
                               <div class="position-relative">
                                 <input
                                   type="text"
-                                  :value="userName"
+                                  v-model="userName"
                                   class="form-control"
                                   placeholder="Please enter UserName"
-                                  id="first-name-icon"
                                   required
                                 />
                                 <div class="form-control-icon">
@@ -79,7 +79,6 @@
                                   class="form-control"
                                   placeholder="Email"
                                   disabled
-                                  id="first-name-icon"
                                   required
                                 />
                                 <div class="form-control-icon">
@@ -118,7 +117,7 @@
                               <div class="position-relative">
                                 <div class="form-group with-title mb-3">
                                   <el-date-picker
-                                    v-model="value2"
+                                    v-model="birthday"
                                     type="date"
                                     placeholder="Pick a day"
                                     :disabled-date="disabledDate"
@@ -174,7 +173,7 @@
                           <div class="col-12 d-flex justify-content-end">
                             <div class="anime__details__btn">
                               <a @click="submitChange()" class="follow-btn">
-                                Submit
+                                Update
                               </a>
 
                               <a @click="returnFun()" class="follow-btn">
@@ -203,6 +202,7 @@ import { PlusOutlined, LoadingOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import router from "@/router";
 import env from "@/env.js";
+import ToolMethod from "../tools.js";
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -309,8 +309,11 @@ export default {
     ]);
     const email = ref("");
     const password = ref("");
+    const userId = ref("");
     const userName = ref("");
     const overViewValue = ref("");
+    const birthday = ref("");
+    const uploadImgAct = ref("");
 
     const state = reactive({
       disabledDate(time) {
@@ -338,28 +341,102 @@ export default {
           },
         },
       ],
-      value2: new Date(),
     });
 
     onBeforeMount(() => {
+    //  location.reload();
+      onInitial();
+    });
+
+    const onInitial = () => {
       const user = JSON.parse(localStorage.getItem("user"));
-      console.log("user.data");
+      console.log("setting user.data");
+      console.log(user);
+      userId.value = user.data.userId;
+      uploadImgAct.value = env.AMDBAPI + "member/newUserImage";
       userName.value = user.data.userName;
       email.value = user.data.email;
       password.value = user.data.password;
-    });
+      if(user.data.movieTags){
+        selectValue.value = user.data.movieTags.split(",");
+      }
+      overViewValue.value = user.data.overView;
+      console.log(user.data.birthday);
+      if (!user.data.birthday) {
+        birthday.value = new Date().toDateString();
+      } else {
+        birthday.value = user.data.birthday;
+      }
+    };
 
     const popupScroll = () => {
       console.log("popupScroll");
       console.log(selectValue.value);
     };
 
+    const submitChange = () => {
+      const settingFormData = new FormData();
+      console.log("settingFormData");
+      settingFormData.append("userId", userId.value);
+      settingFormData.append("userName", userName.value);
+      settingFormData.append("password", password.value);
+      settingFormData.append("birthday", formatDate(birthday.value));
+      settingFormData.append("movieTags", selectValue.value);
+      settingFormData.append("overview", overViewValue.value);
+      console.log(settingFormData);
+      axios({
+        method: "post",
+        url: env.AMDBAPI + "member/setUserInfo",
+        data: settingFormData,
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then((response) => {
+          console.log("setting submitChange");
+          console.log(response);
+          if (response.data.code == 200) {
+            message.success("Update successfully!");
+            axios
+              .get(env.AMDBAPI + "member/getUserInfo?userId=" + userId.value)
+              .then((response) => {
+                console.log("setting getUserInfo");
+                console.log(response);
+                localStorage.setItem("user", JSON.stringify(response.data));
+                location.reload();
+              })
+              .catch((error) => {
+                console.log("error");
+                console.log(error);
+                showErroeMessage();
+              });
+          }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          showErroeMessage();
+        });
+    };
+
+    const formatDate = (value) => {
+      return ToolMethod.formatDate(value);
+    };
+
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
+    };
     const handleChange = () => {
       console.log("handleChange");
       console.log(selectValue.value);
     };
-
+    const returnFun = () => {
+      router.push({
+        name: "Profile",
+      });
+    };
     const handleUploadChange = (info) => {
+      console.log("handleUploadChange");
+      console.log(info);
       if (info.file.status === "uploading") {
         loading.value = true;
         return;
@@ -393,7 +470,7 @@ export default {
         message.error("Image must smaller than 100kb!");
       }
 
-      return isJpgOrPng && isLt2M;
+      return isJpgOrPng && isLtKB;
     };
 
     return {
@@ -404,12 +481,17 @@ export default {
       loading,
       imageUrl,
       email,
+      userId,
+      birthday,
       password,
       overViewValue,
+      uploadImgAct,
       handleChange,
       beforeUpload,
       popupScroll,
+      submitChange,
       handleUploadChange,
+      returnFun,
       ...toRefs(state),
     };
   },

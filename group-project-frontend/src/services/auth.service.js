@@ -43,8 +43,8 @@ class AuthService {
         // if (response.data.accessToken) {
         console.log("REG");
         console.log(response.data);
+        localStorage.setItem('user', JSON.stringify(response.data));
         // }
-
         return response;
       });;
   }
