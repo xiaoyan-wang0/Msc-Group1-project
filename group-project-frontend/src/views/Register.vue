@@ -221,10 +221,13 @@ export default defineComponent({
               console.log("onClose");
             });
           } else if (response.code === 200) {
-            message.success(response.msg + ", Will return setting page in 3s.", () => {
-              router.push({ name: "Setting" });
-              console.log("onClose");
-            });
+            message.success(
+              response.msg + ", Will return setting page in 3s.",
+              () => {
+                router.push({ name: "Setting" });
+                console.log("onClose");
+              }
+            );
           }
         },
         (error) => {

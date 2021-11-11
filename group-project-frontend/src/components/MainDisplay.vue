@@ -84,8 +84,9 @@
                     </div>
                     <div class="product__item__text">
                       <ul>
-                        <li v-for="genre in genres" :key="genre.id">{genre}</li>
-                        >
+                        <li v-for="genre in item.genres.slice(0, 2)" :key="genre.id">
+                          {{ genre }}
+                        </li>
                       </ul>
                       <h5>
                         <a href="#">{{ item.movie_title }}</a>
