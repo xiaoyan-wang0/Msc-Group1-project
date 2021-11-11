@@ -23,8 +23,9 @@
                     >
                       <i class="fas fa-cog" aria-hidden="true"></i>
                     </button>
-                    <div class="email"><span class="profile-stat-count"></span>
-                        {{ user.email }}</div>
+                    <div class="email">
+                      <span class="profile-stat-count"></span> {{ user.email }}
+                    </div>
                   </div>
                   <div class="profile-stats">
                     <ul>
@@ -48,8 +49,9 @@
                   </div>
                   <div class="profile-bio">
                     <p>
-                      <span class="profile-real-name">Jane Doe</span> Lorem
-                      ipsum dolor sit, amet consectetur adipisicing elit
+                      <span class="profile-real-name"
+                        >Overview: {{ user.overView }}</span
+                      >
                     </p>
                   </div>
                 </div>
@@ -60,6 +62,7 @@
             <div class="anime__details__form">
               <div class="section-title">
                 <h5>My Movie List</h5>
+                <p></p>
                 <div class="movie-like-list">
                   <a-table :columns="likeColumns" :data-source="likeListData">
                     <template #name="{ text }">
@@ -242,6 +245,12 @@ export default {
           console.log("showMovieList");
           console.log(response.data.data);
           likeListData.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -255,6 +264,12 @@ export default {
           console.log("showCommentList");
           console.log(response.data.data);
           commentsData.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -270,6 +285,12 @@ export default {
             deleteSuccessful();
             fetchMovieLike();
           }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -285,6 +306,12 @@ export default {
             deleteSuccessful();
             fetchCommentList();
           }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -598,7 +625,8 @@ export default {
   margin-top: 2.3rem;
 }
 
-.email , .profile-stat-count{
+.email,
+.profile-stat-count {
   font-weight: 600;
   font-size: 25px;
   color: #fff;
@@ -608,6 +636,7 @@ export default {
 .profile-stat-count,
 .profile-edit-btn {
   font-weight: 600;
+  color: #fff;
 }
 
 /* Media Query */
