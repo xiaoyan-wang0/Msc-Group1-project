@@ -61,7 +61,7 @@ def reg():
     newUser = User.serialize(newUser)
     # userJson.append(userInfo)
     dictMerged2 = dict( newUser, **userInfo )
-
+    db.session.close()
     return ops_renderJSON( msg = "register successfully!",data = dictMerged2)
 
 @member_page.route("/login",methods = ["POST" ])
@@ -119,7 +119,7 @@ def movieLikes():
 
     db.session.add( model_movies )
     db.session.commit()
-
+    db.session.close()
 
     return ops_renderJSON(msg = "Show movieLikes Successfull!")
 
@@ -215,6 +215,7 @@ def deleteComment():
     if id != "":
         db.session.query(Usercomment).filter(Usercomment.id == id).delete()
         db.session.commit()
+        db.session.close()
     return ops_renderJSON( msg = "delete comment successfully!")
 
 @member_page.route("/deleteMovieLikes")
@@ -225,6 +226,7 @@ def deleteMovieLikes():
     if id != "":
         db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
         db.session.commit()
+        db.session.close()
 
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
