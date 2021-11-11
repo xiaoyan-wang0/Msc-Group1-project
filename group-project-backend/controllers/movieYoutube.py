@@ -86,5 +86,6 @@ def review():
     model_reviews.type = 3
     db.session.add( model_reviews )
     db.session.commit()
+    db.session.close()
 
     return ops_renderJSON(msg = "Show Successfull!", data = list)
