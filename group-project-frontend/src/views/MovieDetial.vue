@@ -25,6 +25,7 @@
       v-loading="commentConfirmLoading"
     >
       <span> Are you sure to publich your comment?</span>
+      <br />
       <span style="font-weight: 600">{{ popTitle }}</span>
       <template #footer>
         <span class="dialog-footer">
@@ -223,6 +224,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="amdbreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in amdbreview"
@@ -358,6 +367,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="tmdbreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in tmdbreview"
@@ -447,6 +464,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="imdbreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in imdbreview"
@@ -533,6 +558,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="youtubereview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in youtubereview"
@@ -617,6 +650,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="twitterreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in twitterreview"
@@ -670,9 +711,16 @@
             <div class="section-title">
               <h5>you might like...</h5>
             </div>
+            <a-empty v-if="recommendationMovies.length < 1">
+              <template #description>
+                <span>
+                  <a>Sorry, No recommendations</a>
+                </span>
+              </template>
+            </a-empty>
             <div
               class="product__sidebar__comment__item"
-              v-for="item in recommendationMovies.data"
+              v-for="item in recommendationMovies"
               :key="item.id"
             >
               <router-link
@@ -807,7 +855,7 @@ export default {
             .then((response) => {
               console.log("getRecommadationById");
               console.log(response.data);
-              recommendationMovies.value = response.data;
+              recommendationMovies.value = response.data.data;
             })
             .catch((error) => {
               console.log("error");

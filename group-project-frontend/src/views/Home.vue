@@ -249,7 +249,7 @@ export default {
   .feature-card {
     // position: relative;
     margin-top: 5px;
-    padding: 0 30px;
+    padding: 0 10px;
     width: 100%;
     .search-model {
       display: none;
@@ -285,7 +285,7 @@ export default {
       display: block;
       width: 100%;
       height: 500px;
-      // object-fit: cover;
+      object-fit: cover;
       position: relative;
       z-index: 0;
     }
