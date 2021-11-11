@@ -119,10 +119,10 @@ def getTmdbInfo(theId, movieId):
         "title": title,
         "genres": genres,
         "overview": overview,
-        "imdb Id": imdb_id,
+        "imdb_Id": imdb_id,
         "release date": year,
         "poster": poster,
-        "vote average": vote_average,
+        "vote_average": vote_average,
         "runtime": runtime,
         "popularity": popularity,
     }
