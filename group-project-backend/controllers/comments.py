@@ -77,7 +77,8 @@ def showComments():
             comment = Serializer.serialize(comment)
             dictMerged2 = dict( comment, **user )
             comments.append(dictMerged2)
-            db.session.close()
+            
+        db.session.close()
     return ops_renderJSON( msg = "showComments successfully!",data = comments )
 
 @comments_page.route("/toxic")

@@ -227,7 +227,7 @@ def deleteComment():
     id = req['id'] if "id" in req else ""
     result = Usercomment.query.filter(Usercomment.id == id).first()
     db.session.close()
-    if id != "" and result:
+    if result:
         try:
             db.session.query(Usercomment).filter(Usercomment.id == id).delete()
             db.session.commit()
@@ -244,7 +244,7 @@ def deleteMovieLikes():
     req = request.values
     Id = req['Id'] if "Id" in req else ""
     result = Usermovy.query.filter(Usermovy.Id == Id).first()
-    if id != "" and result:
+    if result:
         try:
             db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
             db.session.commit()
