@@ -225,7 +225,9 @@ def deleteComment():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     id = req['id'] if "id" in req else ""
-    if id != "":
+    result = Usercomment.query.filter(Usercomment.id == id).first()
+    db.session.close()
+    if id != "" and result:
         try:
             db.session.query(Usercomment).filter(Usercomment.id == id).delete()
             db.session.commit()
@@ -241,7 +243,8 @@ def deleteMovieLikes():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     Id = req['Id'] if "Id" in req else ""
-    if id != "":
+    result = Usermovy.query.filter(Usermovy.Id == Id).first()
+    if id != "" and result:
         try:
             db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
             db.session.commit()
