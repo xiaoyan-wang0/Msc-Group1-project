@@ -66,13 +66,8 @@ def showComments():
     #userId = str(current_user.userId)
     movieId = req['movieId'] if "movieId" in req else ""
     textsql = " 1=1 and movieId = '" + movieId + "'"
-    try:
-        result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
-    except Exception as e:
-        db.session.rollback()  
-        raise e
-    finally:
-        db.session.close()
+    result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
+
     comments = []
     #usercomments = Usercomment.serialize_list(result)
     for comment in result:
@@ -81,13 +76,11 @@ def showComments():
         except Exception as e:
             db.session.rollback()  
             raise e
-        finally:
-            db.session.close()
         user = User.serialize(user)
         comment = Serializer.serialize(comment)
         dictMerged2 = dict( comment, **user )
         comments.append(dictMerged2)
-
+        db.session.close()
     return ops_renderJSON( msg = "showComments successfully!",data = comments )
 
 @comments_page.route("/toxic")
