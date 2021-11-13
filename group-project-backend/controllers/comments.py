@@ -71,11 +71,7 @@ def showComments():
     comments = []
     #usercomments = Usercomment.serialize_list(result)
     for comment in result:
-        try:
-            user = User.query.filter_by( userId = comment.userId ).first()
-        except Exception as e:
-            db.session.rollback()  
-            raise e
+        user = User.query.filter_by( userId = comment.userId ).first()       
         user = User.serialize(user)
         comment = Serializer.serialize(comment)
         dictMerged2 = dict( comment, **user )
