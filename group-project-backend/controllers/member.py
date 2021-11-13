@@ -46,8 +46,15 @@ def reg():
     model_user.userName = userName
     model_user.email = email
     model_user.password = UserService.genePwd( password )
-    db.session.add( model_user )
-    db.session.commit()
+
+    try:
+        db.session.add( model_user )
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  
+        raise e
+    finally:
+        db.session.close()
 
     newUser = User.query.filter_by( email = email ).first()
 
@@ -117,9 +124,14 @@ def movieLikes():
     model_movies.userId = userId
     model_movies.type = 1
 
-    db.session.add( model_movies )
-    db.session.commit()
-    db.session.close()
+    try:
+        db.session.add( model_movies )
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  
+        raise e
+    finally:
+        db.session.close()
 
     return ops_renderJSON(msg = "Show movieLikes Successfull!")
 
@@ -213,9 +225,14 @@ def deleteComment():
     req = request.values
     id = req['id'] if "id" in req else ""
     if id != "":
-        db.session.query(Usercomment).filter(Usercomment.id == id).delete()
-        db.session.commit()
-        db.session.close()
+        try:
+            db.session.query(Usercomment).filter(Usercomment.id == id).delete()
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()  
+            raise e
+        finally:
+            db.session.close()
     return ops_renderJSON( msg = "delete comment successfully!")
 
 @member_page.route("/deleteMovieLikes")
@@ -224,9 +241,14 @@ def deleteMovieLikes():
     req = request.values
     Id = req['Id'] if "Id" in req else ""
     if id != "":
-        db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
-        db.session.commit()
-        db.session.close()
+        try:
+            db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()  
+            raise e
+        finally:
+            db.session.close()
 
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
