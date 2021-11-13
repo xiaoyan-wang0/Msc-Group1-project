@@ -42,9 +42,14 @@ def addComments():
     model_comments.comment = comment
     model_comments.movieId = movieId
     model_comments.userId = userId
-    db.session.add( model_comments )
-    db.session.commit()
-    db.session.close()
+    try:
+        db.session.add( model_comments )
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  
+        raise e
+    finally:
+        db.session.close()
     return ops_renderJSON( msg = "addComments successfully!")
 
 @comments_page.route("/showComments")
@@ -65,7 +70,11 @@ def showComments():
     comments = []
     #usercomments = Usercomment.serialize_list(result)
     for comment in result:
-        user = User.query.filter_by( userId = comment.userId ).first()
+        try:
+            user = User.query.filter_by( userId = comment.userId ).first()
+        except Exception as e:
+            db.session.rollback()  
+            raise e
         user = User.serialize(user)
         comment = Serializer.serialize(comment)
         dictMerged2 = dict( comment, **user )
