@@ -195,6 +195,7 @@ def showCommentList():
     textsql = " 1=1 and userId = "+ userId
     
     result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
+    db.session.close()
     movieComments = []
     for comments in result:
         comments.toxic = round(float(comments.toxic), 2)
