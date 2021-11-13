@@ -225,7 +225,7 @@ def deleteComment():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     id = req['id'] if "id" in req else ""
-    result = Usercomment.query.filter(Usercomment.id == id).first()
+    result = Usercomment.query.filter(Usercomment.id == id).all()
     db.session.close()
     if result:
         try:
