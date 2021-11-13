@@ -71,12 +71,13 @@ def showComments():
     comments = []
     #usercomments = Usercomment.serialize_list(result)
     for comment in result:
-        user = User.query.filter_by( userId = comment.userId ).first()       
-        user = User.serialize(user)
-        comment = Serializer.serialize(comment)
-        dictMerged2 = dict( comment, **user )
-        comments.append(dictMerged2)
-        db.session.close()
+        user = User.query.filter_by( userId = comment.userId ).first()
+        if user:       
+            user = User.serialize(user)
+            comment = Serializer.serialize(comment)
+            dictMerged2 = dict( comment, **user )
+            comments.append(dictMerged2)
+            db.session.close()
     return ops_renderJSON( msg = "showComments successfully!",data = comments )
 
 @comments_page.route("/toxic")
