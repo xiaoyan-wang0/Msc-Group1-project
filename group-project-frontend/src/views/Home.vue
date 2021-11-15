@@ -2,15 +2,18 @@
   <div class="home">
     <div class="feature-card">
              
-      <form class="search-model-form" @submit.prevent="SearchMovies()">
-         <input
-          type="text"
-          id="search-input"
-          v-model="search"
-          placeholder="Search here....."
-        /><span class="fa fa-2x fa-search" style="color: #e53637"></span>      
-         
-      </form>
+      <div class="search">
+        <form class="search-model-form" @submit.prevent="SearchMovies()">
+           <input
+            type="text"
+            id="search-input"
+            v-model="search"
+            placeholder="Search here....."
+          /><a @click="SearchMovies()"
+            ><span class="fa fa-2x fa-search" style="color: #e53637"></span
+          ></a>
+        </form>
+      </div>
       <div>
         <div id="1" style="">
           <div class="home-carousel-div" style="">
@@ -22,10 +25,23 @@
                   direction="vertical"
                   height="400px"
                 >
-                  <el-carousel-item
+                  <el-carousel-item v-for="item in fackePic" :key="item.id">
+                    <router-link :to="'/movie/' + item.id">
+                      <img
+                        :src="item.backdrop_path"
+                        :alt="item.title"
+                        class="featured-img"
+                      />
+                      <div class="detail">
+                        <p>{{ item.title }}</p>
+                      </div>
+                    </router-link>
+                  </el-carousel-item>
+                  <!-- <el-carousel-item
                     v-for="item in upComingMovieData.slice(0, 3)"
                     :key="item.id"
-                  >
+                  > 
+                  <el-carousel-item v-for="item in fackePic" :key="item.id">
                     <router-link :to="'/movie/' + item.id">
                       <img
                         :src="moviePoster + item.backdrop_path"
@@ -36,7 +52,7 @@
                         <p>{{ item.title }}</p>
                       </div>
                     </router-link>
-                  </el-carousel-item>
+                  </el-carousel-item> -->
                 </el-carousel>
               </div>
             </div>
@@ -122,10 +138,13 @@ export default {
     const upComingMovieData = ref([]);
     const moviePoster = ref("");
     const showRouterView = ref(true);
+    const fackePic = ref([]);
     moviePoster.value = env.tmdbpic;
 
     //Search event
     const SearchMovies = () => {
+      console.log("SearchMovies");
+      console.log(search.value);
       if (search.value != "") {
         showRouterView.value = false;
         nextTick(() => (showRouterView.value = true));
@@ -163,6 +182,19 @@ export default {
       //     console.log(response.data);
       //     console.log(lastestMovieData.value);
       // });
+      fackePic.value = [
+        {
+          id: 580489,
+          title: "Venom: Let There Be Carnage",
+          backdrop_path: require("@/assets/1.jpg"),
+        },
+        { id: 438631, title: "Dune", backdrop_path: require("@/assets/2.jpg") },
+        {
+          id: 574060,
+          title: "Gunpowder Milkshake",
+          backdrop_path: require("@/assets/3.jpg"),
+        },
+      ];
     });
 
     //show Result Page
@@ -186,6 +218,7 @@ export default {
       itemdata,
       lastestMovieData,
       upComingMovieData,
+      fackePic,
       showRouterView,
       handleSelect,
       SearchMovies,
@@ -215,8 +248,8 @@ export default {
   }
   .feature-card {
     // position: relative;
-    margin-top: 20px;
-    padding: 0 30px;
+    margin-top: 5px;
+    padding: 0 10px;
     width: 100%;
     .search-model {
       display: none;
@@ -228,13 +261,16 @@ export default {
       background: #000;
       z-index: 99999;
     }
-
+    .search {
+      text-align: center;
+      margin-bottom: 15px;
+    }
     .search-model-form {
       padding: 0 15px;
     }
 
     .search-model-form input {
-      width: 500px;
+      width: 80%;
       font-size: 40px;
       border: none;
       border-bottom: 2px solid #333;
@@ -249,7 +285,7 @@ export default {
       display: block;
       width: 100%;
       height: 500px;
-      // object-fit: cover;
+      object-fit: cover;
       position: relative;
       z-index: 0;
     }

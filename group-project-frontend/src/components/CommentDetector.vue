@@ -75,6 +75,7 @@
 
 <script>
 import { ref, inject } from "vue";
+import { message } from "ant-design-vue";
 import ToolMethod from "../tools.js";
 import env from "@/env.js";
 export default {
@@ -111,7 +112,16 @@ export default {
           );
           console.log("Comment detect");
           console.log(response.data);
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
+    };
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
     };
     return {
       commentValue,
@@ -133,8 +143,8 @@ export default {
   flex-direction: column;
   align-items: center;
   padding-top: 10px;
-  .detect-input{
-padding-bottom: 20px;
+  .detect-input {
+    padding-bottom: 20px;
   }
   .detector {
     align-items: center;

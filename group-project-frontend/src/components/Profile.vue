@@ -23,13 +23,16 @@
                     >
                       <i class="fas fa-cog" aria-hidden="true"></i>
                     </button>
+                    <div class="email">
+                      <span class="profile-stat-count"></span> {{ user.email }}
+                    </div>
                   </div>
                   <div class="profile-stats">
                     <ul>
-                      <li>
+                      <!-- <li>
                         <span class="profile-stat-count"></span>
                         {{ user.email }}
-                      </li>
+                      </li> -->
                       <li>
                         <span class="profile-stat-count">{{
                           likeListData.length
@@ -46,8 +49,9 @@
                   </div>
                   <div class="profile-bio">
                     <p>
-                      <span class="profile-real-name">Jane Doe</span> Lorem
-                      ipsum dolor sit, amet consectetur adipisicing elit
+                      <span class="profile-real-name"
+                        >Overview: {{ user.overView }}</span
+                      >
                     </p>
                   </div>
                 </div>
@@ -58,6 +62,7 @@
             <div class="anime__details__form">
               <div class="section-title">
                 <h5>My Movie List</h5>
+                <p></p>
                 <div class="movie-like-list">
                   <a-table :columns="likeColumns" :data-source="likeListData">
                     <template #name="{ text }">
@@ -92,30 +97,39 @@
             <div class="anime__details__form">
               <div class="section-title">
                 <h5>My Comments</h5>
-                div class="movie-like-list">
-                <a-table :columns="commentsColumns" :data-source="commentsData">
-                  <template #name="{ text }">
-                    <a>{{ text }}</a>
-                  </template>
-                  <template #customTitle>
-                    <span>
-                      <smile-outlined />
-                      Name
-                    </span>
-                  </template>
-                  <template #tags="{ text: tags }">
-                    <span>
-                      <a-tag v-for="tag in tags" :key="tag" :color="'volcano'">
-                        {{ tag.toUpperCase() }}
-                      </a-tag>
-                    </span>
-                  </template>
-                  <template #action="{ record }">
-                    <span>
-                      <a @click="deleteComment(record)">Delete</a>
-                    </span>
-                  </template>
-                </a-table>
+                <p></p>
+                <div class="movie-like-list">
+                  <a-table
+                    :columns="commentsColumns"
+                    :data-source="commentsData"
+                  >
+                    <template #name="{ text }">
+                      <a>{{ text }}</a>
+                    </template>
+                    <template #customTitle>
+                      <span>
+                        <smile-outlined />
+                        Name
+                      </span>
+                    </template>
+                    <template #tags="{ text: tags }">
+                      <span>
+                        <a-tag
+                          v-for="tag in tags"
+                          :key="tag"
+                          :color="'volcano'"
+                        >
+                          {{ tag.toUpperCase() }}
+                        </a-tag>
+                      </span>
+                    </template>
+                    <template #action="{ record }">
+                      <span>
+                        <a @click="deleteComment(record)">Delete</a>
+                      </span>
+                    </template>
+                  </a-table>
+                </div>
               </div>
             </div>
           </div>
@@ -135,7 +149,7 @@
 
 <script>
 import { ref, inject, onBeforeMount, h } from "vue";
-import { notification } from "ant-design-vue";
+import { notification, message } from "ant-design-vue";
 import { SmileOutlined } from "@ant-design/icons-vue";
 import router from "@/router";
 import env from "@/env.js";
@@ -240,6 +254,12 @@ export default {
           console.log("showMovieList");
           console.log(response.data.data);
           likeListData.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -253,6 +273,12 @@ export default {
           console.log("showCommentList");
           console.log(response.data.data);
           commentsData.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -268,6 +294,12 @@ export default {
             deleteSuccessful();
             fetchMovieLike();
           }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -283,6 +315,12 @@ export default {
             deleteSuccessful();
             fetchCommentList();
           }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     };
 
@@ -294,6 +332,10 @@ export default {
           style: "color: #108ee9",
         }),
       });
+    };
+
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
     };
 
     const showSettingPage = () => {
@@ -596,10 +638,18 @@ export default {
   margin-top: 2.3rem;
 }
 
+.email,
+.profile-stat-count {
+  font-weight: 600;
+  font-size: 25px;
+  color: #fff;
+}
+
 .profile-real-name,
 .profile-stat-count,
 .profile-edit-btn {
   font-weight: 600;
+  color: #fff;
 }
 
 /* Media Query */

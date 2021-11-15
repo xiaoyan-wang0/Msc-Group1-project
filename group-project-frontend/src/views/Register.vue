@@ -186,7 +186,7 @@ import {
   LockOutlined,
   MailOutlined,
 } from "@ant-design/icons-vue";
-import { ref, defineComponent, inject, onMounted } from "vue";
+import { ref, defineComponent, onBeforeMount, onMounted } from "vue";
 import { message } from "ant-design-vue";
 import router from "@/router";
 import { useStore } from "vuex";
@@ -202,6 +202,15 @@ export default defineComponent({
       gender: "",
       email: "",
     });
+
+    onBeforeMount(() => {
+      console.log("Reggggggggggggg");
+      console.log(localStorage.getItem("user"));
+      if (localStorage.getItem("user")) {
+        router.push({ name: "Setting" });
+      }
+    });
+
     const submitRegister = () => {
       console.log("registerMess");
       console.log(registerMess.value);
@@ -221,10 +230,14 @@ export default defineComponent({
               console.log("onClose");
             });
           } else if (response.code === 200) {
-            message.success(response.msg + ", Will return in 3s.", () => {
-              router.push({ name: "Login" });
-              console.log("onClose");
-            });
+            message.success(
+              response.msg + ", Will return setting page in 3s.",
+              () => {
+                // router.push({ name: "Setting" });
+                location.reload();
+                console.log("onClose");
+              }
+            );
           }
         },
         (error) => {

@@ -70,8 +70,7 @@
                     <div
                       class="product__item__pic set-bg"
                       v-bind:style="{
-                        'background-image':
-                          'url(' + poster + item.posters[0] + ')',
+                        'background-image': 'url(' + item.posters[0] + ')',
                       }"
                     >
                       <div class="ep">
@@ -84,8 +83,12 @@
                     </div>
                     <div class="product__item__text">
                       <ul>
-                        <li v-for="genre in genres" :key="genre.id">{genre}</li>
+                        <li
+                          v-for="genre in item.genres.slice(0, 2)"
+                          :key="genre.id"
                         >
+                          {{ genre }}
+                        </li>
                       </ul>
                       <h5>
                         <a href="#">{{ item.movie_title }}</a>
@@ -143,6 +146,25 @@
                   <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
                 </div>
               </div>
+              <div class="product__sidebar__comment__item">
+                <div class="product__sidebar__comment__item__pic">
+                  <img
+                    src="../assets/trend-3.jpg"
+                    style="width: 90px; height: 130px"
+                    alt=""
+                  />
+                </div>
+                <div class="product__sidebar__comment__item__text">
+                  <ul>
+                    <li>Active</li>
+                    <li>Movie</li>
+                  </ul>
+                  <h5>
+                    <a href="#">The Seven Deadly Sins: Wrath of the Gods</a>
+                  </h5>
+                  <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -153,6 +175,7 @@
 
 <script>
 import { ref, inject, onBeforeMount } from "vue";
+import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
 import router from "@/router";
@@ -198,8 +221,18 @@ export default {
           console.log("IMDB BOT 10 Movies");
           console.log(imdbBotMovies.value);
           // console.log(hignScoreMovieData.value.results);
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
         });
     });
+
+    const showErroeMessage = () => {
+      return message.error("Sorry, error accured in server");
+    };
 
     const findCategary = (genres) => {
       let categary = [];
@@ -386,7 +419,7 @@ export default {
 
 .product__item__text ul {
   margin-bottom: 10px;
-  margin-left: 0px;
+  padding-left: 0px !important;
 }
 
 .product__item__text ul li {

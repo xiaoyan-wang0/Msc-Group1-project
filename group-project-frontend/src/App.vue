@@ -19,12 +19,12 @@
                   <a href="/">Home</a>
                 </li>
 
-                <li>
+                <!-- <li>
                   <a href="#"></a>
                 </li>
                 <li>
                   <a href="#"></a>
-                </li>
+                </li> -->
                 <li>
                   <a href="/main/profile">Profile</a>
                 </li>
@@ -57,7 +57,7 @@
       </div>
     </header>
     <main>
-      <router-view />
+      <router-view :key="$route.fullPath" />
       <div>wxy</div>
     </main>
 
@@ -200,9 +200,12 @@ body {
     box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85) !important;
   }
   input:required:focus {
-  border: 1px solid red;
-  outline: none;
-}
+    border: 1px solid red;
+    outline: none;
+  }
+  a {
+    text-decoration: none;
+  }
 }
 * {
   margin: 0;
@@ -212,10 +215,6 @@ body {
 
   &::selection {
     background: transparentize(#42b883, 0.5);
-  }
-
-  a {
-    text-decoration: none;
   }
 
   header {
@@ -762,7 +761,8 @@ body {
 
 /* Tablet Device = 768px */
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
+// @media only screen and (min-width: 768px) and (max-width: 991px) {
+@media only screen and (min-width: 920px) and (max-width: 991px) {
   .hero {
     overflow: hidden;
   }
@@ -867,7 +867,7 @@ body {
 
 /* Wide Mobile = 480px */
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 919px) {
   .hero {
     overflow: hidden;
   }
@@ -1007,8 +1007,8 @@ body {
 }
 
 /* Small Device = 320px */
-
-@media only screen and (max-width: 479px) {
+// @media only screen and (max-width: 479px) {
+@media only screen and (max-width: 600px) {
   .hero__slider.owl-carousel .owl-nav {
     display: none;
   }
@@ -1056,6 +1056,9 @@ body {
   }
   .login__social__links ul li a i {
     left: 20px;
+  }
+  .login__form {
+    padding-left: 50px !important;
   }
   .login__form .forget_pass {
     position: relative;

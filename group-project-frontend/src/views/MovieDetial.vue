@@ -17,6 +17,25 @@
         :height="400"
       />
     </a-modal>
+    <el-dialog
+      v-model="addCommentsDialog"
+      title="Warning"
+      width="30%"
+      center
+      v-loading="commentConfirmLoading"
+    >
+      <span> Are you sure to publich your comment?</span>
+      <br />
+      <span style="font-weight: 600">{{ popTitle }}</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="addCommentsDialog = false">Cancel</el-button>
+          <el-button type="primary" @click="confirmAddComment"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <div class="container">
       <div class="anime__details__content">
         <div class="row">
@@ -205,6 +224,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="amdbreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in amdbreview"
@@ -275,7 +302,7 @@
                         />
                       </a-form-item>
                       <a-form-item>
-                        <a-popconfirm
+                        <!-- <a-popconfirm
                           :title="popTitle"
                           ok-text="Yes"
                           cancel-text="No"
@@ -285,17 +312,17 @@
                         >
                           <template #icon
                             ><question-circle-outlined style="color: red"
-                          /></template>
+                          /></template> -->
 
-                          <button
-                            class="site-btn"
-                            html-type="submit"
-                            :loading="submitting"
-                            @click="handleSubmit()"
-                          >
-                            Add Comment
-                          </button>
-                        </a-popconfirm>
+                        <button
+                          class="site-btn"
+                          html-type="submit"
+                          :loading="submitting"
+                          @click="handleSubmit()"
+                        >
+                          Add Comment
+                        </button>
+                        <!-- </a-popconfirm> -->
                       </a-form-item>
                     </template>
                   </a-comment>
@@ -340,6 +367,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="tmdbreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in tmdbreview"
@@ -429,6 +464,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="imdbreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in imdbreview"
@@ -515,6 +558,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="youtubereview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in youtubereview"
@@ -599,6 +650,14 @@
                     </div>
                   </div>
                 </div>
+                <a-empty v-if="twitterreview.length < 1">
+                  <template #description>
+                    <span>
+                      <!-- Customize -->
+                      <a>Sorry, don't have now</a>
+                    </span>
+                  </template>
+                </a-empty>
                 <div
                   class="comment-wrap"
                   v-for="item in twitterreview"
@@ -652,6 +711,46 @@
             <div class="section-title">
               <h5>you might like...</h5>
             </div>
+            <a-empty v-if="recommendationMovies.length < 1">
+              <template #description>
+                <span>
+                  <a>Sorry, No recommendations</a>
+                </span>
+              </template>
+            </a-empty>
+            <div
+              class="product__sidebar__comment__item"
+              v-for="item in recommendationMovies"
+              :key="item.id"
+            >
+              <router-link
+                :to="{ path: '/movie/' + item.id, query: { id: item.tmdb_Id } }"
+                @click.native="fleshMovie"
+              >
+                <div class="product__sidebar__comment__item__pic">
+                  <img
+                    :src="moviePoster + item.poster"
+                    style="width: 90px; height: 130px"
+                    alt=""
+                  />
+                </div>
+                <div class="product__sidebar__comment__item__text">
+                  <h5>
+                    <a style="color: white">{{ item.title }}</a>
+                  </h5>
+                  <ul>
+                    <li
+                      v-for="genre in item.genres[0].slice(0, 2)"
+                      :key="genre.id"
+                    >
+                      {{ genre.name }}
+                    </li>
+                  </ul>
+                  <div class="ep">{{ item.vote_average + "/ 10" }}</div>
+                  <span><i class="fa fa-eye"></i> {{ item.release_date }}</span>
+                </div>
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -702,6 +801,8 @@ export default {
     const imdbmovieid = ref("");
     const activeKey = ref("amdb");
     const popTitle = ref("");
+    const commentConfirmLoading = ref(false);
+    const addCommentsDialog = ref(false);
     const tmdbreview = ref([]);
     const tmdbAllreview = ref([]);
     const amdbreview = ref([]);
@@ -712,6 +813,7 @@ export default {
     const youtubeAllreview = ref([]);
     const twitterreview = ref([]);
     const twitterAllreview = ref([]);
+    const recommendationMovies = ref([]);
     const moviePoster = ref("");
     const video_id = ref("");
     const emptyprofile = ref("");
@@ -744,6 +846,23 @@ export default {
           console.log(imdbmovieid.value);
           console.log("imdbmovie title");
           console.log(movie.value.original_title);
+
+          // Fetch recommendation movies
+          axios
+            .get(
+              env.AMDBAPI + "rec/getRecommendationById?movieId=" + movieid.value
+            )
+            .then((response) => {
+              console.log("getRecommadationById");
+              console.log(response.data);
+              recommendationMovies.value = response.data.data;
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+            });
         });
 
       //Fetch trailer
@@ -1005,8 +1124,10 @@ export default {
       if (!authLogin() || !commentsValue.value) {
         return;
       }
-      //  Comment detect
-      popTitle.value = "Are you sure to publich your comment? ";
+      //  Comment detectaddCommentsDialog
+      commentConfirmLoading.value = true;
+      addCommentsDialog.value = true;
+      popTitle.value = "";
       axios
         .get(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
         .then((response) => {
@@ -1014,15 +1135,21 @@ export default {
           popTitle.value =
             popTitle.value +
             "Toxic is " +
+            showToxicText(commentStatus.toxic[0]) +
+            "(" +
             Number(commentStatus.toxic[0] * 100).toFixed(1) +
-            "% and Sentiment is " +
+            "%) and Sentiment is " +
+            showSentiemntText(commentStatus.sentiment[0]) +
+            "(" +
             Number(commentStatus.sentiment[0] * 100).toFixed(1) +
-            "%.";
+            "%).";
+          commentConfirmLoading.value = false;
         });
     };
 
     const confirmAddComment = () => {
       commentLoading.value = true;
+      addCommentsDialog.value = false;
       // Add comments
       axios
         .get(
@@ -1053,10 +1180,18 @@ export default {
             });
           }
         });
+      addCommentsDialog.value = false;
     };
 
     const cancelAddComment = () => {
       return ToolMethod.changeToPercent(value);
+    };
+
+    const fleshMovie = (to, from) => {
+      // window.location.reload()
+      // if (router.query) {
+      //   router.go(0);
+      // }
     };
 
     const showCastDetail = (id) => {
@@ -1257,8 +1392,11 @@ export default {
       emptyprofile,
       castList,
       popTitle,
+      commentConfirmLoading,
+      addCommentsDialog,
       activeKey,
       commentLoading,
+      recommendationMovies,
       // comments
       comments,
       submitting,
@@ -1290,6 +1428,7 @@ export default {
       handleTwitterFilterChange,
       addCommentText,
       changeCommentTab,
+      fleshMovie,
     };
   },
 };
@@ -1300,6 +1439,18 @@ export default {
    Details
 -----------------------*/
 
+.ep {
+  font-size: 13px;
+  color: #ffffff;
+  background: #e53637;
+  display: inline-block;
+  padding: 2px 12px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+.product__sidebar__comment__item__text ul {
+  padding-left: 0 !important;
+}
 .anime-details {
   padding-top: 60px;
 }
@@ -1350,6 +1501,7 @@ export default {
 
 .anime__details__title {
   margin-bottom: 20px;
+  padding-right: 100px;
 }
 
 .anime__details__title h3 {
