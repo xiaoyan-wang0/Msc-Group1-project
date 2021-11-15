@@ -262,10 +262,8 @@ def getRecommadationById():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     image = req['avatar'] if "avatar" in req else ""
-    print(type(image) )
-    print(image)
     #
-    image = request.files.get('avatar')
+    image = request.files['avatar'].read()
     print(type(image) )
     print(image)
     #img = base64.b64decode(str(image))
