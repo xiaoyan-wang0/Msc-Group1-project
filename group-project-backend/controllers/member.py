@@ -266,6 +266,8 @@ def getRecommadationById():
     image = request.files['avatar'].read()
     print(type(image) )
     print(image)
+    img = base64.b64decode(image)
+    print(img)
     #img = base64.b64decode(str(image))
     #image_data = np.fromstring(img, np.uint8)
     #image_data = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
