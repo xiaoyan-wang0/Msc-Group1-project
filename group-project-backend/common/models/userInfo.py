@@ -18,6 +18,7 @@ class Userinfo(db.Model):
     age = db.Column(db.Integer)
     overView = db.Column(db.Text(collation='utf8mb4_0900_ai_ci'))
     movieTags = db.Column(db.String(64))
+    mimetype = db.Column(db.String(64))
 
     def serialize(self):
         d = Serializer.serialize(self)
