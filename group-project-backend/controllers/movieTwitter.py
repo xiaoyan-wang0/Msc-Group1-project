@@ -41,7 +41,7 @@ def review():
     api = tweepy.API(auth)
 
     # To be added: Search tweets according to page number...
-    cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended", languages=['en']).items(20)
+    cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended", lang='en').items(20)
 
     list = []
 
