@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint,render_template,request,make_response,jsonify,redirect
+from flask import Blueprint,render_template,request,make_response,jsonify,redirect,Response
 import requests
 from sqlalchemy import  text
 from application import app,db
@@ -257,7 +257,7 @@ def deleteMovieLikes():
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
 @member_page.route("/newUserImage",methods = ["POST" ])
-def getRecommadationById():
+def newUserImage():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     userId = req['userId'] if "userId" in req else ""
@@ -277,6 +277,14 @@ def getRecommadationById():
     db.session.close()
 
     return ops_renderJSON( msg = "image updata")
+
+@member_page.route("/getUserImage")
+def getUserImage():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    userInfo = Userinfo.query.filter_by( userId = userId ).first()
+    return Response(userInfo.image)
 
 @member_page.route("/getUserInfo")
 def getUserInfo():
