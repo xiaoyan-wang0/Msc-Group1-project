@@ -270,7 +270,7 @@ def getRecommadationById():
     #image_data = np.fromstring(img, np.uint8)
     #image_data = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
 
-    db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":str(image)})
+    db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":image})
     db.session.commit()
     db.session.close()
 
