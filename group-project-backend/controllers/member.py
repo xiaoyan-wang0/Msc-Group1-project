@@ -262,12 +262,12 @@ def getRecommadationById():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     image = req['avatar'] if "avatar" in req else ""
-    
+    app.logger.info( type(image) )
     #
     img = base64.b64decode(str(image))
     #image_data = np.fromstring(img, np.uint8)
     #image_data = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
-
+    app.logger.info( img )
 
     db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":str(img)})
     db.session.commit()
