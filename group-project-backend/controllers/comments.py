@@ -15,7 +15,7 @@ import requests
 
 comments_page = Blueprint( "comments_page",__name__ )
 
-@comments_page.route("/addComments")
+@comments_page.route("/addComments",methods = ["POST" ])
 def addComments():
     import json
 
@@ -81,7 +81,7 @@ def showComments():
         db.session.close()
     return ops_renderJSON( msg = "showComments successfully!",data = comments )
 
-@comments_page.route("/toxic")
+@comments_page.route("/toxic",methods = ["POST" ])
 def toxic():
     '''
     if 'current_user' in  g:
