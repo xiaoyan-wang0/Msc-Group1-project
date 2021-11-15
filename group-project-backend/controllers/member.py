@@ -264,7 +264,7 @@ def getRecommadationById():
     image = req['avatar'] if "avatar" in req else ""
     
     #
-    img = base64.b64decode(str(image))
+    img =str(image)
     #image_data = np.fromstring(img, np.uint8)
     #image_data = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
 
