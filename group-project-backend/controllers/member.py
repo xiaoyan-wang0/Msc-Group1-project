@@ -276,6 +276,10 @@ def newUserImage():
     db.session.commit()
     db.session.close()
 
+    db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"mimetype":request.files['avatar'].mimetype})
+    db.session.commit()
+    db.session.close()
+
     return ops_renderJSON( msg = "image updata")
 
 @member_page.route("/getUserImage")
@@ -284,7 +288,7 @@ def getUserImage():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     userInfo = Userinfo.query.filter_by( userId = userId ).first()
-    return Response(userInfo.image)
+    return Response(userInfo.image, mimetype=userInfo.mimetype)
 
 @member_page.route("/getUserInfo")
 def getUserInfo():
