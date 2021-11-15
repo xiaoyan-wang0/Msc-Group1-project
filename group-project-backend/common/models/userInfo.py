@@ -11,7 +11,7 @@ class Userinfo(db.Model):
 
     userInfoId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, nullable=False)
-    image = db.Column(db.LONGBLOB)
+    image = db.Column(db.LargeBinary(length=2048))
     birthday = db.Column(db.DateTime)
     likeNum = db.Column(db.Integer)
     followNum = db.Column(db.Integer)
