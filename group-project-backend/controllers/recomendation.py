@@ -40,7 +40,37 @@ def getRecommadationById():
 
     list = getRecomendation(movieId, number)
 
-    return ops_renderJSON( msg = "delete movieLikes successfully!",data = list)
+    return ops_renderJSON( msg = "get recommendation successfully!",data = list)
+
+@rec_page.route("/getMostComments")
+def getMostComments():
+    
+    sql = 'SELECT movieId FROM usercomments GROUP BY movieId ORDER BY SUM(1) DESC LIMIT 3'
+    result = db.session.execute(text(sql)).fetchall()
+
+    list = []
+    for lis in result:
+        movieInfoDictionary = getTmdbInfo(lis[0], lis[0])
+        list.append(movieInfoDictionary)
+    db.session.close()
+    return ops_renderJSON( msg = "get most comments successfully!",data = list)
+
+@rec_page.route("/getRecommandation")
+def getRecommandation():
+
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    list = []
+    if userId !="":
+        sql = 'SELECT DISTINCT movieId FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 3;'
+        result = db.session.execute(text(sql)).fetchall()
+
+        if result:
+            for lis in result:
+                rec = getRecomendation(lis[0], 2)
+                list.append(rec)
+        db.session.close()
+    return ops_renderJSON( msg = "get recommandation successfully!",data = list)
 
 def getRecomendation(movieId, number):
     #train_movies_1 = pd.read_csv('C:/final.csv')
