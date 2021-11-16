@@ -303,6 +303,7 @@ def getUserInfo():
     user = User.query.filter_by( userId = userId ).first()
     userInfo = Userinfo.query.filter_by( userId = userId ).first()
     user = User.serialize(user)
+    userInfo.image = ""
     userInfo = Userinfo.serialize(userInfo)
     dictMerged2 = dict( user, **userInfo )
     return ops_renderJSON( msg = "getUserInfo",data = dictMerged2)
