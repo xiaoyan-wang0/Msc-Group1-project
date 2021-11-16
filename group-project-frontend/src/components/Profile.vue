@@ -10,7 +10,9 @@
                 <div class="profile">
                   <div class="profile-image">
                     <img
-                      src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces"
+                      :src="
+                        AMDBAPI + 'member/getUserImage?userId=' + user.userId
+                      "
                       alt=""
                     />
                   </div>
@@ -64,33 +66,39 @@
                 <h5>My Movie List</h5>
                 <p></p>
                 <div class="movie-like-list">
-                  <a-table :columns="likeColumns" :data-source="likeListData">
-                    <template #name="{ text }">
-                      <a>{{ text }}</a>
-                    </template>
-                    <template #customTitle>
-                      <span>
-                        <smile-outlined />
-                        Name
-                      </span>
-                    </template>
-                    <template #tags="{ text: tags }">
-                      <span>
-                        <a-tag
-                          v-for="tag in tags"
-                          :key="tag"
-                          :color="'volcano'"
-                        >
-                          {{ tag.toUpperCase() }}
-                        </a-tag>
-                      </span>
-                    </template>
-                    <template #action="{ record }">
-                      <span>
-                        <a @click="deleteLike(record)">Delete</a>
-                      </span>
-                    </template>
-                  </a-table>
+                  <el-scrollbar>
+                    <a-table
+                      :columns="likeColumns"
+                      :data-source="likeListData"
+                      v-loading="isLoading"
+                    >
+                      <template #name="{ text }">
+                        <a>{{ text }}</a>
+                      </template>
+                      <template #customTitle>
+                        <span>
+                          <smile-outlined />
+                          Name
+                        </span>
+                      </template>
+                      <template #tags="{ text: tags }">
+                        <span>
+                          <a-tag
+                            v-for="tag in tags"
+                            :key="tag"
+                            :color="'volcano'"
+                          >
+                            {{ tag.toUpperCase() }}
+                          </a-tag>
+                        </span>
+                      </template>
+                      <template #action="{ record }">
+                        <span>
+                          <a @click="deleteLike(record)">Delete</a>
+                        </span>
+                      </template>
+                    </a-table>
+                  </el-scrollbar>
                 </div>
               </div>
             </div>
@@ -99,36 +107,39 @@
                 <h5>My Comments</h5>
                 <p></p>
                 <div class="movie-like-list">
-                  <a-table
-                    :columns="commentsColumns"
-                    :data-source="commentsData"
-                  >
-                    <template #name="{ text }">
-                      <a>{{ text }}</a>
-                    </template>
-                    <template #customTitle>
-                      <span>
-                        <smile-outlined />
-                        Name
-                      </span>
-                    </template>
-                    <template #tags="{ text: tags }">
-                      <span>
-                        <a-tag
-                          v-for="tag in tags"
-                          :key="tag"
-                          :color="'volcano'"
-                        >
-                          {{ tag.toUpperCase() }}
-                        </a-tag>
-                      </span>
-                    </template>
-                    <template #action="{ record }">
-                      <span>
-                        <a @click="deleteComment(record)">Delete</a>
-                      </span>
-                    </template>
-                  </a-table>
+                  <el-scrollbar>
+                    <a-table
+                      :columns="commentsColumns"
+                      :data-source="commentsData"
+                      v-loading="isLoading"
+                    >
+                      <template #name="{ text }">
+                        <a>{{ text }}</a>
+                      </template>
+                      <template #customTitle>
+                        <span>
+                          <smile-outlined />
+                          Name
+                        </span>
+                      </template>
+                      <template #tags="{ text: tags }">
+                        <span>
+                          <a-tag
+                            v-for="tag in tags"
+                            :key="tag"
+                            :color="'volcano'"
+                          >
+                            {{ tag.toUpperCase() }}
+                          </a-tag>
+                        </span>
+                      </template>
+                      <template #action="{ record }">
+                        <span>
+                          <a @click="deleteComment(record)">Delete</a>
+                        </span>
+                      </template>
+                    </a-table>
+                  </el-scrollbar>
                 </div>
               </div>
             </div>
@@ -151,6 +162,7 @@
 import { ref, inject, onBeforeMount, h } from "vue";
 import { notification, message } from "ant-design-vue";
 import { SmileOutlined } from "@ant-design/icons-vue";
+import { ElMessageBox } from "element-plus";
 import router from "@/router";
 import env from "@/env.js";
 
@@ -161,8 +173,11 @@ export default {
   setup() {
     const user = ref("");
     const commentsData = ref([]);
+    const isLoading = ref(false);
     const likeListData = ref([]);
+    env.AMDBAPI;
 
+    const AMDBAPI = ref(env.AMDBAPI);
     const axios = inject("axios"); // inject axios
     const likeColumns = ref([
       {
@@ -247,6 +262,7 @@ export default {
     });
 
     const fetchMovieLike = () => {
+      isLoading.value = true;
       // fetch like List
       axios
         .get(env.AMDBAPI + "member/showMovieList?userId=" + user.value.userId)
@@ -254,16 +270,19 @@ export default {
           console.log("showMovieList");
           console.log(response.data.data);
           likeListData.value = response.data.data;
+          isLoading.value = false;
         })
         .catch((error) => {
           console.log("error");
           console.log(error);
           console.log("error");
           showErroeMessage();
+          isLoading.value = false;
         });
     };
 
     const fetchCommentList = () => {
+      isLoading.value = true;
       // fetch comment List
       axios
         .get(
@@ -273,55 +292,78 @@ export default {
           console.log("showCommentList");
           console.log(response.data.data);
           commentsData.value = response.data.data;
+          isLoading.value = false;
         })
         .catch((error) => {
           console.log("error");
           console.log(error);
           console.log("error");
           showErroeMessage();
+          isLoading.value = false;
         });
     };
 
     const deleteLike = (record) => {
       console.log("record");
       console.log(record);
-      axios
-        .get(env.AMDBAPI + "member/deleteMovieLikes?Id=" + record.Id)
-        .then((response) => {
-          console.log("deleteMovieLikes");
-          console.log(response.data);
-          if (response.data.code == 200) {
-            deleteSuccessful();
-            fetchMovieLike();
-          }
+      ElMessageBox.confirm("Do you confirm to delete this item?", "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          axios
+            .get(env.AMDBAPI + "member/deleteMovieLikes?Id=" + record.Id)
+            .then((response) => {
+              console.log("deleteMovieLikes");
+              console.log(response.data);
+              if (response.data.code == 200) {
+                deleteSuccessful();
+                fetchMovieLike();
+              }
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+            });
         })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+        .catch(() => {});
     };
 
     const deleteComment = (record) => {
       console.log("record");
       console.log(record);
-      axios
-        .get(env.AMDBAPI + "member/deleteComment?id=" + record.id)
-        .then((response) => {
-          console.log("deleteMovieLikes");
-          console.log(response.data);
-          if (response.data.code == 200) {
-            deleteSuccessful();
-            fetchCommentList();
-          }
+
+      ElMessageBox.confirm(
+        "Do you confirm to delete this comment?",
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          axios
+            .get(env.AMDBAPI + "member/deleteComment?id=" + record.id)
+            .then((response) => {
+              console.log("deleteMovieLikes");
+              console.log(response.data);
+              if (response.data.code == 200) {
+                deleteSuccessful();
+                fetchCommentList();
+              }
+            })
+            .catch((error) => {
+              console.log("error");
+              console.log(error);
+              console.log("error");
+              showErroeMessage();
+            });
         })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+        .catch(() => {});
     };
 
     const deleteSuccessful = () => {
@@ -346,10 +388,12 @@ export default {
 
     return {
       user,
+      isLoading,
       likeColumns,
       commentsColumns,
       commentsData,
       likeListData,
+      AMDBAPI,
       deleteLike,
       deleteComment,
       showSettingPage,
@@ -359,6 +403,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.movie-like-list {
+  min-width: 300px;
+}
 .anime-details {
   padding-top: 60px;
 }
@@ -572,6 +619,7 @@ export default {
 .profile-image {
   float: left;
   width: calc(33.333% - 1rem);
+  min-width: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -595,8 +643,9 @@ export default {
 
 .profile-user-name {
   display: inline-block;
-  font-size: 3.2rem;
+  font-size: 2.2rem;
   font-weight: 300;
+  overflow: hidden;
   color: #fff;
 }
 
@@ -655,6 +704,9 @@ export default {
 /* Media Query */
 
 @media screen and (max-width: 40rem) {
+  .email {
+    font-size: 12px;
+  }
   .profile {
     display: flex;
     flex-wrap: wrap;
@@ -685,7 +737,7 @@ export default {
   }
 
   .profile-user-name {
-    font-size: 2.2rem;
+    font-size: 0.2rem !important;
   }
 
   .profile-edit-btn {
