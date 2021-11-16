@@ -82,7 +82,7 @@ def getRecommandation():
     userId = req['userId'] if "userId" in req else ""
     list = []
     if userId !="":
-        sql = 'SELECT DISTINCT movieId FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 3;'
+        sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 3;'
         result = db.session.execute(text(sql)).fetchall()
 
         if result:
