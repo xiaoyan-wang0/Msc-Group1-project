@@ -288,6 +288,8 @@ def getUserImage():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     userInfo = Userinfo.query.filter_by( userId = userId ).first()
+    if not userInfo:
+        return ops_renderErrJSON( msg ="userId not true")
     return Response(userInfo.image, mimetype=userInfo.mimetype)
 
 @member_page.route("/getUserInfo")
