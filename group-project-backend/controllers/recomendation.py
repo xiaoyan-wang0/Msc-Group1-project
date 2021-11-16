@@ -87,7 +87,7 @@ def getRecommandation():
 
         if result:
             for lis in result:
-                rec = getRecomendation(lis[0], 2)
+                rec = getRecomendation(int(lis[0]), 2)
                 list.append(rec)
         db.session.close()
     return ops_renderJSON( msg = "get recommandation successfully!",data = list)
