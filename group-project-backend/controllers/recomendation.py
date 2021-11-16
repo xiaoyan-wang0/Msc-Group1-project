@@ -8,6 +8,7 @@ from common.models.final import Final
 from common.models.serializer import Serializer
 from common.libs.ToxicComments import do_pe,detector
 from common.libs.Sentiment import sentiment
+from common.models.recommandation import Recommandation
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -54,6 +55,25 @@ def getMostComments():
         list.append(movieInfoDictionary)
     db.session.close()
     return ops_renderJSON( msg = "get most comments successfully!",data = list)
+
+
+@rec_page.route("/setRecommandation")
+def setRecommandation():
+    
+    req = request.values
+    movieId = req['movieId'] if "movieId" in req else ""
+    userId = req['userId'] if "userId" in req else ""
+
+    if userId != "":
+        user = User.query.filter_by( userId = userId ).first()
+        if user:
+            model_rec = Recommandation()
+            model_rec.movieId = movieId
+            model_rec.userId = userId
+            db.session.add( model_rec )
+            db.session.commit()
+            db.session.close()
+    return ops_renderJSON( msg = "set recommandation successfully!")
 
 @rec_page.route("/getRecommandation")
 def getRecommandation():
