@@ -232,65 +232,89 @@
                     </span>
                   </template>
                 </a-empty>
-                <div
-                  class="comment-wrap"
-                  v-for="item in amdbreview"
-                  :key="item.id"
-                >
-                  <div class="anime__review__item">
-                    <div class="anime__review__item__pic">
-                      <div class="photo-avatar">
-                        <div class="avatar">
-                          <a-avatar :src="emptyprofile" />
+                <el-scrollbar max-height="500px">
+                  <div
+                    class="comment-wrap"
+                    v-for="item in amdbreview"
+                    :key="item.id"
+                  >
+                    <div class="anime__review__item">
+                      <div class="anime__review__item__pic">
+                        <div class="photo-avatar">
+                          <div class="avatar">
+                            <a-avatar
+                              :src="
+                                currentUser
+                                  ? AMDBAPI +
+                                    'member/getUserImage?userId=' +
+                                    item.userId
+                                  : emptyprofile
+                              "
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="anime__review__item__text">
-                      <h6 class="comment-author">
-                        {{ item.userName }}
-                      </h6>
-                      <p class="comment-text">{{ item.comment }}</p>
-                      <div class="bottom-comment">
-                        <div class="comment-date">
-                          {{ formatDate(item.createTime) }}
-                        </div>
-                        <ul class="comment-actions">
-                          <li class="toxicrate">
-                            {{ showToxicText(item.toxic) }} :
-                            {{ changeToPercent(item.toxic) }}
-                            <img
-                              :src="showToxicImg(item.toxic)"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="sentiemnt-rate">
-                            {{ showSentiemntText(item.sentiment) }} :
-                            {{ changeToPercent(item.sentiment) }}
-                            <img
-                              :src="showSentimentImg(item.sentiment)"
-                              style="height: 30px"
-                              alt=""
-                            />
-                            <!-- <img
+                      <div class="anime__review__item__text">
+                        <h6 class="comment-author">
+                          {{ item.userName }}
+                        </h6>
+                        <!-- <p class="comment-text">{{ item.comment }}</p> -->
+                        <a-typography-paragraph
+                          class="comment-text"
+                          :ellipsis="
+                            ellipsis
+                              ? { rows: 5, expandable: true, symbol: 'more' }
+                              : false
+                          "
+                          :content="item.comment"
+                        />
+                        <div class="bottom-comment">
+                          <div class="comment-date">
+                            {{ formatDate(item.createTime) }}
+                          </div>
+                          <ul class="comment-actions">
+                            <li class="toxicrate">
+                              {{ showToxicText(item.toxic) }} :
+                              {{ changeToPercent(item.toxic) }}
+                              <img
+                                :src="showToxicImg(item.toxic)"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="sentiemnt-rate">
+                              {{ showSentiemntText(item.sentiment) }} :
+                              {{ changeToPercent(item.sentiment) }}
+                              <img
+                                :src="showSentimentImg(item.sentiment)"
+                                style="height: 30px"
+                                alt=""
+                              />
+                              <!-- <img
                               src="../assets/toxic-red.png"
                               style="height: 30px"
                               alt=""
                             /> -->
-                          </li>
-                          <li class="report">Report</li>
-                        </ul>
+                            </li>
+                            <li class="report">Report</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-
+                </el-scrollbar>
                 <div class="anime__details__form">
                   <a-comment>
                     <template #avatar>
                       <a-avatar
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                        alt="Han Solo"
+                        :src="
+                          currentUser
+                            ? AMDBAPI +
+                              'member/getUserImage?userId=' +
+                              currentUser.data.userId
+                            : emptyprofile
+                        "
+                        alt="Avatar"
                       />
                     </template>
                     <template #content>
@@ -375,56 +399,68 @@
                     </span>
                   </template>
                 </a-empty>
-                <div
-                  class="comment-wrap"
-                  v-for="item in tmdbreview"
-                  :key="item.id"
-                >
-                  <div class="anime__review__item">
-                    <div class="anime__review__item__pic">
-                      <div class="photo-avatar">
-                        <div class="avatar">
-                          <a-avatar
-                            :src="
-                              item.author_details.avatar_path
-                                ? moviePoster + item.author_details.avatar_path
-                                : emptyprofile
-                            "
-                          />
+                <el-scrollbar max-height="700px">
+                  <div
+                    class="comment-wrap"
+                    v-for="item in tmdbreview"
+                    :key="item.id"
+                  >
+                    <div class="anime__review__item">
+                      <div class="anime__review__item__pic">
+                        <div class="photo-avatar">
+                          <div class="avatar">
+                            <a-avatar
+                              :src="
+                                item.author_details.avatar_path
+                                  ? moviePoster +
+                                    item.author_details.avatar_path
+                                  : emptyprofile
+                              "
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="anime__review__item__text">
+                        <h6 class="comment-author">{{ item.author }}</h6>
+                        <!-- <p class="comment-text">{{ item.content }}</p> -->
+                        <a-typography-paragraph
+                          class="comment-text"
+                          :ellipsis="
+                            ellipsis
+                              ? { rows: 5, expandable: true, symbol: 'more' }
+                              : false
+                          "
+                          :content="item.content"
+                        />
+                        <div class="bottom-comment">
+                          <div class="comment-date">{{ item.created_at }}</div>
+                          <ul class="comment-actions">
+                            <li class="toxicrate">
+                              {{ showToxicText(item.toxic[0]) }}:{{
+                                changeToPercent(item.toxic)
+                              }}
+                              <img
+                                :src="showToxicImg(item.toxic)"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="sentiemnt-rate">
+                              {{ showSentiemntText(item.sentiment[0]) }} :
+                              {{ changeToPercent(item.sentiment[0]) }}
+                              <img
+                                :src="showSentimentImg(item.sentiment[0])"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="report">Report</li>
+                          </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="anime__review__item__text">
-                      <h6 class="comment-author">{{ item.author }}</h6>
-                      <p class="comment-text">{{ item.content }}</p>
-                      <div class="bottom-comment">
-                        <div class="comment-date">{{ item.created_at }}</div>
-                        <ul class="comment-actions">
-                          <li class="toxicrate">
-                            {{ showToxicText(item.toxic[0]) }}:{{
-                              changeToPercent(item.toxic)
-                            }}
-                            <img
-                              :src="showToxicImg(item.toxic)"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="sentiemnt-rate">
-                            {{ showSentiemntText(item.sentiment[0]) }} :
-                            {{ changeToPercent(item.sentiment[0]) }}
-                            <img
-                              :src="showSentimentImg(item.sentiment[0])"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="report">Report</li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
-                </div>
+                </el-scrollbar>
               </a-tab-pane>
               <a-tab-pane key="imdb" tab="IMDB reviews">
                 <div class="section-title">
@@ -472,53 +508,66 @@
                     </span>
                   </template>
                 </a-empty>
-                <div
-                  class="comment-wrap"
-                  v-for="item in imdbreview"
-                  :key="item.id"
-                >
-                  <div class="anime__review__item">
-                    <div class="anime__review__item__pic">
-                      <div class="photo-avatar">
-                        <div class="avatar">
-                          <a-avatar :src="emptyprofile" />
+                <el-scrollbar max-height="700px">
+                  <div
+                    class="comment-wrap"
+                    v-for="item in imdbreview"
+                    :key="item.id"
+                  >
+                    <div class="anime__review__item">
+                      <div class="anime__review__item__pic">
+                        <div class="photo-avatar">
+                          <div class="avatar">
+                            <a-avatar :src="emptyprofile" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="anime__review__item__text">
+                        <h6 class="comment-author">{{ item.username }}</h6>
+                        <!-- <p class="comment-text">{{ item.content }}</p> -->
+                        <a-typography-paragraph
+                          class="comment-text"
+                          :ellipsis="
+                            ellipsis
+                              ? { rows: 5, expandable: true, symbol: 'more' }
+                              : false
+                          "
+                          :content="item.content"
+                        />
+                        <div class="bottom-comment">
+                          <div class="comment-date">{{ item.date }}</div>
+                          <ul class="comment-actions">
+                            <li class="toxicrate">
+                              {{ showToxicText(item.toxic[0]) }}:{{
+                                changeToPercent(item.toxic)
+                              }}
+                              <img
+                                :src="showToxicImg(item.toxic)"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="sentiemnt-rate">
+                              {{ showSentiemntText(item.sentiment[0]) }} :
+                              {{ changeToPercent(item.sentiment[0]) }}
+                              <img
+                                :src="showSentimentImg(item.sentiment[0])"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="report">Report</li>
+                            <li class="report">
+                              {{
+                                item.warningSpoilers ? "warningSpoilers" : ""
+                              }}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="anime__review__item__text">
-                      <h6 class="comment-author">{{ item.username }}</h6>
-                      <p class="comment-text">{{ item.content }}</p>
-                      <div class="bottom-comment">
-                        <div class="comment-date">{{ item.date }}</div>
-                        <ul class="comment-actions">
-                          <li class="toxicrate">
-                            {{ showToxicText(item.toxic[0]) }}:{{
-                              changeToPercent(item.toxic)
-                            }}
-                            <img
-                              :src="showToxicImg(item.toxic)"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="sentiemnt-rate">
-                            {{ showSentiemntText(item.sentiment[0]) }} :
-                            {{ changeToPercent(item.sentiment[0]) }}
-                            <img
-                              :src="showSentimentImg(item.sentiment[0])"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="report">Report</li>
-                          <li class="report">
-                            {{ item.warningSpoilers ? "warningSpoilers" : "" }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
-                </div>
+                </el-scrollbar>
               </a-tab-pane>
               <a-tab-pane key="youtube" tab="Youtube reviews">
                 <div class="section-title">
@@ -566,50 +615,61 @@
                     </span>
                   </template>
                 </a-empty>
-                <div
-                  class="comment-wrap"
-                  v-for="item in youtubereview"
-                  :key="item.id"
-                >
-                  <div class="anime__review__item">
-                    <div class="anime__review__item__pic">
-                      <div class="photo-avatar">
-                        <div class="avatar">
-                          <a-avatar :src="item.profile_picture" />
+                <el-scrollbar max-height="700px">
+                  <div
+                    class="comment-wrap"
+                    v-for="item in youtubereview"
+                    :key="item.id"
+                  >
+                    <div class="anime__review__item">
+                      <div class="anime__review__item__pic">
+                        <div class="photo-avatar">
+                          <div class="avatar">
+                            <a-avatar :src="item.profile_picture" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="anime__review__item__text">
+                        <h6 class="comment-author">{{ item.username }}</h6>
+                        <!-- <p class="comment-text">{{ item.review }}</p> -->
+                        <a-typography-paragraph
+                          class="comment-text"
+                          :ellipsis="
+                            ellipsis
+                              ? { rows: 5, expandable: true, symbol: 'more' }
+                              : false
+                          "
+                          :content="item.review"
+                        />
+                        <div class="bottom-comment">
+                          <div class="comment-date">{{ item.time }}</div>
+                          <ul class="comment-actions">
+                            <li class="toxicrate">
+                              {{ showToxicText(item.toxic[0]) }}:{{
+                                changeToPercent(item.toxic)
+                              }}
+                              <img
+                                :src="showToxicImg(item.toxic)"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="sentiemnt-rate">
+                              {{ showSentiemntText(item.sentiment[0]) }} :
+                              {{ changeToPercent(item.sentiment[0]) }}
+                              <img
+                                :src="showSentimentImg(item.sentiment[0])"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="report">Report</li>
+                          </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="anime__review__item__text">
-                      <h6 class="comment-author">{{ item.username }}</h6>
-                      <p class="comment-text">{{ item.review }}</p>
-                      <div class="bottom-comment">
-                        <div class="comment-date">{{ item.time }}</div>
-                        <ul class="comment-actions">
-                          <li class="toxicrate">
-                            {{ showToxicText(item.toxic[0]) }}:{{
-                              changeToPercent(item.toxic)
-                            }}
-                            <img
-                              :src="showToxicImg(item.toxic)"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="sentiemnt-rate">
-                            {{ showSentiemntText(item.sentiment[0]) }} :
-                            {{ changeToPercent(item.sentiment[0]) }}
-                            <img
-                              :src="showSentimentImg(item.sentiment[0])"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="report">Report</li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
-                </div>
+                </el-scrollbar>
               </a-tab-pane>
 
               <a-tab-pane key="twitter" tab="Twitter reviews">
@@ -658,50 +718,61 @@
                     </span>
                   </template>
                 </a-empty>
-                <div
-                  class="comment-wrap"
-                  v-for="item in twitterreview"
-                  :key="item.id"
-                >
-                  <div class="anime__review__item">
-                    <div class="anime__review__item__pic">
-                      <div class="photo-avatar">
-                        <div class="avatar">
-                          <a-avatar :src="emptyprofile" />
+                <el-scrollbar max-height="700px">
+                  <div
+                    class="comment-wrap"
+                    v-for="item in twitterreview"
+                    :key="item.id"
+                  >
+                    <div class="anime__review__item">
+                      <div class="anime__review__item__pic">
+                        <div class="photo-avatar">
+                          <div class="avatar">
+                            <a-avatar :src="emptyprofile" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="anime__review__item__text">
+                        <!-- <h6 class="comment-author">{{ item.username }}</h6> -->
+                        <!-- <p class="comment-text">{{ item.content }}</p> -->
+                        <a-typography-paragraph
+                          class="comment-text"
+                          :ellipsis="
+                            ellipsis
+                              ? { rows: 5, expandable: true, symbol: 'more' }
+                              : false
+                          "
+                          :content="item.content"
+                        />
+                        <div class="bottom-comment">
+                          <!-- <div class="comment-date">{{ item.time }}</div> -->
+                          <ul class="comment-actions">
+                            <li class="toxicrate">
+                              {{ showToxicText(item.toxic[0]) }}:{{
+                                changeToPercent(item.toxic)
+                              }}
+                              <img
+                                :src="showToxicImg(item.toxic)"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="sentiemnt-rate">
+                              {{ showSentiemntText(item.sentiment[0]) }} :
+                              {{ changeToPercent(item.sentiment[0]) }}
+                              <img
+                                :src="showSentimentImg(item.sentiment[0])"
+                                style="height: 30px"
+                                alt=""
+                              />
+                            </li>
+                            <li class="report">Report</li>
+                          </ul>
                         </div>
                       </div>
                     </div>
-                    <div class="anime__review__item__text">
-                      <!-- <h6 class="comment-author">{{ item.username }}</h6> -->
-                      <p class="comment-text">{{ item.content }}</p>
-                      <div class="bottom-comment">
-                        <!-- <div class="comment-date">{{ item.time }}</div> -->
-                        <ul class="comment-actions">
-                          <li class="toxicrate">
-                            {{ showToxicText(item.toxic[0]) }}:{{
-                              changeToPercent(item.toxic)
-                            }}
-                            <img
-                              :src="showToxicImg(item.toxic)"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="sentiemnt-rate">
-                            {{ showSentiemntText(item.sentiment[0]) }} :
-                            {{ changeToPercent(item.sentiment[0]) }}
-                            <img
-                              :src="showSentimentImg(item.sentiment[0])"
-                              style="height: 30px"
-                              alt=""
-                            />
-                          </li>
-                          <li class="report">Report</li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
-                </div>
+                </el-scrollbar>
               </a-tab-pane>
             </a-tabs>
           </div>
@@ -794,6 +865,7 @@ export default {
     const movie = ref({});
     const casts = ref({});
     const castList = ref([]);
+    let crewList = [];
     const castDetail = ref({});
     const start = ref(0);
     const route = useRoute();
@@ -820,6 +892,7 @@ export default {
     const isShowTrailer = ref(false);
     const commentLoading = ref(false);
     const isShowCastDetail = ref(false);
+    const AMDBAPI = ref(env.AMDBAPI);
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
     movieid.value = route.params.id;
@@ -865,6 +938,26 @@ export default {
             });
         });
 
+      // Fetch setRecommandation
+      axios
+        .get(
+          env.AMDBAPI +
+            "rec/setRecommandation?movieId=" +
+            movieid.value +
+            "&userId=" +
+            (currentUser.value === null ? "" : currentUser.value.data.userId)
+        )
+        .then((response) => {
+          console.log("setRecommandation");
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
+
       //Fetch trailer
       axios
         .get(
@@ -896,13 +989,16 @@ export default {
           casts.value = response.data;
           console.log("casts detail");
           console.log(casts.value);
-          if (response.data.cast.length <= 7) {
-            castList.value = casts.value.cast;
+          crewList = casts.value.crew;
+          addCrewToCast();
+          if (response.data.cast.length <= 6) {
+            castList.value = castList.value.concat(casts.value.cast);
           } else {
-            castList.value = response.data.cast.slice(0, 7);
+            castList.value = castList.value.concat(
+              casts.value.cast.slice(0, 6)
+            );
           }
         });
-
       getAMDBComments();
     });
 
@@ -930,6 +1026,18 @@ export default {
           showErroeMessage();
           commentLoading.value = false;
         });
+    };
+
+    const addCrewToCast = () => {
+      console.log("crewList");
+      console.log(crewList);
+      for (let item of crewList) {
+        if (item.job == "Director") {
+          console.log("Director");
+          console.log(item);
+          castList.value.push(item);
+        }
+      }
     };
 
     const handleCancel = () => {
@@ -1129,7 +1237,7 @@ export default {
       addCommentsDialog.value = true;
       popTitle.value = "";
       axios
-        .get(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
+        .post(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
         .then((response) => {
           const commentStatus = response.data.data;
           popTitle.value =
@@ -1152,7 +1260,7 @@ export default {
       addCommentsDialog.value = false;
       // Add comments
       axios
-        .get(
+        .post(
           env.AMDBAPI +
             "comments/addComments?movieId=" +
             movieid.value +
@@ -1397,6 +1505,8 @@ export default {
       activeKey,
       commentLoading,
       recommendationMovies,
+      currentUser,
+      AMDBAPI,
       // comments
       comments,
       submitting,
@@ -1409,6 +1519,7 @@ export default {
       twitterreview,
       castDetail,
       isShowCastDetail,
+      ellipsis: ref(true),
       handleCancel,
       handleSubmit,
       showCastDetail,
@@ -1675,6 +1786,10 @@ export default {
   background: #494a58;
   padding: 13px 30px 0px 20px;
   border-radius: 10px;
+
+  .comment-text {
+    color: #fff;
+  }
 }
 
 .anime__review__item__text h6 {

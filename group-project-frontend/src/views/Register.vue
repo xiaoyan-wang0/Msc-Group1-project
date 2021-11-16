@@ -77,7 +77,7 @@
                   </div>
                 </div>
 
-                <div class="col-md-12 mt-3">
+                <!-- <div class="col-md-12 mt-3">
                   <label class="mb-3 mr-1" for="gender" style="color: white"
                     >Gender:
                   </label>
@@ -124,7 +124,7 @@
                   <div class="invalid-feedback mv-up">
                     Please select a gender!
                   </div>
-                </div>
+                </div> -->
 
                 <div class="form-check">
                   <input

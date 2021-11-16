@@ -102,68 +102,100 @@
         </div>
         <div class="col-lg-4 col-md-6 col-sm-8">
           <div class="product__sidebar">
-            <div class="product__sidebar__view">
+            <div class="product__sidebar__comment">
               <div class="section-title">
-                <h5>Top Views</h5>
+                <h5>The Most Comments movies</h5>
               </div>
-              <ul class="filter__controls">
-                <li class="active" data-filter="*">Day</li>
-                <li data-filter=".week">Week</li>
-                <li data-filter=".month">Month</li>
-                <li data-filter=".years">Years</li>
-              </ul>
-              <div class="filter__gallery">
+              <a-empty v-if="mostRecommendationMovies.length < 1">
+                <template #description>
+                  <span>
+                    <a>Sorry, No recommendations</a>
+                  </span>
+                </template>
+              </a-empty>
+              <div
+                class="product__sidebar__comment__item"
+                v-for="item in mostRecommendationMovies"
+                :key="item.id"
+              >
+                <router-link :to="'/movie/' + item.id">
+                  <div class="product__sidebar__comment__item__pic">
+                    <img
+                      :src="poster + item.poster"
+                      style="width: 90px; height: 130px"
+                      alt=""
+                    />
+                  </div>
+                  <div class="product__sidebar__comment__item__text">
+                    <h5>
+                      <a style="color: white">{{ item.title }}</a>
+                    </h5>
+                    <ul>
+                      <li
+                        v-for="genre in item.genres[0].slice(0, 2)"
+                        :key="genre.id"
+                      >
+                        {{ genre.name }}
+                      </li>
+                    </ul>
+                    <div class="ep">{{ item.vote_average + "/ 10" }}</div>
+                    <span
+                      ><i class="fa fa-eye"></i> {{ item.release_date }}</span
+                    >
+                  </div>
+                </router-link>
+              </div>
+            </div>
+            <div
+              class="product__sidebar__view"
+              v-if="recentRecommendationMovies !== []"
+            >
+              <div class="section-title">
+                <h5>Recent Views recommendations</h5>
+              </div>
+              <!-- <div class="filter__gallery">
                 <div
                   class="product__sidebar__view__item set-bg mix day years"
-                  style="background-image: url(../assets/trend-1.jpg)"
+                  :style="{
+                    backgroundImage: 'url(' + '../assets/trend-1.jpg' + ')',
+                  }"
                 >
                   <div class="ep">18 / ?</div>
                   <div class="view"><i class="fa fa-eye"></i> 9141</div>
                   <h5><a href="#">Boruto: Naruto next generations</a></h5>
                 </div>
-              </div>
-            </div>
-            <div class="product__sidebar__comment">
-              <div class="section-title">
-                <h5>New Comment</h5>
-              </div>
-              <div class="product__sidebar__comment__item">
-                <div class="product__sidebar__comment__item__pic">
-                  <img
-                    src="../assets/trend-3.jpg"
-                    style="width: 90px; height: 130px"
-                    alt=""
-                  />
-                </div>
-                <div class="product__sidebar__comment__item__text">
-                  <ul>
-                    <li>Active</li>
-                    <li>Movie</li>
-                  </ul>
-                  <h5>
-                    <a href="#">The Seven Deadly Sins: Wrath of the Gods</a>
-                  </h5>
-                  <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
-                </div>
-              </div>
-              <div class="product__sidebar__comment__item">
-                <div class="product__sidebar__comment__item__pic">
-                  <img
-                    src="../assets/trend-3.jpg"
-                    style="width: 90px; height: 130px"
-                    alt=""
-                  />
-                </div>
-                <div class="product__sidebar__comment__item__text">
-                  <ul>
-                    <li>Active</li>
-                    <li>Movie</li>
-                  </ul>
-                  <h5>
-                    <a href="#">The Seven Deadly Sins: Wrath of the Gods</a>
-                  </h5>
-                  <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
-                </div>
+              </div> -->
+              <div
+                class="product__sidebar__comment__item"
+                v-for="item in recentRecommendationMovies"
+                :key="item.id"
+              >
+                <router-link :to="'/movie/' + item.id">
+                  <div class="product__sidebar__comment__item__pic">
+                    <img
+                      :src="poster + item.poster"
+                      style="width: 90px; height: 130px"
+                      alt=""
+                    />
+                  </div>
+                  <div class="product__sidebar__comment__item__text">
+                    <h5>
+                      <a style="color: white">{{ item.title }}</a>
+                    </h5>
+                    <ul>
+                      <li
+                        v-for="genre in item.genres[0].slice(0, 2)"
+                        :key="genre.id"
+                      >
+                        {{ genre.name }}
+                      </li>
+                    </ul>
+                    <div class="ep">{{ item.vote_average + "/ 10" }}</div>
+                    <span
+                      ><i class="fa fa-eye"></i> {{ item.release_date }}</span
+                    >
+                  </div>
+                </router-link>
               </div>
             </div>
           </div>
@@ -174,11 +206,12 @@
 </template>
 
 <script>
-import { ref, inject, onBeforeMount } from "vue";
+import { ref, inject, onBeforeMount, computed } from "vue";
 import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
 import router from "@/router";
+import { useStore } from "vuex";
 
 export default {
   name: "MainDisplay",
@@ -190,6 +223,10 @@ export default {
     const hignScoreMovieData = ref([]);
     const imdbBotMovies = ref([]);
     const genreList = ref([]);
+    const store = useStore();
+    const mostRecommendationMovies = ref([]);
+    const recentRecommendationMovies = ref([]);
+    const currentUser = computed(() => store.state.auth.user);
     const poster = ref("");
     poster.value = env.tmdbpic;
     onBeforeMount(() => {
@@ -228,6 +265,46 @@ export default {
           console.log("error");
           showErroeMessage();
         });
+
+      // Fetch the most comments recommendation movies
+      axios
+        .get(env.AMDBAPI + "rec/getMostComments")
+        .then((response) => {
+          console.log("getMostComments  recommendation movies");
+          console.log(response.data);
+          mostRecommendationMovies.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
+
+      // Fetch recently recommendation movies
+      if (currentUser.value !== null) {
+        axios
+          .get(
+            env.AMDBAPI +
+              "rec/getRecommandation?userId=" +
+              currentUser.value.data.userId
+          )
+          .then((response) => {
+            console.log(
+              "recently recommendation movies recentRecommendationMovies"
+            );
+            console.log(response.data);
+            recentRecommendationMovies.value = response.data.data;
+          })
+          .catch((error) => {
+            console.log("error");
+            console.log(error);
+            console.log("error");
+            showErroeMessage();
+          });
+      } else {
+        recentRecommendationMovies.value = [];
+      }
     });
 
     const showErroeMessage = () => {
@@ -265,6 +342,8 @@ export default {
       popularMovieData,
       hignScoreMovieData,
       imdbBotMovies,
+      mostRecommendationMovies,
+      recentRecommendationMovies,
       poster,
       showResultPage,
       findCategary,

@@ -210,6 +210,16 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img);
 }
 
+function arrayBufferToBase64(buffer) {
+  var binary = "";
+  var bytes = new Uint8Array(buffer);
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+}
+
 export default {
   name: "Setting",
   components: {
@@ -369,6 +379,23 @@ export default {
       } else {
         birthday.value = user.data.birthday;
       }
+      imageUrl.value =
+        env.AMDBAPI + "member/getUserImage?userId=" + userId.value;
+      // axios
+      //   .get(env.AMDBAPI + "member/getUserImage?userId=" + userId.value )
+      //   .then((response) => {
+      //     console.log("getUserImage");
+      //     console.log(response);
+      //     if (response.data.code == 200) {
+      //       imageUrl.value = 'data:image/png;base64,' + arrayBufferToBase64(response.data)
+      //       // message.success("Update successfully!");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("error");
+      //     console.log(error);
+      //     showErroeMessage();
+      //   });
     };
 
     const popupScroll = () => {
