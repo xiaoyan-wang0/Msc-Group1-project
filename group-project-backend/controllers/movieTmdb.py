@@ -13,6 +13,7 @@ from tmdbv3api import TMDb
 from tmdbv3api import Movie
 import requests
 from common.models.reviews import Review
+from common.models.recommandation import Recommandation
 import json
 from jsonpath import jsonpath
 from common.libs.ToxicComments import do_pe,detector
@@ -88,7 +89,17 @@ def Info():
 
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
+    userId = req['userId'] if "userId" in req else ""
 
+    if userId != "":
+        user = User.query.filter_by( userId = userId ).first()
+        if user:
+            model_rec = Recommandation()
+            model_rec.movieId = movieId
+            model_rec.userId = userId
+            db.session.add( model_rec )
+            db.session.commit()
+            db.session.close()
 
 
     # I am using a Python Library for the TMDB API which is very convinient and easy to use.
