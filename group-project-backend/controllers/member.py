@@ -91,6 +91,7 @@ def login():
     #userJson = []
     # userJson.append(User.serialize(user))
     userInfo = Userinfo.query.filter_by( userId = user.userId ).first()
+    userInfo.image = ""
     userInfo = Userinfo.serialize(userInfo)
     # userJson.append(userInfo)
     dictMerged2 = dict( User.serialize(user), **userInfo )
