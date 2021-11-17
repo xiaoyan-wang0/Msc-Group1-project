@@ -218,7 +218,7 @@ def worst():
     req = request.values
     movieId = req['movieId'] 
 
-    url = 'https://www.imdb.com/title/tt1213644/reviews?sort=userRating&dir=asc&ratingFilter=0'
+    url = 'https://www.imdb.com/title/' + str(movieId) + '/reviews?sort=userRating&dir=asc&ratingFilter=0'
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'lxml')
 
