@@ -223,13 +223,21 @@ def worst():
     soup = BeautifulSoup(response.text, 'lxml')
 
     reviews = soup.select('div.text.show-more__control')
+    dates = soup.select('span.review-date')
     displayNames = soup.select('span.display-name-link')
 
     list = []
 
     for index in range(0, len(reviews)):
 	    review = reviews[index].get_text()
-	    data = {"review": review}
+	    date = dates[index].get_text()
+	    displayName = displayNames[index].get_text()
+	    rating = "1/10"
+
+	    data = {"review": review,
+			    "date": date,
+			    "username": displayName,
+			    "rating": rating}
 	    list.append(data)
 
     return ops_renderJSON(msg = "Show Comments Successfull!", data = list)
