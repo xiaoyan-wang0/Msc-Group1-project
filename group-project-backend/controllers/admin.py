@@ -32,7 +32,7 @@ def doReport():
     result = Usercomment.query.filter_by( id = id ).first()
 
     if result and result.ifReport == 0:
-        db.session.query(Usercomment).filter(id == id).update({"ifReport":1})
+        db.session.query(Usercomment).filter(Usercomment.id == id).update({"ifReport":1})
 
     db.session.close()
 
@@ -44,9 +44,9 @@ def getReportComments():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     #req = request.values
     #userId = req['userId'] if "userId" in req else ""
-    result = Usercomment.query.filter(ifReport = 1).order_by(Usercomment.id.desc()).all()
+    result = Usercomment.query.filter(Usercomment.ifReport == '1').order_by(Usercomment.id.desc()).all()
     db.session.close()
-
+    result = Serializer.serialize_list(result)
     return ops_renderJSON( msg = "report successfully!", data = result)
 
 @admin_page.route("/adminLogin", methods = ["POST" ])
