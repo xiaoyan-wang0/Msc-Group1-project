@@ -17,7 +17,8 @@ class Usercomment(db.Model):
     movieId = db.Column(db.String(16))
     toxic = db.Column(db.String(16))
     sentiment = db.Column(db.String(16))
-
+    ifReport = db.Column(db.Integer)
+    
     def serialize(self):
         d = Serializer.serialize(self)
         return d

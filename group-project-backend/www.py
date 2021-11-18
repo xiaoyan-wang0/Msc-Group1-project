@@ -23,6 +23,7 @@ from controllers.movieTwitter import movie_page_Twitter
 from controllers.movieRecommandation import movie_page_Recommandation
 from controllers.comments import comments_page
 from controllers.recomendation import rec_page
+from controllers.admin import admin_page
 
 app.register_blueprint( index_page,url_prefix = "/" )
 app.register_blueprint( member_page,url_prefix = "/member" )
@@ -33,6 +34,7 @@ app.register_blueprint( movie_page_Twitter,url_prefix = "/movieTwitter" )
 app.register_blueprint( movie_page_Recommandation,url_prefix = "/movieRecommandation" )
 app.register_blueprint( comments_page,url_prefix = "/comments" )
 app.register_blueprint( rec_page,url_prefix = "/rec" )
+app.register_blueprint( admin_page,url_prefix = "/admin" )
 
 '''
 template url
