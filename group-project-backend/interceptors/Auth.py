@@ -18,7 +18,7 @@ def before_request():
 @app.after_request
 def after_request( response ):
     app.logger.info("--------after_request--------")
-    white_list =['http://amdb-frontend.s3-website-eu-west-1.amazonaws.com', 'http://localhost:8080' , 'http://amdb-admin.s3-website-eu-west-1.amazonaws.com/']
+    white_list =['http://amdb-frontend.s3-website-eu-west-1.amazonaws.com', 'http://localhost:8080' , 'http://amdb-admin.s3-website-eu-west-1.amazonaws.com']
     if request.headers['Origin'] in white_list:
         response.headers.add('Access-Control-Allow-Origin', request.headers['Origin']  )
     response.headers.add('Access-Control-Allow-Credentials', 'true')
