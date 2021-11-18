@@ -8,6 +8,7 @@ from common.libs.DataHelper import getCurrentTime
 from common.models.user import User
 from common.models.usercomments import Usercomment
 from common.models.userInfo import Userinfo
+from common.models.userInfo2 import Userinfo2
 #import cv2
 import numpy as np
 from common.models.serializer import Serializer
@@ -27,12 +28,12 @@ admin_page = Blueprint( "admin_page",__name__ )
 def doReport():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
-    #userId = req['userId'] if "userId" in req else ""
+    userId = req['userId'] if "userId" in req else ""
     id = req['id'] if "id" in req else ""
     result = Usercomment.query.filter_by( id = id ).first()
 
     if result and result.ifReport == 0:
-        db.session.query(Usercomment).filter(Usercomment.id == id).update({"ifReport":1})
+        db.session.query(Usercomment).filter(Usercomment.id == id).update({"ifReport":1,"reporterId":userId})
 
     db.session.close()
 
@@ -60,3 +61,46 @@ def adminLogin():
         return ops_renderErrJSON( msg = "error" )
 
     return ops_renderJSON( msg = "login successfully!")
+
+@admin_page.route("/userList")
+def userList():
+    
+    users = User.query.all()
+    List = []
+    for user in users:
+        userInfo = Userinfo2.query.filter_by( userId = user.userId ).first()
+        db.session.close()
+        user = Serializer.serialize(user)
+        userInfo = Serializer.serialize(userInfo)
+        List.append(dict( user, **userInfo ))
+
+    return ops_renderJSON( msg = "login successfully!",data = List)
+
+@admin_page.route("/getSentimentRate")
+def getSentimentRate():
+    
+    req = request.values
+    
+    #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
+    sql = 'SELECT SUM(case WHEN sentiment >= 0.5 then 1 else 0 end ) as positive,  SUM(case WHEN sentiment < 0.5 then 1 else 0 end ) as negative FROM usercomments ;'
+    result = db.session.execute(text(sql)).fetchall()
+    List = {}
+    for lis in result:
+        List['positive'] = str(lis[0])
+        List['negative'] = str(lis[1])
+    return ops_renderJSON( msg = "get SentimentRate successfully!",data = List)
+
+@admin_page.route("/getToxicRate")
+def getToxicRate():
+    
+    req = request.values
+    
+    #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
+    sql = 'SELECT SUM(case WHEN toxic <= 0.53 then 1 else 0 end ) as toxic,  SUM(case WHEN toxic > 0.53 AND toxic < 0.9 then 1 else 0 end ) as midToxic, SUM(case WHEN toxic >= 0.9 then 1 else 0 end ) as noneToxic FROM usercomments ;'
+    result = db.session.execute(text(sql)).fetchall()
+    List = {}
+    for lis in result:
+        List['toxic'] = str(lis[0])
+        List['midToxic'] = str(lis[1])
+        List['noneToxic'] = str(lis[2])
+    return ops_renderJSON( msg = "get toxicRate successfully!",data = List)

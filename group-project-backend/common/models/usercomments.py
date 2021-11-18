@@ -18,6 +18,7 @@ class Usercomment(db.Model):
     toxic = db.Column(db.String(16))
     sentiment = db.Column(db.String(16))
     ifReport = db.Column(db.Integer)
+    reporterId = db.Column(db.Integer)
     
     def serialize(self):
         d = Serializer.serialize(self)
