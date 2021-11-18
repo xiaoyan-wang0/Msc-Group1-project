@@ -76,6 +76,14 @@ def userList():
 
     return ops_renderJSON( msg = "login successfully!",data = List)
 
+@admin_page.route("/commentsList")
+def commentsList():
+    
+    commentsList = Usercomment.query.all()
+    commentsList = Serializer.serialize_list(commentsList)
+
+    return ops_renderJSON( msg = "login successfully!",data = commentsList)
+
 @admin_page.route("/getSentimentRate")
 def getSentimentRate():
     
