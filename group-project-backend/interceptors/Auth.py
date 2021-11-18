@@ -8,11 +8,6 @@ from common.libs.UserService import UserService
 def before_request():
     app.logger.info( "--------before_request--------" )
 
-    white_list ={'http://amdb-frontend.s3-website-eu-west-1.amazonaws.com', 'http://localhost:8080' , 'http://amdb-admin.s3-website-eu-west-1.amazonaws.com/'}
-    g.cross_url = None
-    if request.headers['Origin'] in white_list:
-        g.cross_url = request.headers['Origin']
-
     user_info = check_login()
     app.logger.info( user_info )
     g.current_user = None
@@ -23,8 +18,9 @@ def before_request():
 @app.after_request
 def after_request( response ):
     app.logger.info("--------after_request--------")
-    
-    response.headers.add('Access-Control-Allow-Origin', g.cross_url )
+    white_list =['http://amdb-frontend.s3-website-eu-west-1.amazonaws.com', 'http://localhost:8080' , 'http://amdb-admin.s3-website-eu-west-1.amazonaws.com/']
+    if request.headers['Origin'] in white_list:
+        response.headers.add('Access-Control-Allow-Origin', request.headers['Origin']  )
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
