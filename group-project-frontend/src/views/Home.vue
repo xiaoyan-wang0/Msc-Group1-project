@@ -266,11 +266,11 @@ export default {
       margin-bottom: 15px;
     }
     .search-model-form {
-      padding: 0 15px;
+      // padding: 0 15px;
     }
 
     .search-model-form input {
-      width: 80%;
+      width: 95%;
       font-size: 40px;
       border: none;
       border-bottom: 2px solid #333;
@@ -433,7 +433,7 @@ export default {
     display: flex;
     -webkit-box-pack: center;
     justify-content: center;
-    max-width: 1280px;
+    // max-width: 1280px;
     .home-carousel-left {
       flex: 846 1 0%;
       margin: 0px 8px;

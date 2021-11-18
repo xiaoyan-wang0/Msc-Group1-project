@@ -26,7 +26,7 @@
         class="detect-button site-btn"
         type="primary"
         shape="round"
-        :size="large"
+        size="large"
         @click="submitDetect"
       >
         Submit
@@ -92,7 +92,7 @@ export default {
     const submitDetect = () => {
       //  Comment detect
       axios
-        .get(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value, {
+        .post(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value, {
           withCredentials: true,
         })
         .then((response) => {
@@ -148,12 +148,12 @@ export default {
   }
   .detector {
     align-items: center;
-    height: 358px;
+    height: 200px;
     width: 100%;
     // background-image: url("../assets/detector_backgroud.jpg");
     // opacity: 0.1;
     .container {
-      margin-top: 130px;
+      margin-top: 30px;
     }
   }
   .circle-erea {
@@ -174,6 +174,7 @@ export default {
     }
   }
   .detector-rate {
+    min-width: 150px;
     float: left;
     width: 50%;
     span,
@@ -190,6 +191,7 @@ export default {
     }
   }
   .detector-sentiemnt {
+    min-width: 150px;
     float: right;
     width: 50%;
     span,
