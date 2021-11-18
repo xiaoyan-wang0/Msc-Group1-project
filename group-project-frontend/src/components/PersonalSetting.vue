@@ -404,6 +404,10 @@ export default {
     };
 
     const submitChange = () => {
+      if (userName.value == "" || password.value == "") {
+        message.success("Sorry, username and password can not be empty!");
+        return;
+      }
       const settingFormData = new FormData();
       console.log("settingFormData");
       settingFormData.append("userId", userId.value);

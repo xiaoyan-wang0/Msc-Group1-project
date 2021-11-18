@@ -35,7 +35,7 @@
     <div class="circle-erea">
       <div class="detector-rate">
         <a-progress
-          width="150px"
+          width="150p"
           type="circle"
           :percent="toxicPercent"
           :format="(percent) => `${toxicPercent} % Toxic`"
@@ -52,7 +52,7 @@
       </div>
       <div class="detector-sentiemnt">
         <a-progress
-          width="150px"
+          width="150p"
           type="circle"
           :percent="sentiemntPercent"
           :format="(percent) => `${sentiemntPercent} % Sentiment`"
