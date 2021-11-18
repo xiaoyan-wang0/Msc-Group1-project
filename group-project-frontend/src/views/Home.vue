@@ -183,16 +183,17 @@ export default {
       //     console.log(lastestMovieData.value);
       // });
       fackePic.value = [
+        
+        { id: 566525, title: "Shang-Chi and the Legend of the Ten Rings", backdrop_path: require("@/assets/2.jpg") },
+        {
+          id: 370172,
+          title: "No Time to Die",
+          backdrop_path: require("@/assets/3.jpg"),
+        },
         {
           id: 580489,
           title: "Venom: Let There Be Carnage",
           backdrop_path: require("@/assets/1.jpg"),
-        },
-        { id: 438631, title: "Dune", backdrop_path: require("@/assets/2.jpg") },
-        {
-          id: 574060,
-          title: "Gunpowder Milkshake",
-          backdrop_path: require("@/assets/3.jpg"),
         },
       ];
     });

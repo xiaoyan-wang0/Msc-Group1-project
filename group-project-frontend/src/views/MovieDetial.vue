@@ -36,6 +36,24 @@
         </span>
       </template>
     </el-dialog>
+
+    <el-dialog
+      v-model="reportCommentsDialog"
+      title="Warning"
+      width="30%"
+      center
+      v-loading="commentConfirmLoading"
+    >
+      <span> Are you sure to report this comment?</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="reportCommentsDialog = false">Cancel</el-button>
+          <el-button type="primary" @click="confirmReportComment"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <div class="container">
       <div class="anime__details__content">
         <div class="row">
@@ -296,7 +314,9 @@
                               alt=""
                             /> -->
                             </li>
-                            <li class="report">Report</li>
+                            <li class="report">
+                              <a @click="amdbReport(item)">Report</a>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -319,25 +339,9 @@
                     </template>
                     <template #content>
                       <a-form-item>
-                        <a-textarea
-                          v-model:value="commentsValue"
-                          :rows="4"
-                          @blur="addCommentText"
-                        />
+                        <a-textarea v-model:value="commentsValue" :rows="4" />
                       </a-form-item>
                       <a-form-item>
-                        <!-- <a-popconfirm
-                          :title="popTitle"
-                          ok-text="Yes"
-                          cancel-text="No"
-                          :disabled="!isPopUp"
-                          @confirm="confirmAddComment"
-                          @cancel="cancelAddComment"
-                        >
-                          <template #icon
-                            ><question-circle-outlined style="color: red"
-                          /></template> -->
-
                         <button
                           class="site-btn"
                           html-type="submit"
@@ -454,7 +458,7 @@
                                 alt=""
                               />
                             </li>
-                            <li class="report">Report</li>
+                            <!-- <li class="report">Report</li> -->
                           </ul>
                         </div>
                       </div>
@@ -556,7 +560,7 @@
                                 alt=""
                               />
                             </li>
-                            <li class="report">Report</li>
+                            <!-- <li class="report">Report</li> -->
                             <li class="report">
                               {{
                                 item.warningSpoilers ? "warningSpoilers" : ""
@@ -663,7 +667,7 @@
                                 alt=""
                               />
                             </li>
-                            <li class="report">Report</li>
+                            <!-- <li class="report">Report</li> -->
                           </ul>
                         </div>
                       </div>
@@ -766,7 +770,7 @@
                                 alt=""
                               />
                             </li>
-                            <li class="report">Report</li>
+                            <!-- <li class="report">Report</li> -->
                           </ul>
                         </div>
                       </div>
@@ -875,6 +879,7 @@ export default {
     const popTitle = ref("");
     const commentConfirmLoading = ref(false);
     const addCommentsDialog = ref(false);
+    const reportCommentsDialog = ref(false);
     const tmdbreview = ref([]);
     const tmdbAllreview = ref([]);
     const amdbreview = ref([]);
@@ -902,7 +907,6 @@ export default {
     const comments = ref([]);
     const submitting = ref(false);
     const commentsValue = ref("");
-    const isPopUp = ref(false);
     onBeforeMount(() => {
       // fetch movie detail
       axios
@@ -1219,14 +1223,6 @@ export default {
       }
     };
 
-    const addCommentText = () => {
-      if (!commentsValue.value) {
-        isPopUp.value = false;
-        return;
-      }
-      isPopUp.value = true;
-    };
-
     // comments
     const handleSubmit = () => {
       if (!authLogin() || !commentsValue.value) {
@@ -1275,7 +1271,6 @@ export default {
           console.log(response.data);
           submitting.value = false;
           getAMDBComments();
-          isPopUp.value = false;
           commentsValue.value = "";
           commentLoading.value = false;
           if (response.data.code === 200) {
@@ -1442,6 +1437,7 @@ export default {
       console.log(comments);
       return comments;
     };
+
     // Add to like list
     const addLikeList = () => {
       if (!authLogin()) {
@@ -1476,6 +1472,44 @@ export default {
         });
     };
 
+    // Report AMDB comments
+    let reportCommentId = "";
+    const amdbReport = (item) => {
+      if (!authLogin()) {
+        return;
+      }
+      reportCommentId = item.id;
+      reportCommentsDialog.value = true;
+    };
+
+    const confirmReportComment = () => {
+      // Add comments
+      axios
+        .get(
+          env.AMDBAPI +
+            "admin/doReport?id=" +
+            reportCommentId +
+            "&userId=" +
+            currentUser.value.data.userId
+        )
+        .then((response) => {
+          // tmdbreview.value = response.data;
+          console.log("confirmReportComment ");
+          console.log(response.data);
+          reportCommentsDialog.value = false;
+          if (response.data.code === 200) {
+            message.success("Thanks for your report!");
+          }
+        })
+        .catch((error) => {
+          reportCommentsDialog.value = false;
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
+    };
+
     // Need log in
     const authLogin = () => {
       if (!localStorage.getItem("user")) {
@@ -1502,6 +1536,7 @@ export default {
       popTitle,
       commentConfirmLoading,
       addCommentsDialog,
+      reportCommentsDialog,
       activeKey,
       commentLoading,
       recommendationMovies,
@@ -1509,11 +1544,11 @@ export default {
       AMDBAPI,
       // comments
       comments,
+      amdbReport,
       submitting,
       commentsValue,
       tmdbreview,
       imdbreview,
-      isPopUp,
       amdbreview,
       youtubereview,
       twitterreview,
@@ -1527,6 +1562,7 @@ export default {
       showSentiemntText,
       cancelAddComment,
       confirmAddComment,
+      confirmReportComment,
       changeToPercent,
       showToxicImg,
       showSentimentImg,
@@ -1537,7 +1573,6 @@ export default {
       handleIMDBFilterChange,
       handleYoutubeFilterChange,
       handleTwitterFilterChange,
-      addCommentText,
       changeCommentTab,
       fleshMovie,
     };
