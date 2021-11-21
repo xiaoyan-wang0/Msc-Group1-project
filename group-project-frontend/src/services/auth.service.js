@@ -9,7 +9,8 @@ class AuthService {
     return axios({
       method: "post",
       url: API_URL + "login",
-      data: user, withCredentials: true,
+      data: user, 
+      // withCredentials: true,
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(response => {
@@ -38,7 +39,9 @@ class AuthService {
       url: API_URL + "reg",
       data: user,
       headers: { "Content-Type": "multipart/form-data" },
-    }, { withCredentials: true })
+    }, 
+    // { withCredentials: true }
+    )
       .then(response => {
         // if (response.data.accessToken) {
         console.log("REG");

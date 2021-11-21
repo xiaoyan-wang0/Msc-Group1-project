@@ -24,7 +24,7 @@
             <el-table-column prop="userName" label="UserName" />
             <el-table-column prop="email" label="Email" />
             <el-table-column prop="movieTags" label="Genres" />
-            <el-table-column prop="overView" label="verView" />
+            <el-table-column prop="overView" label="Overview" />
             <el-table-column fixed="right" label="Operations">
               <template #default="scope">
                 <el-button

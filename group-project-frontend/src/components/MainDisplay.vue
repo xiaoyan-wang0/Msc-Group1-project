@@ -249,9 +249,9 @@ export default {
 
       // IMDB BOT 10 movies
       axios
-        .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=6", {
-          withCredentials: true,
-        })
+        .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=6", 
+        // { withCredentials: true,}
+        )
         .then((response) => {
           // popularMovieData.value = JSON.stringify(response.data);
           imdbBotMovies.value = response.data.data;

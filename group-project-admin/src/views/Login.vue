@@ -104,7 +104,7 @@ export default {
         method: "post",
         url: env.AMDBAPI + "admin/adminLogin",
         data: loginFormData,
-        withCredentials: true,
+        // withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then((response) => {
