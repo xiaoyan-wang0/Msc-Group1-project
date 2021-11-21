@@ -425,7 +425,7 @@ export default {
         method: "post",
         url: env.AMDBAPI + "member/setUserInfo",
         data: settingFormData,
-        withCredentials: true,
+        // withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then((response) => {

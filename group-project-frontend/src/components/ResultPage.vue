@@ -204,9 +204,9 @@ export default {
         axios
           .get(
             env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
-            {
-              withCredentials: true,
-            }
+            // {
+            //   withCredentials: true,
+            // }
           )
           .then((response) => {
             // popularMovieData.value = JSON.stringify(response.data);
@@ -308,9 +308,9 @@ export default {
         axios
           .get(
             env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
-            {
-              withCredentials: true,
-            }
+            // {
+            //   withCredentials: true,
+            // }
           )
           .then((response) => {
             // popularMovieData.value = JSON.stringify(response.data);

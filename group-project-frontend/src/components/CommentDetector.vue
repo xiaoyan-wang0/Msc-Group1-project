@@ -35,7 +35,7 @@
     <div class="circle-erea">
       <div class="detector-rate">
         <a-progress
-          width="150p"
+          :width="150"
           type="circle"
           :percent="toxicPercent"
           :format="(percent) => `${toxicPercent} % Toxic`"
@@ -52,7 +52,7 @@
       </div>
       <div class="detector-sentiemnt">
         <a-progress
-          width="150p"
+          :width="150"
           type="circle"
           :percent="sentiemntPercent"
           :format="(percent) => `${sentiemntPercent} % Sentiment`"
@@ -92,9 +92,9 @@ export default {
     const submitDetect = () => {
       //  Comment detect
       axios
-        .post(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value, {
-          withCredentials: true,
-        })
+        .post(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value, 
+        // { withCredentials: true, }
+      )
         .then((response) => {
           commentStatus.value = response.data.data;
           toxicPercent.value = Number(
