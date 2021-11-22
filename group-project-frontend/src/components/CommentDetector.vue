@@ -17,7 +17,7 @@
     <div class="detector-text">
       <h3>Please enter the character!</h3>
       <a-textarea
-        v-model:value="commentValue"
+        v-model="commentValue"
         showCount
         :maxlength="500"
         class="detect-input"
@@ -37,14 +37,15 @@
         <a-progress
           :width="150"
           type="circle"
-          :percent="toxicPercent"
+          :percent="parseFloat(toxicPercent)"
           :format="(percent) => `${toxicPercent} % Toxic`"
           :stroke-color="{
             '0%': 'white',
-            '0%': 'green',
+            '50%': 'green',
             '100%': 'red',
           }"
         />
+        <!-- <el-progress type="circle" :percentage="15" :color="['green','red']"/> -->
         <div class="toxic-rate">
           <span style="color: white">Toxic extent :</span>
           <a :style="{ color: 'red' }">{{ toxicText }}</a>
@@ -54,11 +55,11 @@
         <a-progress
           :width="150"
           type="circle"
-          :percent="sentiemntPercent"
+          :percent="parseFloat(sentiemntPercent)"
           :format="(percent) => `${sentiemntPercent} % Sentiment`"
           :stroke-color="{
             '0%': 'white',
-            '0%': 'green',
+            '50%': 'green',
             '100%': 'red',
           }"
         />
