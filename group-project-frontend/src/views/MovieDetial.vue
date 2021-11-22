@@ -1,59 +1,61 @@
  <template>
   <section class="anime-details spad">
-    <a-modal
-      :visible="isShowTrailer"
-      :maskClosable="true"
-      :closable="false"
-      :footer="null"
-      :destroyOnClose="true"
-      :width="700"
-      @cancel="handleCancel"
-    >
-      <YoutubeVue3
-        ref="youtube"
-        :videoid="video_id"
+    <div class="">
+      <a-modal
+        :visible="isShowTrailer"
+        :maskClosable="true"
+        :closable="false"
+        :footer="null"
+        :destroyOnClose="true"
         :width="700"
-        :autoplay="0"
-        :height="400"
-      />
-    </a-modal>
-    <el-dialog
-      v-model="addCommentsDialog"
-      title="Warning"
-      width="30%"
-      center
-      v-loading="commentConfirmLoading"
-    >
-      <span> Are you sure to publich your comment?</span>
-      <br />
-      <span style="font-weight: 600">{{ popTitle }}</span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="addCommentsDialog = false">Cancel</el-button>
-          <el-button type="primary" @click="confirmAddComment"
-            >Confirm</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
+        @cancel="handleCancel"
+      >
+        <YoutubeVue3
+          ref="youtube"
+          :videoid="video_id"
+          :width="700"
+          :autoplay="0"
+          :height="400"
+        />
+      </a-modal>
+      <el-dialog
+        v-model="addCommentsDialog"
+        title="Warning"
+        width="30%"
+        center
+        v-loading="commentConfirmLoading"
+      >
+        <span> Are you sure to publich your comment?</span>
+        <br />
+        <span style="font-weight: 600">{{ popTitle }}</span>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="addCommentsDialog = false">Cancel</el-button>
+            <el-button type="primary" @click="confirmAddComment"
+              >Confirm</el-button
+            >
+          </span>
+        </template>
+      </el-dialog>
 
-    <el-dialog
-      v-model="reportCommentsDialog"
-      title="Warning"
-      width="30%"
-      center
-      v-loading="commentConfirmLoading"
-    >
-      <span> Are you sure to report this comment?</span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="reportCommentsDialog = false">Cancel</el-button>
-          <el-button type="primary" @click="confirmReportComment"
-            >Confirm</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
+      <el-dialog
+        v-model="reportCommentsDialog"
+        title="Warning"
+        width="30%"
+        center
+        v-loading="commentConfirmLoading"
+      >
+        <span> Are you sure to report this comment?</span>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="reportCommentsDialog = false">Cancel</el-button>
+            <el-button type="primary" @click="confirmReportComment"
+              >Confirm</el-button
+            >
+          </span>
+        </template>
+      </el-dialog>
+    </div>
     <div class="container">
       <div class="anime__details__content">
         <div class="row">
@@ -76,8 +78,9 @@
               <div class="anime__details__rating">
                 <div class="rating">
                   <a-rate v-model:value="start" disabled allowHalf />
-                  <!-- <el-rate v-model="start" allow-half disabled> </el-rate> -->
                   <p>{{ movie.vote_average }}</p>
+                  <!-- <a-rate v-model:value="start" disabled allowHalf /> -->
+                  <!-- <p>{{ movie.vote_average }}</p> -->
                 </div>
               </div>
 
@@ -205,578 +208,602 @@
               :tabBarStyle="{ color: 'white' }"
             >
               <a-tab-pane key="amdb" tab="AMDB reviews" style="">
-                <div class="section-title">
-                  <div class="comment-filter">
-                    <h5>AMDB Comment</h5>
-                    <div class="filter-select">
-                      <a-select
-                        placeholder="Filter"
-                        style="width: 150px"
-                        @change="handleFilterChange"
-                      >
-                        <a-select-option value="all">All</a-select-option>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Toxic Degree </span>
-                          </template>
-                          <a-select-option value="notoxic"
-                            >Non toxic</a-select-option
-                          >
-                          <a-select-option value="toxic">Toxic</a-select-option>
-                          <a-select-option value="severetoxic"
-                            >Severe toxic</a-select-option
-                          >
-                        </a-select-opt-group>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Sentiment Degree </span>
-                          </template>
-                          <a-select-option value="positive"
-                            >Positive</a-select-option
-                          >
-                          <a-select-option value="negative"
-                            >Negative</a-select-option
-                          >
-                        </a-select-opt-group>
-                      </a-select>
+                <div class="comment-div-amdb">
+                  <div class="section-title">
+                    <div class="comment-filter">
+                      <div class="comment-title">
+                        <h5>AMDB Comment</h5>
+                      </div>
+                      <div class="filter-select">
+                        <a-select
+                          placeholder="Filter"
+                          style="width: 150px"
+                          @change="handleFilterChange"
+                        >
+                          <a-select-option value="all">All</a-select-option>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Toxic Degree </span>
+                            </template>
+                            <a-select-option value="notoxic"
+                              >Non toxic</a-select-option
+                            >
+                            <a-select-option value="toxic"
+                              >Toxic</a-select-option
+                            >
+                            <a-select-option value="severetoxic"
+                              >Severe toxic</a-select-option
+                            >
+                          </a-select-opt-group>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Sentiment Degree </span>
+                            </template>
+                            <a-select-option value="positive"
+                              >Positive</a-select-option
+                            >
+                            <a-select-option value="negative"
+                              >Negative</a-select-option
+                            >
+                          </a-select-opt-group>
+                        </a-select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <a-empty v-if="amdbreview.length < 1">
-                  <template #description>
-                    <span>
-                      <!-- Customize -->
-                      <a>Sorry, don't have now</a>
-                    </span>
-                  </template>
-                </a-empty>
-                <el-scrollbar max-height="500px">
-                  <div
-                    class="comment-wrap"
-                    v-for="item in amdbreview"
-                    :key="item.id"
-                  >
-                    <div class="anime__review__item">
-                      <div class="anime__review__item__pic">
-                        <div class="photo-avatar">
-                          <div class="avatar">
-                            <a-avatar
-                              :src="
-                                currentUser
-                                  ? AMDBAPI +
-                                    'member/getUserImage?userId=' +
-                                    item.userId
-                                  : emptyprofile
-                              "
-                            />
+                  <el-scrollbar max-height="500px">
+                    <a-empty v-if="amdbreview.length < 1">
+                      <template #description>
+                        <span>
+                          <!-- Customize -->
+                          <a>Sorry, don't have now</a>
+                        </span>
+                      </template>
+                    </a-empty>
+                    <div
+                      class="comment-wrap"
+                      v-for="item in amdbreview"
+                      :key="item.id"
+                    >
+                      <div class="anime__review__item">
+                        <div class="anime__review__item__pic">
+                          <div class="photo-avatar">
+                            <div class="avatar">
+                              <a-avatar
+                                :src="
+                                  currentUser
+                                    ? AMDBAPI +
+                                      'member/getUserImage?userId=' +
+                                      item.userId
+                                    : emptyprofile
+                                "
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="anime__review__item__text">
-                        <h6 class="comment-author">
-                          {{ item.userName }}
-                        </h6>
-                        <!-- <p class="comment-text">{{ item.comment }}</p> -->
-                        <a-typography-paragraph
-                          class="comment-text"
-                          :ellipsis="
-                            ellipsis
-                              ? { rows: 5, expandable: true, symbol: 'more' }
-                              : false
-                          "
-                          :content="item.comment"
-                        />
-                        <div class="bottom-comment">
-                          <div class="comment-date">
-                            {{ formatDate(item.createTime) }}
-                          </div>
-                          <ul class="comment-actions">
-                            <li class="toxicrate">
-                              {{ showToxicText(item.toxic) }} :
-                              {{ changeToPercent(item.toxic) }}
-                              <img
-                                :src="showToxicImg(item.toxic)"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <li class="sentiemnt-rate">
-                              {{ showSentiemntText(item.sentiment) }} :
-                              {{ changeToPercent(item.sentiment) }}
-                              <img
-                                :src="showSentimentImg(item.sentiment)"
-                                style="height: 30px"
-                                alt=""
-                              />
-                              <!-- <img
+                        <div class="anime__review__item__text">
+                          <h6 class="comment-author">
+                            {{ item.userName }}
+                          </h6>
+                          <!-- <p class="comment-text">{{ item.comment }}</p> -->
+                          <a-typography-paragraph
+                            class="comment-text"
+                            :ellipsis="
+                              ellipsis
+                                ? { rows: 5, expandable: true, symbol: 'more' }
+                                : false
+                            "
+                            :content="item.comment"
+                          />
+                          <div class="bottom-comment">
+                            <div class="comment-date">
+                              {{ formatDate(item.createTime) }}
+                            </div>
+                            <ul class="comment-actions">
+                              <li class="toxicrate">
+                                {{ showToxicText(item.toxic) }} :
+                                {{ changeToPercent(item.toxic) }}
+                                <img
+                                  :src="showToxicImg(item.toxic)"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <li class="sentiemnt-rate">
+                                {{ showSentiemntText(item.sentiment) }} :
+                                {{ changeToPercent(item.sentiment) }}
+                                <img
+                                  :src="showSentimentImg(item.sentiment)"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                                <!-- <img
                               src="../assets/toxic-red.png"
                               style="height: 30px"
                               alt=""
                             /> -->
-                            </li>
-                            <li class="report">
-                              <a @click="amdbReport(item)">Report</a>
-                            </li>
-                          </ul>
+                              </li>
+                              <li class="report">
+                                <a @click="amdbReport(item)">Report</a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  </el-scrollbar>
+                  <div class="anime__details__form">
+                    <a-comment>
+                      <template #avatar>
+                        <a-avatar
+                          :src="
+                            currentUser
+                              ? AMDBAPI +
+                                'member/getUserImage?userId=' +
+                                currentUser.data.userId
+                              : emptyprofile
+                          "
+                          alt="Avatar"
+                        />
+                      </template>
+                      <template #content>
+                        <a-form-item>
+                          <a-textarea v-model:value="commentsValue" :rows="4" />
+                        </a-form-item>
+                        <a-form-item>
+                          <button
+                            class="site-btn"
+                            html-type="submit"
+                            :loading="submitting"
+                            @click="handleSubmit()"
+                          >
+                            Add Comment
+                          </button>
+                          <!-- </a-popconfirm> -->
+                        </a-form-item>
+                      </template>
+                    </a-comment>
                   </div>
-                </el-scrollbar>
-                <div class="anime__details__form">
-                  <a-comment>
-                    <template #avatar>
-                      <a-avatar
-                        :src="
-                          currentUser
-                            ? AMDBAPI +
-                              'member/getUserImage?userId=' +
-                              currentUser.data.userId
-                            : emptyprofile
-                        "
-                        alt="Avatar"
-                      />
-                    </template>
-                    <template #content>
-                      <a-form-item>
-                        <a-textarea v-model:value="commentsValue" :rows="4" />
-                      </a-form-item>
-                      <a-form-item>
-                        <button
-                          class="site-btn"
-                          html-type="submit"
-                          :loading="submitting"
-                          @click="handleSubmit()"
-                        >
-                          Add Comment
-                        </button>
-                        <!-- </a-popconfirm> -->
-                      </a-form-item>
-                    </template>
-                  </a-comment>
                 </div>
               </a-tab-pane>
 
               <a-tab-pane key="tmdb" tab="TMDB reviews" v-if="tmdbreview">
-                <div class="section-title">
-                  <div class="comment-filter">
-                    <h5>TMDB Comment</h5>
-                    <div class="filter-select">
-                      <a-select
-                        placeholder="Filter"
-                        style="width: 150px"
-                        @change="handleTMDBFilterChange"
-                      >
-                        <a-select-option value="all">All</a-select-option>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Toxic Degree </span>
-                          </template>
-                          <a-select-option value="notoxic"
-                            >Non toxic</a-select-option
-                          >
-                          <a-select-option value="toxic">Toxic</a-select-option>
-                          <a-select-option value="severetoxic"
-                            >Severe toxic</a-select-option
-                          >
-                        </a-select-opt-group>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Sentiment Degree </span>
-                          </template>
-                          <a-select-option value="positive"
-                            >Positive</a-select-option
-                          >
-                          <a-select-option value="negative"
-                            >Negative</a-select-option
-                          >
-                        </a-select-opt-group>
-                      </a-select>
+                <div class="comment-div">
+                  <div class="section-title">
+                    <div class="comment-filter">
+                      <h5>TMDB Comment</h5>
+                      <div class="filter-select">
+                        <a-select
+                          placeholder="Filter"
+                          style="width: 150px"
+                          @change="handleTMDBFilterChange"
+                        >
+                          <a-select-option value="all">All</a-select-option>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Toxic Degree </span>
+                            </template>
+                            <a-select-option value="notoxic"
+                              >Non toxic</a-select-option
+                            >
+                            <a-select-option value="toxic"
+                              >Toxic</a-select-option
+                            >
+                            <a-select-option value="severetoxic"
+                              >Severe toxic</a-select-option
+                            >
+                          </a-select-opt-group>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Sentiment Degree </span>
+                            </template>
+                            <a-select-option value="positive"
+                              >Positive</a-select-option
+                            >
+                            <a-select-option value="negative"
+                              >Negative</a-select-option
+                            >
+                          </a-select-opt-group>
+                        </a-select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <a-empty v-if="tmdbreview.length < 1">
-                  <template #description>
-                    <span>
-                      <!-- Customize -->
-                      <a>Sorry, don't have now</a>
-                    </span>
-                  </template>
-                </a-empty>
-                <el-scrollbar max-height="700px">
-                  <div
-                    class="comment-wrap"
-                    v-for="item in tmdbreview"
-                    :key="item.id"
-                  >
-                    <div class="anime__review__item">
-                      <div class="anime__review__item__pic">
-                        <div class="photo-avatar">
-                          <div class="avatar">
-                            <a-avatar
-                              :src="
-                                item.author_details.avatar_path
-                                  ? moviePoster +
-                                    item.author_details.avatar_path
-                                  : emptyprofile
-                              "
-                            />
+                  <el-scrollbar max-height="700px">
+                    <a-empty v-if="tmdbreview.length < 1">
+                      <template #description>
+                        <span>
+                          <!-- Customize -->
+                          <a>Sorry, don't have now</a>
+                        </span>
+                      </template>
+                    </a-empty>
+                    <div
+                      class="comment-wrap"
+                      v-for="item in tmdbreview"
+                      :key="item.id"
+                    >
+                      <div class="anime__review__item">
+                        <div class="anime__review__item__pic">
+                          <div class="photo-avatar">
+                            <div class="avatar">
+                              <a-avatar
+                                :src="
+                                  item.author_details.avatar_path
+                                    ? moviePoster +
+                                      item.author_details.avatar_path
+                                    : emptyprofile
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="anime__review__item__text">
+                          <h6 class="comment-author">{{ item.author }}</h6>
+                          <!-- <p class="comment-text">{{ item.content }}</p> -->
+                          <a-typography-paragraph
+                            class="comment-text"
+                            :ellipsis="
+                              ellipsis
+                                ? { rows: 5, expandable: true, symbol: 'more' }
+                                : false
+                            "
+                            :content="item.content"
+                          />
+                          <div class="bottom-comment">
+                            <div class="comment-date">
+                              {{ item.created_at }}
+                            </div>
+                            <ul class="comment-actions">
+                              <li class="toxicrate">
+                                {{ showToxicText(item.toxic[0]) }}:{{
+                                  changeToPercent(item.toxic)
+                                }}
+                                <img
+                                  :src="showToxicImg(item.toxic)"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <li class="sentiemnt-rate">
+                                {{ showSentiemntText(item.sentiment[0]) }} :
+                                {{ changeToPercent(item.sentiment[0]) }}
+                                <img
+                                  :src="showSentimentImg(item.sentiment[0])"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <!-- <li class="report">Report</li> -->
+                            </ul>
                           </div>
                         </div>
                       </div>
-                      <div class="anime__review__item__text">
-                        <h6 class="comment-author">{{ item.author }}</h6>
-                        <!-- <p class="comment-text">{{ item.content }}</p> -->
-                        <a-typography-paragraph
-                          class="comment-text"
-                          :ellipsis="
-                            ellipsis
-                              ? { rows: 5, expandable: true, symbol: 'more' }
-                              : false
-                          "
-                          :content="item.content"
-                        />
-                        <div class="bottom-comment">
-                          <div class="comment-date">{{ item.created_at }}</div>
-                          <ul class="comment-actions">
-                            <li class="toxicrate">
-                              {{ showToxicText(item.toxic[0]) }}:{{
-                                changeToPercent(item.toxic)
-                              }}
-                              <img
-                                :src="showToxicImg(item.toxic)"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <li class="sentiemnt-rate">
-                              {{ showSentiemntText(item.sentiment[0]) }} :
-                              {{ changeToPercent(item.sentiment[0]) }}
-                              <img
-                                :src="showSentimentImg(item.sentiment[0])"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <!-- <li class="report">Report</li> -->
-                          </ul>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                </el-scrollbar>
+                  </el-scrollbar>
+                </div>
               </a-tab-pane>
               <a-tab-pane key="imdb" tab="IMDB reviews">
-                <div class="section-title">
-                  <div class="comment-filter">
-                    <h5>IMDB Comment</h5>
-                    <div class="filter-select">
-                      <a-select
-                        placeholder="Filter"
-                        style="width: 150px"
-                        @change="handleIMDBFilterChange"
-                      >
-                        <a-select-option value="all">All</a-select-option>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Toxic Degree </span>
-                          </template>
-                          <a-select-option value="notoxic"
-                            >Non toxic</a-select-option
-                          >
-                          <a-select-option value="toxic">Toxic</a-select-option>
-                          <a-select-option value="severetoxic"
-                            >Severe toxic</a-select-option
-                          >
-                        </a-select-opt-group>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Sentiment Degree </span>
-                          </template>
-                          <a-select-option value="positive"
-                            >Positive</a-select-option
-                          >
-                          <a-select-option value="negative"
-                            >Negative</a-select-option
-                          >
-                        </a-select-opt-group>
-                      </a-select>
+                <div class="comment-div">
+                  <div class="section-title">
+                    <div class="comment-filter">
+                      <h5>IMDB Comment</h5>
+                      <div class="filter-select">
+                        <a-select
+                          placeholder="Filter"
+                          style="width: 150px"
+                          @change="handleIMDBFilterChange"
+                        >
+                          <a-select-option value="all">All</a-select-option>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Toxic Degree </span>
+                            </template>
+                            <a-select-option value="notoxic"
+                              >Non toxic</a-select-option
+                            >
+                            <a-select-option value="toxic"
+                              >Toxic</a-select-option
+                            >
+                            <a-select-option value="severetoxic"
+                              >Severe toxic</a-select-option
+                            >
+                          </a-select-opt-group>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Sentiment Degree </span>
+                            </template>
+                            <a-select-option value="positive"
+                              >Positive</a-select-option
+                            >
+                            <a-select-option value="negative"
+                              >Negative</a-select-option
+                            >
+                          </a-select-opt-group>
+                        </a-select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <a-empty v-if="imdbreview.length < 1">
-                  <template #description>
-                    <span>
-                      <!-- Customize -->
-                      <a>Sorry, don't have now</a>
-                    </span>
-                  </template>
-                </a-empty>
-                <el-scrollbar max-height="700px">
-                  <div
-                    class="comment-wrap"
-                    v-for="item in imdbreview"
-                    :key="item.id"
-                  >
-                    <div class="anime__review__item">
-                      <div class="anime__review__item__pic">
-                        <div class="photo-avatar">
-                          <div class="avatar">
-                            <a-avatar :src="emptyprofile" />
+                  <el-scrollbar max-height="700px">
+                    <a-empty v-if="imdbreview.length < 1">
+                      <template #description>
+                        <span>
+                          <!-- Customize -->
+                          <a>Sorry, don't have now</a>
+                        </span>
+                      </template>
+                    </a-empty>
+                    <div
+                      class="comment-wrap"
+                      v-for="item in imdbreview"
+                      :key="item.id"
+                    >
+                      <div class="anime__review__item">
+                        <div class="anime__review__item__pic">
+                          <div class="photo-avatar">
+                            <div class="avatar">
+                              <a-avatar :src="emptyprofile" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="anime__review__item__text">
+                          <h6 class="comment-author">{{ item.username }}</h6>
+                          <!-- <p class="comment-text">{{ item.content }}</p> -->
+                          <a-typography-paragraph
+                            class="comment-text"
+                            :ellipsis="
+                              ellipsis
+                                ? { rows: 5, expandable: true, symbol: 'more' }
+                                : false
+                            "
+                            :content="item.content"
+                          />
+                          <div class="bottom-comment">
+                            <div class="comment-date">{{ item.date }}</div>
+                            <ul class="comment-actions">
+                              <li class="toxicrate">
+                                {{ showToxicText(item.toxic[0]) }}:{{
+                                  changeToPercent(item.toxic)
+                                }}
+                                <img
+                                  :src="showToxicImg(item.toxic)"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <li class="sentiemnt-rate">
+                                {{ showSentiemntText(item.sentiment[0]) }} :
+                                {{ changeToPercent(item.sentiment[0]) }}
+                                <img
+                                  :src="showSentimentImg(item.sentiment[0])"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <!-- <li class="report">Report</li> -->
+                              <li class="report">
+                                {{
+                                  item.warningSpoilers ? "warningSpoilers" : ""
+                                }}
+                              </li>
+                            </ul>
                           </div>
                         </div>
                       </div>
-                      <div class="anime__review__item__text">
-                        <h6 class="comment-author">{{ item.username }}</h6>
-                        <!-- <p class="comment-text">{{ item.content }}</p> -->
-                        <a-typography-paragraph
-                          class="comment-text"
-                          :ellipsis="
-                            ellipsis
-                              ? { rows: 5, expandable: true, symbol: 'more' }
-                              : false
-                          "
-                          :content="item.content"
-                        />
-                        <div class="bottom-comment">
-                          <div class="comment-date">{{ item.date }}</div>
-                          <ul class="comment-actions">
-                            <li class="toxicrate">
-                              {{ showToxicText(item.toxic[0]) }}:{{
-                                changeToPercent(item.toxic)
-                              }}
-                              <img
-                                :src="showToxicImg(item.toxic)"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <li class="sentiemnt-rate">
-                              {{ showSentiemntText(item.sentiment[0]) }} :
-                              {{ changeToPercent(item.sentiment[0]) }}
-                              <img
-                                :src="showSentimentImg(item.sentiment[0])"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <!-- <li class="report">Report</li> -->
-                            <li class="report">
-                              {{
-                                item.warningSpoilers ? "warningSpoilers" : ""
-                              }}
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                </el-scrollbar>
+                  </el-scrollbar>
+                </div>
               </a-tab-pane>
               <a-tab-pane key="youtube" tab="Youtube reviews">
-                <div class="section-title">
-                  <div class="comment-filter">
-                    <h5>Youtube Comment</h5>
-                    <div class="filter-select">
-                      <a-select
-                        placeholder="Filter"
-                        style="width: 150px"
-                        @change="handleYoutubeFilterChange"
-                      >
-                        <a-select-option value="all">All</a-select-option>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Toxic Degree </span>
-                          </template>
-                          <a-select-option value="notoxic"
-                            >Non toxic</a-select-option
-                          >
-                          <a-select-option value="toxic">Toxic</a-select-option>
-                          <a-select-option value="severetoxic"
-                            >Severe toxic</a-select-option
-                          >
-                        </a-select-opt-group>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Sentiment Degree </span>
-                          </template>
-                          <a-select-option value="positive"
-                            >Positive</a-select-option
-                          >
-                          <a-select-option value="negative"
-                            >Negative</a-select-option
-                          >
-                        </a-select-opt-group>
-                      </a-select>
+                <div class="comment-div">
+                  <div class="section-title">
+                    <div class="comment-filter">
+                      <h5>Youtube Comment</h5>
+                      <div class="filter-select">
+                        <a-select
+                          placeholder="Filter"
+                          style="width: 150px"
+                          @change="handleYoutubeFilterChange"
+                        >
+                          <a-select-option value="all">All</a-select-option>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Toxic Degree </span>
+                            </template>
+                            <a-select-option value="notoxic"
+                              >Non toxic</a-select-option
+                            >
+                            <a-select-option value="toxic"
+                              >Toxic</a-select-option
+                            >
+                            <a-select-option value="severetoxic"
+                              >Severe toxic</a-select-option
+                            >
+                          </a-select-opt-group>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Sentiment Degree </span>
+                            </template>
+                            <a-select-option value="positive"
+                              >Positive</a-select-option
+                            >
+                            <a-select-option value="negative"
+                              >Negative</a-select-option
+                            >
+                          </a-select-opt-group>
+                        </a-select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <a-empty v-if="youtubereview.length < 1">
-                  <template #description>
-                    <span>
-                      <!-- Customize -->
-                      <a>Sorry, don't have now</a>
-                    </span>
-                  </template>
-                </a-empty>
-                <el-scrollbar max-height="700px">
-                  <div
-                    class="comment-wrap"
-                    v-for="item in youtubereview"
-                    :key="item.id"
-                  >
-                    <div class="anime__review__item">
-                      <div class="anime__review__item__pic">
-                        <div class="photo-avatar">
-                          <div class="avatar">
-                            <a-avatar :src="item.profile_picture" />
+                  <el-scrollbar max-height="700px">
+                    <a-empty v-if="youtubereview.length < 1">
+                      <template #description>
+                        <span>
+                          <!-- Customize -->
+                          <a>Sorry, don't have now</a>
+                        </span>
+                      </template>
+                    </a-empty>
+                    <div
+                      class="comment-wrap"
+                      v-for="item in youtubereview"
+                      :key="item.id"
+                    >
+                      <div class="anime__review__item">
+                        <div class="anime__review__item__pic">
+                          <div class="photo-avatar">
+                            <div class="avatar">
+                              <a-avatar :src="item.profile_picture" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="anime__review__item__text">
+                          <h6 class="comment-author">{{ item.username }}</h6>
+                          <!-- <p class="comment-text">{{ item.review }}</p> -->
+                          <a-typography-paragraph
+                            class="comment-text"
+                            :ellipsis="
+                              ellipsis
+                                ? { rows: 5, expandable: true, symbol: 'more' }
+                                : false
+                            "
+                            :content="item.review"
+                          />
+                          <div class="bottom-comment">
+                            <div class="comment-date">{{ item.time }}</div>
+                            <ul class="comment-actions">
+                              <li class="toxicrate">
+                                {{ showToxicText(item.toxic[0]) }}:{{
+                                  changeToPercent(item.toxic)
+                                }}
+                                <img
+                                  :src="showToxicImg(item.toxic)"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <li class="sentiemnt-rate">
+                                {{ showSentiemntText(item.sentiment[0]) }} :
+                                {{ changeToPercent(item.sentiment[0]) }}
+                                <img
+                                  :src="showSentimentImg(item.sentiment[0])"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <!-- <li class="report">Report</li> -->
+                            </ul>
                           </div>
                         </div>
                       </div>
-                      <div class="anime__review__item__text">
-                        <h6 class="comment-author">{{ item.username }}</h6>
-                        <!-- <p class="comment-text">{{ item.review }}</p> -->
-                        <a-typography-paragraph
-                          class="comment-text"
-                          :ellipsis="
-                            ellipsis
-                              ? { rows: 5, expandable: true, symbol: 'more' }
-                              : false
-                          "
-                          :content="item.review"
-                        />
-                        <div class="bottom-comment">
-                          <div class="comment-date">{{ item.time }}</div>
-                          <ul class="comment-actions">
-                            <li class="toxicrate">
-                              {{ showToxicText(item.toxic[0]) }}:{{
-                                changeToPercent(item.toxic)
-                              }}
-                              <img
-                                :src="showToxicImg(item.toxic)"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <li class="sentiemnt-rate">
-                              {{ showSentiemntText(item.sentiment[0]) }} :
-                              {{ changeToPercent(item.sentiment[0]) }}
-                              <img
-                                :src="showSentimentImg(item.sentiment[0])"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <!-- <li class="report">Report</li> -->
-                          </ul>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                </el-scrollbar>
+                  </el-scrollbar>
+                </div>
               </a-tab-pane>
 
               <a-tab-pane key="twitter" tab="Twitter reviews">
-                <div class="section-title">
-                  <div class="comment-filter">
-                    <h5>Twitter Comment</h5>
-                    <div class="filter-select">
-                      <a-select
-                        placeholder="Filter"
-                        style="width: 150px"
-                        @change="handleTwitterFilterChange"
-                      >
-                        <a-select-option value="all">All</a-select-option>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Toxic Degree </span>
-                          </template>
-                          <a-select-option value="notoxic"
-                            >Non toxic</a-select-option
-                          >
-                          <a-select-option value="toxic">Toxic</a-select-option>
-                          <a-select-option value="severetoxic"
-                            >Severe toxic</a-select-option
-                          >
-                        </a-select-opt-group>
-                        <a-select-opt-group>
-                          <template #label>
-                            <span> Sentiment Degree </span>
-                          </template>
-                          <a-select-option value="positive"
-                            >Positive</a-select-option
-                          >
-                          <a-select-option value="negative"
-                            >Negative</a-select-option
-                          >
-                        </a-select-opt-group>
-                      </a-select>
+                <div class="comment-div">
+                  <div class="section-title">
+                    <div class="comment-filter">
+                      <h5>Twitter Comment</h5>
+                      <div class="filter-select">
+                        <a-select
+                          placeholder="Filter"
+                          style="width: 150px"
+                          @change="handleTwitterFilterChange"
+                        >
+                          <a-select-option value="all">All</a-select-option>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Toxic Degree </span>
+                            </template>
+                            <a-select-option value="notoxic"
+                              >Non toxic</a-select-option
+                            >
+                            <a-select-option value="toxic"
+                              >Toxic</a-select-option
+                            >
+                            <a-select-option value="severetoxic"
+                              >Severe toxic</a-select-option
+                            >
+                          </a-select-opt-group>
+                          <a-select-opt-group>
+                            <template #label>
+                              <span> Sentiment Degree </span>
+                            </template>
+                            <a-select-option value="positive"
+                              >Positive</a-select-option
+                            >
+                            <a-select-option value="negative"
+                              >Negative</a-select-option
+                            >
+                          </a-select-opt-group>
+                        </a-select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <a-empty v-if="twitterreview.length < 1">
-                  <template #description>
-                    <span>
-                      <!-- Customize -->
-                      <a>Sorry, don't have now</a>
-                    </span>
-                  </template>
-                </a-empty>
-                <el-scrollbar max-height="700px">
-                  <div
-                    class="comment-wrap"
-                    v-for="item in twitterreview"
-                    :key="item.id"
-                  >
-                    <div class="anime__review__item">
-                      <div class="anime__review__item__pic">
-                        <div class="photo-avatar">
-                          <div class="avatar">
-                            <a-avatar :src="emptyprofile" />
+                  <el-scrollbar max-height="700px">
+                    <a-empty v-if="twitterreview.length < 1">
+                      <template #description>
+                        <span>
+                          <!-- Customize -->
+                          <a>Sorry, don't have now</a>
+                        </span>
+                      </template>
+                    </a-empty>
+                    <div
+                      class="comment-wrap"
+                      v-for="item in twitterreview"
+                      :key="item.id"
+                    >
+                      <div class="anime__review__item">
+                        <div class="anime__review__item__pic">
+                          <div class="photo-avatar">
+                            <div class="avatar">
+                              <a-avatar :src="emptyprofile" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="anime__review__item__text">
+                          <!-- <h6 class="comment-author">{{ item.username }}</h6> -->
+                          <!-- <p class="comment-text">{{ item.content }}</p> -->
+                          <a-typography-paragraph
+                            class="comment-text"
+                            :ellipsis="
+                              ellipsis
+                                ? { rows: 5, expandable: true, symbol: 'more' }
+                                : false
+                            "
+                            :content="item.content"
+                          />
+                          <div class="bottom-comment">
+                            <!-- <div class="comment-date">{{ item.time }}</div> -->
+                            <ul class="comment-actions">
+                              <li class="toxicrate">
+                                {{ showToxicText(item.toxic[0]) }}:{{
+                                  changeToPercent(item.toxic)
+                                }}
+                                <img
+                                  :src="showToxicImg(item.toxic)"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <li class="sentiemnt-rate">
+                                {{ showSentiemntText(item.sentiment[0]) }} :
+                                {{ changeToPercent(item.sentiment[0]) }}
+                                <img
+                                  :src="showSentimentImg(item.sentiment[0])"
+                                  style="height: 30px"
+                                  alt=""
+                                />
+                              </li>
+                              <!-- <li class="report">Report</li> -->
+                            </ul>
                           </div>
                         </div>
                       </div>
-                      <div class="anime__review__item__text">
-                        <!-- <h6 class="comment-author">{{ item.username }}</h6> -->
-                        <!-- <p class="comment-text">{{ item.content }}</p> -->
-                        <a-typography-paragraph
-                          class="comment-text"
-                          :ellipsis="
-                            ellipsis
-                              ? { rows: 5, expandable: true, symbol: 'more' }
-                              : false
-                          "
-                          :content="item.content"
-                        />
-                        <div class="bottom-comment">
-                          <!-- <div class="comment-date">{{ item.time }}</div> -->
-                          <ul class="comment-actions">
-                            <li class="toxicrate">
-                              {{ showToxicText(item.toxic[0]) }}:{{
-                                changeToPercent(item.toxic)
-                              }}
-                              <img
-                                :src="showToxicImg(item.toxic)"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <li class="sentiemnt-rate">
-                              {{ showSentiemntText(item.sentiment[0]) }} :
-                              {{ changeToPercent(item.sentiment[0]) }}
-                              <img
-                                :src="showSentimentImg(item.sentiment[0])"
-                                style="height: 30px"
-                                alt=""
-                              />
-                            </li>
-                            <!-- <li class="report">Report</li> -->
-                          </ul>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                </el-scrollbar>
+                  </el-scrollbar>
+                </div>
               </a-tab-pane>
             </a-tabs>
           </div>
@@ -1755,8 +1782,8 @@ export default {
   .comment-filter {
     .filter-select {
       position: absolute;
-      right: 0;
-      top: 50px;
+      right: 15px;
+      top: 70px;
     }
   }
 }
@@ -1872,5 +1899,27 @@ export default {
 .movie-casts {
   display: flex;
   flex-wrap: wrap;
+}
+
+.comment-div-amdb {
+  // border: #e53637 Dashed 1px;
+  box-shadow: 0 2px 12px 0 rgba(236, 230, 230, 0.1);
+  padding: 15px 15px 0 15px;
+  border-radius: 15px;
+  background-color: #1f1d1d;
+}
+
+.comment-div {
+  // border: #e53637 Dashed 1px;
+  box-shadow: 0 2px 12px 0 rgba(236, 230, 230, 0.1);
+  padding: 15px;
+  border-radius: 15px;
+  background-color: #1f1d1d;
+}
+
+@media only screen and (max-width: 800px) {
+  .filter-select {
+    position: initial !important;
+  }
 }
 </style>
