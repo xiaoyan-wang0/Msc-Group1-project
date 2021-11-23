@@ -48,6 +48,7 @@ def addComments():
     model_comments.comment = comment
     model_comments.movieId = movieId
     model_comments.userId = userId
+    model_comments.ifReport = 0
     try:
         db.session.add( model_comments )
         db.session.commit()
