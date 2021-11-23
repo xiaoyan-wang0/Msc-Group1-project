@@ -1,71 +1,356 @@
 <template>
-     <body >
-        <div id="layoutAuthentication">
-            <div id="layoutAuthentication_content">
-                <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-5">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">AMDB Admin System</h3></div>
-                                    <div class="card-body">
-                                        <form>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                                                <label for="inputEmail">Email address</label>
-                                            </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
-                                                <label for="inputPassword">Password</label>
-                                            </div>
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                                <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small" href="password.html">Forgot Password?</a>
-                                                <a class="btn btn-primary" href="index.html">Login</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-            <div id="layoutAuthentication_footer">
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2021</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
+  <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+      <!-- Navbar Brand-->
+      <a class="navbar-brand ps-3" href="index.html">Management system</a>
+      <!-- Sidebar Toggle-->
+      <button
+        class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+        id="sidebarToggle"
+        href="#!"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <!-- Navbar Search-->
+
+      <!-- Navbar-->
+      <form
+        class="
+          d-none d-md-inline-block
+          form-inline
+          ms-auto
+          me-0 me-md-3
+          my-2 my-md-0
+        "
+      >
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Search for..."
+            aria-label="Search for..."
+            aria-describedby="btnNavbarSearch"
+          />
+          <button class="btn btn-primary" id="btnNavbarSearch" type="button">
+            <i class="fas fa-search"></i>
+          </button>
         </div>
+      </form>
+      <!-- Navbar-->
+      <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="navbarDropdown"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            ><i class="fas fa-user fa-fw"></i
+          ></a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdown"
+          >
+            <li><a class="dropdown-item" href="#!">Settings</a></li>
+            <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#!">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="layoutSidenav">
+      <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+          <div class="sb-sidenav-menu">
+            <div class="nav">
+              <div class="sb-sidenav-menu-heading">Info</div>
+              <a class="nav-link" href="index.html">
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-tachometer-alt"></i>
+                </div>
+                Users
+              </a>
+              <div class="sb-sidenav-menu-heading">Comment</div>
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseLayouts"
+                aria-expanded="false"
+                aria-controls="collapseLayouts"
+              >
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-columns"></i>
+                </div>
+                User Comment
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div
+                class="collapse"
+                id="collapseLayouts"
+                aria-labelledby="headingOne"
+                data-bs-parent="#sidenavAccordion"
+              >
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="layout-static.html"
+                    >Static Navigation</a
+                  >
+                  <a class="nav-link" href="layout-sidenav-light.html"
+                    >Light Sidenav</a
+                  >
+                </nav>
+              </div>
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapsePages"
+                aria-expanded="false"
+                aria-controls="collapsePages"
+              >
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-book-open"></i>
+                </div>
+                Report Comment
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div
+                class="collapse"
+                id="collapsePages"
+                aria-labelledby="headingTwo"
+                data-bs-parent="#sidenavAccordion"
+              >
+                <nav
+                  class="sb-sidenav-menu-nested nav accordion"
+                  id="sidenavAccordionPages"
+                >
+                  <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#pagesCollapseAuth"
+                    aria-expanded="false"
+                    aria-controls="pagesCollapseAuth"
+                  >
+                    Authentication
+                    <div class="sb-sidenav-collapse-arrow">
+                      <i class="fas fa-angle-down"></i>
+                    </div>
+                  </a>
+                  <div
+                    class="collapse"
+                    id="pagesCollapseAuth"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#sidenavAccordionPages"
+                  >
+                    <nav class="sb-sidenav-menu-nested nav">
+                      <a class="nav-link" href="login.html">Login</a>
+                      <a class="nav-link" href="register.html">Register</a>
+                      <a class="nav-link" href="password.html"
+                        >Forgot Password</a
+                      >
+                    </nav>
+                  </div>
+                  <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#pagesCollapseError"
+                    aria-expanded="false"
+                    aria-controls="pagesCollapseError"
+                  >
+                    Error
+                    <div class="sb-sidenav-collapse-arrow">
+                      <i class="fas fa-angle-down"></i>
+                    </div>
+                  </a>
+                  <div
+                    class="collapse"
+                    id="pagesCollapseError"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#sidenavAccordionPages"
+                  >
+                    <nav class="sb-sidenav-menu-nested nav">
+                      <a class="nav-link" href="401.html">401 Page</a>
+                      <a class="nav-link" href="404.html">404 Page</a>
+                      <a class="nav-link" href="500.html">500 Page</a>
+                    </nav>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="sb-sidenav-footer">
+            <div class="small">Logged in as:</div>
+            Start Bootstrap
+          </div>
+        </nav>
+      </div>
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            <h1 class="mt-4">User Info</h1>
+            <ol class="breadcrumb mb-4">
+              <li class="breadcrumb-item active">User information details</li>
+            </ol>
+
+            <div class="card mb-4">
+              <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Users
+              </div>
+
+              <div class="card-body">
+                <el-table :data="tableData" style="width: 100%">
+                  <el-table-column fixed prop="date" label="Date" width="150" />
+                  <el-table-column prop="name" label="Name" width="120" />
+                  <el-table-column prop="state" label="State" width="120" />
+                  <el-table-column prop="city" label="City" width="120" />
+                  <el-table-column prop="address" label="Address" width="600" />
+                  <el-table-column prop="zip" label="Zip" width="120" />
+                  <el-table-column fixed="right" label="Operations" width="120">
+                    <template #default>
+                      <el-button type="text" size="small" @click="handleClick"
+                        >Detail</el-button
+                      >
+                      <el-button type="text" size="small">Edit</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+          </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+          <div class="container-fluid px-4">
+            <div
+              class="d-flex align-items-center justify-content-between small"
+            >
+              <div class="text-muted">Copyright &copy; TEAM1-AMDB</div>
+              <div>
+                <a href="#">Privacy Policy</a>
+                &middot;
+                <a href="#">Terms &amp; Conditions</a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
   </body>
 </template>
 
 <script>
-
-
+import { ElCarousel } from "element-plus";
+import { ref, inject, onBeforeMount, nextTick } from "vue";
+import env from "@/env.js";
+import router from "@/router";
+import Showpart from "@/components/ShowPart.vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 
 export default {
-  name: "About",
- 
+  name: "Home",
+  components: { ElCarousel, Showpart },
   setup() {
-  
+    const axios = inject("axios"); // inject axios
+    const search = ref("");
+    const activeIndex = ref("1");
+    const itemdata = ref([]);
+    const lastestMovieData = ref([]);
+    const upComingMovieData = ref([]);
+    const moviePoster = ref("");
+    const showRouterView = ref(true);
+    const fackePic = ref([]);
+    moviePoster.value = env.tmdbpic;
+    const drawer = ref(false);
+    const direction = ref("ltr");
+    const handleClose = (done) => {
+      ElMessageBox.confirm("Are you sure you want to close this?")
+        .then(() => {
+          done();
+        })
+        .catch(() => {
+          // catch error
+        });
+    };
+
+    //Search event
+    const SearchMovies = () => {
+      console.log("SearchMovies");
+      console.log(search.value);
+      if (search.value != "") {
+        showRouterView.value = false;
+        nextTick(() => (showRouterView.value = true));
+        localStorage.setItem("resultResource", 4);
+        localStorage.setItem("searchValue", search.value);
+        router.push({
+          name: "ResultDisplay",
+          params: {
+            //   resultName: "IMDB TOP 10 movies"
+            // isPopularorHighScore: 4,
+            // searchValue: search.value,
+          },
+        });
+      }
+    };
+
+    //Select menu event
+    const handleSelect = (key, keyPath) => {
+      console.log(key, keyPath);
+    };
+
+    onBeforeMount(() => {
+      //Upcoming moveis
+      axios
+        .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
+        .then((response) => {
+          upComingMovieData.value = response.data.results;
+          console.log(upComingMovieData.value.results);
+        });
+      //THe lastest moveis
+      // axios
+      //   .get(env.tmdbmovieapi + env.tmdblatest + env.tmdbkey + env.tmdbtail)
+      //   .then(response => {
+      //     lastestMovieData.value = response.data;
+      //     console.log(response.data);
+      //     console.log(lastestMovieData.value);
+      // });
+      fackePic.value = [
+        {
+          id: 580489,
+          title: "Venom: Let There Be Carnage",
+          backdrop_path: require("@/assets/1.jpg"),
+        },
+        { id: 438631, title: "Dune", backdrop_path: require("@/assets/2.jpg") },
+        {
+          id: 574060,
+          title: "Gunpowder Milkshake",
+          backdrop_path: require("@/assets/3.jpg"),
+        },
+      ];
+    });
+
+    //show Result Page
+    const showResultPage = () => {
+      showRouterView.value = false;
+      nextTick(() => (showRouterView.value = true));
+      localStorage.setItem("resultResource", 3);
+      router.push({
+        name: "ResultDisplay",
+        params: {
+          //   resultName: "IMDB TOP 10 movies"
+          // isPopularorHighScore: 3,
+        },
+      });
+    };
 
     const sidebarToggle = document.body.querySelector("#sidebarToggle");
 
@@ -85,9 +370,21 @@ export default {
     }
 
     return {
-      
+      search,
+      moviePoster,
+      activeIndex,
+      itemdata,
+      lastestMovieData,
+      upComingMovieData,
+      fackePic,
+      showRouterView,
+      handleSelect,
+      SearchMovies,
+      showResultPage,
       sidebarToggle,
-     
+      drawer,
+      direction,
+      handleClose,
     };
   },
 
@@ -133,12 +430,9 @@ export default {
       ],
     };
   },
-   methods: {
-    handleEdit(index, row) {
-      console.log(index, row)
-    },
-    handleDelete(index, row) {
-      console.log(index, row)
+  methods: {
+    handleClick() {
+      console.log("click");
     },
   },
 };

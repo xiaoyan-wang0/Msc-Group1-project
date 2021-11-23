@@ -9,7 +9,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "-": "0.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
@@ -27,12 +26,10 @@
     "vue-axios": "^3.3.7",
     "vue-chart-3": "^0.5.11",
     "vue-chartkick": "^1.1.0",
-    "vue-facebook-login-component-next": "^1.0.4",
     "vue-router": "^4.0.0-0",
     "vue-sidebar-menu": "^4.8.1",
     "vue3-chart-v2": "^0.8.3",
-    "vuex": "^4.0.0-0",
-    "youtube-vue3": "^0.1.8"
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

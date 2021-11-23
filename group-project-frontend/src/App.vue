@@ -229,6 +229,13 @@ body {
   .ant-select-single.ant-select-open .ant-select-selection-item {
     color: #000;
   }
+  .ant-comment-inner {
+    padding: 10px 0 0 0 !important;
+  }
+  .el-scrollbar {
+    border: white solid 1px;
+    border-radius: 15px;
+  }
 }
 * {
   margin: 0;
@@ -633,7 +640,7 @@ body {
   }
 
   .spad {
-    padding-bottom: 100px;
+    padding-bottom: 10px;
   }
 
   .text-white h1,
