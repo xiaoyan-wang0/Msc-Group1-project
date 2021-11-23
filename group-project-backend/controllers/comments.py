@@ -13,6 +13,7 @@ from common.libs.Sentiment import sentiment
 
 import requests
 
+import time
 comments_page = Blueprint( "comments_page",__name__ )
 
 @comments_page.route("/addComments",methods = ["POST" ])
@@ -57,6 +58,7 @@ def addComments():
         raise e
     finally:
         db.session.close()
+    time.sleep(1.5)
     return ops_renderJSON( msg = "addComments successfully!")
 
 @comments_page.route("/showComments")

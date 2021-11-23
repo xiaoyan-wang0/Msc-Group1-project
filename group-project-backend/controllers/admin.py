@@ -20,7 +20,7 @@ from tmdbv3api import Movie
 import json
 from jsonpath import jsonpath
 import base64
-
+import time
 
 admin_page = Blueprint( "admin_page",__name__ )
 
@@ -141,5 +141,5 @@ def deleteComments():
         raise e
     finally:
         db.session.close()
-
+    time.sleep(1.5)
     return ops_renderJSON( msg = "delete comment successfully!")
