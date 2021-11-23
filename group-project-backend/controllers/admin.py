@@ -102,7 +102,7 @@ def getSentimentRate():
 def getToxicRate():
     
     req = request.values
-    
+
     #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
     sql = 'SELECT SUM(case WHEN toxic <= 0.53 then 1 else 0 end ) as toxic,  SUM(case WHEN toxic > 0.53 AND toxic < 0.9 then 1 else 0 end ) as midToxic, SUM(case WHEN toxic >= 0.9 then 1 else 0 end ) as noneToxic FROM usercomments ;'
     result = db.session.execute(text(sql)).fetchall()
@@ -112,3 +112,34 @@ def getToxicRate():
         List['midToxic'] = str(lis[1])
         List['noneToxic'] = str(lis[2])
     return ops_renderJSON( msg = "get toxicRate successfully!",data = List)
+
+
+@admin_page.route("/blockUser")
+def blockUser():
+    
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    
+    if userId != "":
+        user = User.query.filter_by( userId = userId ).first()
+        if user:
+            db.session.query(User).filter(User.userId == userId).update({"ifBlocked":1})
+            db.session.close()
+    
+    return ops_renderJSON( msg = "block user successfully!")
+
+@admin_page.route("/deleteComments")
+def deleteComments():
+   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+    req = request.values
+    id = req['id'] if "id" in req else ""
+    try:
+        db.session.query(Usercomment).filter(Usercomment.id == id).delete()
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  
+        raise e
+    finally:
+        db.session.close()
+
+    return ops_renderJSON( msg = "delete comment successfully!")
