@@ -4,7 +4,7 @@ from flask_script import Server,Command
 from www import *
 
 ##web serve
-manager.add_command( "runserver",Server( host = "0.0.0.0",use_debugger=True,use_reloader= True ) )
+manager.add_command( "runserver",Server( host = "127.0.0.1",use_debugger=True,use_reloader= True ) )
 
 ##create_table
 @Command
