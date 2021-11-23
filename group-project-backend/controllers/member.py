@@ -194,7 +194,7 @@ def showCommentList():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     
-    result = Usercomment.query.filter(userId = userId).order_by(Usercomment.id.desc()).all()
+    result = Usercomment.query.filter(Usercomment.userId = userId).order_by(Usercomment.id.desc()).all()
     movieComments = []
     for comments in result:
         comments.toxic = round(float(comments.toxic), 2)
