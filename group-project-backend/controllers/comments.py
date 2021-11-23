@@ -28,6 +28,12 @@ def addComments():
 
     req = request.values
     userId = req['userId'] if "userId" in req else ""
+
+    user = User.query.filter_by( userId = userId ).first()
+    if user:
+        if user.ifBlocked == 1:
+            return ops_renderErrJSON( msg = "use have been blocked" )
+
     #userId = str(current_user.userId)
     comment = req['comment'] if "comment" in req else ""
     movieId = req['movieId'] if "movieId" in req else ""

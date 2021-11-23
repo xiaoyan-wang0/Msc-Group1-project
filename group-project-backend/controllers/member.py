@@ -226,17 +226,17 @@ def deleteComment():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     id = req['id'] if "id" in req else ""
-    result = Usercomment.query.filter(Usercomment.id == id).all()
-    db.session.close()
-    if result:
-        try:
-            db.session.query(Usercomment).filter(Usercomment.id == id).delete()
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()  
-            raise e
-        finally:
-            db.session.close()
+    # result = Usercomment.query.filter(Usercomment.id == id).all()
+    # db.session.close()
+    #if result:
+    try:
+        db.session.query(Usercomment).filter(Usercomment.id == id).delete()
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  
+        raise e
+    finally:
+        db.session.close()
     return ops_renderJSON( msg = "delete comment successfully!")
 
 @member_page.route("/deleteMovieLikes")
@@ -244,16 +244,16 @@ def deleteMovieLikes():
    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     Id = req['Id'] if "Id" in req else ""
-    result = Usermovy.query.filter(Usermovy.Id == Id).first()
-    if result:
-        try:
-            db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()  
-            raise e
-        finally:
-            db.session.close()
+    #result = Usermovy.query.filter(Usermovy.Id == Id).first()
+    #if result:
+    try:
+        db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  
+        raise e
+    finally:
+        db.session.close()
 
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
