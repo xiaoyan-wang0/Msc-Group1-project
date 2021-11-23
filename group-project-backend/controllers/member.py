@@ -9,6 +9,7 @@ from common.models.user import User
 from common.models.usercomments import Usercomment
 from common.models.userInfo import Userinfo
 #import cv2
+import time
 import numpy as np
 from common.models.serializer import Serializer
 from common.libs.UserService import UserService
@@ -195,6 +196,7 @@ def showCommentList():
     userId = req['userId'] if "userId" in req else ""
     textsql = " 1=1 and userId = "+ userId
     
+    time.sleep(1)
     result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
     movieComments = []
     for comments in result:
@@ -236,6 +238,7 @@ def deleteComment():
         raise e
     finally:
         db.session.close()
+    time.sleep(1.5)
     return ops_renderJSON( msg = "delete comment successfully!")
 
 @member_page.route("/deleteMovieLikes")
