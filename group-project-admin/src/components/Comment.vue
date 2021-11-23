@@ -1,5 +1,19 @@
 <template>
   <main>
+    <el-dialog v-model="deleteDialogVisible" title="Warning" width="30%" center>
+      <span
+        >It should be noted that the content will not be aligned in center by
+        default</span
+      >
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="blockDialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="comfirmDelete()"
+            >Confirm
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
     <div class="container-fluid px-4">
       <h1 class="mt-4">User Comment</h1>
       <ol class="breadcrumb mb-4">
@@ -18,17 +32,17 @@
             <el-table-column prop="comment" label="Content" />
             <el-table-column prop="userId" label="User Id" />
             <el-table-column prop="movieId" label="Movie Id" />
-            <el-table-column prop="toxic" label="Toxic Rate" sortable/>
-            <el-table-column prop="sentiment" label="Sentiment Rate" sortable/>
-            <el-table-column prop="createTime" label="Date" sortable/>
+            <el-table-column prop="toxic" label="Toxic Rate" sortable />
+            <el-table-column prop="sentiment" label="Sentiment Rate" sortable />
+            <el-table-column prop="createTime" label="Date" sortable />
             <el-table-column fixed="right" label="Operations">
               <template #default="scope">
                 <el-button
-                  type="text"
+                  type="danger"
                   size="small"
                   @click.prevent="handleDelete(scope.$index, tableData)"
                 >
-                  Remove
+                  Delete
                 </el-button>
               </template>
             </el-table-column>
@@ -81,7 +95,7 @@
 
 <script>
 import { ref, inject, onBeforeMount } from "vue";
-import { message } from "ant-design-vue";
+import { message, notification } from "ant-design-vue";
 import router from "@/router";
 import env from "@/env.js";
 
@@ -93,6 +107,8 @@ export default {
     const tableData = ref([]);
     const toxic = ref({});
     const sentiment = ref({});
+    const deleteDialogVisible = ref(false);
+    let deleteId = "";
 
     onBeforeMount(() => {
       // Fetch  toxic num
@@ -123,7 +139,10 @@ export default {
           console.log("error");
           showErroeMessage();
         });
+      fetchAllCommentsList();
+    });
 
+    const fetchAllCommentsList = (index, data) => {
       // Fetch  all comments list
       axios
         .get(env.AMDBAPI + "admin/commentsList")
@@ -131,6 +150,36 @@ export default {
           console.log("all comments list");
           console.log(response.data);
           tableData.value = response.data.data;
+          deleteDialogVisible.value = false;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          deleteDialogVisible.value = false;
+          showErroeMessage();
+        });
+    };
+
+    const handleDelete = (index, data) => {
+      deleteDialogVisible.value = true;
+      deleteId = data[index].id;
+      console.log("deleteId");
+      console.log(deleteId);
+    };
+
+    const comfirmDelete = () => {
+      // Fetch comfirm Block
+      // delete comments
+      axios
+        .get(env.AMDBAPI + "admin/deleteComments?id=" + deleteId)
+        .then((response) => {
+          console.log("deleteComments");
+          console.log(response.data);
+          if (response.data.code == 200) {
+            fetchAllCommentsList();
+            openNotificationWithIcon("success");
+          }
         })
         .catch((error) => {
           console.log("error");
@@ -138,14 +187,27 @@ export default {
           console.log("error");
           showErroeMessage();
         });
-    });
+    };
 
-    const handleDelete = (a, b) => {};
+    const openNotificationWithIcon = (type) => {
+      notification[type]({
+        message: "Delete sucessful!",
+        top: "100px",
+        // description: "Block sucessful!",
+      });
+    };
 
     const showErroeMessage = () => {
       return message.error("Sorry, error accured in server");
     };
-    return { tableData, toxic, sentiment, handleDelete };
+    return {
+      tableData,
+      toxic,
+      sentiment,
+      deleteDialogVisible,
+      handleDelete,
+      comfirmDelete,
+    };
   },
 };
 </script>

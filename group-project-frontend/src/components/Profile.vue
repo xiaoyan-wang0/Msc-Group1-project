@@ -65,13 +65,9 @@
               <div class="section-title">
                 <h5>My Movie List</h5>
                 <p></p>
-                <div class="movie-like-list">
+                <div class="movie-like-list" v-loading="isLoading">
                   <el-scrollbar>
-                    <a-table
-                      :columns="likeColumns"
-                      :data-source="likeListData"
-                      v-loading="isLoading"
-                    >
+                    <a-table :columns="likeColumns" :data-source="likeListData">
                       <template #name="{ text }">
                         <a>{{ text }}</a>
                       </template>
@@ -106,12 +102,11 @@
               <div class="section-title">
                 <h5>My Comments</h5>
                 <p></p>
-                <div class="movie-like-list">
+                <div class="movie-like-list" v-loading="isLoading">
                   <el-scrollbar>
                     <a-table
                       :columns="commentsColumns"
                       :data-source="commentsData"
-                      v-loading="isLoading"
                     >
                       <template #name="{ text }">
                         <a>{{ text }}</a>

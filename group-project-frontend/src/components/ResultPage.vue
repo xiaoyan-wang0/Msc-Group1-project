@@ -17,7 +17,7 @@
           <router-link :to="'/movie/' + item.id">
             <div class="product__item">
               <div
-                class="product__item__pic set-bg"
+                class="product__item__pic set-bg test"
                 v-bind:style="{
                   'background-image': 'url(' + poster + item.poster_path + ')',
                 }"
@@ -66,7 +66,7 @@
           <router-link :to="'/movie/' + item.tmdb_Id">
             <div class="product__item">
               <div
-                class="product__item__pic set-bg"
+                class="product__item__pic set-bg test"
                 v-bind:style="{
                   'background-image': 'url(' + item.posters[0] + ')',
                 }"
@@ -203,7 +203,7 @@ export default {
         isIMDBBot.value = true;
         axios
           .get(
-            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
+            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20"
             // {
             //   withCredentials: true,
             // }
@@ -307,7 +307,7 @@ export default {
         resultName.value = "IMDB BOTTOM result";
         axios
           .get(
-            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20",
+            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20"
             // {
             //   withCredentials: true,
             // }
@@ -437,5 +437,23 @@ export default {
     margin: auto;
     float: right;
   }
+}
+
+.test {
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.test:hover {
+  background-size: 110% 110%;
+  -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+  cursor: pointer;
 }
 </style>
