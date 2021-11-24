@@ -94,6 +94,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+
+
 .home {
   // .main-menu li ul {
   // font-size: 500px;

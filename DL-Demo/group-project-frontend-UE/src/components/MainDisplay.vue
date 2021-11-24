@@ -491,7 +491,7 @@ export default {
     -moz-transition:all .4s;
     -webkit-transition:all .4s;
     -o-transition:all .4s;
-    background-repeat:no-repeat;  
+    background-repeat:no-repeat;   
     background-position: center;   
     background-size: 100% 100%;
     
@@ -501,7 +501,9 @@ export default {
     -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
     -moz-box-shadow: 2px 12px 10px  rgba(138, 138, 138, 0.603);
     box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+    cursor: pointer;
   }
+
 
 .item-list {
   margin: 0 50px;

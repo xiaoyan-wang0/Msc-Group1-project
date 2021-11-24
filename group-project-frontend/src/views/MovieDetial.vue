@@ -131,6 +131,7 @@
                       }"
                       v-for="item in castList"
                       :key="item.id"
+                      class="pichover"
                       @click="showCastDetail(item.id)"
                       style="margin: 5px"
                     >
@@ -831,8 +832,8 @@
               >
                 <div class="product__sidebar__comment__item__pic">
                   <img
+                    class="pichover"
                     :src="moviePoster + item.poster"
-                    style="width: 90px; height: 130px"
                     alt=""
                   />
                 </div>
@@ -1915,6 +1916,28 @@ export default {
   padding: 15px;
   border-radius: 15px;
   background-color: #1f1d1d;
+}
+
+.pichover {
+  width: 90px;
+  height: 130px;
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.pichover:hover {
+  object-fit: cover;
+
+  background-size: 110% 110%;
+  -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 800px) {

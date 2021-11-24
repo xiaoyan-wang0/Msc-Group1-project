@@ -66,7 +66,8 @@
               <router-link :to="'/movie/' + item.id">
                 <div class="home-carousel-right-list-img" style="float: left">
                   <img
-                    style="object-fit: fill; width: 74px"
+                    class="pichover2"
+                    style=""
                     :src="moviePoster + item.poster_path"
                     :alt="item.title"
                   />
@@ -153,10 +154,10 @@
                 <router-link :to="'/movie/' + item.tmdb_Id">
                   <div class="product__item">
                     <div
-                      class="product__item__pic set-bg"
                       v-bind:style="{
                         'background-image': 'url(' + item.posters[0] + ')',
                       }"
+                      class="product__item__pic set-bg testmain"
                     >
                       <div class="ep">
                         {{ Number(item.rating).toFixed(1) }} / 10
@@ -206,6 +207,7 @@
                 <router-link :to="'/movie/' + item.id">
                   <div class="product__sidebar__comment__item__pic">
                     <img
+                      class="pichover"
                       :src="poster + item.poster"
                       style="width: 90px; height: 130px"
                       alt=""
@@ -258,6 +260,7 @@
                 <router-link :to="'/movie/' + item.id">
                   <div class="product__sidebar__comment__item__pic">
                     <img
+                      class="pichover"
                       :src="poster + item.poster"
                       style="width: 90px; height: 130px"
                       alt=""
@@ -547,6 +550,67 @@ export default {
       }
     }
   }
+}
+
+.testmain {
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.testmain:hover {
+  background-size: 110% 110%;
+  -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+  cursor: pointer;
+}
+
+.pichover {
+  width: 90px;
+  height: 130px;
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.pichover:hover {
+  object-fit: cover;
+  background-size: 110% 110%;
+  -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+  cursor: pointer;
+}
+
+.pichover2 {
+  object-fit: fill;
+  width: 74px;
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.pichover2:hover {
+  object-fit: cover;
+  width: 76px;
+  background-size: 110% 110%;
+  -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+  box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+  cursor: pointer;
 }
 .product {
   padding-bottom: 10px;
@@ -893,7 +957,7 @@ export default {
   // position: relative;
   margin-top: 5px;
   margin-bottom: 35px;
-  padding: 0 2px; 
+  padding: 0 2px;
   width: 100%;
   .search-model {
     display: none;
@@ -1042,7 +1106,7 @@ export default {
       background-color: #111111;
       height: 110px;
       .home-carousel-right-list-right {
-        width: calc(100% - 74px);
+        width: calc(100% - 76px);
         height: 100%;
         float: right;
 
