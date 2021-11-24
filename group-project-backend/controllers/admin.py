@@ -143,3 +143,17 @@ def deleteComments():
         db.session.close()
     time.sleep(1.5)
     return ops_renderJSON( msg = "delete comment successfully!")
+
+@admin_page.route("/unBlockUser")
+def unBlockUser():
+    
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    
+    if userId != "":
+        user = User.query.filter_by( userId = userId ).first()
+        if user:
+            db.session.query(User).filter(User.userId == userId).update({"ifBlocked":0})
+            db.session.close()
+    
+    return ops_renderJSON( msg = "block user successfully!")
