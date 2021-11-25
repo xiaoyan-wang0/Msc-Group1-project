@@ -1,0 +1,87 @@
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".upload-btn").click(function () {
+  console.log("Processing.....");
+  //Prepare form data
+  var formData = new FormData();
+  var fileToUpload = $("#qn-img-inp")[0].files[0];
+  formData.append("file", fileToUpload);
+  // formData.append("url", "URL-of-Image-or-PDF-file");
+  formData.append("language", "eng");
+  formData.append("apikey", "cefc90891488957");
+  formData.append("isOverlayRequired", true);
+  //Send OCR Parsing request asynchronously
+  $.ajax({
+    url: "https://api.ocr.space/parse/image",
+    data: formData,
+    dataType: "json",
+    cache: false,
+    contentType: false,
+    processData: false,
+    type: "POST",
+    success: function (ocrParsedResult) {
+      console.log(ocrParsedResult);
+      //Get the parsed results, exit code and error message and details
+      var parsedResults = ocrParsedResult["ParsedResults"];
+      var ocrExitCode = ocrParsedResult["OCRExitCode"];
+      var isErroredOnProcessing = ocrParsedResult["IsErroredOnProcessing"];
+      var errorMessage = ocrParsedResult["ErrorMessage"];
+      var errorDetails = ocrParsedResult["ErrorDetails"];
+      var processingTimeInMilliseconds =
+        ocrParsedResult["ProcessingTimeInMilliseconds"];
+      //If we have got parsed results, then loop over the results to do something
+      if (parsedResults != null) {
+        let textOnImg = "";
+        //Loop through the parsed results
+        $.each(parsedResults, function (index, value) {
+          var exitCode = value["FileParseExitCode"];
+          var parsedText = value["ParsedText"];
+          var errorMessage = value["ParsedTextFileName"];
+          var errorDetails = value["ErrorDetails"];
+
+          var textOverlay = value["TextOverlay"];
+          var pageText = "";
+          switch (+exitCode) {
+            case 1:
+              pageText = parsedText;
+              break;
+            case 0:
+            case -10:
+            case -20:
+            case -30:
+            case -99:
+            default:
+              pageText += "Error: " + errorMessage;
+              break;
+          }
+          let textOnImg2 = "";
+          $.each(textOverlay["Lines"], function (index, value) {
+            // LOOP THROUGH THE LINES AND GET WORDS TO DISPLAY ON TOP OF THE IMAGE AS OVERLAY
+            textOnImg2 += " " + value.LineText;
+            // console.log(value.LineText);
+            // console.log(textOnImg);
+          });
+          textOnImg += textOnImg2;
+          // YOUR CODE HERE
+        });
+        //console.log(textOnImg);
+        $("p").append(textOnImg);
+      }
+    },
+    error: function (e) {
+      console.log(e);
+    }
+  });
+});
+  });
+  </script>
+
+<form action="/match/" method="post" id="search-by-img-form">
+   <input type="file" name="qnimg" id="qn-img-inp" />
+   <button type="button" class="btn btn-success upload-btn">Upload</button>
+</form>
+<p></p>
+
+
+</html>
