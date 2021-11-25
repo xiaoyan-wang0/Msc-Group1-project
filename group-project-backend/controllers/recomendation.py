@@ -128,17 +128,18 @@ def getRecommandationByTags():
         tag = userInfo.movieTags
         #tag = "28,99,37"
         if tag != "":
-            mlist = tag.split(",")
-            tuple(mlist)
-            if len(mlist) > 3:
-                number = 1
-            else:
-                number = 2
-            for lis in mlist:
-                    tagName = num_to_label[lis]
-                    movies = getTagMovies(tagName, number)
-                    taglist = movies.to_dict('list')['id']
-                    movie.extend(taglist)
+            if tag:
+                mlist = tag.split(",")
+                tuple(mlist)
+                if len(mlist) > 3:
+                    number = 1
+                else:
+                    number = 2
+                for lis in mlist:
+                        tagName = num_to_label[lis]
+                        movies = getTagMovies(tagName, number)
+                        taglist = movies.to_dict('list')['id']
+                        movie.extend(taglist)
     movie=list(set(movie))
 
     movieList = []
