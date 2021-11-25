@@ -164,6 +164,8 @@ def getUser():
     req = request.values
     email = req['email'] if "email" in req else ""    
     user = User.query.filter_by( email = email ).first()
+    if not user:
+        return ops_renderErrJSON( msg = "error" )
     user = Serializer.serialize(user)
 
     return ops_renderJSON( msg = "find user successfully!",data = user)
