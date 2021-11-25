@@ -112,7 +112,7 @@ export default {
           console.log(response);
           if (response.data.code != -1) {
             // message.success("Login Sucessfully");
-            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem("admin", JSON.stringify(response.data));
             router.push({
               name: "Home",
             });

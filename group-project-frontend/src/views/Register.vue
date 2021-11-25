@@ -157,18 +157,8 @@
               <h3>Login With:</h3>
               <ul>
                 <li>
-                  <a href="#" class="facebook"
+                  <a href="/login" class="facebook"
                     ><i class="fab fa-facebook"></i> Sign in With Facebook</a
-                  >
-                </li>
-                <li>
-                  <a href="#" class="google"
-                    ><i class="fab fa-google"></i> Sign in With Google</a
-                  >
-                </li>
-                <li>
-                  <a href="#" class="twitter"
-                    ><i class="fab fa-twitter"></i> Sign in With Twitter</a
                   >
                 </li>
               </ul>

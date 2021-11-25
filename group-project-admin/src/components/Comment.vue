@@ -14,7 +14,7 @@
         </span>
       </template>
     </el-dialog>
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4" v-loading="isLoading">
       <h1 class="mt-4">User Comment</h1>
       <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">User Comment details</li>
@@ -108,6 +108,7 @@ export default {
     const toxic = ref({});
     const sentiment = ref({});
     const deleteDialogVisible = ref(false);
+    const isLoading = ref(false);
     let deleteId = "";
 
     onBeforeMount(() => {
@@ -142,7 +143,8 @@ export default {
       fetchAllCommentsList();
     });
 
-    const fetchAllCommentsList = (index, data) => {
+    const fetchAllCommentsList = () => {
+      isLoading.value = true;
       // Fetch  all comments list
       axios
         .get(env.AMDBAPI + "admin/commentsList")
@@ -151,6 +153,7 @@ export default {
           console.log(response.data);
           tableData.value = response.data.data;
           deleteDialogVisible.value = false;
+          isLoading.value = false;
         })
         .catch((error) => {
           console.log("error");
@@ -198,6 +201,7 @@ export default {
     };
 
     const showErroeMessage = () => {
+      isLoading.value = false;
       return message.error("Sorry, error accured in server");
     };
     return {

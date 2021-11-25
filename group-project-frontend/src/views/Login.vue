@@ -110,14 +110,12 @@
                     >
                   </li>
                   <li>
-                    <a href="#" class="google" 
-                      style="display: none"
+                    <a href="#" class="google" style="display: none"
                       ><i class="fab fa-google"></i> Sign in With Google</a
                     >
                   </li>
                   <li>
-                    <a href="#" class="twitter" 
-                      style="display: none"
+                    <a href="#" class="twitter" style="display: none"
                       ><i class="fab fa-twitter"></i> Sign in With Twitter</a
                     >
                   </li>
@@ -132,7 +130,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, onMounted } from "vue";
+import { ref, defineComponent, onMounted, inject, onBeforeMount } from "vue";
 import { message } from "ant-design-vue";
 import {
   GoogleOutlined,
@@ -143,6 +141,7 @@ import router from "@/router";
 import { useStore } from "vuex";
 import VFacebookLogin from "vue-facebook-login-component-next";
 import { VFBLoginScope as VFacebookLoginScope } from "vue-facebook-login-component-next";
+import env from "@/env.js";
 
 export default defineComponent({
   name: "Login",
@@ -155,6 +154,7 @@ export default defineComponent({
   },
   methods: {},
   setup() {
+    const axios = inject("axios"); // inject axios
     const store = useStore();
     const fbSignInParams = ref({
       scope: "email,user_likes",
@@ -165,6 +165,14 @@ export default defineComponent({
       username: "",
       password: "",
       email: "",
+    });
+
+    onBeforeMount(() => {
+      console.log("LOGGGGGGG");
+      console.log(localStorage.getItem("user"));
+      if (localStorage.getItem("user")) {
+        router.push({ name: "Setting" });
+      }
     });
 
     //Login event
@@ -226,6 +234,79 @@ export default defineComponent({
       console.log(value);
     };
 
+    const checkEmail = (data) => {
+      // Fetch checkEmail
+      axios
+        .get(env.AMDBAPI + "admin/getUser?email=" + data.email)
+        .then((response) => {
+          console.log("checkEmail");
+          console.log(response.data);
+          if (response.data.code === -1) {
+            const registerFormData = new FormData();
+            registerFormData.append("userName", data.name);
+            registerFormData.append("email", data.email);
+            registerFormData.append("password", "12345678");
+            store.dispatch("auth/register", registerFormData).then(
+              (response) => {
+                console.log("response");
+                console.log(response);
+                if (response.code === -1) {
+                  message.error(response.msg, () => {
+                    console.log("onClose");
+                  });
+                } else if (response.code === 200) {
+                  message.success(
+                    response.msg + ", Will return setting page in 3s.",
+                    () => {
+                      // router.push({ name: "Setting" });
+                      location.reload();
+                      console.log("onClose");
+                    }
+                  );
+                }
+              },
+              (error) => {
+                console.log("error");
+                console.log(error);
+              }
+            );
+          } else if (response.data.code === 200) {
+            const loginFormData = new FormData();
+            console.log("resploginMes.email");
+            console.log(data.email);
+            loginFormData.append("email", data.email);
+            loginFormData.append("password", 12345678);
+
+            store.dispatch("auth/login", loginFormData).then(
+              (response) => {
+                console.log("LOGIN");
+                console.log(response);
+
+                if (response.code === -1) {
+                  message.error(response.msg, () => {
+                    console.log("onClose");
+                  });
+                } else if (response.code === 200) {
+                  message.success(response.msg + ", Will return in 3s.", () => {
+                    router.push({ name: "Home" });
+                  });
+                }
+              },
+              (error) => {
+                console.log("login error");
+                console.log(error);
+              }
+            );
+          }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
+    };
+
     const logInWithFacebook = async () => {
       await loadFacebookSDK(document, "script", "facebook-jssdk");
       await initFacebook();
@@ -237,6 +318,7 @@ export default defineComponent({
             FB.api("/me?fields=id,name,email", function (response) {
               console.log("Good to see you, " + response.name + ".");
               console.log(response);
+              checkEmail(response);
             });
             window.close();
             // Now you can redirect the user or do an AJAX request to
@@ -251,6 +333,7 @@ export default defineComponent({
       );
       return false;
     };
+
     const initFacebook = async () => {
       window.fbAsyncInit = function () {
         window.FB.init({
@@ -261,6 +344,7 @@ export default defineComponent({
         });
       };
     };
+
     const loadFacebookSDK = async (d, s, id) => {
       var js,
         fjs = d.getElementsByTagName(s)[0];

@@ -18,7 +18,6 @@
                 <li>
                   <a href="/">Home</a>
                 </li>
-
                 <!-- <li>
                   <a href="#"></a>
                 </li>
@@ -28,9 +27,11 @@
                 <li>
                   <a href="/main/profile">Profile</a>
                 </li>
-
                 <li>
                   <a href="/main/detector">Detector</a>
+                </li>
+                <li>
+                  <a href="/main/aboutus">About Us</a>
                 </li>
                 <li class="header-login-li" v-if="currentUser">
                   <router-link to="/main/profile" class="header-login">
@@ -236,6 +237,9 @@ body {
     border: white solid 1px;
     border-radius: 15px;
   }
+  .ant-upload.ant-upload-drag p.ant-upload-drag-icon .anticon {
+    color: #e53637 !important;
+  }
 }
 * {
   margin: 0;
@@ -282,6 +286,8 @@ body {
       color: white;
     }
     .header-login {
+      max-width: 400px;
+      overflow: hidden;
       span {
         margin-left: 50px;
         vertical-align: middle;

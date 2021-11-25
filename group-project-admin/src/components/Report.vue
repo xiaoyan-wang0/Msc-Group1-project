@@ -14,7 +14,7 @@
         </span>
       </template>
     </el-dialog>
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4" v-loading="isLoading">
       <h1 class="mt-4">Report Comment</h1>
       <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">User Reported Comment details</li>
@@ -48,11 +48,6 @@
               <template #default="scope">
                 <el-button
                   size="mini"
-                  @click="handleEdit(scope.$index, scope.row)"
-                  >Edit</el-button
-                >
-                <el-button
-                  size="mini"
                   type="danger"
                   @click="handleDelete(scope.$index, scope.row)"
                   >Delete</el-button
@@ -67,7 +62,7 @@
 </template>
 
 <script>
-import { message,notification  } from "ant-design-vue";
+import { message, notification } from "ant-design-vue";
 import { ref, inject, onBeforeMount } from "vue";
 import env from "@/env.js";
 
@@ -78,16 +73,19 @@ export default {
     const axios = inject("axios"); // inject axios
     const tableData = ref([]);
     const deleteDialogVisible = ref(false);
+    const isLoading = ref(false);
     let deleteId = "";
     onBeforeMount(() => {
       fetchAllCommentsList();
     });
 
     const showErroeMessage = () => {
+      isLoading.value = false;
       return message.error("Sorry, error accured in server");
     };
 
     const fetchAllCommentsList = () => {
+      isLoading.value = true;
       // Fetch comments reported
       axios
         .get(env.AMDBAPI + "admin/getReportComments")
@@ -96,6 +94,7 @@ export default {
           console.log(response.data);
           tableData.value = response.data.data;
           deleteDialogVisible.value = false;
+          isLoading.value = false;
         })
         .catch((error) => {
           console.log("error");
@@ -148,6 +147,7 @@ export default {
     };
 
     return {
+      isLoading,
       tableData,
       deleteDialogVisible,
       handleEdit,

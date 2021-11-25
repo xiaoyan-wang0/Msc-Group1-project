@@ -22,8 +22,9 @@ export default {
   width: 100%;
   margin: auto;
   margin-top: 10px;
-  .div-main-content{
-  width: 80%;
-  margin: auto;}
+  .div-main-content {
+    width: 80%;
+    margin: auto;
+  }
 }
 </style>

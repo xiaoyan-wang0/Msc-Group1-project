@@ -122,7 +122,7 @@ export default {
 
     const handleLogout = () => {
       console.log("handleLogout");
-      localStorage.removeItem("user");
+      localStorage.removeItem("admin");
       router.push({
         path: "/",
       });

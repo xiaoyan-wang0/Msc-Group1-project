@@ -332,19 +332,19 @@ export default {
 
       fackePic.value = [
         {
-          id: 566525,
-          title: "Shang-Chi and the Legend of the Ten Rings",
+          id: 425909,
+          title: "Ghostbusters: Afterlife",
+          backdrop_path: require("@/assets/1.jpg"),
+        },
+        {
+          id: 438695,
+          title: "Sing 2",
           backdrop_path: require("@/assets/2.jpg"),
         },
         {
-          id: 370172,
-          title: "No Time to Die",
+          id: 634649,
+          title: "Spider-Man: No Way Home",
           backdrop_path: require("@/assets/3.jpg"),
-        },
-        {
-          id: 580489,
-          title: "Venom: Let There Be Carnage",
-          backdrop_path: require("@/assets/1.jpg"),
         },
       ];
 
