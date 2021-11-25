@@ -157,3 +157,13 @@ def unBlockUser():
             db.session.close()
     
     return ops_renderJSON( msg = "block user successfully!")
+
+@admin_page.route("/getUser")
+def getUser():
+    
+    req = request.values
+    email = req['email'] if "email" in req else ""    
+    user = User.query.filter_by( email = email ).first()
+    user = Serializer.serialize(user)
+
+    return ops_renderJSON( msg = "find user successfully!",data = user)
