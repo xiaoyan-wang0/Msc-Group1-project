@@ -4,6 +4,7 @@ import requests
 from sqlalchemy import  text
 from application import db
 from common.models.user import User
+from common.models.userInfo2 import Userinfo2
 from common.models.final import Final
 from common.models.serializer import Serializer
 from common.libs.ToxicComments import do_pe,detector
@@ -92,6 +93,73 @@ def getRecommandation():
                 list.append(rec[0])
         db.session.close()
     return ops_renderJSON( msg = "get recommandation successfully!",data = list)
+
+@rec_page.route("/getRecommandationByTags")
+def getRecommandationByTags():
+
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+    userInfo = Userinfo2.query.filter_by( userId = userId ).first()
+
+    num_to_label = {
+    '28':'Action',
+    '12':'Adventure',
+    '16':'Animation',
+    '35':'Comedy',
+    '80':'Crime',
+    '99':'Documentary',
+    '18':'Drama',
+    '10751':'Family',
+    '14':'Fantasy',
+    '36':'History',
+    '27':'Horror',
+    '10402':'Music',
+    '9648':'Mystery',
+    '10749':'Romance',
+    '878':'Science Fiction',
+    '10770':'TV Movie',
+    '53':'Thriller',
+    '10752':'War',
+    '37':'Western'
+    }
+    movie = []
+    #if num_to_label:
+    if userInfo:
+        tag = userInfo.movieTags
+        #tag = "28,99,37"
+        if tag != "":
+            mlist = tag.split(",")
+            tuple(mlist)
+            if len(mlist) > 3:
+                number = 1
+            else:
+                number = 2
+            for lis in mlist:
+                    tagName = num_to_label[lis]
+                    movies = getTagMovies(tagName, number)
+                    taglist = movies.to_dict('list')['id']
+                    movie.extend(taglist)
+    movie=list(set(movie))
+
+    movieList = []
+    for lis in movie:
+        movieInfoDictionary = getTmdbInfo(str(lis), lis)
+        movieList.append(movieInfoDictionary)
+
+    return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
+
+def getTagMovies(tagName, number):
+    import pandas as pd
+    from pandas import DataFrame,Series
+    import json
+    import csv
+    from tqdm.notebook import tqdm
+
+    dx=pd.read_csv("~/Msc-Group1-project/group-project-backend/database/profile_movie.csv")
+
+    movies=dx.loc[(dx['label'] == tagName) & (dx['popularity']>100)].head(number)
+    return movies
+
 
 def getRecomendation(movieId, number):
     #train_movies_1 = pd.read_csv('C:/final.csv')
