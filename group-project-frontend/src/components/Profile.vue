@@ -23,7 +23,7 @@
                       @click="showSettingPage()"
                       aria-label="profile settings"
                     >
-                      <i class="fas fa-cog" aria-hidden="true"></i>
+                      <i class="fas fa-user-cog" aria-hidden="true"></i>
                     </button>
                     <div class="email">
                       <span class="profile-stat-count"></span> {{ user.email }}
@@ -146,6 +146,37 @@
             <div class="section-title">
               <h5>Recommend to you</h5>
             </div>
+            <div
+              class="product__sidebar__comment__item"
+              v-for="item in recentRecommendationMovies"
+              :key="item.id"
+            >
+              <router-link :to="'/movie/' + item.id">
+                <div class="product__sidebar__comment__item__pic">
+                  <img
+                    class="pichover"
+                    :src="poster + item.poster"
+                    style="width: 90px; height: 130px"
+                    alt=""
+                  />
+                </div>
+                <div class="product__sidebar__comment__item__text">
+                  <h5>
+                    <a style="color: white">{{ item.title }}</a>
+                  </h5>
+                  <ul>
+                    <li
+                      v-for="genre in item.genres[0].slice(0, 2)"
+                      :key="genre.id"
+                    >
+                      {{ genre.name }}
+                    </li>
+                  </ul>
+                  <div class="ep">{{ item.vote_average + "/ 10" }}</div>
+                  <span><i class="fa fa-eye"></i> {{ item.release_date }}</span>
+                </div>
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -170,6 +201,9 @@ export default {
     const commentsData = ref([]);
     const isLoading = ref(false);
     const likeListData = ref([]);
+    const recentRecommendationMovies = ref([]);
+    const poster = ref("");
+    poster.value = env.tmdbpic;
     env.AMDBAPI;
 
     const AMDBAPI = ref(env.AMDBAPI);
@@ -222,14 +256,14 @@ export default {
         key: "toxic",
       },
       {
-        title: "Date",
-        dataIndex: "createTime",
-        key: "createTime",
-      },
-      {
         title: "Sentiment rate",
         dataIndex: "sentiment",
         key: "sentiment",
+      },
+      {
+        title: "Date",
+        dataIndex: "createTime",
+        key: "createTime",
       },
       {
         title: "Action",
@@ -254,6 +288,26 @@ export default {
       fetchMovieLike();
       // fetch comment List
       fetchCommentList();
+
+      // fetch getRecommandationByTags
+      axios
+        .get(
+          env.AMDBAPI +
+            "rec/getRecommandationByTags?userId=" +
+            user.value.userId
+        )
+        .then((response) => {
+          console.log("getRecommandationByTags");
+          console.log(response.data.data);
+          recentRecommendationMovies.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+          isLoading.value = false;
+        });
     });
 
     const fetchMovieLike = () => {
@@ -389,6 +443,8 @@ export default {
       commentsData,
       likeListData,
       AMDBAPI,
+      poster,
+      recentRecommendationMovies,
       deleteLike,
       deleteComment,
       showSettingPage,
@@ -687,6 +743,15 @@ export default {
   font-weight: 600;
   font-size: 25px;
   color: #fff;
+}
+
+.profile-real-name {
+  word-break: normal;
+  max-width: 500px;
+  display: block;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
 .profile-real-name,

@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import MovieDetial from '../views/MovieDetial.vue'
 import MainPage from '../views/MainPage.vue'
+import AboutUs from '../views/AboutUs.vue'
 import Profile from '../components/Profile.vue'
 import PersonalSetting from '../components/PersonalSetting.vue'
 import CommentDetector from '../components/CommentDetector.vue'
@@ -56,6 +57,11 @@ const routes = [
         path: 'detector',
         name: 'CommentDetector',
         component: CommentDetector
+      },
+      {
+        path: 'aboutus',
+        name: 'AboutUs',
+        component: AboutUs
       }
     ],
     redirect: Home
@@ -66,6 +72,7 @@ const routes = [
     name: 'Login',
     component: Login
   },
+
   {
     path: '/register',
     name: 'Register',

@@ -7,7 +7,7 @@ import store from './store'
 import ElementPlus from 'element-plus'
 import VueAxios from 'vue-axios'
 import 'element-plus/dist/index.css'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css';;
 
 //fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";

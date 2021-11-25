@@ -1,10 +1,7 @@
 <template>
   <main>
     <el-dialog v-model="blockDialogVisible" title="Warning" width="30%" center>
-      <span
-        >It should be noted that the content will not be aligned in center by
-        default</span
-      >
+      <span>{{ dialogContent }}</span>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="blockDialogVisible = false">Cancel</el-button>
@@ -43,13 +40,13 @@
                 <el-button
                   type="danger"
                   size="small"
-                  @click="handleClickBlock(scope.$index, tableData)"
+                  @click="handleClickBlock(scope.$index, tableData, 0)"
                   >Block</el-button
                 >
                 <el-button
                   type="danger"
                   size="small"
-                  @click="handleClickdeleteRow(scope.$index, tableData)"
+                  @click="handleClickBlock(scope.$index, tableData, 1)"
                   >Unblock</el-button
                 >
               </template>
@@ -75,21 +72,31 @@ export default {
     const tableData = ref([]);
     const blockDialogVisible = ref(false);
     const isLoading = ref(false);
+    const dialogContent = ref("");
     let blockUserId = "";
+    let isblockorUn = 0;
     onBeforeMount(() => {
       fetchUserList();
     });
 
-    const handleClickBlock = (index, data) => {
+    const handleClickBlock = (index, data, isblock) => {
       blockDialogVisible.value = true;
       blockUserId = data[index].userId;
       console.log("handleClickBlock");
       console.log(index);
       console.log(blockUserId);
       console.log(data);
+      if (isblock === 0) {
+        isblockorUn = 0;
+        dialogContent.value = "Are you sure to block this user?";
+      } else {
+        isblockorUn = 1;
+        dialogContent.value = "Are you sure to unblock this user?";
+      }
     };
 
-    const fetchUserList = (index, data) => {
+    const fetchUserList = () => {
+      isLoading.value = true;
       // Fetch  all user list
       axios
         .get(env.AMDBAPI + "admin/userList")
@@ -97,6 +104,7 @@ export default {
           console.log("get userList");
           console.log(response.data);
           tableData.value = response.data.data;
+          isLoading.value = false;
         })
         .catch((error) => {
           console.log("error");
@@ -107,15 +115,41 @@ export default {
     };
 
     const comfirmBlock = () => {
+      if (isblockorUn === 0) {
+        // Fetch comfirm Block
+        axios
+          .get(env.AMDBAPI + "admin/blockUser?userId=" + blockUserId)
+          .then((response) => {
+            console.log("blockUser");
+            console.log(response.data);
+            if (response.data.code == 200) {
+              blockDialogVisible.value = false;
+              openNotificationWithIcon("success", "block");
+              fetchUserList();
+            }
+          })
+          .catch((error) => {
+            blockDialogVisible.value = false;
+            console.log("error");
+            console.log(error);
+            console.log("error");
+            showErroeMessage();
+          });
+      } else {
+        handleClicUnblock();
+      }
+    };
+
+    const handleClicUnblock = () => {
       // Fetch comfirm Block
       axios
-        .get(env.AMDBAPI + "admin/blockUser?userId=" + blockUserId)
+        .get(env.AMDBAPI + "admin/unBlockUser?userId=" + blockUserId)
         .then((response) => {
           console.log("blockUser");
           console.log(response.data);
           if (response.data.code == 200) {
             blockDialogVisible.value = false;
-            openNotificationWithIcon("success");
+            openNotificationWithIcon("success", "unblock");
             fetchUserList();
           }
         })
@@ -128,20 +162,22 @@ export default {
         });
     };
 
-    const openNotificationWithIcon = (type) => {
+    const openNotificationWithIcon = (type, isblock) => {
       notification[type]({
-        message: "Block sucessful!",
+        message: isblock + " sucessful!",
         top: "100px",
         // description: "Block sucessful!",
       });
     };
 
     const showErroeMessage = () => {
+      isLoading.value = false;
       return message.error("Sorry, error accured in server");
     };
 
     return {
       tableData,
+      dialogContent,
       blockDialogVisible,
       isLoading,
       handleClickBlock,

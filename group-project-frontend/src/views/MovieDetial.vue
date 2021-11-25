@@ -190,6 +190,34 @@
                 <a @click="isShowTrailer = true" class="follow-btn"
                   ><i class="fa fa-play"></i> <span>Watch trailer</span>
                 </a>
+                <a class="follow-btn fb_share_btn"
+                  ><i class="fab fa-facebook"></i>
+                  <span>Share to facebook</span>
+                </a>
+                <!-- <div class="share-function">
+                  <div id="fb-root">
+                    <div
+                      class="fb-share-button"
+                      data-href="http://amdb-frontend.s3-website-eu-west-1.amazonaws.com/main/home/maindisplay"
+                      data-layout="button_count"
+                    ></div>
+                    <div class="fb_share_btn">button</div>
+                  </div> -->
+
+                <!-- <a
+                    href="javascript:window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent('https://alexey-avdeev.com/vanilla-sharing/')+'&title=' +encodeURIComponent('HALLO'))"
+                    style="font-size: 14px; margin-right: 50px"
+                  >
+                    分享Facebook
+                  </a> -->
+
+                <!-- <a
+                    href="javascript:window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent('https://alexey-avdeev.com/vanilla-sharing/')+'&title=' +encodeURIComponent('HALLO'))"
+                    style="font-size: 14px; margin-right: 50px"
+                  >
+                    分享T -->
+                <!-- </a> -->
+                <!-- </div> -->
               </div>
             </div>
           </div>
@@ -293,7 +321,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            :content="item.comment"
+                            v-html="judgeBadWord(item.comment)"
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">
@@ -862,7 +890,7 @@
 </template> 
 
 <script>
-import { ref, inject, onBeforeMount, computed, h } from "vue";
+import { ref, inject, onBeforeMount, computed, h, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import { useStore } from "vuex";
@@ -870,6 +898,7 @@ import { YoutubeVue3 } from "youtube-vue3";
 import { message } from "ant-design-vue";
 import { SmileOutlined, QuestionCircleOutlined } from "@ant-design/icons-vue";
 import { notification } from "ant-design-vue";
+import { ElMessageBox } from "element-plus";
 import env from "@/env.js";
 import ToolMethod from "../tools.js";
 
@@ -1034,6 +1063,47 @@ export default {
       getAMDBComments();
     });
 
+    onMounted(() => {
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src =
+          "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+
+      window.fbAsyncInit = function () {
+        var appId = "903265547247503";
+        FB.init({
+          appId: appId,
+          xfbml: true,
+          version: "v2.9",
+        });
+      };
+
+      // FB Share with custom OG data.
+      (function ($) {
+        $(".fb_share_btn").on("click", function (event) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+
+          FB.ui({
+            method: "feed",
+            name: "Facebook Dialogs",
+            link:
+              "http://amdb-frontend.s3-website-eu-west-1.amazonaws.com/movie/" +
+              movieid.value,
+            picture: "http://fbrell.com/f8.jpg",
+            caption: "wwwwwwwwwwwwwwwwwww",
+            description: "yyyyyyyyyyyyyyyyyyyy",
+          });
+        });
+      })(jQuery);
+    });
+
     const getAMDBComments = () => {
       commentLoading.value = true;
       //Fetch AMDB Comments
@@ -1079,6 +1149,7 @@ export default {
     const showToxicText = (rate) => {
       return ToolMethod.showToxicText(rate);
     };
+
     const showToxicImg = (rate) => {
       if (rate > 0 && rate <= 0.53) {
         return require("@/assets/toxic-green.png");
@@ -1089,6 +1160,7 @@ export default {
       }
       // return ToolMethod.showToxicImg(rate);
     };
+
     const showSentimentImg = (rate) => {
       if (rate > 0.5) {
         return require("@/assets/sentiment-green.png");
@@ -1298,16 +1370,22 @@ export default {
           console.log("Add comments ");
           console.log(response.data);
           submitting.value = false;
-          getAMDBComments();
           commentsValue.value = "";
           commentLoading.value = false;
           if (response.data.code === 200) {
+            getAMDBComments();
             notification.open({
               duration: 2,
               message: "Add comment successfully!",
               icon: h(SmileOutlined, {
                 style: "color: #108ee9",
               }),
+            });
+          } else {
+            ElMessageBox.confirm(response.data.msg, "Warning", {
+              cancelButtonText: "Cancel",
+              type: "warning",
+              center: true,
             });
           }
         });
@@ -1338,6 +1416,7 @@ export default {
           console.log(castDetail.value);
         });
     };
+
     //AMDB filter change
     const handleFilterChange = (value) => {
       console.log("handleFilterChange");
@@ -1549,6 +1628,11 @@ export default {
         return true;
       }
     };
+
+    const judgeBadWord = (str) => {
+      return ToolMethod.judgeBadWord(str);
+    };
+
     return {
       movie,
       start,
@@ -1572,7 +1656,6 @@ export default {
       AMDBAPI,
       // comments
       comments,
-      amdbReport,
       submitting,
       commentsValue,
       tmdbreview,
@@ -1583,6 +1666,8 @@ export default {
       castDetail,
       isShowCastDetail,
       ellipsis: ref(true),
+      judgeBadWord,
+      amdbReport,
       handleCancel,
       handleSubmit,
       showCastDetail,

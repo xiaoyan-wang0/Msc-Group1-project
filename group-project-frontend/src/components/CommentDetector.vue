@@ -14,10 +14,35 @@
         </div>
       </div>
     </section>
+    <div class="detect-upload-div" v-loading="isLoading">
+      <a-upload-dragger
+        v-model:fileList="fileList"
+        name="file"
+        :before-upload="beforeUpload"
+        :show-upload-list="false"
+        :data="{
+          language: 'eng',
+          apikey: 'cefc90891488957',
+          isOverlayRequired: 'true',
+        }"
+        action="https://api.ocr.space/parse/image"
+        @change="handleUploadChange"
+      >
+        <p class="ant-upload-drag-icon">
+          <inbox-outlined></inbox-outlined>
+        </p>
+        <p class="ant-upload-text">
+          Click or drag image to this area to upload
+        </p>
+        <p class="ant-upload-hint">
+          Support for a image upload. tranfer to text.
+        </p>
+      </a-upload-dragger>
+    </div>
     <div class="detector-text">
       <h3>Please enter the character!</h3>
       <a-textarea
-        v-model="commentValue"
+        v-model:value="commentValue"
         showCount
         :maxlength="500"
         class="detect-input"
@@ -77,61 +102,124 @@
 <script>
 import { ref, inject } from "vue";
 import { message } from "ant-design-vue";
+import { InboxOutlined } from "@ant-design/icons-vue";
 import ToolMethod from "../tools.js";
 import env from "@/env.js";
 export default {
   name: "Detector",
-  components: {},
+  components: { InboxOutlined },
   setup() {
     const axios = inject("axios"); // inject axios
     const commentValue = ref("");
     const commentStatus = ref();
     const toxicPercent = ref(0);
+    const isLoading = ref(false);
     const toxicText = ref("~");
     const sentiemntPercent = ref(0);
     const sentiemntText = ref("~");
     const submitDetect = () => {
       //  Comment detect
-      axios
-        .post(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value, 
-        // { withCredentials: true, }
-      )
-        .then((response) => {
-          commentStatus.value = response.data.data;
-          toxicPercent.value = Number(
-            commentStatus.value.toxic[0] * 100
-          ).toFixed(2);
+      if (commentValue.value !== "") {
+        axios
+          .post(
+            env.AMDBAPI + "/comments/toxic?title=" + commentValue.value
+            // { withCredentials: true, }
+          )
+          .then((response) => {
+            commentStatus.value = response.data.data;
+            toxicPercent.value = Number(
+              commentStatus.value.toxic[0] * 100
+            ).toFixed(2);
 
-          toxicText.value = ToolMethod.showToxicText(
-            commentStatus.value.toxic[0]
-          );
-          sentiemntPercent.value = Number(
-            commentStatus.value.sentiment[0] * 100
-          ).toFixed(2);
-          sentiemntText.value = ToolMethod.showSentiemntText(
-            commentStatus.value.sentiment[0]
-          );
-          console.log("Comment detect");
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+            toxicText.value = ToolMethod.showToxicText(
+              commentStatus.value.toxic[0]
+            );
+            sentiemntPercent.value = Number(
+              commentStatus.value.sentiment[0] * 100
+            ).toFixed(2);
+            sentiemntText.value = ToolMethod.showSentiemntText(
+              commentStatus.value.sentiment[0]
+            );
+            console.log("Comment detect");
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log("error");
+            console.log(error);
+            console.log("error");
+            showErroeMessage();
+          });
+      }
     };
+
     const showErroeMessage = () => {
       return message.error("Sorry, error accured in server");
     };
+
+    const beforeUpload = (file) => {
+      isLoading.value = true;
+      const isJpgOrPng =
+        file.type === "image/jpeg" || file.type === "image/png";
+
+      if (!isJpgOrPng) {
+        message.error("You can only upload JPG file!");
+        isLoading.value = false;
+      }
+
+      const isLtKB = file.size / 1024 < 1024;
+
+      if (!isLtKB) {
+        message.error("Image must smaller than 1MB!");
+        isLoading.value = false;
+      }
+
+      return isJpgOrPng && isLtKB;
+    };
+
+    const handleUploadChange = (info) => {
+      const status = info.file.status;
+
+      if (status !== "uploading") {
+        // console.log(info.file, info.fileList);
+      }
+      try {
+        if (status === "done") {
+          console.log(info.file, info.fileList);
+
+          commentValue.value = "";
+          if (info.file.response) {
+            for (let item of info.file.response.ParsedResults) {
+              for (let line of item.TextOverlay.Lines) {
+                commentValue.value += " " + line.LineText;
+              }
+            }
+          }
+
+          console.log(commentValue.value);
+          isLoading.value = false;
+          message.success(`${info.file.name} file uploaded successfully.`);
+        } else if (status === "error") {
+          isLoading.value = false;
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      } catch {
+        isLoading.value = false;
+        message.error(`${info.file.name} can't reginize text.`);
+      }
+    };
+
     return {
       commentValue,
       commentStatus,
       toxicPercent,
       toxicText,
+      isLoading,
       sentiemntPercent,
       sentiemntText,
+      fileList: ref([]),
       submitDetect,
+      handleUploadChange,
+      beforeUpload,
     };
   },
 };
@@ -144,6 +232,9 @@ export default {
   flex-direction: column;
   align-items: center;
   padding-top: 10px;
+  .detect-upload-div {
+    width: 50%;
+  }
   .detect-input {
     padding-bottom: 20px;
   }

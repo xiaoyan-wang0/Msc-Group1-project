@@ -8,43 +8,54 @@
           </div>
         </div>
       </div>
-      <div class="row" v-if="itemdata !== undefined">
-        <div
-          class="col-lg-3 col-md-6 col-sm-6"
-          v-for="item in itemdata"
-          :key="item.id"
-        >
-          <router-link :to="'/movie/' + item.id">
-            <div class="product__item">
-              <div
-                class="product__item__pic set-bg test"
-                v-bind:style="{
-                  'background-image': 'url(' + poster + item.poster_path + ')',
-                }"
-              >
-                <div class="ep">{{ item.vote_average }} / 10</div>
-                <div class="comment">
-                  <i class="fa fa-comments"></i> {{ item.vote_count }}
+      <div class="result-content">
+        <a-empty v-if="itemdata.length < 1">
+          <template #description>
+            <span>
+              <!-- Customize -->
+              <a>Sorry, don't have now</a>
+            </span>
+          </template>
+        </a-empty>
+        <div class="row" v-if="itemdata !== undefined">
+          <div
+            class="col-lg-3 col-md-6 col-sm-6"
+            v-for="item in itemdata"
+            :key="item.id"
+          >
+            <router-link :to="'/movie/' + item.id">
+              <div class="product__item">
+                <div
+                  class="product__item__pic set-bg test"
+                  v-bind:style="{
+                    'background-image':
+                      'url(' + poster + item.poster_path + ')',
+                  }"
+                >
+                  <div class="ep">{{ item.vote_average }} / 10</div>
+                  <div class="comment">
+                    <i class="fa fa-comments"></i> {{ item.vote_count }}
+                  </div>
+                  <div class="view">
+                    <i class="fa fa-eye"></i> {{ item.release_date }}
+                  </div>
                 </div>
-                <div class="view">
-                  <i class="fa fa-eye"></i> {{ item.release_date }}
+                <div class="product__item__text">
+                  <ul>
+                    <li
+                      v-for="genre in findCategary(item.genre_ids).slice(0, 2)"
+                      :key="genre.id"
+                    >
+                      {{ genre }}
+                    </li>
+                  </ul>
+                  <h5>
+                    <a href="#">{{ item.title }}</a>
+                  </h5>
                 </div>
               </div>
-              <div class="product__item__text">
-                <ul>
-                  <li
-                    v-for="genre in findCategary(item.genre_ids).slice(0, 2)"
-                    :key="genre.id"
-                  >
-                    {{ genre }}
-                  </li>
-                </ul>
-                <h5>
-                  <a href="#">{{ item.title }}</a>
-                </h5>
-              </div>
-            </div>
-          </router-link>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -57,40 +68,55 @@
           </div>
         </div>
       </div>
-      <div class="row" v-if="itemdata !== undefined">
-        <div
-          class="col-lg-3 col-md-6 col-sm-6"
-          v-for="item in itemdata"
-          :key="item.tmdb_Id"
-        >
-          <router-link :to="'/movie/' + item.tmdb_Id">
-            <div class="product__item">
-              <div
-                class="product__item__pic set-bg test"
-                v-bind:style="{
-                  'background-image': 'url(' + item.posters[0] + ')',
-                }"
-              >
-                <div class="ep">{{ Number(item.rating).toFixed(1) }} / 10</div>
-                <div class="comment">
-                  <!-- <i class="fa fa-comments"></i> {{ item.vote_count }} -->
+      <div class="result-content">
+        <a-empty v-if="itemdata.length < 1">
+          <template #description>
+            <span>
+              <!-- Customize -->
+              <a>Sorry, don't have now</a>
+            </span>
+          </template>
+        </a-empty>
+        <div class="row" v-if="itemdata !== []">
+          <div
+            class="col-lg-3 col-md-6 col-sm-6"
+            v-for="item in itemdata"
+            :key="item.tmdb_Id"
+          >
+            <router-link :to="'/movie/' + item.tmdb_Id">
+              <div class="product__item">
+                <div
+                  class="product__item__pic set-bg test"
+                  v-bind:style="{
+                    'background-image': 'url(' + item.posters[0] + ')',
+                  }"
+                >
+                  <div class="ep">
+                    {{ Number(item.rating).toFixed(1) }} / 10
+                  </div>
+                  <div class="comment">
+                    <!-- <i class="fa fa-comments"></i> {{ item.vote_count }} -->
+                  </div>
+                  <div class="view">
+                    <i class="fa fa-eye"></i> {{ item.year }}
+                  </div>
                 </div>
-                <div class="view">
-                  <i class="fa fa-eye"></i> {{ item.year }}
+                <div class="product__item__text">
+                  <ul>
+                    <li
+                      v-for="genre in item.genres.slice(0, 2)"
+                      :key="genre.id"
+                    >
+                      {{ genre }}
+                    </li>
+                  </ul>
+                  <h5>
+                    <a href="#">{{ item.movie_title }}</a>
+                  </h5>
                 </div>
               </div>
-              <div class="product__item__text">
-                <ul>
-                  <li v-for="genre in item.genres.slice(0, 2)" :key="genre.id">
-                    {{ genre }}
-                  </li>
-                </ul>
-                <h5>
-                  <a href="#">{{ item.movie_title }}</a>
-                </h5>
-              </div>
-            </div>
-          </router-link>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -122,7 +148,7 @@ export default {
   setup(props) {
     const poster = ref("");
     const resultName = ref("Result");
-    const itemdata = ref();
+    const itemdata = ref([]);
     const itemtotal = ref(0);
     const isIMDBBot = ref(false);
     const axios = inject("axios"); // inject axios
@@ -132,9 +158,7 @@ export default {
 
     onBeforeMount(() => {
       console.log("onBeforeMount");
-      itemdata.value = [];
       resultName.value = "";
-      console.log(itemdata.value);
       console.log(resultName.value);
     });
 
@@ -364,6 +388,7 @@ export default {
 
 <style lang="scss" scoped>
 .show-items {
+  min-height: 550px;
   padding-top: 50px;
 }
 .item-list {
@@ -430,6 +455,10 @@ export default {
     }
   }
 }
+.result-content {
+  min-height: 400px;
+}
+
 .result-pagiantion {
   .result-pagiantion-content {
     justify-content: center;
