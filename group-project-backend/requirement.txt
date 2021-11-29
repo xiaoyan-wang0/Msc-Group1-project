@@ -12,4 +12,4 @@ lxml
 flask_cors
 tweepy
 pandas
-ipywidgets
+ 
