@@ -109,19 +109,19 @@
 </template>
 
 <script>
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.bundle.js";
 import { computed, onMounted, ref, inject, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
 import env from "@/env.js";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
+import { navfunction } from "./views/navbar.js";
 import {
   LoginOutlined,
   LogoutOutlined,
   UserOutlined,
   RightCircleOutlined,
 } from "@ant-design/icons-vue";
-import { navfunction } from "./views/navbar.js";
 
 export default {
   components: {
@@ -240,6 +240,9 @@ body {
   .ant-upload.ant-upload-drag p.ant-upload-drag-icon .anticon {
     color: #e53637 !important;
   }
+  .el-message-box {
+    --el-messagebox-width: auto;
+  }
 }
 * {
   margin: 0;
@@ -286,11 +289,15 @@ body {
       color: white;
     }
     .header-login {
-      max-width: 400px;
       overflow: hidden;
       span {
-        margin-left: 50px;
+        max-width: 200px;
+        margin-left: 40px;
         vertical-align: middle;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
       }
     }
     .header-register {
@@ -463,7 +470,7 @@ body {
       height: $nav-height;
       width: $nav-height;
     }
-    @media only screen and (max-width: 798px) {
+    @media only screen and (max-width: 1100px) {
       // Hamburger nav visible on mobile only
       .header-login {
         span {
@@ -494,7 +501,7 @@ body {
         position: static;
       }
     }
-    @media screen and (min-width: $breakpoint) {
+    @media screen and (min-width: 1199px) {
       .nav-list {
         display: block !important;
       }
@@ -660,6 +667,17 @@ body {
   .text-white li,
   .text-white a {
     color: #fff;
+  }
+
+  .twoline-ellipsis {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
   }
 
   /* buttons */
@@ -894,10 +912,10 @@ body {
     width: auto;
   }
   .login__register {
-    padding-left: 0;
+    padding-left: 145px !important;
   }
   .signup .login__social__links {
-    padding-left: 0;
+    padding-left: 145px !important;
   }
 }
 
@@ -984,7 +1002,7 @@ body {
     text-align: center;
   }
   .blog__details__title h2 {
-    font-size: 34px;
+    font-size: 34px !important;
     line-height: normal;
   }
   .anime__details__pic {
@@ -1026,8 +1044,11 @@ body {
   .login__form form .input__item {
     width: auto;
   }
+  .signup {
+    padding-top: 20px !important;
+  }
   .signup .login__social__links {
-    padding-left: 0;
+    padding-left: 145px !important;
   }
   .login__social__links ul li a {
     width: auto;
@@ -1035,11 +1056,16 @@ body {
   .blog__item__text {
     padding: 0 30px;
   }
-  .login__register {
-    padding-left: 0;
-  }
   .product__sidebar__view .filter__controls li {
     margin-right: 2px;
+  }
+  .login__register {
+    padding-left: 145px !important;
+  }
+
+  .el-dialog--center,
+  .el-dialog {
+    --el-dialog-width: 60% !important;
   }
 }
 
@@ -1079,7 +1105,7 @@ body {
     margin-right: 60px;
   }
   .blog__details__title h2 {
-    font-size: 30px;
+    font-size: 30px !important;
     line-height: normal;
   }
   .blog__details__title .blog__details__social a {
@@ -1098,7 +1124,7 @@ body {
     left: 20px;
   }
   .login__form {
-    padding-left: 50px !important;
+    padding-left: 20px !important;
   }
   .login__form .forget_pass {
     position: relative;
@@ -1115,8 +1141,18 @@ body {
   .anime__review__item__text {
     padding: 18px 20px 20px;
   }
-  .el-dialog .el-dialog--center {
-    --el-dialog-width: 80%;
+  .login__register {
+    padding-left: 20px !important;
+  }
+  .signup .login__social__links {
+    padding-left: 10px !important;
+  }
+  .signup {
+    padding-top: 10px !important;
+  }
+  .el-dialog--center,
+  .el-dialog {
+    --el-dialog-width: 80% !important;
   }
 }
 </style>

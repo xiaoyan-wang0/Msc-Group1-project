@@ -1,13 +1,11 @@
 <template>
   <div class="">
-    <div id="nav">
-    </div>
+    <div id="nav"></div>
     <router-view />
   </div>
 </template>
 
 <style lang="scss">
-
 root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -12217,5 +12215,23 @@ body {
   width: 20px !important;
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
+}
+
+/* Wide Mobile = 480px */
+
+@media only screen and (max-width: 919px) {
+  .el-dialog--center,
+  .el-dialog {
+    --el-dialog-width: 60% !important;
+  }
+}
+
+/* Small Device = 320px */
+// @media only screen and (max-width: 479px) {
+@media only screen and (max-width: 600px) {
+  .el-dialog--center,
+  .el-dialog {
+    --el-dialog-width: 80% !important;
+  }
 }
 </style>

@@ -180,31 +180,6 @@ div .t {
   border-radius: 2px;
   margin-right: 6px;
 }
-
-.blog__details__title .blog__details__social a:last-child {
-  margin-right: 0;
-}
-
-.blog__details__title .blog__details__social a.facebook {
-  background: #3b5998;
-}
-
-.blog__details__title .blog__details__social a.pinterest {
-  background: #ca2027;
-}
-
-.blog__details__title .blog__details__social a.linkedin {
-  background: #0372b1;
-}
-
-.blog__details__title .blog__details__social a.twitter {
-  background: #39a1f2;
-}
-
-.blog__details__title .blog__details__social a i {
-  margin-right: 6px;
-}
-
 .blog__details__pic {
   margin-bottom: 30px;
 }
