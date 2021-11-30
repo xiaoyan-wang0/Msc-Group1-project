@@ -153,16 +153,13 @@
             >
               <router-link :to="'/movie/' + item.id">
                 <div class="product__sidebar__comment__item__pic">
-                  <img
-                    class="pichover"
-                    :src="poster + item.poster"
-                    style="width: 90px; height: 130px"
-                    alt=""
-                  />
+                  <img class="pichover" :src="poster + item.poster" alt="" />
                 </div>
                 <div class="product__sidebar__comment__item__text">
                   <h5>
-                    <a style="color: white">{{ item.title }}</a>
+                    <a class="twoline-ellipsis" style="color: white">{{
+                      item.title
+                    }}</a>
                   </h5>
                   <ul>
                     <li
@@ -763,7 +760,13 @@ export default {
 
 /* Media Query */
 
-@media screen and (max-width: 40rem) {
+@media only screen and (max-width: 1000px) {
+  .email, .profile-user-name {
+    font-size: 17px;
+  }
+}
+
+@media screen and (max-width: 640px) {
   .email {
     font-size: 12px;
   }
@@ -890,7 +893,7 @@ Remove or comment-out the code block below to see how the browser will fall-back
     .profile-user-settings {
       display: grid;
       grid-template-columns: auto 1fr;
-      grid-gap: 1rem;
+      grid-gap: 0.5rem;
     }
 
     .profile-edit-btn,

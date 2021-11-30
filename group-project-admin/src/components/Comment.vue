@@ -29,14 +29,14 @@
         <div class="card-body">
           <el-table :data="tableData" style="width: 100%" max-height="550">
             <el-table-column fixed prop="id" label="ID" />
-            <el-table-column prop="comment" label="Content" />
+            <el-table-column prop="comment" label="Content"  width="300px"/>
             <el-table-column prop="userId" label="User Id" />
             <el-table-column prop="movieId" label="Movie Id" />
             <el-table-column prop="toxic" label="Toxic Rate" sortable />
             <el-table-column prop="sentiment" label="Sentiment Rate" sortable />
             <el-table-column prop="createTime" label="Date" sortable />
             <el-table-column fixed="right" label="Operations">
-              <template #default="scope">
+              <template #default="scope" >
                 <el-button
                   type="danger"
                   size="small"
