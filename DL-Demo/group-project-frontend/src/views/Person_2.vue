@@ -1,54 +1,101 @@
  <template>
- <body>
-  <section class="anime-details spad">
-    <div class="container">
-      
-
-      <div class="row">
-        <div class="col-lg-8 col-md-8">
-          <div class="anime__details__review">
-            <div class="section-title">
-              <h5>Person Detial</h5>
+ <section class="blog-details spad">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <div class="blog__details__title">
+                        <h6>Last update date <span>- Nov 25th, 2021</span></h6>
+                        <h2>For AMDb Beginners: </h2>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="blog__details__pic">
+                        <img src="img/blog/details/blog-details-pic.jpg" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="blog__details__content">
+                        <div class="blog__details__text">
+                            <p>AMDb (Authentic Movie Database) is a movie review platform
+                              with a movies recommender system and an authentic comment detector which could filter toxic
+                              comments and analyze the sentiment of movie reviews. All the users can view or share some
+                              related movie comments in a fair and authentic environment by using AMDb.</p>
+                        </div>
+                        <div class="blog__details__item__text">
+                            <h4>Comment detector:</h4>
+                            <img src="img/blog/details/bd-item-1.jpg" alt="">
+                            <p>For AMDb, when users post their comment on AMDb platform, it will
+                              be reminded this comment’s toxic rate and sentiment result to users.
+                              Users can filter comments based on their tolerance for the toxic level or emotional bias.
+                              In this way, a relatively non-toxic and fair communication environment can
+                              be created for users
+                             <br/>
+                              For other platforms, AMDb supports browsing of film reviews from TMDb, IMDb,
+                              YouTube and Twitter. At the same time, each film review has been tested by the
+                              toxic comment detector and its corresponding results are attached in the
+                              end of the comment box.</p>
+                        </div>
+                        <div class="blog__details__item__text">
+                            <h4>Toxic Level Icons and Explanation</h4>
+                            <div>
+                              <img src="assets/toxic-green.png" alt="toxic level 1" width="10%" height="10%">
+                            </div>
+                            <div>
+                              <img src="assets/toxic-yellow.png" alt="toxic level 2" width="10%" height="10%">
+                            </div>
+                            <div>
+                              <img src="assets/toxic-red.png" alt="toxic level 3" width="10%" height="10%">
+                            </div>
+                            <div>
+                              <p>When the toxic rate is within the range of 0-53%, the system will
+                              use a green grunt head to indicate that it is non-toxic.
+                              Green symbolizes non-toxicity.</br>
+                              When the toxic rate is within the range of 54-90%, the
+                              system will use a yellow grunt to indicate that it is toxic.</br>
+                              When the toxic rate exceeds 90%, the red grunt head is used by
+                              the system to indicate that it is sever toxic</p>
+                            </div>
+                        </div>
+                        <div class="blog__details__item__text">
+                            <h4>sentiment Level Icons and Explanation</h4>
+                            <div>
+                              <img src="assets/sentiment-green.png" alt="Positive" width="10%" height="10%">
+                            </div>
+                            <div>
+                              <img src="assets/sentiment-red.png" alt="Negative" width="10%" height="10%">
+                            </div>
+                            <div>
+                              <p>After the result of the detector detection, if
+                              it is less than 50%, it is judged as negative by
+                              the system and the red angry face icon is adopted;
+                              if it is higher than 50%, it is regarded as positive
+                              and the green smiling face icon is adopted.</p>
+                            </div>
+                        </div>
+                        <div class="blog__details__btns">
+                            </div>
+                            <div class="blog__details__form">
+                                <h4>Leave A Commnet</h4>
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <input type="text" placeholder="Name">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <input type="text" placeholder="Email">
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <textarea placeholder="Message"></textarea>
+                                            <button type="submit" class="site-btn">Send Message</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-
-                <div class="anime__details__form">
-                  <div class="section-title">
-                    <h5>My Movie List</h5>
-               
-         
-
-             
-            
-           
-          </div>
-           </div>
-
-		       <div class="anime__details__form">
-                  <div class="section-title">
-                    <h5>My Comments</h5>
-               
-         
-
-             
-            
-           
-          </div>
-           </div>
-		  </div>
-		  </div>
-		  
-        <div class="col-lg-4 col-md-4">
-          <div class="anime__details__sidebar">
-            <div class="section-title">
-              <h5>Recommend to you</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  </body>
+        </section>
 </template> 
 
 <script>

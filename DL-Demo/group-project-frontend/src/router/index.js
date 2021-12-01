@@ -56,8 +56,8 @@ const routes = [
   },
 
   {
-    path: '/login',
-    name: 'Login',
+    path: '/Facebook_Share2',
+    name: 'Facebook_Share2',
     component: Login
   },
   {

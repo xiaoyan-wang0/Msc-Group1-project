@@ -16,6 +16,12 @@
     </section>
     <div class="detector-text">
       <h3>Please enter the character!</h3>
+   <div>
+
+  <p>Result: {{ note }}</p>
+  <p>Error: {{ error }}</p>
+  <button @click="toggleListening">Start/Stop</button>
+  </div>
       <a-textarea
         v-model="commentValue"
         showCount
@@ -79,10 +85,12 @@ import { ref, inject } from "vue";
 import { message } from "ant-design-vue";
 import ToolMethod from "../tools.js";
 import env from "@/env.js";
+import useSpeechRecognition from "../useSpeechRecognition.js"
 export default {
   name: "Detector",
   components: {},
   setup() {
+    const { toggleListening, note, error } = useSpeechRecognition();
     const axios = inject("axios"); // inject axios
     const commentValue = ref("");
     const commentStatus = ref();
@@ -132,6 +140,9 @@ export default {
       sentiemntPercent,
       sentiemntText,
       submitDetect,
+      toggleListening,
+      note,
+      error
     };
   },
 };
