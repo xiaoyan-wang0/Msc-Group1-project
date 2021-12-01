@@ -1,5 +1,5 @@
  <template>
-  <section class="anime-details spad">
+  <section class="amdb-details spad">
     <div class="">
       <a-modal
         :visible="isShowTrailer"
@@ -65,25 +65,25 @@
       </el-dialog>
     </div>
     <div class="container">
-      <div class="anime__details__content">
+      <div class="amdb__details__content">
         <div class="row">
           <div class="col-lg-3">
-            <div class="anime__details__pic set-bg">
+            <div class="amdb__details__pic set-bg">
               <img
                 :src="moviePoster + movie.poster_path"
                 alt="Movie Poster"
-                class="anime__details__pic set-bg"
+                class="amdb__details__pic set-bg"
                 @click="isShowTrailer = true"
               />
             </div>
           </div>
           <div class="col-lg-9">
-            <div class="anime__details__text">
-              <div class="anime__details__title">
+            <div class="amdb__details__text">
+              <div class="amdb__details__title">
                 <h3>{{ movie.original_title }}</h3>
                 <span>{{ movie.release_date }}</span>
               </div>
-              <div class="anime__details__rating">
+              <div class="amdb__details__rating">
                 <div class="rating">
                   <a-rate v-model:value="start" disabled allowHalf />
                   <p>{{ movie.vote_average }}</p>
@@ -92,7 +92,7 @@
 
               <p style="font-size: 20px">{{ movie.overview }}</p>
 
-              <div class="anime__details__widget">
+              <div class="amdb__details__widget">
                 <div class="row">
                   <div class="col-lg-6 col-md-6">
                     <ul>
@@ -189,7 +189,7 @@
                   </el-dialog>
                 </div>
               </div>
-              <div class="anime__details__btn">
+              <div class="amdb__details__btn">
                 <a @click="addLikeList()" class="follow-btn">
                   <i class="fa fa-heart"></i> ADD Like list
                 </a>
@@ -208,7 +208,7 @@
 
       <div class="row">
         <div class="col-lg-8 col-md-8">
-          <div class="anime__details__review">
+          <div class="amdb__details__review">
             <div class="section-title">
               <h5>reviews</h5>
             </div>
@@ -275,8 +275,8 @@
                       v-for="item in amdbreview"
                       :key="item.id"
                     >
-                      <div class="anime__review__item">
-                        <div class="anime__review__item__pic">
+                      <div class="amdb__review__item">
+                        <div class="amdb__review__item__pic">
                           <div class="photo-avatar">
                             <div class="avatar">
                               <a-avatar
@@ -291,7 +291,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="anime__review__item__text">
+                        <div class="amdb__review__item__text">
                           <h6 class="comment-author">
                             {{ item.userName }}
                           </h6>
@@ -336,7 +336,7 @@
                       </div>
                     </div>
                   </el-scrollbar>
-                  <div class="anime__details__form">
+                  <div class="amdb__details__form">
                     <a-comment>
                       <template #avatar>
                         <a-avatar
@@ -426,8 +426,8 @@
                       v-for="item in tmdbreview"
                       :key="item.id"
                     >
-                      <div class="anime__review__item">
-                        <div class="anime__review__item__pic">
+                      <div class="amdb__review__item">
+                        <div class="amdb__review__item__pic">
                           <div class="photo-avatar">
                             <div class="avatar">
                               <a-avatar
@@ -441,7 +441,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="anime__review__item__text">
+                        <div class="amdb__review__item__text">
                           <h6 class="comment-author">{{ item.author }}</h6>
                           <a-typography-paragraph
                             class="comment-text"
@@ -539,15 +539,15 @@
                       v-for="item in imdbreview"
                       :key="item.id"
                     >
-                      <div class="anime__review__item">
-                        <div class="anime__review__item__pic">
+                      <div class="amdb__review__item">
+                        <div class="amdb__review__item__pic">
                           <div class="photo-avatar">
                             <div class="avatar">
                               <a-avatar :src="emptyprofile" />
                             </div>
                           </div>
                         </div>
-                        <div class="anime__review__item__text">
+                        <div class="amdb__review__item__text">
                           <h6 class="comment-author">{{ item.username }}</h6>
                           <a-typography-paragraph
                             class="comment-text"
@@ -648,15 +648,15 @@
                       v-for="item in youtubereview"
                       :key="item.id"
                     >
-                      <div class="anime__review__item">
-                        <div class="anime__review__item__pic">
+                      <div class="amdb__review__item">
+                        <div class="amdb__review__item__pic">
                           <div class="photo-avatar">
                             <div class="avatar">
                               <a-avatar :src="item.profile_picture" />
                             </div>
                           </div>
                         </div>
-                        <div class="anime__review__item__text">
+                        <div class="amdb__review__item__text">
                           <h6 class="comment-author">{{ item.username }}</h6>
                           <a-typography-paragraph
                             class="comment-text"
@@ -753,15 +753,15 @@
                       v-for="item in twitterreview"
                       :key="item.id"
                     >
-                      <div class="anime__review__item">
-                        <div class="anime__review__item__pic">
+                      <div class="amdb__review__item">
+                        <div class="amdb__review__item__pic">
                           <div class="photo-avatar">
                             <div class="avatar">
                               <a-avatar :src="emptyprofile" />
                             </div>
                           </div>
                         </div>
-                        <div class="anime__review__item__text">
+                        <div class="amdb__review__item__text">
                           <a-typography-paragraph
                             class="comment-text"
                             :ellipsis="
@@ -804,7 +804,7 @@
           </div>
         </div>
         <div class="col-lg-4 col-md-4">
-          <div class="anime__details__sidebar">
+          <div class="amdb__details__sidebar">
             <div class="section-title">
               <h5>you might like...</h5>
             </div>
@@ -1672,31 +1672,31 @@ export default {
 .product__sidebar__comment__item__text ul {
   padding-left: 0 !important;
 }
-.anime-details {
+.amdb-details {
   padding-top: 60px;
 }
 
-.anime__details__content {
+.amdb__details__content {
   margin-bottom: 65px;
 }
 
-.anime__details__text {
+.amdb__details__text {
   position: relative;
 }
 
-.anime__details__text p {
+.amdb__details__text p {
   color: #b7b7b7;
   font-size: 18px;
   line-height: 30px;
 }
 
-.anime__details__pic {
+.amdb__details__pic {
   height: 440px;
   border-radius: 5px;
   position: relative;
 }
 
-.anime__details__pic .comment {
+.amdb__details__pic .comment {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -1708,7 +1708,7 @@ export default {
   bottom: 25px;
 }
 
-.anime__details__pic .view {
+.amdb__details__pic .view {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -1720,24 +1720,24 @@ export default {
   bottom: 25px;
 }
 
-.anime__details__title {
+.amdb__details__title {
   margin-bottom: 20px;
   padding-right: 100px;
 }
 
-.anime__details__title h3 {
+.amdb__details__title h3 {
   color: #fff;
   font-weight: 700;
   margin-bottom: 13px;
 }
 
-.anime__details__title span {
+.amdb__details__title span {
   font-size: 15px;
   color: #b7b7b7;
   display: block;
 }
 
-.anime__details__rating {
+.amdb__details__rating {
   text-align: center;
   position: absolute;
   right: 0;
@@ -1751,21 +1751,21 @@ export default {
   display: inline-block;
 }
 
-.anime__details__rating span {
+.amdb__details__rating span {
   display: block;
   font-size: 18px;
   // color: #b7b7b7;
 }
 
-.anime__details__widget {
+.amdb__details__widget {
   margin-bottom: 15px;
 }
 
-.anime__details__widget ul {
+.amdb__details__widget ul {
   margin-bottom: 20px;
 }
 
-.anime__details__widget ul li {
+.amdb__details__widget ul li {
   list-style: none;
   font-size: 15px;
   color: #ffffff;
@@ -1774,7 +1774,7 @@ export default {
   padding-left: 18px;
 }
 
-.anime__details__widget ul li:before {
+.amdb__details__widget ul li:before {
   position: absolute;
   left: 0;
   top: 12px;
@@ -1784,13 +1784,13 @@ export default {
   content: "";
 }
 
-.anime__details__widget ul li span {
+.amdb__details__widget ul li span {
   color: #b7b7b7;
   width: 115px;
   display: inline-block;
 }
 
-.anime__details__btn .follow-btn {
+.amdb__details__btn .follow-btn {
   font-size: 10px;
   color: #ffffff;
   background: #e53637;
@@ -1804,7 +1804,7 @@ export default {
   margin-bottom: 13px;
 }
 
-.anime__details__btn .watch-btn span {
+.amdb__details__btn .watch-btn span {
   font-size: 13px;
   color: #ffffff;
   background: #e53637;
@@ -1817,7 +1817,7 @@ export default {
   margin-right: 1px;
 }
 
-.anime__details__btn .watch-btn i {
+.amdb__details__btn .watch-btn i {
   font-size: 20px;
   display: inline-block;
   background: #e53637;
@@ -1826,7 +1826,7 @@ export default {
   border-radius: 0 4px 4px 0;
 }
 
-.anime__details__review {
+.amdb__details__review {
   margin-bottom: 55px;
   .comment-filter {
     .filter-select {
@@ -1837,7 +1837,7 @@ export default {
   }
 }
 
-.anime__review__item {
+.amdb__review__item {
   overflow: hidden;
   margin-bottom: 15px;
   .bottom-comment {
@@ -1868,13 +1868,13 @@ export default {
   }
 }
 
-.anime__review__item__pic {
+.amdb__review__item__pic {
   float: left;
   margin-right: 20px;
   position: relative;
 }
 
-.anime__review__item__pic:before {
+.amdb__review__item__pic:before {
   position: absolute;
   right: -30px;
   top: 15px;
@@ -1886,13 +1886,13 @@ export default {
   transform: rotate(45deg);
 }
 
-.anime__review__item__pic img {
+.amdb__review__item__pic img {
   height: 50px;
   width: 50px;
   border-radius: 50%;
 }
 
-.anime__review__item__text {
+.amdb__review__item__text {
   overflow: hidden;
   background: #494a58;
   padding: 13px 30px 0px 20px;
@@ -1903,24 +1903,24 @@ export default {
   }
 }
 
-.anime__review__item__text h6 {
+.amdb__review__item__text h6 {
   color: #ffffff;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
-.anime__review__item__text h6 span {
+.amdb__review__item__text h6 span {
   color: #b7b7b7;
   font-weight: 400;
 }
 
-.anime__review__item__text p {
+.amdb__review__item__text p {
   color: #b7b7b7;
   line-height: 23px;
   margin-bottom: 0;
 }
 
-.anime__details__form form textarea {
+.amdb__details__form form textarea {
   width: 100%;
   font-size: 15px;
   color: #b7b7b7;
@@ -1933,7 +1933,7 @@ export default {
   margin-bottom: 24px;
 }
 
-.anime__details__form form button {
+.amdb__details__form form button {
   font-size: 11px;
   color: #ffffff;
   font-weight: 700;

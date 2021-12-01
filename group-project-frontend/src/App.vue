@@ -841,13 +841,13 @@ body {
   .footer__copyright__text {
     text-align: center;
   }
-  .anime__details__widget ul li span {
+  .amdb__details__widget ul li span {
     width: 90px;
   }
-  .anime__details__pic {
+  .amdb__details__pic {
     margin-bottom: 40px;
   }
-  .anime__details__sidebar {
+  .amdb__details__sidebar {
     padding-top: 50px;
   }
   .login__form {
@@ -930,10 +930,10 @@ body {
     font-size: 34px !important;
     line-height: normal;
   }
-  .anime__details__pic {
+  .amdb__details__pic {
     margin-bottom: 40px;
   }
-  .anime__details__sidebar {
+  .amdb__details__sidebar {
     padding-top: 50px;
   }
   .btn__all {
@@ -945,7 +945,7 @@ body {
   .product__page__title .product__page__filter {
     text-align: left;
   }
-  .anime__details__rating {
+  .amdb__details__rating {
     text-align: left;
     position: relative;
     margin-bottom: 20px;
@@ -998,12 +998,12 @@ body {
   .footer__nav ul li {
     margin-right: 10px;
   }
-  .anime__details__btn .follow-btn {
+  .amdb__details__btn .follow-btn {
     padding: 14px 26px;
     margin-right: 11px;
     margin-bottom: 25px;
   }
-  .anime__details__widget ul li span {
+  .amdb__details__widget ul li span {
     width: 85px;
   }
   .blog__details__title h2 {
@@ -1037,10 +1037,10 @@ body {
   .header__right a {
     margin-right: 10px;
   }
-  .anime__review__item__text h6 span {
+  .amdb__review__item__text h6 span {
     font-size: 12px;
   }
-  .anime__review__item__text {
+  .amdb__review__item__text {
     padding: 18px 20px 20px;
   }
   .login__register {

@@ -1,9 +1,9 @@
 <template>
-  <section class="anime-details spad">
+  <section class="amdb-details spad">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-8">
-          <div class="anime__details__review">
+          <div class="amdb__details__review">
             <div class="section-title">
               <h5>Person Detial</h5>
               <div class="container2">
@@ -57,7 +57,7 @@
               </div>
               <!-- End of container -->
             </div>
-            <div class="anime__details__form">
+            <div class="amdb__details__form">
               <div class="section-title">
                 <h5>My Movie List</h5>
                 <p></p>
@@ -94,7 +94,7 @@
                 </div>
               </div>
             </div>
-            <div class="anime__details__form">
+            <div class="amdb__details__form">
               <div class="section-title">
                 <h5>My Comments</h5>
                 <p></p>
@@ -138,7 +138,7 @@
         </div>
 
         <div class="col-lg-4 col-md-4">
-          <div class="anime__details__sidebar">
+          <div class="amdb__details__sidebar">
             <div class="section-title">
               <h5>Recommend to you</h5>
             </div>
@@ -442,31 +442,31 @@ export default {
 .movie-like-list {
   min-width: 300px;
 }
-.anime-details {
+.amdb-details {
   padding-top: 60px;
 }
 
-.anime__details__content {
+.amdb__details__content {
   margin-bottom: 65px;
 }
 
-.anime__details__text {
+.amdb__details__text {
   position: relative;
 }
 
-.anime__details__text p {
+.amdb__details__text p {
   color: #b7b7b7;
   font-size: 18px;
   line-height: 30px;
 }
 
-.anime__details__pic {
+.amdb__details__pic {
   height: 440px;
   border-radius: 5px;
   position: relative;
 }
 
-.anime__details__pic .comment {
+.amdb__details__pic .comment {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -478,7 +478,7 @@ export default {
   bottom: 25px;
 }
 
-.anime__details__pic .view {
+.amdb__details__pic .view {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -490,31 +490,31 @@ export default {
   bottom: 25px;
 }
 
-.anime__details__title {
+.amdb__details__title {
   margin-bottom: 20px;
 }
 
-.anime__details__title h3 {
+.amdb__details__title h3 {
   color: #ffffff;
   font-weight: 700;
   margin-bottom: 13px;
 }
 
-.anime__details__title span {
+.amdb__details__title span {
   font-size: 15px;
   color: #b7b7b7;
   display: block;
 }
 
-.anime__details__widget {
+.amdb__details__widget {
   margin-bottom: 15px;
 }
 
-.anime__details__widget ul {
+.amdb__details__widget ul {
   margin-bottom: 20px;
 }
 
-.anime__details__widget ul li {
+.amdb__details__widget ul li {
   list-style: none;
   font-size: 15px;
   color: #ffffff;
@@ -523,7 +523,7 @@ export default {
   padding-left: 18px;
 }
 
-.anime__details__widget ul li:before {
+.amdb__details__widget ul li:before {
   position: absolute;
   left: 0;
   top: 12px;
@@ -533,24 +533,24 @@ export default {
   content: "";
 }
 
-.anime__details__widget ul li span {
+.amdb__details__widget ul li span {
   color: #b7b7b7;
   width: 115px;
   display: inline-block;
 }
 
-.anime__review__item {
+.amdb__review__item {
   overflow: hidden;
   margin-bottom: 15px;
 }
 
-.anime__review__item__pic {
+.amdb__review__item__pic {
   float: left;
   margin-right: 20px;
   position: relative;
 }
 
-.anime__review__item__pic:before {
+.amdb__review__item__pic:before {
   position: absolute;
   right: -30px;
   top: 15px;
@@ -562,37 +562,37 @@ export default {
   transform: rotate(45deg);
 }
 
-.anime__review__item__pic img {
+.amdb__review__item__pic img {
   height: 50px;
   width: 50px;
   border-radius: 50%;
 }
 
-.anime__review__item__text {
+.amdb__review__item__text {
   overflow: hidden;
   background: #1d1e39;
   padding: 18px 30px 16px 20px;
   border-radius: 10px;
 }
 
-.anime__review__item__text h6 {
+.amdb__review__item__text h6 {
   color: #ffffff;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
-.anime__review__item__text h6 span {
+.amdb__review__item__text h6 span {
   color: #b7b7b7;
   font-weight: 400;
 }
 
-.anime__review__item__text p {
+.amdb__review__item__text p {
   color: #b7b7b7;
   line-height: 23px;
   margin-bottom: 0;
 }
 
-.anime__details__form form textarea {
+.amdb__details__form form textarea {
   width: 100%;
   font-size: 15px;
   color: #b7b7b7;
@@ -605,7 +605,7 @@ export default {
   margin-bottom: 24px;
 }
 
-.anime__details__form form button {
+.amdb__details__form form button {
   font-size: 11px;
   color: #ffffff;
   font-weight: 700;
