@@ -744,7 +744,7 @@ export default {
 
 .profile-real-name {
   word-break: normal;
-  max-width: 500px;
+  max-width: 400px;
   display: block;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -761,8 +761,13 @@ export default {
 /* Media Query */
 
 @media only screen and (max-width: 1000px) {
-  .email, .profile-user-name {
-    font-size: 17px;
+  .email,
+  .profile-user-name {
+    font-size: 17px !important;
+  }
+
+  .profile-real-name {
+    max-width: 250px !important;
   }
 }
 
