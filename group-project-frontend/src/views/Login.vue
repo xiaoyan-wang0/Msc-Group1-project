@@ -73,8 +73,13 @@
                 </div>
 
                 <div class="form-button mt-3">
-                  <button id="submit" type="submit" class="site-btn">
-                    LogIn
+                  <button
+                    id="submit"
+                    type="submit"
+                    class="site-btn"
+                    :disabled="isLoading"
+                  >
+                    {{ isLoading ? "Loading..." : "LogIn" }}
                   </button>
                 </div>
               </form>
@@ -156,6 +161,7 @@ export default defineComponent({
   setup() {
     const axios = inject("axios"); // inject axios
     const store = useStore();
+    const isLoading = ref(false);
     const fbSignInParams = ref({
       scope: "email,user_likes",
       return_scopes: true,
@@ -177,6 +183,7 @@ export default defineComponent({
 
     //Login event
     const onSubmitLogin = () => {
+      isLoading.value = true;
       const loginFormData = new FormData();
       console.log("resploginMes.email");
       console.log(loginMes.value.email);
@@ -191,18 +198,21 @@ export default defineComponent({
           console.log(response);
 
           if (response.code === -1) {
+            isLoading.value = false;
             message.error(response.msg, () => {
               console.log("onClose");
             });
           } else if (response.code === 200) {
             message.success(response.msg + ", Will return in 3s.", () => {
               router.push({ name: "Home" });
+              isLoading.value = false;
             });
           }
         },
         (error) => {
           console.log("login error");
           console.log(error);
+          showErroeMessage();
         }
       );
     };
@@ -268,6 +278,7 @@ export default defineComponent({
               (error) => {
                 console.log("error");
                 console.log(error);
+                showErroeMessage();
               }
             );
           } else if (response.data.code === 200) {
@@ -295,6 +306,7 @@ export default defineComponent({
               (error) => {
                 console.log("login error");
                 console.log(error);
+                showErroeMessage();
               }
             );
           }
@@ -356,9 +368,14 @@ export default defineComponent({
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     };
+    const showErroeMessage = () => {
+      isLoading.value = false;
+      return message.error("Sorry, error accured in server");
+    };
 
     return {
       loginMes,
+      isLoading,
       activeKey: ref("1"),
       fbSignInParams,
       onSubmitLogin,
@@ -370,41 +387,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-/*---------------------
-  Breadcrumb
------------------------*/
-
-.breadcrumb-option {
-  padding-top: 35px;
-}
-
-.breadcrumb__links a {
-  font-size: 15px;
-  color: #ffffff;
-  margin-right: 18px;
-  display: inline-block;
-  position: relative;
-}
-
-.breadcrumb__links a i {
-  margin-right: 5px;
-  color: #e53637;
-}
-
-.breadcrumb__links a:after {
-  position: absolute;
-  right: -14px;
-  top: 0;
-  content: "";
-  font-family: "FontAwesome";
-}
-
-.breadcrumb__links span {
-  font-size: 15px;
-  color: #b7b7b7;
-  display: inline-block;
-}
-
 /*---------------------
     Normal Breadcrumb
 -----------------------*/
@@ -585,7 +567,7 @@ export default defineComponent({
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  width: 460px;
+  width: 330px;
   padding: 14px 0;
   position: relative;
   margin: 0 auto;

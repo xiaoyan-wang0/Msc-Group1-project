@@ -206,16 +206,13 @@
               >
                 <router-link :to="'/movie/' + item.id">
                   <div class="product__sidebar__comment__item__pic">
-                    <img
-                      class="pichover"
-                      :src="poster + item.poster"
-                      style="width: 90px; height: 130px"
-                      alt=""
-                    />
+                    <img class="pichover" :src="poster + item.poster" alt="" />
                   </div>
                   <div class="product__sidebar__comment__item__text">
                     <h5>
-                      <a style="color: white">{{ item.title }}</a>
+                      <a class="twoline-ellipsis" style="color: white">{{
+                        item.title
+                      }}</a>
                     </h5>
                     <ul>
                       <li
@@ -259,16 +256,13 @@
               >
                 <router-link :to="'/movie/' + item.id">
                   <div class="product__sidebar__comment__item__pic">
-                    <img
-                      class="pichover"
-                      :src="poster + item.poster"
-                      style="width: 90px; height: 130px"
-                      alt=""
-                    />
+                    <img class="pichover" :src="poster + item.poster" alt="" />
                   </div>
                   <div class="product__sidebar__comment__item__text">
                     <h5>
-                      <a style="color: white">{{ item.title }}</a>
+                      <a class="twoline-ellipsis" style="color: white">{{
+                        item.title
+                      }}</a>
                     </h5>
                     <ul>
                       <li
@@ -487,71 +481,6 @@ export default {
 </script>
 
 <style lang="scss" >
-.item-list {
-  margin: 0 50px;
-}
-.item-title {
-  color: white;
-  span {
-    font-size: 50px;
-  }
-  a {
-    margin-top: 25px;
-    margin-right: 30px;
-    float: right;
-    font-size: 25px;
-  }
-}
-.movies-list {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0px 50px;
-  .movie {
-    max-width: 20%;
-    flex: 1 1 50%;
-    padding: 16px 8px;
-    .movie-link {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      .product-image {
-        position: relative;
-        display: block;
-        img {
-          display: block;
-          width: 100%;
-          height: 300px;
-          object-fit: cover;
-        }
-        .type {
-          position: absolute;
-          padding: 8px 16px;
-          background-color: rgba(86, 98, 168, 0.8);
-          color: #fff;
-          bottom: 16px;
-          left: 0px;
-          text-transform: capitalize;
-        }
-      }
-      .detail {
-        background-color: #363636;
-        padding: 16px 8px;
-        flex: 1 1 100%;
-        border-radius: 0px 0px 8px 8px;
-        .year {
-          color: #aaa;
-          font-size: 14px;
-        }
-        h3 {
-          color: #fff;
-          font-weight: 600;
-          font-size: 18px;
-        }
-      }
-    }
-  }
-}
-
 .testmain {
   transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -571,8 +500,8 @@ export default {
 }
 
 .pichover {
-  width: 90px;
-  height: 130px;
+  width: 105px;
+  height: 150px;
   transition: all 0.4s;
   -moz-transition: all 0.4s;
   -webkit-transition: all 0.4s;
@@ -814,6 +743,7 @@ export default {
 .product__sidebar__comment__item {
   margin-bottom: 20px;
   overflow: hidden;
+  min-width: 300px;
 }
 
 .product__sidebar__comment__item__pic {

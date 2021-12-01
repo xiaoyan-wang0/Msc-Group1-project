@@ -27,15 +27,16 @@
               fixed
               prop="userId"
               label="UserId"
-              width="150"
+              width="100px"
               sortable
             />
             <el-table-column prop="userName" label="UserName" />
-            <el-table-column prop="email" label="Email" />
+            <el-table-column prop="email" label="Email" width="150px"/>
             <el-table-column prop="movieTags" label="Genres" />
             <el-table-column prop="ifBlocked" label="Block" />
-            <el-table-column prop="overView" label="Overview" />
-            <el-table-column fixed="right" label="Operations">
+            <el-table-column prop="overView" label="Overview"  width="300px"/>
+            <el-table-column fixed="right" label="Operations" 
+              width="175px">
               <template #default="scope">
                 <el-button
                   type="danger"

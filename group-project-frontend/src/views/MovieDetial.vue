@@ -27,7 +27,13 @@
       >
         <span> Are you sure to publich your comment?</span>
         <br />
-        <span style="font-weight: 600">{{ popTitle }}</span>
+        <br />
+        <span style="font-weight: 600">{{ popToxicText }}</span>
+        <br />
+        <span style="font-weight: 600">{{ popSentimentText }}</span>
+        <br />
+        <br />
+        <span style="font-weight: 600">{{ popHightToxicText }}</span>
         <template #footer>
           <span class="dialog-footer">
             <el-button @click="addCommentsDialog = false">Cancel</el-button>
@@ -45,7 +51,9 @@
         center
         v-loading="commentConfirmLoading"
       >
-        <span> Are you sure to report this comment?</span>
+        <span style="font-weight: 600">
+          Are you sure to report this comment?</span
+        >
         <template #footer>
           <span class="dialog-footer">
             <el-button @click="reportCommentsDialog = false">Cancel</el-button>
@@ -192,7 +200,7 @@
                 </a>
                 <a class="follow-btn fb_share_btn"
                   ><i class="fab fa-facebook"></i>
-                  <span>Share to facebook</span>
+                  <span> Facebook Share</span>
                 </a>
                 <!-- <div class="share-function">
                   <div id="fb-root">
@@ -384,6 +392,7 @@
                             html-type="submit"
                             :loading="submitting"
                             @click="handleSubmit()"
+                            :disabled="commentConfirmLoading"
                           >
                             Add Comment
                           </button>
@@ -867,7 +876,9 @@
                 </div>
                 <div class="product__sidebar__comment__item__text">
                   <h5>
-                    <a style="color: white">{{ item.title }}</a>
+                    <a class="twoline-ellipsis" style="color: white">{{
+                      item.title
+                    }}</a>
                   </h5>
                   <ul>
                     <li
@@ -933,7 +944,9 @@ export default {
     const movieid = ref("");
     const imdbmovieid = ref("");
     const activeKey = ref("amdb");
-    const popTitle = ref("");
+    const popToxicText = ref("");
+    const popSentimentText = ref("");
+    const popHightToxicText = ref("");
     const commentConfirmLoading = ref(false);
     const addCommentsDialog = ref(false);
     const reportCommentsDialog = ref(false);
@@ -1330,24 +1343,31 @@ export default {
       }
       //  Comment detectaddCommentsDialog
       commentConfirmLoading.value = true;
-      addCommentsDialog.value = true;
-      popTitle.value = "";
+      popToxicText.value = "";
+      popSentimentText.value = "";
+      popHightToxicText.value = "";
       axios
         .post(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
         .then((response) => {
           const commentStatus = response.data.data;
-          popTitle.value =
-            popTitle.value +
+          addCommentsDialog.value = true;
+          popToxicText.value =
             "Toxic is " +
             showToxicText(commentStatus.toxic[0]) +
             "(" +
             Number(commentStatus.toxic[0] * 100).toFixed(1) +
-            "%) and Sentiment is " +
+            "%)";
+          popSentimentText.value =
+            "Sentiment is " +
             showSentiemntText(commentStatus.sentiment[0]) +
             "(" +
             Number(commentStatus.sentiment[0] * 100).toFixed(1) +
             "%).";
           commentConfirmLoading.value = false;
+          if (commentStatus.toxic[0] > 0.9) {
+            popHightToxicText.value =
+              "Your comment is SEVERE TOXIC. If you post too much, the administrator will block your account.";
+          }
         });
     };
 
@@ -1645,7 +1665,9 @@ export default {
       isShowTrailer,
       emptyprofile,
       castList,
-      popTitle,
+      popToxicText,
+      popHightToxicText,
+      popSentimentText,
       commentConfirmLoading,
       addCommentsDialog,
       reportCommentsDialog,
@@ -1829,7 +1851,7 @@ export default {
 }
 
 .anime__details__btn .follow-btn {
-  font-size: 13px;
+  font-size: 10px;
   color: #ffffff;
   background: #e53637;
   display: inline-block;
@@ -1839,6 +1861,7 @@ export default {
   padding: 14px 20px;
   border-radius: 4px;
   margin-right: 11px;
+  margin-bottom: 13px;
 }
 
 .anime__details__btn .watch-btn span {
@@ -2003,31 +2026,31 @@ export default {
   background-color: #1f1d1d;
 }
 
-.pichover {
-  width: 90px;
-  height: 130px;
-  transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
+// .pichover {
+//   width: 110px;
+//   height: 150px;
+//   transition: all 0.4s;
+//   -moz-transition: all 0.4s;
+//   -webkit-transition: all 0.4s;
+//   -o-transition: all 0.4s;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: 100% 100%;
+// }
 
-.pichover:hover {
-  object-fit: cover;
-
-  background-size: 110% 110%;
-  -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
-  -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
-  box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
-  cursor: pointer;
-}
+// .pichover:hover {
+//   object-fit: cover;
+//   background-size: 110% 110%;
+//   -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+//   -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
+//   box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
+//   cursor: pointer;
+// }
 
 @media only screen and (max-width: 800px) {
   .filter-select {
     position: initial !important;
+    margin-top: 30px;
   }
 }
 </style>
