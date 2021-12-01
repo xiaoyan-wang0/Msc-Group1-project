@@ -1,7 +1,7 @@
 <template>
  <div id="fb-root">
 <div class="fb-share-button" 
-data-href="https://www.your-domain.com/your-page.html" 
+data-href="https://alexey-avdeev.com/vanilla-sharing/" 
 data-layout="button_count">
 </div>
 </div>
