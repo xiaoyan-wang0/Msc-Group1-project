@@ -1,9 +1,9 @@
 <template>
-  <section class="setting anime-details spad">
+  <section class="setting amdb-details spad">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-8">
-          <div class="anime__details__review">
+          <div class="amdb__details__review">
             <div class="section-title">
               <h5>Person Setting</h5>
 
@@ -171,7 +171,7 @@
                           </div>
 
                           <div class="col-12 d-flex justify-content-end">
-                            <div class="anime__details__btn">
+                            <div class="amdb__details__btn">
                               <a @click="submitChange()" class="follow-btn">
                                 Update
                               </a>
@@ -529,7 +529,7 @@ export default {
   font-family: "Oswald", sans-serif;
 }
 
-.anime__details__btn .follow-btn {
+.amdb__details__btn .follow-btn {
   font-size: 13px;
   color: #ffffff;
   background: #e53637;
@@ -542,7 +542,7 @@ export default {
   margin-right: 11px;
 }
 
-.anime__details__btn .watch-btn span {
+.amdb__details__btn .watch-btn span {
   font-size: 13px;
   color: #ffffff;
   background: #e53637;
@@ -555,7 +555,7 @@ export default {
   margin-right: 1px;
 }
 
-.anime__details__btn .watch-btn i {
+.amdb__details__btn .watch-btn i {
   font-size: 20px;
   display: inline-block;
   background: #e53637;
