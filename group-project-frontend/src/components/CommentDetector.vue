@@ -70,7 +70,6 @@
             '100%': 'red',
           }"
         />
-        <!-- <el-progress type="circle" :percentage="15" :color="['green','red']"/> -->
         <div class="toxic-rate">
           <span style="color: white">Toxic extent :</span>
           <a :style="{ color: 'red' }">{{ toxicText }}</a>
@@ -121,10 +120,7 @@ export default {
       //  Comment detect
       if (commentValue.value !== "") {
         axios
-          .post(
-            env.AMDBAPI + "/comments/toxic?title=" + commentValue.value
-            // { withCredentials: true, }
-          )
+          .post(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value)
           .then((response) => {
             commentStatus.value = response.data.data;
             toxicPercent.value = Number(
@@ -242,8 +238,6 @@ export default {
     align-items: center;
     height: 200px;
     width: 100%;
-    // background-image: url("../assets/detector_backgroud.jpg");
-    // opacity: 0.1;
     .container {
       margin-top: 30px;
     }
@@ -275,7 +269,6 @@ export default {
       font-weight: bold;
     }
     .toxic-rate {
-      // float: right;
       margin-top: 20px;
       margin-bottom: 40px;
       justify-content: center;

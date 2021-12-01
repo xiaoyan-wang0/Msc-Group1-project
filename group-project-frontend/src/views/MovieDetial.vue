@@ -87,8 +87,6 @@
                 <div class="rating">
                   <a-rate v-model:value="start" disabled allowHalf />
                   <p>{{ movie.vote_average }}</p>
-                  <!-- <a-rate v-model:value="start" disabled allowHalf /> -->
-                  <!-- <p>{{ movie.vote_average }}</p> -->
                 </div>
               </div>
 
@@ -202,30 +200,6 @@
                   ><i class="fab fa-facebook"></i>
                   <span> Facebook Share</span>
                 </a>
-                <!-- <div class="share-function">
-                  <div id="fb-root">
-                    <div
-                      class="fb-share-button"
-                      data-href="http://amdb-frontend.s3-website-eu-west-1.amazonaws.com/main/home/maindisplay"
-                      data-layout="button_count"
-                    ></div>
-                    <div class="fb_share_btn">button</div>
-                  </div> -->
-
-                <!-- <a
-                    href="javascript:window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent('https://alexey-avdeev.com/vanilla-sharing/')+'&title=' +encodeURIComponent('HALLO'))"
-                    style="font-size: 14px; margin-right: 50px"
-                  >
-                    分享Facebook
-                  </a> -->
-
-                <!-- <a
-                    href="javascript:window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent('https://alexey-avdeev.com/vanilla-sharing/')+'&title=' +encodeURIComponent('HALLO'))"
-                    style="font-size: 14px; margin-right: 50px"
-                  >
-                    分享T -->
-                <!-- </a> -->
-                <!-- </div> -->
               </div>
             </div>
           </div>
@@ -321,7 +295,6 @@
                           <h6 class="comment-author">
                             {{ item.userName }}
                           </h6>
-                          <!-- <p class="comment-text">{{ item.comment }}</p> -->
                           <a-typography-paragraph
                             class="comment-text"
                             :ellipsis="
@@ -353,11 +326,6 @@
                                   style="height: 30px"
                                   alt=""
                                 />
-                                <!-- <img
-                              src="../assets/toxic-red.png"
-                              style="height: 30px"
-                              alt=""
-                            /> -->
                               </li>
                               <li class="report">
                                 <a @click="amdbReport(item)">Report</a>
@@ -396,7 +364,6 @@
                           >
                             Add Comment
                           </button>
-                          <!-- </a-popconfirm> -->
                         </a-form-item>
                       </template>
                     </a-comment>
@@ -476,7 +443,6 @@
                         </div>
                         <div class="anime__review__item__text">
                           <h6 class="comment-author">{{ item.author }}</h6>
-                          <!-- <p class="comment-text">{{ item.content }}</p> -->
                           <a-typography-paragraph
                             class="comment-text"
                             :ellipsis="
@@ -510,7 +476,6 @@
                                   alt=""
                                 />
                               </li>
-                              <!-- <li class="report">Report</li> -->
                             </ul>
                           </div>
                         </div>
@@ -584,7 +549,6 @@
                         </div>
                         <div class="anime__review__item__text">
                           <h6 class="comment-author">{{ item.username }}</h6>
-                          <!-- <p class="comment-text">{{ item.content }}</p> -->
                           <a-typography-paragraph
                             class="comment-text"
                             :ellipsis="
@@ -616,7 +580,6 @@
                                   alt=""
                                 />
                               </li>
-                              <!-- <li class="report">Report</li> -->
                               <li class="report">
                                 {{
                                   item.warningSpoilers ? "warningSpoilers" : ""
@@ -695,7 +658,6 @@
                         </div>
                         <div class="anime__review__item__text">
                           <h6 class="comment-author">{{ item.username }}</h6>
-                          <!-- <p class="comment-text">{{ item.review }}</p> -->
                           <a-typography-paragraph
                             class="comment-text"
                             :ellipsis="
@@ -727,7 +689,6 @@
                                   alt=""
                                 />
                               </li>
-                              <!-- <li class="report">Report</li> -->
                             </ul>
                           </div>
                         </div>
@@ -801,8 +762,6 @@
                           </div>
                         </div>
                         <div class="anime__review__item__text">
-                          <!-- <h6 class="comment-author">{{ item.username }}</h6> -->
-                          <!-- <p class="comment-text">{{ item.content }}</p> -->
                           <a-typography-paragraph
                             class="comment-text"
                             :ellipsis="
@@ -813,7 +772,6 @@
                             :content="item.content"
                           />
                           <div class="bottom-comment">
-                            <!-- <div class="comment-date">{{ item.time }}</div> -->
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{ showToxicText(item.toxic[0]) }}:{{
@@ -834,7 +792,6 @@
                                   alt=""
                                 />
                               </li>
-                              <!-- <li class="report">Report</li> -->
                             </ul>
                           </div>
                         </div>
@@ -1171,7 +1128,6 @@ export default {
       } else {
         return require("@/assets/toxic-red.png");
       }
-      // return ToolMethod.showToxicImg(rate);
     };
 
     const showSentimentImg = (rate) => {
@@ -1180,7 +1136,6 @@ export default {
       } else {
         return require("@/assets/sentiment-red.png");
       }
-      // return ToolMethod.showToxicImg(rate);
     };
 
     const showSentiemntText = (rate) => {
@@ -1440,44 +1395,30 @@ export default {
     //AMDB filter change
     const handleFilterChange = (value) => {
       console.log("handleFilterChange");
-      // console.log(value);
-      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
       amdbreview.value = commentsFilter(amdbAllreview.value, value);
     };
 
     //TMDB filter change
     const handleTMDBFilterChange = (value) => {
       console.log("handleFilterChange2");
-      // console.log(data);
-      // console.log(value);
-      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
       tmdbreview.value = commentsFilter2(tmdbAllreview.value, value);
     };
 
     //IMDB filter change
     const handleIMDBFilterChange = (value) => {
       console.log("handleFilterChange2");
-      // console.log(data);
-      // console.log(value);
-      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
       imdbreview.value = commentsFilter2(imdbAllreview.value, value);
     };
 
     //Youtube filter change
     const handleYoutubeFilterChange = (value) => {
       console.log("handleFilterChange2");
-      // console.log(data);
-      // console.log(value);
-      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
       youtubereview.value = commentsFilter2(youtubeAllreview.value, value);
     };
 
     //Twitter filter change
     const handleTwitterFilterChange = (value) => {
       console.log("handleFilterChange2");
-      // console.log(data);
-      // console.log(value);
-      // console.log(ToolMethod.commentsFilter(amdbreview.value, value));
       twitterreview.value = commentsFilter2(twitterAllreview.value, value);
     };
 
@@ -1620,7 +1561,6 @@ export default {
             currentUser.value.data.userId
         )
         .then((response) => {
-          // tmdbreview.value = response.data;
           console.log("confirmReportComment ");
           console.log(response.data);
           reportCommentsDialog.value = false;
@@ -2025,27 +1965,6 @@ export default {
   border-radius: 15px;
   background-color: #1f1d1d;
 }
-
-// .pichover {
-//   width: 110px;
-//   height: 150px;
-//   transition: all 0.4s;
-//   -moz-transition: all 0.4s;
-//   -webkit-transition: all 0.4s;
-//   -o-transition: all 0.4s;
-//   background-repeat: no-repeat;
-//   background-position: center;
-//   background-size: 100% 100%;
-// }
-
-// .pichover:hover {
-//   object-fit: cover;
-//   background-size: 110% 110%;
-//   -webkit-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
-//   -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
-//   box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
-//   cursor: pointer;
-// }
 
 @media only screen and (max-width: 800px) {
   .filter-select {

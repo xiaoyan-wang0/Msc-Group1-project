@@ -18,12 +18,6 @@
                 <li>
                   <a href="/">Home</a>
                 </li>
-                <!-- <li>
-                  <a href="#"></a>
-                </li>
-                <li>
-                  <a href="#"></a>
-                </li> -->
                 <li>
                   <a href="/main/profile">Profile</a>
                 </li>
@@ -86,31 +80,24 @@
             <div class="footer__nav">
               <ul>
                 <li class="active"><a href="/">Homepage</a></li>
-                <!-- <li><a href="./categories.html">Categories</a></li>
-                <li><a href="./blog.html">Our Blog</a></li> -->
                 <li><a href="#">Contacts</a></li>
               </ul>
             </div>
           </div>
           <div class="col-lg-3">
             <p>
-              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
               Copyright All rights reserved | This website is made with
               <i class="fa fa-heart" aria-hidden="true"></i> by
               <a href="#" target="_blank">TEAM 1</a>
-              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </p>
           </div>
         </div>
       </div>
     </footer>
-    <!-- Footer Section End -->
   </div>
 </template>
 
 <script>
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
 import { computed, onMounted, ref, inject, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
@@ -373,7 +360,6 @@ body {
 
     // Navigation Variables
     $content-width: 80%;
-    $breakpoint: 799px;
     $nav-height: 70px;
     $nav-background: #0a0a13;
     $nav-font-color: #ffffff;
@@ -656,19 +642,6 @@ body {
     padding-bottom: 10px;
   }
 
-  .text-white h1,
-  .text-white h2,
-  .text-white h3,
-  .text-white h4,
-  .text-white h5,
-  .text-white h6,
-  .text-white p,
-  .text-white span,
-  .text-white li,
-  .text-white a {
-    color: #fff;
-  }
-
   .twoline-ellipsis {
     text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
@@ -784,23 +757,17 @@ body {
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 
 @media only screen and (min-width: 1200px) and (max-width: 1300px) {
-  .hero {
-    overflow: hidden;
-  }
 }
 
 @media only screen and (min-width: 1200px) {
   .container {
-    // max-width: 1170px;
+    max-width: 1300px;
   }
 }
 
 /* Medium Device = 1200px */
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
-  .hero {
-    overflow: hidden;
-  }
   .login__form {
     position: relative;
     padding-left: 32px;
@@ -817,24 +784,6 @@ body {
 
 // @media only screen and (min-width: 768px) and (max-width: 991px) {
 @media only screen and (min-width: 920px) and (max-width: 991px) {
-  .hero {
-    overflow: hidden;
-  }
-  .header {
-    position: relative;
-  }
-  .header .container {
-    position: relative;
-  }
-  .header__right {
-    position: absolute;
-    right: 120px;
-    top: -42px;
-    padding: 0;
-  }
-  .header__menu {
-    display: none;
-  }
   .slicknav_menu {
     background: transparent;
     padding: 0;
@@ -919,31 +868,7 @@ body {
   }
 }
 
-/* Wide Mobile = 480px */
-
 @media only screen and (max-width: 919px) {
-  // .ant-table-wrapper {
-  //   overflow: scroll;
-  // }
-
-  .hero {
-    overflow: hidden;
-  }
-  .header {
-    position: relative;
-  }
-  .header .container {
-    position: relative;
-  }
-  .header__right {
-    position: absolute;
-    right: 120px;
-    top: -42px;
-    padding: 0;
-  }
-  .header__menu {
-    display: none;
-  }
   .slicknav_menu {
     background: transparent;
     padding: 0;
@@ -1069,21 +994,7 @@ body {
   }
 }
 
-/* Small Device = 320px */
-// @media only screen and (max-width: 479px) {
 @media only screen and (max-width: 600px) {
-  // .ant-table-wrapper {
-  //   overflow: scroll;
-  // }
-  .hero__slider.owl-carousel .owl-nav {
-    display: none;
-  }
-  .hero__items {
-    padding: 250px 0 42px 15px;
-  }
-  .hero__text h2 {
-    font-size: 32px;
-  }
   .footer__nav ul li {
     margin-right: 10px;
   }
@@ -1094,15 +1005,6 @@ body {
   }
   .anime__details__widget ul li span {
     width: 85px;
-  }
-  .anime__video__player .plyr__volume {
-    left: 65px;
-  }
-  .anime__video__player .plyr__controls .plyr__controls__item.plyr__time {
-    left: 95px;
-  }
-  .anime__video__player .plyr__menu {
-    margin-right: 60px;
   }
   .blog__details__title h2 {
     font-size: 30px !important;

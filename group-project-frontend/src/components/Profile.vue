@@ -31,10 +31,6 @@
                   </div>
                   <div class="profile-stats">
                     <ul>
-                      <!-- <li>
-                        <span class="profile-stat-count"></span>
-                        {{ user.email }}
-                      </li> -->
                       <li>
                         <span class="profile-stat-count">{{
                           likeListData.length
@@ -211,14 +207,6 @@ export default {
         dataIndex: "title",
         key: "title",
       },
-      //   {
-      //     title: "Poster",
-      //     dataIndex: "poster_path",
-      //     key: "poster_path",
-      //     customRender: (record) => {
-      //       return <img src={record.poster_path} />;
-      //     },
-      //   },
       {
         title: "Tags",
         key: "vote_average",
@@ -853,14 +841,6 @@ export default {
     display: block;
   }
 }
-
-/*
-
-The following code will only run if your browser supports CSS grid.
-
-Remove or comment-out the code block below to see how the browser will fall-back to flexbox & floated styling. 
-
-*/
 
 @supports (display: grid) {
   .profile {

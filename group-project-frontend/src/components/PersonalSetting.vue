@@ -187,7 +187,6 @@
                   </div>
                 </div>
               </section>
-              <!-- // Basic Vertical form layout section end -->
             </div>
           </div>
         </div>
@@ -355,7 +354,6 @@ export default {
     });
 
     onBeforeMount(() => {
-      //  location.reload();
       onInitial();
     });
 
@@ -381,21 +379,6 @@ export default {
       }
       imageUrl.value =
         env.AMDBAPI + "member/getUserImage?userId=" + userId.value;
-      // axios
-      //   .get(env.AMDBAPI + "member/getUserImage?userId=" + userId.value )
-      //   .then((response) => {
-      //     console.log("getUserImage");
-      //     console.log(response);
-      //     if (response.data.code == 200) {
-      //       imageUrl.value = 'data:image/png;base64,' + arrayBufferToBase64(response.data)
-      //       // message.success("Update successfully!");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("error");
-      //     console.log(error);
-      //     showErroeMessage();
-      //   });
     };
 
     const popupScroll = () => {

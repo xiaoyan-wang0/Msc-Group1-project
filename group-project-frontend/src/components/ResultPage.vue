@@ -94,9 +94,7 @@
                   <div class="ep">
                     {{ Number(item.rating).toFixed(1) }} / 10
                   </div>
-                  <div class="comment">
-                    <!-- <i class="fa fa-comments"></i> {{ item.vote_count }} -->
-                  </div>
+                  <div class="comment"></div>
                   <div class="view">
                     <i class="fa fa-eye"></i> {{ item.year }}
                   </div>
@@ -137,7 +135,6 @@
 import env from "@/env.js";
 import { ref, inject, onMounted, onBeforeMount } from "vue";
 import { message } from "ant-design-vue";
-import router from "@/router";
 
 export default {
   name: "ResultPage",
@@ -165,10 +162,8 @@ export default {
     onMounted(() => {
       console.log("onMounted");
       console.log("RESULT props.isPopularorHighScore");
-      // console.log(props.isPopularorHighScore);
       console.log(localStorage.getItem("resultResource"));
       if (resource == 1) {
-        // Popular movies
         resultName.value = "Popular movies Result";
         axios
           .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
@@ -186,11 +181,9 @@ export default {
             env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail
           )
           .then((response) => {
-            // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.results;
             console.log("REsult page score moveis Result");
             console.log(itemdata.value);
-            // console.log(hignScoreMovieData.value.results);
             itemtotal.value = response.data.total_results;
           });
       } else if (resource == 3) {
@@ -200,12 +193,10 @@ export default {
           .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
 
           .then((response) => {
-            // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.results;
             console.log("Result page score moveis");
             console.log(itemdata.value);
             console.log(itemdata.value);
-            // console.log(hignScoreMovieData.value.results);
             itemtotal.value = response.data.total_results;
             console.log(itemtotal.value);
           });
@@ -226,18 +217,11 @@ export default {
         resultName.value = "IMDB BOTTOM result";
         isIMDBBot.value = true;
         axios
-          .get(
-            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20"
-            // {
-            //   withCredentials: true,
-            // }
-          )
+          .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20")
           .then((response) => {
-            // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.data;
             console.log("IMDB BOT result");
             console.log(itemdata);
-            // console.log(hignScoreMovieData.value.results);
           })
           .catch((error) => {
             console.log("error");
@@ -280,11 +264,9 @@ export default {
               pageNumber
           )
           .then((response) => {
-            // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.results;
             console.log("REsult page score moveis Result");
             console.log(itemdata.value);
-            // console.log(hignScoreMovieData.value.results);
           });
       } else if (resource == 3) {
         resultName.value = "Upcoming Movies Result";
@@ -300,11 +282,9 @@ export default {
           )
 
           .then((response) => {
-            // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.results;
             console.log("Result page score moveis");
             console.log(itemdata.value);
-            // console.log(hignScoreMovieData.value.results);
           });
       } else if (resource == 4) {
         resultName.value = "Search result";
@@ -330,18 +310,11 @@ export default {
       } else {
         resultName.value = "IMDB BOTTOM result";
         axios
-          .get(
-            env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20"
-            // {
-            //   withCredentials: true,
-            // }
-          )
+          .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20")
           .then((response) => {
-            // popularMovieData.value = JSON.stringify(response.data);
             itemdata.value = response.data.data;
             console.log("IMDB BOT result");
             console.log(itemdata);
-            // console.log(hignScoreMovieData.value.results);
           })
           .catch((error) => {
             console.log("error");
@@ -360,15 +333,11 @@ export default {
       let categary = [];
       for (let id of genres) {
         for (const genrn of JSON.parse(localStorage.getItem("genreList"))) {
-          // console.log("findCategary([878,28]");
-          // console.log(genrn);
-          // console.log(id);
           if (genrn.id == id) {
             categary.push(genrn.name);
           }
         }
       }
-      // console.log(categary);
       return categary;
     };
     return {
@@ -462,7 +431,6 @@ export default {
 .result-pagiantion {
   .result-pagiantion-content {
     justify-content: center;
-    // width: 120px;
     margin: auto;
     float: right;
   }
