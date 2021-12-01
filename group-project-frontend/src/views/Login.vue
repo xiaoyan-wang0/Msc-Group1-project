@@ -15,7 +15,6 @@
         </div>
       </div>
     </section>
-    <!-- Normal Breadcrumb End -->
 
     <!-- Login Section Begin -->
     <section class="login spad">
@@ -268,7 +267,6 @@ export default defineComponent({
                   message.success(
                     response.msg + ", Will return setting page in 3s.",
                     () => {
-                      // router.push({ name: "Setting" });
                       location.reload();
                       console.log("onClose");
                     }
@@ -387,9 +385,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-/*---------------------
-    Normal Breadcrumb
------------------------*/
 
 .normal-breadcrumb {
   height: 300px;

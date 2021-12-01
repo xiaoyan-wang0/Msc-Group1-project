@@ -1,5 +1,4 @@
 <template>
-  <!-- Product Section Begin -->
   <section class="product spad">
     <div class="feature-card">
       <div id="1" style="">
@@ -90,9 +89,6 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
-          <!-- the lastest movies -->
-          <!-- <Showpart :itemdata="lastestMovieData" spacename="The lastest movies" /> -->
-
           <!-- Upcoming movies -->
           <Showpart
             :itemdata="popularMovieData"
@@ -108,28 +104,6 @@
           />
 
           <!-- IMDB bot 10 movies  -->
-          <!-- <div class="show-items">
-      <div class="item-list">
-        <div class="item-title">
-          <span>IMDB Bottom Movies</span>
-          <a @click="showResultPage()">more</a>
-        </div>
-        <div class="movies-list">
-          <div class="movie" v-for="item in imdbBotMovies" :key="item.Imdb_Id">
-            <router-link :to="'/movie/' + item.Imdb_Id" class="movie-link">
-              <div class="product-image">
-                <img :src="poster+ item.posters[0]" alt="Movie Poster" />
-                <div class="type">{{ Number(item.rating).toFixed(1) }}</div>
-              </div>
-              <div class="detail">
-                <p class="year">{{ item.year }}</p>
-                <h3>{{ item.movie_title }}</h3>
-              </div>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div> -->
           <div class="trending__product">
             <div class="row">
               <div class="col-lg-8 col-md-8 col-sm-8">
@@ -162,7 +136,6 @@
                       <div class="ep">
                         {{ Number(item.rating).toFixed(1) }} / 10
                       </div>
-                      <!-- <div class="comment"><i class="fa fa-comments"></i> 11</div> -->
                       <div class="view">
                         <i class="fa fa-eye"></i> {{ item.year }}
                       </div>
@@ -237,18 +210,6 @@
               <div class="section-title">
                 <h5>Recent Views recommendations</h5>
               </div>
-              <!-- <div class="filter__gallery">
-                <div
-                  class="product__sidebar__view__item set-bg mix day years"
-                  :style="{
-                    backgroundImage: 'url(' + '../assets/trend-1.jpg' + ')',
-                  }"
-                >
-                  <div class="ep">18 / ?</div>
-                  <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                  <h5><a href="#">Boruto: Naruto next generations</a></h5>
-                </div>
-              </div> -->
               <div
                 class="product__sidebar__comment__item"
                 v-for="item in recentRecommendationMovies"
@@ -354,9 +315,7 @@ export default {
       axios
         .get(env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail)
         .then((response) => {
-          // popularMovieData.value = JSON.stringify(response.data);
           hignScoreMovieData.value = response.data;
-          // console.log(hignScoreMovieData.value.results);
         });
 
       // IMDB BOT 10 movies
@@ -366,11 +325,9 @@ export default {
           // { withCredentials: true,}
         )
         .then((response) => {
-          // popularMovieData.value = JSON.stringify(response.data);
           imdbBotMovies.value = response.data.data;
           console.log("IMDB BOT 10 Movies");
           console.log(imdbBotMovies.value);
-          // console.log(hignScoreMovieData.value.results);
         })
         .catch((error) => {
           console.log("error");
@@ -445,7 +402,6 @@ export default {
       router.push({
         name: "ResultDisplay",
         params: {
-          //   resultName: "IMDB TOP 10 movies"
           isPopularorHighScore: 5,
         },
       });
@@ -455,10 +411,7 @@ export default {
       localStorage.setItem("resultResource", 3);
       router.push({
         name: "ResultDisplay",
-        params: {
-          //   resultName: "IMDB TOP 10 movies"
-          // isPopularorHighScore: 3,
-        },
+        params: {},
       });
     };
 

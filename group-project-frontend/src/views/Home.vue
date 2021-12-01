@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <div class="feature-card">
-             
       <div class="search">
         <form class="search-model-form" @submit.prevent="SearchMovies()">
            <input
@@ -17,14 +16,6 @@
     </div>
     <!-- SEACH BAR -->
     <div class="search-bar">
-      <!-- <form @submit.prevent="SearchMovies()" class="search-box">
-        <input
-          type="text"
-          placeholder="What are you looking for?"
-          v-model="search"
-        />
-        <input type="submit" value="Search" />
-      </form> -->
       <div class="search-content" v-if="showRouterView"></div>
     </div>
     <router-view v-if="showRouterView" />
@@ -33,17 +24,13 @@
 
 <script>
 import { ElCarousel } from "element-plus";
-import { ref, inject, onBeforeMount, nextTick } from "vue";
-import env from "@/env.js";
+import { ref, onBeforeMount, nextTick } from "vue";
 import router from "@/router";
 import Showpart from "@/components/ShowPart.vue";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
 export default {
   name: "Home",
   components: { ElCarousel, Showpart },
   setup() {
-    const axios = inject("axios"); // inject axios
     const search = ref("");
     const activeIndex = ref("1");
     const itemdata = ref([]);
@@ -62,11 +49,6 @@ export default {
         localStorage.setItem("searchValue", search.value);
         router.push({
           name: "ResultDisplay",
-          params: {
-            //   resultName: "IMDB TOP 10 movies"
-            // isPopularorHighScore: 4,
-            // searchValue: search.value,
-          },
         });
       }
     };
@@ -77,8 +59,6 @@ export default {
     };
 
     onBeforeMount(() => {});
-
-  
 
     return {
       search,
@@ -95,9 +75,6 @@ export default {
 
 <style lang="scss">
 .home {
-  // .main-menu li ul {
-  // font-size: 500px;
-  // }
   .feature-card {
     .search-model {
       display: none;
@@ -112,9 +89,6 @@ export default {
     .search {
       text-align: center;
       margin-bottom: 15px;
-    }
-    .search-model-form {
-      // padding: 0 15px;
     }
     .search-model-form input {
       width: 95%;

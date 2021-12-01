@@ -79,7 +79,6 @@ export default {
       router.push({
         name: "ResultDisplay",
         params: {
-          // isPopularorHighScore: props.isPopularorHighScore,
         },
       });
     };
@@ -88,9 +87,6 @@ export default {
       let categary = [];
       for (let id of genres) {
         for (const genrn of JSON.parse(localStorage.getItem("genreList"))) {
-          // console.log("show part findCategary");
-          // console.log(genrn);
-          // console.log(id);
           if (genrn.id == id) {
             categary.push(genrn.name);
           }
