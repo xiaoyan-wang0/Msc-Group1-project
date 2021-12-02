@@ -8,14 +8,16 @@ SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
+SQLALCHEMY_POOL_TIMEOUT=10
 SQLALCHEMY_POOL_SIZE=0
+SQLALCHEMY_MAX_OVERFLOW=-1
 
 
 
 from sqlalchemy.pool import SingletonThreadPool 
 #SQLALCHEMY_ENGINE_OPTIONS = {"poolclass":"NullPool"}
 SQLALCHEMY_ENGINE_OPTIONS  = {
-     "poolclass": SingletonThreadPool 
+    'pool_pre_ping': True
  }
 SECRET_KEY = "123456"
 AUTH_COOKIE_NAME = "token"
