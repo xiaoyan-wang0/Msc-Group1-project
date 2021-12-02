@@ -6,7 +6,7 @@
           <div class="col-lg-8">
             <div class="blog__details__title">
               <h6>Last update date <span>- Nov 25th, 2021</span></h6>
-              <h2>For Authentic movie database(AMDB) Beginners:</h2>
+              <h2>For Authentic Movie Database(AMDB) Beginners:</h2>
               <h6>Customised Multi-Sourced Movie Guide</h6>
             </div>
           </div>

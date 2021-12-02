@@ -363,10 +363,12 @@ export default {
             );
             console.log(response.data);
             const randomMovie = response.data.data;
-            recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
-              randomMovie,
-              randomMovie.length > 4 ? 5 : randomMovie.length
-            );
+            if (randomMovie.length) {
+              recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
+                randomMovie,
+                randomMovie.length > 4 ? 5 : randomMovie.length
+              );
+            }
           })
           .catch((error) => {
             console.log("error");

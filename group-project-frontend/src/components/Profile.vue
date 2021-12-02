@@ -140,7 +140,7 @@
         <div class="col-lg-4 col-md-4">
           <div class="amdb__details__sidebar">
             <div class="section-title">
-              <h5>Recent Views recommendations</h5>
+              <h5> Recommendation based on history</h5>
             </div>
             <div
               class="product__sidebar__comment__item"
@@ -282,10 +282,12 @@ export default {
           console.log("getRecommandationByTags");
           console.log(response.data.data);
           const randomMovie = response.data.data;
-          recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
-            randomMovie,
-            randomMovie.length > 4 ? 5 : randomMovie.length
-          );
+          if (randomMovie.length) {
+            recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
+              randomMovie,
+              randomMovie.length > 4 ? 5 : randomMovie.length
+            );
+          }
         })
         .catch((error) => {
           console.log("error");

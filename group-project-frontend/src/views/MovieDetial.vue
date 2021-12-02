@@ -961,10 +961,12 @@ export default {
               console.log("getRecommadationById");
               console.log(response.data);
               const randomMovie = response.data.data;
-              recommendationMovies.value = ToolMethod.RandomNumBoth(
-                randomMovie,
-                randomMovie.length > 4 ? 5 : randomMovie.length
-              );
+              if (randomMovie.length) {
+                recommendationMovies.value = ToolMethod.RandomNumBoth(
+                  randomMovie,
+                  randomMovie.length > 4 ? 5 : randomMovie.length
+                );
+              }
             })
             .catch((error) => {
               console.log("error");
