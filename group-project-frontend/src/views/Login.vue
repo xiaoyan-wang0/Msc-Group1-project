@@ -368,7 +368,7 @@ export default defineComponent({
     };
     const showErroeMessage = () => {
       isLoading.value = false;
-      return message.error("Sorry, error accured in server");
+      return message.error("Server is busy, try again later");
     };
 
     return {

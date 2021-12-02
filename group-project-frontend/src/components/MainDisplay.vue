@@ -205,10 +205,10 @@
             </div>
             <div
               class="product__sidebar__view"
-              v-if="recentRecommendationMovies !== []"
+              v-if="recentRecommendationMovies.length > 0"
             >
               <div class="section-title">
-                <h5>Recent Views recommendations</h5>
+                <h5>Recommend to you</h5>
               </div>
               <div
                 class="product__sidebar__comment__item"
@@ -255,6 +255,7 @@ import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
 import router from "@/router";
 import { useStore } from "vuex";
+import ToolMethod from "../tools.js";
 
 export default {
   name: "MainDisplay",
@@ -320,10 +321,7 @@ export default {
 
       // IMDB BOT 10 movies
       axios
-        .get(
-          env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=6"
-          // { withCredentials: true,}
-        )
+        .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=6")
         .then((response) => {
           imdbBotMovies.value = response.data.data;
           console.log("IMDB BOT 10 Movies");
@@ -351,12 +349,12 @@ export default {
           showErroeMessage();
         });
 
-      // Fetch recently recommendation movies
+      // fetch getRecommandationByTags
       if (currentUser.value !== null) {
         axios
           .get(
             env.AMDBAPI +
-              "rec/getRecommandation?userId=" +
+              "rec/getRecommandationByTags?userId=" +
               currentUser.value.data.userId
           )
           .then((response) => {
@@ -364,7 +362,11 @@ export default {
               "recently recommendation movies recentRecommendationMovies"
             );
             console.log(response.data);
-            recentRecommendationMovies.value = response.data.data;
+            const randomMovie = response.data.data;
+            recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
+              randomMovie,
+              randomMovie.length > 4 ? 5 : randomMovie.length
+            );
           })
           .catch((error) => {
             console.log("error");
@@ -378,7 +380,7 @@ export default {
     });
 
     const showErroeMessage = () => {
-      return message.error("Sorry, error accured in server");
+      return message.error("Server is busy, try again later");
     };
 
     const findCategary = (genres) => {

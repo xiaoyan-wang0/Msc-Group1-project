@@ -140,7 +140,7 @@
         <div class="col-lg-4 col-md-4">
           <div class="amdb__details__sidebar">
             <div class="section-title">
-              <h5>Recommend to you</h5>
+              <h5>Recent Views recommendations</h5>
             </div>
             <div
               class="product__sidebar__comment__item"
@@ -183,6 +183,7 @@ import { notification, message } from "ant-design-vue";
 import { SmileOutlined } from "@ant-design/icons-vue";
 import { ElMessageBox } from "element-plus";
 import router from "@/router";
+import ToolMethod from "../tools.js";
 import env from "@/env.js";
 
 export default {
@@ -274,17 +275,17 @@ export default {
       // fetch comment List
       fetchCommentList();
 
-      // fetch getRecommandationByTags
+      //  Fetch recently recommendation movies
       axios
-        .get(
-          env.AMDBAPI +
-            "rec/getRecommandationByTags?userId=" +
-            user.value.userId
-        )
+        .get(env.AMDBAPI + "rec/getRecommandation?userId=" + user.value.userId)
         .then((response) => {
           console.log("getRecommandationByTags");
           console.log(response.data.data);
-          recentRecommendationMovies.value = response.data.data;
+          const randomMovie = response.data.data;
+          recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
+            randomMovie,
+            randomMovie.length > 4 ? 5 : randomMovie.length
+          );
         })
         .catch((error) => {
           console.log("error");
@@ -411,7 +412,7 @@ export default {
     };
 
     const showErroeMessage = () => {
-      return message.error("Sorry, error accured in server");
+      return message.error("Server is busy, try again later");
     };
 
     const showSettingPage = () => {
