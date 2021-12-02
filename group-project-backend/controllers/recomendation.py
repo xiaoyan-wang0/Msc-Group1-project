@@ -10,6 +10,7 @@ from common.models.serializer import Serializer
 from common.libs.ToxicComments import do_pe,detector
 from common.libs.Sentiment import sentiment
 from common.models.recommandation import Recommandation
+from common.models.rec import Rec
 from common.libs.Helper import ops_renderJSON,ops_renderErrJSON,ops_render
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -25,6 +26,7 @@ from jsonpath import jsonpath
 from tmdbv3api import TMDb
 from tmdbv3api import Movie
 from requests_futures.sessions import FuturesSession
+import random
 
 rec_page = Blueprint( "rec_page",__name__ )
 
@@ -33,14 +35,30 @@ def getRecommadationById():
     # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
+
+    type = str(1)
+    textsql = " 1=1 and movieId = '"+str(movieId)+"' and type = "+ type
+    result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON( msg = "get recommendation successfully!",data = result.content)
+
+
     movieId = int(movieId)
-    number = 6
+    number = 16
 
     movie = Final.query.filter_by( movieId = movieId ).first()
     if movie is None:
         return ops_renderErrJSON( msg ="movie doesn't find")
 
     list = getRecomendation(movieId, number)
+
+    model_rec = Rec()
+    model_rec.content = list
+    model_rec.movieId = movieId
+    model_rec.type = 1
+    db.session.add( model_rec )
+    db.session.commit()
+    db.session.close()
 
     return ops_renderJSON( msg = "get recommendation successfully!",data = list)
 
@@ -81,7 +99,14 @@ def getRecommandation():
 
     req = request.values
     userId = req['userId'] if "userId" in req else ""
-    list = []
+
+    type = str(2)
+    textsql = " 1=1 and userId = '"+str(userId)+"' and type = "+ type 
+    result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON( msg = "get recommendation successfully!",data = result.content)
+
+    list2 = []
     if userId !="":
         #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
         sql = 'SELECT distinct a.movieId FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  limit 5 ;'
@@ -89,10 +114,25 @@ def getRecommandation():
 
         if result:
             for lis in result:
-                rec = getRecomendation(int(lis[0]), 2)
-                list.append(rec[0])
+                rec = getRecomendation(int(lis[0]), 6)
+                list2.append(rec[0])
+                list2.append(rec[1])
+                list2.append(rec[2])
+                list2.append(rec[3])
+                list2.append(rec[4])
         db.session.close()
-    return ops_renderJSON( msg = "get recommandation successfully!",data = list)
+
+    
+
+    model_rec = Rec()
+    model_rec.content = list2
+    model_rec.userId = userId
+    model_rec.type = 2
+    db.session.add( model_rec )
+    db.session.commit()
+    db.session.close()
+
+    return ops_renderJSON( msg = "get recommandation successfully!",data = list2)
 
 @rec_page.route("/getRecommandationByTags")
 def getRecommandationByTags():
@@ -100,6 +140,13 @@ def getRecommandationByTags():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     userInfo = Userinfo2.query.filter_by( userId = userId ).first()
+
+    type = str(3)
+    textsql = " 1=1 and userId = '"+str(userId)+"' and type = "+ type 
+    result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
+    if  result:
+        return ops_renderJSON( msg = "get recommendation successfully!",data = result.content)
+
 
     num_to_label = {
     '28':'Action',
@@ -132,9 +179,9 @@ def getRecommandationByTags():
                 mlist = tag.split(",")
                 tuple(mlist)
                 if len(mlist) > 3:
-                    number = 1
+                    number = 3
                 else:
-                    number = 2
+                    number = 6
                 for lis in mlist:
                         tagName = num_to_label[lis]
                         movies = getTagMovies(tagName, number)
@@ -147,6 +194,17 @@ def getRecommandationByTags():
         movieInfoDictionary = getTmdbInfo(str(lis), lis)
         movieList.append(movieInfoDictionary)
 
+
+
+    model_rec = Rec()
+    model_rec.content = movieList
+    model_rec.userId = userId
+    model_rec.type = 3
+    db.session.add( model_rec )
+    db.session.commit()
+    db.session.close()
+
+    
     return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
 
 def getTagMovies(tagName, number):
@@ -163,8 +221,8 @@ def getTagMovies(tagName, number):
 
 
 def getRecomendation(movieId, number):
-    #train_movies_1 = pd.read_csv('C:/final.csv')
-    train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
+    train_movies_1 = pd.read_csv('C:/final.csv')
+    #train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
     #print(type(train_movies_1))
     # train_movies_1.dtypes
     # train_movies_1.isnull().sum(axis=0)
