@@ -221,8 +221,8 @@ def getTagMovies(tagName, number):
 
 
 def getRecomendation(movieId, number):
-    train_movies_1 = pd.read_csv('C:/final.csv')
-    #train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
+    #train_movies_1 = pd.read_csv('C:/final.csv')
+    train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
     #print(type(train_movies_1))
     # train_movies_1.dtypes
     # train_movies_1.isnull().sum(axis=0)
