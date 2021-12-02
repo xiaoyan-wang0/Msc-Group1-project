@@ -58,7 +58,7 @@ def getRecommadationById():
     model_rec.type = 1
     db.session.add( model_rec )
     db.session.commit()
-    db.session.dispose()
+    db.session.close()
 
     return ops_renderJSON( msg = "get recommendation successfully!",data = list)
 
@@ -72,7 +72,7 @@ def getMostComments():
     for lis in result:
         movieInfoDictionary = getTmdbInfo(lis[0], lis[0])
         list.append(movieInfoDictionary)
-    db.session.dispose()
+    db.session.close()
     return ops_renderJSON( msg = "get most comments successfully!",data = list)
 
 
@@ -91,7 +91,7 @@ def setRecommandation():
             model_rec.userId = userId
             db.session.add( model_rec )
             db.session.commit()
-            db.session.dispose()
+            db.session.close()
     return ops_renderJSON( msg = "set recommandation successfully!")
 
 @rec_page.route("/getRecommandation")
@@ -120,7 +120,7 @@ def getRecommandation():
                 list2.append(rec[2])
                 list2.append(rec[3])
                 list2.append(rec[4])
-        db.session.dispose()
+        db.session.close()
 
     
 
@@ -130,7 +130,7 @@ def getRecommandation():
     model_rec.type = 2
     db.session.add( model_rec )
     db.session.commit()
-    db.session.dispose()
+    db.session.close()
 
     return ops_renderJSON( msg = "get recommandation successfully!",data = list2)
 
@@ -202,7 +202,7 @@ def getRecommandationByTags():
     model_rec.type = 3
     db.session.add( model_rec )
     db.session.commit()
-    db.session.dispose()
+    db.session.close()
 
     
     return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
@@ -221,8 +221,8 @@ def getTagMovies(tagName, number):
 
 
 def getRecomendation(movieId, number):
-    #train_movies_1 = pd.read_csv('C:/final.csv')
-    train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
+    train_movies_1 = pd.read_csv('C:/final.csv')
+    #train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
     #print(type(train_movies_1))
     # train_movies_1.dtypes
     # train_movies_1.isnull().sum(axis=0)
