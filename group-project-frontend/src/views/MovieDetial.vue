@@ -450,7 +450,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            :content="item.content"
+                            :content="judgeBadWordOther(item.content)"
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">
@@ -556,7 +556,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            :content="item.content"
+                            :content="judgeBadWordOther(item.content)"
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">{{ item.date }}</div>
@@ -665,7 +665,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            :content="item.review"
+                            :content="judgeBadWordOther(item.review)"
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">{{ item.time }}</div>
@@ -769,7 +769,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            :content="item.content"
+                            :content="judgeBadWordOther(item.content)"
                           />
                           <div class="bottom-comment">
                             <ul class="comment-actions">
@@ -1593,6 +1593,10 @@ export default {
       return ToolMethod.judgeBadWord(str);
     };
 
+    const judgeBadWordOther = (str) => {
+      return ToolMethod.judgeBadWordOther(str);
+    };
+
     return {
       movie,
       start,
@@ -1629,6 +1633,7 @@ export default {
       isShowCastDetail,
       ellipsis: ref(true),
       judgeBadWord,
+      judgeBadWordOther,
       amdbReport,
       handleCancel,
       handleSubmit,

@@ -63,7 +63,18 @@ class ToolMethod {
         const value2 = badWords;
         (value2 || []).map(function (item) {
             let reg = new RegExp(item, 'g');
-            valuel = valuel.replace(reg, '<font color="red" >' + item + '</font>');
+            valuel = valuel.replace(reg, '<font color="red" >' + "***" + '</font>');
+        });
+        return valuel;
+    }
+
+
+
+    judgeBadWordOther(valuel) {
+        const value2 = badWords;
+        (value2 || []).map(function (item) {
+            let reg = new RegExp(item, 'g');
+            valuel = valuel.replace(reg, "***");
         });
         return valuel;
     }
