@@ -149,7 +149,7 @@ export default {
     };
 
     const showErroeMessage = () => {
-      return message.error("Sorry, error accured in server");
+      return message.error("Server is busy, try again later");
     };
 
     const beforeUpload = (file) => {

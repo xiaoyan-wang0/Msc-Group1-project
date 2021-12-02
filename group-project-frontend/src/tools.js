@@ -46,44 +46,75 @@ class ToolMethod {
     }
 
     judgeBadWord(valuel) {
-        // //trim() 方法不会改变原始字符串 去掉首尾空白符
-        // this.contents = valuel.trim()
-        // var re = ''
-        // //正则过滤 模版字符串 \b 是一个整单词
-        // for (var i = 0; i < badWords.length; i++) {
-        //     if (i == badWords.length - 1)
-        //         re += `\\b${badWords[i]}\\b`
-        //     else
-        //         re += `\\b${badWords[i]}\\b` + "|"
-        // }
-        // var reg = new RegExp(re, "gi")
-        // this.contents = this.contents.replace(reg, '<font color="red">' + "***" + '</font>')
-        // return this.contents
+        //trim() 方法不会改变原始字符串 去掉首尾空白符
+        this.contents = valuel.trim()
+        var re = ''
+        //正则过滤 模版字符串 \b 是一个整单词
+        for (var i = 0; i < badWords.length; i++) {
+            if (i == badWords.length - 1)
+                re += `\\b${badWords[i]}\\b`
+            else
+                re += `\\b${badWords[i]}\\b` + "|"
+        }
+        var reg = new RegExp(re, "gi")
+        this.contents = this.contents.replace(reg, '<font color="red">' + " *** " + '</font>')
+        return this.contents
 
-        const value2 = badWords;
-        (value2 || []).map(function (item) {
-            let reg = new RegExp(item, 'g');
-            valuel = valuel.replace(reg, '<font color="red" >' + "***" + '</font>');
-        });
-        return valuel;
+        // const value2 = badWords;
+        // (value2 || []).map(function (item) {
+        //     let reg = new RegExp(item, 'g');
+        //     valuel = valuel.replace(reg, '<font color="red" >' + " *** " + '</font>');
+        // });
+        // return valuel;
     }
 
-
-
     judgeBadWordOther(valuel) {
-        const value2 = badWords;
-        (value2 || []).map(function (item) {
-            let reg = new RegExp(item, 'g');
-            valuel = valuel.replace(reg, "***");
-        });
-        return valuel;
+        this.contents = valuel.trim()
+        var re = ''
+        //正则过滤 模版字符串 \b 是一个整单词
+        for (var i = 0; i < badWords.length; i++) {
+            if (i == badWords.length - 1)
+                re += `\\b${badWords[i]}\\b`
+            else
+                re += `\\b${badWords[i]}\\b` + "|"
+        }
+        var reg = new RegExp(re, "gi")
+        this.contents = this.contents.replace(reg, " *** ")
+        return this.contents
+
+        // const value2 = badWords;
+        // (value2 || []).map(function (item) {
+        //     let reg = new RegExp(item, 'g');
+        //     valuel = valuel.replace(reg, " *** ");
+        // });
+        // return valuel;
+    }
+
+    //取出随机数, maxNum为 取出随机数的个数
+    RandomNumBoth(arr, maxNum) {
+        var numArr = [];
+        //最大的循环次数
+        var arrLength = arr.length;
+        for (var i = 0; i < arrLength; i++) {
+            //获取arr的长度
+            var Rand = arr.length
+            //取出随机数 
+            var number = Math.floor(Math.random() * arr.length); //生成随机数num
+            //往新建的数组里面传入数值
+            numArr.push(arr[number]);
+            //传入一个删除一个，避免重复
+            arr.splice(number, 1);
+            if (arr.length <= arrLength - maxNum) {
+                return numArr;
+            }
+        }
     }
 
     // add more
 }
 
 const badWords = [
-    '2g1c', '2 girls 1 cup', 'acrotomophilia', 'alabama hot pocket', 'alaskan pipeline', 'anal',
+    '2g1c', '2 girls 1 cup', 'acrotomophilia', 'alabama hot pocket', 'alaskan pipeline', 'anal', 'damn', 'sh!t',
     'anilingus', 'anus', 'apeshit', 'arsehole', 'ass', 'asshole', 'assmunch', 'auto erotic', 'autoerotic',
     'babeland', 'baby batter', 'baby juice', 'ball gag', 'ball gravy', 'ball kicking', 'ball licking', 'ball sack',
     'ball sucking', 'bangbros', 'bareback', 'barely legal', 'barenaked', 'bastard', 'bastardo', 'bastinado', 'bbw', 'bdsm',
