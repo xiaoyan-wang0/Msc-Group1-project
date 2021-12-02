@@ -55,7 +55,7 @@ def reg():
         db.session.rollback()  
         raise e
     finally:
-        db.session.close()
+        db.session.dispose()
 
     newUser = User.query.filter_by( email = email ).first()
 
@@ -69,7 +69,7 @@ def reg():
     newUser = User.serialize(newUser)
     # userJson.append(userInfo)
     dictMerged2 = dict( newUser, **userInfo )
-    db.session.close()
+    db.session.dispose()
     return ops_renderJSON( msg = "register successfully!",data = dictMerged2)
 
 @member_page.route("/login",methods = ["POST" ])
@@ -133,7 +133,7 @@ def movieLikes():
         db.session.rollback()  
         raise e
     finally:
-        db.session.close()
+        db.session.dispose()
 
     return ops_renderJSON(msg = "Show movieLikes Successfull!")
 
@@ -237,7 +237,7 @@ def deleteComment():
         db.session.rollback()  
         raise e
     finally:
-        db.session.close()
+        db.session.dispose()
     time.sleep(1.5)
     return ops_renderJSON( msg = "delete comment successfully!")
 
@@ -255,7 +255,7 @@ def deleteMovieLikes():
         db.session.rollback()  
         raise e
     finally:
-        db.session.close()
+        db.session.dispose()
 
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
@@ -277,11 +277,11 @@ def newUserImage():
 
     db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":image})
     db.session.commit()
-    db.session.close()
+    db.session.dispose()
 
     db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"mimetype":request.files['avatar'].mimetype})
     db.session.commit()
-    db.session.close()
+    db.session.dispose()
 
     return ops_renderJSON( msg = "image updata")
 
@@ -349,7 +349,7 @@ def setUserInfo():
     if overview != "":
         db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"overView":str(overview)})
 
-    db.session.close()
+    db.session.dispose()
 
     return ops_renderJSON( msg = "update sucessful")
 
