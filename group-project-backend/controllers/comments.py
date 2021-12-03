@@ -110,6 +110,5 @@ def toxic():
 
 @app.teardown_appcontext
 def teardown_db(exception):
-    print("dispute")
-    db.session.close()
+    
     db.engine.dispose()
