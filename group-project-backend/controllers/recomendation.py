@@ -59,7 +59,7 @@ def getRecommadationById():
     db.session.add( model_rec )
     db.session.commit()
     db.session.close()
-
+    db.engine.dispose()
     return ops_renderJSON( msg = "get recommendation successfully!",data = list)
 
 @rec_page.route("/getMostComments")
@@ -73,6 +73,7 @@ def getMostComments():
         movieInfoDictionary = getTmdbInfo(lis[0], lis[0])
         list.append(movieInfoDictionary)
     db.session.close()
+    db.engine.dispose()
     return ops_renderJSON( msg = "get most comments successfully!",data = list)
 
 
@@ -92,6 +93,7 @@ def setRecommandation():
             db.session.add( model_rec )
             db.session.commit()
             db.session.close()
+            db.engine.dispose()
     return ops_renderJSON( msg = "set recommandation successfully!")
 
 @rec_page.route("/getRecommandation")
@@ -121,6 +123,7 @@ def getRecommandation():
                 list2.append(rec[3])
                 list2.append(rec[4])
         db.session.close()
+        db.engine.dispose()
 
     
 
@@ -131,6 +134,7 @@ def getRecommandation():
     db.session.add( model_rec )
     db.session.commit()
     db.session.close()
+    db.engine.dispose()
 
     return ops_renderJSON( msg = "get recommandation successfully!",data = list2)
 
@@ -203,6 +207,7 @@ def getRecommandationByTags():
     db.session.add( model_rec )
     db.session.commit()
     db.session.close()
+    db.engine.dispose()
 
     
     return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
@@ -221,8 +226,8 @@ def getTagMovies(tagName, number):
 
 
 def getRecomendation(movieId, number):
-    #train_movies_1 = pd.read_csv('C:/final.csv')
-    train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
+    train_movies_1 = pd.read_csv('C:/final.csv')
+    #train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
     #print(type(train_movies_1))
     # train_movies_1.dtypes
     # train_movies_1.isnull().sum(axis=0)

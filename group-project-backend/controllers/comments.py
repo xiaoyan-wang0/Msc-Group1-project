@@ -58,6 +58,7 @@ def addComments():
         raise e
     finally:
         db.session.close()
+        db.engine.dispose()
     time.sleep(1.5)
     return ops_renderJSON( msg = "addComments successfully!")
 
@@ -88,6 +89,7 @@ def showComments():
             comments.append(dictMerged2)
             
         db.session.close()
+        db.engine.dispose()
     return ops_renderJSON( msg = "showComments successfully!",data = comments )
 
 @comments_page.route("/toxic",methods = ["POST" ])
@@ -108,5 +110,6 @@ def toxic():
 
 @app.teardown_appcontext
 def teardown_db(exception):
-
+    print("dispute")
     db.session.close()
+    db.engine.dispose()

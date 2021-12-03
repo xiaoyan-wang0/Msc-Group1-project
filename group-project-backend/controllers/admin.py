@@ -36,6 +36,7 @@ def doReport():
         db.session.query(Usercomment).filter(Usercomment.id == id).update({"ifReport":1,"reporterId":userId})
 
     db.session.close()
+    db.engine.dispose()
 
     return ops_renderJSON( msg = "report successfully!")
 
@@ -47,6 +48,7 @@ def getReportComments():
     #userId = req['userId'] if "userId" in req else ""
     result = Usercomment.query.filter(Usercomment.ifReport == '1').order_by(Usercomment.id.desc()).all()
     db.session.close()
+    db.engine.dispose()
     result = Serializer.serialize_list(result)
     return ops_renderJSON( msg = "report successfully!", data = result)
 
@@ -70,6 +72,7 @@ def userList():
     for user in users:
         userInfo = Userinfo2.query.filter_by( userId = user.userId ).first()
         db.session.close()
+        db.engine.dispose()
         user = Serializer.serialize(user)
         userInfo = Serializer.serialize(userInfo)
         List.append(dict( user, **userInfo ))
@@ -125,7 +128,7 @@ def blockUser():
         if user:
             db.session.query(User).filter(User.userId == userId).update({"ifBlocked":1})
             db.session.close()
-    
+            db.engine.dispose()
     return ops_renderJSON( msg = "block user successfully!")
 
 @admin_page.route("/deleteComments")
@@ -141,6 +144,7 @@ def deleteComments():
         raise e
     finally:
         db.session.close()
+        db.engine.dispose()
     time.sleep(1.5)
     return ops_renderJSON( msg = "delete comment successfully!")
 
@@ -155,6 +159,7 @@ def unBlockUser():
         if user:
             db.session.query(User).filter(User.userId == userId).update({"ifBlocked":0})
             db.session.close()
+            db.engine.dispose()
     
     return ops_renderJSON( msg = "block user successfully!")
 
