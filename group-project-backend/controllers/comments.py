@@ -108,7 +108,7 @@ def toxic():
     result['sentiment'] = senti['tag']
     return ops_renderJSON( msg = "comments detected successfully!",data = result )
 
-# @app.teardown_appcontext
-# def teardown_db(exception):
-#     db.session.close()
-#     db.engine.dispose()
+@app.teardown_appcontext
+def teardown_db(exception):
+    
+    db.engine.dispose()
