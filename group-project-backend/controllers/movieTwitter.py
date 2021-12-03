@@ -69,5 +69,6 @@ def review():
     db.session.add( model_reviews )
     db.session.commit()
     db.session.close()
+    db.engine.dispose()
 
     return ops_renderJSON(msg = "Show Comments Successfull!", data = dic2)

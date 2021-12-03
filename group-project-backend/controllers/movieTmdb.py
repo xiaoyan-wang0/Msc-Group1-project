@@ -75,6 +75,7 @@ def review():
     db.session.add( model_reviews )
     db.session.commit()
     db.session.close()
+    db.engine.dispose()
 
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
@@ -100,6 +101,7 @@ def Info():
             db.session.add( model_rec )
             db.session.commit()
             db.session.close()
+            db.engine.dispose()
 
 
     # I am using a Python Library for the TMDB API which is very convinient and easy to use.
