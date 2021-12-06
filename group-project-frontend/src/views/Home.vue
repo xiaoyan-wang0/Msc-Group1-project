@@ -36,7 +36,6 @@ export default {
     const itemdata = ref([]);
     const lastestMovieData = ref([]);
     const showRouterView = ref(true);
-    const fackePic = ref([]);
 
     //Search event
     const SearchMovies = () => {

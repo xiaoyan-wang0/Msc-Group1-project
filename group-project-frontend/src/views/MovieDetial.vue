@@ -869,6 +869,7 @@ import { notification } from "ant-design-vue";
 import { ElMessageBox } from "element-plus";
 import env from "@/env.js";
 import ToolMethod from "../tools.js";
+import UserApi from "../services/user.service";
 
 import {
   LikeFilled,
@@ -876,7 +877,6 @@ import {
   DislikeFilled,
   DislikeOutlined,
 } from "@ant-design/icons-vue";
-import tools from "../tools.js";
 
 export default {
   components: {
@@ -889,7 +889,6 @@ export default {
   },
 
   setup() {
-    const axios = inject("axios"); // inject axios
     const store = useStore();
     const currentUser = computed(() => store.state.auth.user);
     const movie = ref({});
@@ -937,106 +936,67 @@ export default {
     const commentsValue = ref("");
     onBeforeMount(() => {
       // fetch movie detail
-      axios
-        .get(env.tmdbmovieapi + movieid.value + "?" + env.tmdbkey)
-        .then((response) => {
-          movie.value = response.data;
-          console.log("movie detail");
-          console.log(movie.value);
-          start.value = movie.value.vote_average / 2;
-          console.log("start.value");
-          console.log(start.value);
-          console.log("imdbmovieid");
-          imdbmovieid.value = response.data.imdb_id;
-          console.log(imdbmovieid.value);
-          console.log("imdbmovie title");
-          console.log(movie.value.original_title);
+      UserApi.getMovieDetail(movieid.value).then((response) => {
+        movie.value = response.data;
+        start.value = movie.value.vote_average / 2;
+        imdbmovieid.value = response.data.imdb_id;
+      });
 
-          // Fetch recommendation movies
-          axios
-            .get(
-              env.AMDBAPI + "rec/getRecommendationById?movieId=" + movieid.value
-            )
-            .then((response) => {
-              console.log("getRecommadationById");
-              console.log(response.data);
-              const randomMovie = response.data.data;
-              if (randomMovie.length) {
-                recommendationMovies.value = ToolMethod.RandomNumBoth(
-                  randomMovie,
-                  randomMovie.length > 4 ? 5 : randomMovie.length
-                );
-              }
-            })
-            .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
-              showErroeMessage();
-            });
-        });
+      // Fetch recommendation movies
+      UserApi.getRecommandationById(movieid.value).then((response) => {
+        const randomMovie = response.data.data;
+        if (randomMovie.length) {
+          recommendationMovies.value = ToolMethod.RandomNumBoth(
+            randomMovie,
+            randomMovie.length > 4 ? 5 : randomMovie.length
+          );
+        }
+      });
+      // .catch((error) => {
+      //   console.log("error");
+      //   console.log(error);
+      //   console.log("error");
+      //   showErroeMessage();
+      // });
 
-      // Fetch setRecommandation
-      axios
-        .get(
-          env.AMDBAPI +
-            "rec/setRecommandation?movieId=" +
-            movieid.value +
-            "&userId=" +
-            (currentUser.value === null ? "" : currentUser.value.data.userId)
-        )
-        .then((response) => {
-          console.log("setRecommandation");
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+      // Fetch setRecommendation
+      UserApi.setRecommendation(
+        movieid.value,
+        currentUser.value === null ? "" : currentUser.value.data.userId
+      ).then((response) => {
+        console.log("setRecommandation");
+        console.log(response.data);
+      });
+      // .catch((error) => {
+      //   console.log("error");
+      //   console.log(error);
+      //   console.log("error");
+      //   showErroeMessage();
+      // });
 
       //Fetch trailer
-      axios
-        .get(
-          env.tmdbmovieapi +
-            movieid.value +
-            env.tmdbvideo +
-            env.tmdbkey +
-            env.tmdbtail
-        )
-        .then((response) => {
-          const video = response.data.results;
-          console.log("video_id");
-          console.log(video);
-          // TODO no videos
-          video_id.value = video[0].key;
-          console.log(video_id.value);
-        });
+      UserApi.getMovieTrailer(movieid.value).then((response) => {
+        const video = response.data.results;
+        console.log("video_id");
+        console.log(video);
+        // TODO no videos
+        video_id.value = video[0].key;
+        console.log(video_id.value);
+      });
 
       //Fetch casts
-      axios
-        .get(
-          env.tmdbmovieapi +
-            movieid.value +
-            env.tmdbcredits +
-            env.tmdbkey +
-            env.tmdbtail
-        )
-        .then((response) => {
-          casts.value = response.data;
-          console.log("casts detail");
-          console.log(casts.value);
-          crewList = casts.value.crew;
-          addCrewToCast();
-          if (response.data.cast.length <= 6) {
-            castList.value = castList.value.concat(casts.value.cast);
-          } else {
-            castList.value = castList.value.concat(
-              casts.value.cast.slice(0, 6)
-            );
-          }
-        });
+      UserApi.getMovieCasts(movieid.value).then((response) => {
+        casts.value = response.data;
+        // console.log("casts detail");
+        // console.log(casts.value);
+        crewList = casts.value.crew;
+        addCrewToCast();
+        if (response.data.cast.length <= 6) {
+          castList.value = castList.value.concat(casts.value.cast);
+        } else {
+          castList.value = castList.value.concat(casts.value.cast.slice(0, 6));
+        }
+      });
       getAMDBComments();
     });
 
@@ -1084,18 +1044,13 @@ export default {
     const getAMDBComments = () => {
       commentLoading.value = true;
       //Fetch AMDB Comments
-      axios
-        .get(
-          env.AMDBAPI + "comments/showComments?movieId=" + movieid.value
-          // "&userId=" +
-          // currentUser.value.data.userId,
-        )
+      UserApi.getMovieComments(movieid.value)
         .then((response) => {
           amdbreview.value = response.data.data;
           amdbAllreview.value = response.data.data;
-          console.log("amdbreview detail");
-          console.log(response.data);
-          console.log(amdbreview.value);
+          // console.log("amdbreview detail");
+          // console.log(response.data);
+          // console.log(amdbreview.value);
           commentLoading.value = false;
         })
         .catch((error) => {
@@ -1173,12 +1128,7 @@ export default {
             commentLoading.value = false;
             return;
           }
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieTmdb/movieTmdbReviews?movieId=" +
-                movieid.value
-            )
+          UserApi.getTmdbComments(movieid.value)
             .then((response) => {
               if (response.data.data.reviews) {
                 tmdbreview.value = response.data.data.reviews[0];
@@ -1203,12 +1153,7 @@ export default {
             return;
           }
           //Fetch IMDB Comments
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieImdb/movieImdbReviews?movieId=" +
-                imdbmovieid.value
-            )
+          UserApi.getImdbComments(imdbmovieid.value)
             .then((response) => {
               if (response.data.data.reviews.items) {
                 imdbreview.value = response.data.data.reviews.items;
@@ -1233,14 +1178,7 @@ export default {
             return;
           }
           //Fetch Youtube Comments
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieYoutube/movieYoutubeReviews?movieName=" +
-                movie.value.original_title +
-                "&movieId=" +
-                movieid.value
-            )
+          UserApi.getYoutubeComments(movie.value.original_title, movieid.value)
             .then((response) => {
               if (response.data.data) {
                 youtubereview.value = response.data.data;
@@ -1265,14 +1203,7 @@ export default {
             return;
           }
           //Fetch Twitter Comments
-          axios
-            .get(
-              env.AMDBAPI +
-                "movieTwitter/movieTwitterReviews?movieName='" +
-                movie.value.original_title +
-                "'&movieId=" +
-                movieid.value
-            )
+          UserApi.getTwitterComments(movie.value.original_title, movieid.value)
             .then((response) => {
               if (response.data.data) {
                 twitterreview.value = response.data.data;
@@ -1308,69 +1239,61 @@ export default {
       popToxicText.value = "";
       popSentimentText.value = "";
       popHightToxicText.value = "";
-      axios
-        .post(env.AMDBAPI + "/comments/toxic?title=" + commentsValue.value)
-        .then((response) => {
-          const commentStatus = response.data.data;
-          addCommentsDialog.value = true;
-          popToxicText.value =
-            "Toxic is " +
-            showToxicText(commentStatus.toxic[0]) +
-            "(" +
-            Number(commentStatus.toxic[0] * 100).toFixed(1) +
-            "%)";
-          popSentimentText.value =
-            "Sentiment is " +
-            showSentiemntText(commentStatus.sentiment[0]) +
-            "(" +
-            Number(commentStatus.sentiment[0] * 100).toFixed(1) +
-            "%).";
-          commentConfirmLoading.value = false;
-          if (commentStatus.toxic[0] > 0.9) {
-            popHightToxicText.value =
-              "Your comment is SEVERE TOXIC. If you post too much, the administrator will block your account.";
-          }
-        });
+      UserApi.detectUserComment(commentsValue.value).then((response) => {
+        const commentStatus = response.data.data;
+        addCommentsDialog.value = true;
+        popToxicText.value =
+          "Toxic is " +
+          showToxicText(commentStatus.toxic[0]) +
+          "(" +
+          Number(commentStatus.toxic[0] * 100).toFixed(1) +
+          "%)";
+        popSentimentText.value =
+          "Sentiment is " +
+          showSentiemntText(commentStatus.sentiment[0]) +
+          "(" +
+          Number(commentStatus.sentiment[0] * 100).toFixed(1) +
+          "%).";
+        commentConfirmLoading.value = false;
+        if (commentStatus.toxic[0] > 0.9) {
+          popHightToxicText.value =
+            "Your comment is SEVERE TOXIC. If you post too much, the administrator will block your account.";
+        }
+      });
     };
 
     const confirmAddComment = () => {
       commentLoading.value = true;
       addCommentsDialog.value = false;
-      // Add comments
-      axios
-        .post(
-          env.AMDBAPI +
-            "comments/addComments?movieId=" +
-            movieid.value +
-            "&comment=" +
-            commentsValue.value +
-            "&userId=" +
-            currentUser.value.data.userId
-        )
-        .then((response) => {
-          // tmdbreview.value = response.data;
-          console.log("Add comments ");
-          console.log(response.data);
-          submitting.value = false;
-          commentsValue.value = "";
-          commentLoading.value = false;
-          if (response.data.code === 200) {
-            getAMDBComments();
-            notification.open({
-              duration: 2,
-              message: "Add comment successfully!",
-              icon: h(SmileOutlined, {
-                style: "color: #108ee9",
-              }),
-            });
-          } else {
-            ElMessageBox.confirm(response.data.msg, "Warning", {
-              cancelButtonText: "Cancel",
-              type: "warning",
-              center: true,
-            });
-          }
-        });
+      // Post comments
+      UserApi.postUserComment(
+        movieid.value,
+        commentsValue.value,
+        currentUser.value.data.userId
+      ).then((response) => {
+        // tmdbreview.value = response.data;
+        console.log("Add comments ");
+        console.log(response.data);
+        submitting.value = false;
+        commentsValue.value = "";
+        commentLoading.value = false;
+        if (response.data.code === 200) {
+          getAMDBComments();
+          notification.open({
+            duration: 2,
+            message: "Add comment successfully!",
+            icon: h(SmileOutlined, {
+              style: "color: #108ee9",
+            }),
+          });
+        } else {
+          ElMessageBox.confirm(response.data.msg, "Warning", {
+            cancelButtonText: "Cancel",
+            type: "warning",
+            center: true,
+          });
+        }
+      });
       addCommentsDialog.value = false;
     };
 
@@ -1390,13 +1313,11 @@ export default {
       console.log("showCastDetail");
       console.log(id);
       //Fetch Cast Detials
-      axios
-        .get(env.tmdbperson + id + "?" + env.tmdbkey + env.tmdbtail)
-        .then((response) => {
-          castDetail.value = response.data;
-          console.log("castDetail detail");
-          console.log(castDetail.value);
-        });
+      UserApi.getMovieCastsDetail(id).then((response) => {
+        castDetail.value = response.data;
+        console.log("castDetail detail");
+        console.log(castDetail.value);
+      });
     };
 
     //AMDB filter change
@@ -1518,15 +1439,8 @@ export default {
       if (!authLogin()) {
         return;
       }
-      axios
-        .get(
-          env.AMDBAPI +
-            "member/movieLikes?userId=" +
-            currentUser.value.data.userId +
-            "&movieId=" +
-            movieid.value
-        )
-        .then((response) => {
+      UserApi.addLikeList(movieid.value, currentUser.value.data.userId).then(
+        (response) => {
           // tmdbreview.value = response.data;
           console.log("Add like list ");
           console.log(response.data);
@@ -1544,7 +1458,8 @@ export default {
               message: "Already add !!",
             });
           }
-        });
+        }
+      );
     };
 
     // Report AMDB comments
@@ -1558,15 +1473,8 @@ export default {
     };
 
     const confirmReportComment = () => {
-      // Add comments
-      axios
-        .get(
-          env.AMDBAPI +
-            "admin/doReport?id=" +
-            reportCommentId +
-            "&userId=" +
-            currentUser.value.data.userId
-        )
+      // report comments
+      UserApi.addLikeList(reportCommentId, currentUser.value.data.userId)
         .then((response) => {
           console.log("confirmReportComment ");
           console.log(response.data);
