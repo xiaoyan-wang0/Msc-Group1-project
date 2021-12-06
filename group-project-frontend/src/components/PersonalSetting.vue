@@ -196,27 +196,18 @@
 </template>
 
 <script>
-import { ref, inject, onBeforeMount, h, reactive, toRefs } from "vue";
+import { ref, onBeforeMount, h, reactive, toRefs } from "vue";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import router from "@/router";
 import env from "@/env.js";
 import ToolMethod from "../tools.js";
+import UserApi from "../services/user.service";
 
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(img);
-}
-
-function arrayBufferToBase64(buffer) {
-  var binary = "";
-  var bytes = new Uint8Array(buffer);
-  var len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return window.btoa(binary);
 }
 
 export default {
@@ -227,7 +218,6 @@ export default {
   },
 
   setup() {
-    const axios = inject("axios"); // inject axios
     const selectValue = ref([]);
     const fileList = ref([]);
     const loading = ref(false);
@@ -391,33 +381,31 @@ export default {
         message.success("Sorry, username and password can not be empty!");
         return;
       }
+
       const settingFormData = new FormData();
       console.log("settingFormData");
       settingFormData.append("userId", userId.value);
       settingFormData.append("userName", userName.value);
+
       if (password.value !== initialPassword) {
         console.log("password.value == initialPassword");
         console.log(password.value == initialPassword);
         settingFormData.append("password", password.value);
       }
+
       settingFormData.append("birthday", formatDate(birthday.value));
       settingFormData.append("movieTags", selectValue.value);
       settingFormData.append("overview", overViewValue.value);
       console.log(settingFormData);
-      axios({
-        method: "post",
-        url: env.AMDBAPI + "member/setUserInfo",
-        data: settingFormData,
-        // withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+
+      UserApi.updateUserInfo(settingFormData)
         .then((response) => {
           console.log("setting submitChange");
           console.log(response);
           if (response.data.code == 200) {
             message.success("Update successfully!");
-            axios
-              .get(env.AMDBAPI + "member/getUserInfo?userId=" + userId.value)
+            
+              UserApi.getUserInfo(userId.value)
               .then((response) => {
                 console.log("setting getUserInfo");
                 console.log(response);

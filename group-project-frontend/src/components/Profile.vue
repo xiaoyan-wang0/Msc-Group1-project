@@ -140,7 +140,7 @@
         <div class="col-lg-4 col-md-4">
           <div class="amdb__details__sidebar">
             <div class="section-title">
-              <h5> Recommendation based on history</h5>
+              <h5>Recommendation based on history</h5>
             </div>
             <div
               class="product__sidebar__comment__item"
@@ -178,13 +178,14 @@
 </template>
 
 <script>
-import { ref, inject, onBeforeMount, h } from "vue";
+import { ref, onBeforeMount, h } from "vue";
 import { notification, message } from "ant-design-vue";
 import { SmileOutlined } from "@ant-design/icons-vue";
 import { ElMessageBox } from "element-plus";
 import router from "@/router";
 import ToolMethod from "../tools.js";
 import env from "@/env.js";
+import UserApi from "../services/user.service";
 
 export default {
   name: "Profile",
@@ -201,7 +202,6 @@ export default {
     env.AMDBAPI;
 
     const AMDBAPI = ref(env.AMDBAPI);
-    const axios = inject("axios"); // inject axios
     const likeColumns = ref([
       {
         title: "Movie name",
@@ -259,6 +259,7 @@ export default {
         },
       },
     ]);
+
     onBeforeMount(() => {
       if (!localStorage.getItem("user")) {
         router.push({
@@ -276,8 +277,7 @@ export default {
       fetchCommentList();
 
       //  Fetch recently recommendation movies
-      axios
-        .get(env.AMDBAPI + "rec/getRecommandation?userId=" + user.value.userId)
+      UserApi.getRecentRecommendation(user.value.userId)
         .then((response) => {
           console.log("getRecommandationByTags");
           console.log(response.data.data);
@@ -301,8 +301,7 @@ export default {
     const fetchMovieLike = () => {
       isLoading.value = true;
       // fetch like List
-      axios
-        .get(env.AMDBAPI + "member/showMovieList?userId=" + user.value.userId)
+      UserApi.getLikeList(user.value.userId)
         .then((response) => {
           console.log("showMovieList");
           console.log(response.data.data);
@@ -321,10 +320,7 @@ export default {
     const fetchCommentList = () => {
       isLoading.value = true;
       // fetch comment List
-      axios
-        .get(
-          env.AMDBAPI + "/member/showCommentList?userId=" + user.value.userId
-        )
+      UserApi.getUserCommentList(user.value.userId)
         .then((response) => {
           console.log("showCommentList");
           console.log(response.data.data);
@@ -349,8 +345,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          axios
-            .get(env.AMDBAPI + "member/deleteMovieLikes?Id=" + record.Id)
+          UserApi.deleteLikeList(record.Id)
             .then((response) => {
               console.log("deleteMovieLikes");
               console.log(response.data);
@@ -383,8 +378,7 @@ export default {
         }
       )
         .then(() => {
-          axios
-            .get(env.AMDBAPI + "member/deleteComment?id=" + record.id)
+          UserApi.deleteUserCommentList(record.Id)
             .then((response) => {
               console.log("deleteMovieLikes");
               console.log(response.data);

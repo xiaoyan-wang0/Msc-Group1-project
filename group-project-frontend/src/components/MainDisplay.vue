@@ -249,24 +249,23 @@
 </template>
 
 <script>
-import { ref, inject, onBeforeMount, computed } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
 import router from "@/router";
 import { useStore } from "vuex";
 import ToolMethod from "../tools.js";
+import UserApi from "../services/user.service";
 
 export default {
   name: "MainDisplay",
   props: {},
   components: { Showpart },
   setup() {
-    const axios = inject("axios"); // inject axios
     const popularMovieData = ref([]);
     const hignScoreMovieData = ref([]);
     const imdbBotMovies = ref([]);
-    const genreList = ref([]);
     const upComingMovieData = ref([]);
     const fackePic = ref([]);
     const store = useStore();
@@ -277,91 +276,76 @@ export default {
     const currentUser = computed(() => store.state.auth.user);
     const poster = ref("");
     poster.value = env.tmdbpic;
+    fackePic.value = [
+      {
+        id: 425909,
+        title: "Ghostbusters: Afterlife",
+        backdrop_path: require("@/assets/1.jpg"),
+      },
+      {
+        id: 438695,
+        title: "Sing 2",
+        backdrop_path: require("@/assets/2.jpg"),
+      },
+      {
+        id: 634649,
+        title: "Spider-Man: No Way Home",
+        backdrop_path: require("@/assets/3.jpg"),
+      },
+    ];
+
     onBeforeMount(() => {
       //Upcoming moveis
-      axios
-        .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
-        .then((response) => {
-          upComingMovieData.value = response.data.results;
-          console.log(upComingMovieData.value.results);
-        });
-
-      fackePic.value = [
-        {
-          id: 425909,
-          title: "Ghostbusters: Afterlife",
-          backdrop_path: require("@/assets/1.jpg"),
-        },
-        {
-          id: 438695,
-          title: "Sing 2",
-          backdrop_path: require("@/assets/2.jpg"),
-        },
-        {
-          id: 634649,
-          title: "Spider-Man: No Way Home",
-          backdrop_path: require("@/assets/3.jpg"),
-        },
-      ];
+      UserApi.getUpcomingMovies().then((response) => {
+        upComingMovieData.value = response.data.results;
+      });
 
       // Popular movies
-      axios
-        .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
-        .then((response) => {
-          popularMovieData.value = response.data;
-          console.log("popularMovieData.results");
-          console.log(popularMovieData.value.results);
-        });
+      UserApi.getPopularMovies().then((response) => {
+        popularMovieData.value = response.data;
+        // console.log("popularMovieData.results");
+        // console.log(popularMovieData.value.results);
+      });
+
       // High score moveis
-      axios
-        .get(env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail)
-        .then((response) => {
-          hignScoreMovieData.value = response.data;
-        });
+      UserApi.getHighScoreMovies().then((response) => {
+        hignScoreMovieData.value = response.data;
+      });
 
       // IMDB BOT 10 movies
-      axios
-        .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=6")
-        .then((response) => {
-          imdbBotMovies.value = response.data.data;
-          console.log("IMDB BOT 10 Movies");
-          console.log(imdbBotMovies.value);
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+      UserApi.getImdbBotMovies(6).then((response) => {
+        imdbBotMovies.value = response.data.data;
+        // console.log("IMDB BOT 10 Movies");
+        // console.log(imdbBotMovies.value);
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
+      });
 
       // Fetch the most comments recommendation movies
-      axios
-        .get(env.AMDBAPI + "rec/getMostComments")
-        .then((response) => {
-          console.log("getMostComments  recommendation movies");
-          console.log(response.data);
-          mostRecommendationMovies.value = response.data.data;
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+      UserApi.getMostCommentsMovies().then((response) => {
+        console.log("getMostComments  recommendation movies");
+        console.log(response.data);
+        mostRecommendationMovies.value = response.data.data;
+      });
+      // .catch((error) => {
+      //   console.log("error");
+      //   console.log(error);
+      //   console.log("error");
+      //   showErroeMessage();
+      // });
 
       // fetch getRecommandationByTags
       if (currentUser.value !== null) {
-        axios
-          .get(
-            env.AMDBAPI +
-              "rec/getRecommandationByTags?userId=" +
-              currentUser.value.data.userId
-          )
-          .then((response) => {
-            console.log(
-              "recently recommendation movies recentRecommendationMovies"
-            );
-            console.log(response.data);
+        UserApi.getRecommandationByTags(currentUser.value.data.userId).then(
+          (response) => {
+            // console.log(
+            //   "recently recommendation movies recentRecommendationMovies"
+            // );
+            // console.log(response.data);
             const randomMovie = response.data.data;
             if (randomMovie.length) {
               recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
@@ -369,13 +353,14 @@ export default {
                 randomMovie.length > 4 ? 5 : randomMovie.length
               );
             }
-          })
-          .catch((error) => {
-            console.log("error");
-            console.log(error);
-            console.log("error");
-            showErroeMessage();
-          });
+          }
+        );
+        // .catch((error) => {
+        //   console.log("error");
+        //   console.log(error);
+        //   console.log("error");
+        //   showErroeMessage();
+        // });
       } else {
         recentRecommendationMovies.value = [];
       }
@@ -389,15 +374,11 @@ export default {
       let categary = [];
       for (let id of genres) {
         for (const genrn of JSON.parse(localStorage.getItem("genreList"))) {
-          console.log("findCategary([878,28]");
-          console.log(genrn);
-          console.log(id);
           if (genrn.id == id) {
             categary.push(genrn.name);
           }
         }
       }
-      console.log(categary);
       return categary;
     };
     //show Result Page

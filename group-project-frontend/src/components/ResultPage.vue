@@ -133,8 +133,9 @@
 
 <script>
 import env from "@/env.js";
-import { ref, inject, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import { message } from "ant-design-vue";
+import UserApi from "../services/user.service";
 
 export default {
   name: "ResultPage",
@@ -148,7 +149,6 @@ export default {
     const itemdata = ref([]);
     const itemtotal = ref(0);
     const isIMDBBot = ref(false);
-    const axios = inject("axios"); // inject axios
     poster.value = env.tmdbpic;
     const resource = localStorage.getItem("resultResource");
     const searchValue = localStorage.getItem("searchValue");
@@ -165,59 +165,48 @@ export default {
       console.log(localStorage.getItem("resultResource"));
       if (resource == 1) {
         resultName.value = "Popular movies Result";
-        axios
-          .get(env.tmdbmovieapi + env.tmdbpopular + env.tmdbkey + env.tmdbtail)
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("REsult page Popula");
-            console.log(itemdata.value);
-            itemtotal.value = response.data.total_results;
-          });
+        // Popular movies
+        UserApi.getPopularMovies().then((response) => {
+          itemdata.value = response.data.results;
+          console.log("REsult page Popula");
+          console.log(itemdata.value);
+          itemtotal.value = response.data.total_results;
+        });
       } else if (resource == 2) {
         resultName.value = "High score moveis Result";
         // High score moveis
-        axios
-          .get(
-            env.tmdbmovieapi + env.tmdbhighscore + env.tmdbkey + env.tmdbtail
-          )
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("REsult page score moveis Result");
-            console.log(itemdata.value);
-            itemtotal.value = response.data.total_results;
-          });
+        UserApi.getHighScoreMovies().then((response) => {
+          itemdata.value = response.data.results;
+          console.log("REsult page score moveis Result");
+          console.log(itemdata.value);
+          itemtotal.value = response.data.total_results;
+        });
       } else if (resource == 3) {
         resultName.value = "Upcoming Movies Result";
-        // High score moveis
-        axios
-          .get(env.tmdbmovieapi + env.tmdbupcoming + env.tmdbkey + env.tmdbtail)
-
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("Result page score moveis");
-            console.log(itemdata.value);
-            console.log(itemdata.value);
-            itemtotal.value = response.data.total_results;
-            console.log(itemtotal.value);
-          });
+        // Upcoming Movies moveis
+        UserApi.getUpcomingMovies().then((response) => {
+          itemdata.value = response.data.results;
+          console.log("Result page score moveis");
+          console.log(itemdata.value);
+          console.log(itemdata.value);
+          itemtotal.value = response.data.total_results;
+          console.log(itemtotal.value);
+        });
       } else if (resource == 4) {
         resultName.value = "Search result";
         // Search moveis result
-        axios
-          .get(env.tmdbSearch + env.tmdbkey + env.tmdbquery + searchValue)
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("Search moveis result");
-            console.log(itemdata.value);
-            console.log(itemdata.value);
-            itemtotal.value = response.data.total_results;
-            console.log(itemtotal.value);
-          });
+        UserApi.getSearchMoveis(searchValue).then((response) => {
+          itemdata.value = response.data.results;
+          console.log("Search moveis result");
+          console.log(itemdata.value);
+          console.log(itemdata.value);
+          itemtotal.value = response.data.total_results;
+          console.log(itemtotal.value);
+        });
       } else {
         resultName.value = "IMDB BOTTOM result";
         isIMDBBot.value = true;
-        axios
-          .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20")
+        UserApi.getImdbBotMovies(20)
           .then((response) => {
             itemdata.value = response.data.data;
             console.log("IMDB BOT result");
@@ -237,80 +226,41 @@ export default {
       if (resource == 1) {
         // Popular movies
         resultName.value = "Popular movies Result";
-        axios
-          .get(
-            env.tmdbmovieapi +
-              env.tmdbpopular +
-              env.tmdbkey +
-              env.tmdbtail +
-              "&page= " +
-              pageNumber
-          )
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("REsult page Popula");
-            console.log(itemdata.value);
-          });
+        UserApi.getPopularMovies(pageNumber).then((response) => {
+          itemdata.value = response.data.results;
+          console.log("REsult page Popula");
+          console.log(itemdata.value);
+        });
       } else if (resource == 2) {
         resultName.value = "High score moveis Result";
         // High score moveis
-        axios
-          .get(
-            env.tmdbmovieapi +
-              env.tmdbhighscore +
-              env.tmdbkey +
-              env.tmdbtail +
-              "&page= " +
-              pageNumber
-          )
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("REsult page score moveis Result");
-            console.log(itemdata.value);
-          });
+        UserApi.getHighScoreMovies(pageNumber).then((response) => {
+          itemdata.value = response.data.results;
+          console.log("REsult page score moveis Result");
+          console.log(itemdata.value);
+        });
       } else if (resource == 3) {
         resultName.value = "Upcoming Movies Result";
         // High score moveis
-        axios
-          .get(
-            env.tmdbmovieapi +
-              env.tmdbupcoming +
-              env.tmdbkey +
-              env.tmdbtail +
-              "&page= " +
-              pageNumber
-          )
-
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("Result page score moveis");
-            console.log(itemdata.value);
-          });
+        UserApi.getUpcomingMovies(pageNumber).then((response) => {
+          itemdata.value = response.data.results;
+          console.log("Result page score moveis");
+          console.log(itemdata.value);
+        });
       } else if (resource == 4) {
         resultName.value = "Search result";
         // Search moveis result
-        axios
-          .get(
-            env.tmdbSearch +
-              env.tmdbkey +
-              env.tmdbquery +
-              searchValue +
-              "&page= " +
-              pageNumber
-          )
-
-          .then((response) => {
-            itemdata.value = response.data.results;
-            console.log("Search moveis result");
-            console.log(itemdata.value);
-            console.log(itemdata.value);
-            itemtotal.value = response.data.total_results;
-            console.log(itemtotal.value);
-          });
+        UserApi.getSearchMoveis(searchValue, pageNumber).then((response) => {
+          itemdata.value = response.data.results;
+          console.log("Search moveis result");
+          console.log(itemdata.value);
+          console.log(itemdata.value);
+          itemtotal.value = response.data.total_results;
+          console.log(itemtotal.value);
+        });
       } else {
         resultName.value = "IMDB BOTTOM result";
-        axios
-          .get(env.AMDBAPI + "movieImdb/movieImdbBottomInfo?numberOfMovies=20")
+        UserApi.getImdbBotMovies(20)
           .then((response) => {
             itemdata.value = response.data.data;
             console.log("IMDB BOT result");

@@ -99,16 +99,16 @@
 </template>
 
 <script>
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { message } from "ant-design-vue";
 import { InboxOutlined } from "@ant-design/icons-vue";
 import ToolMethod from "../tools.js";
-import env from "@/env.js";
+import UserApi from "../services/user.service";
+
 export default {
   name: "Detector",
   components: { InboxOutlined },
   setup() {
-    const axios = inject("axios"); // inject axios
     const commentValue = ref("");
     const commentStatus = ref();
     const toxicPercent = ref(0);
@@ -119,8 +119,7 @@ export default {
     const submitDetect = () => {
       //  Comment detect
       if (commentValue.value !== "") {
-        axios
-          .post(env.AMDBAPI + "/comments/toxic?title=" + commentValue.value)
+          UserApi.detectUserComment(commentValue.value)
           .then((response) => {
             commentStatus.value = response.data.data;
             toxicPercent.value = Number(
