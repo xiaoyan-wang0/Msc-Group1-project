@@ -120,6 +120,7 @@ export default {
     const store = useStore();
     const axios = inject("axios"); // inject axios
     const currentUser = computed(() => store.state.auth.user);
+
     const active = ref("home");
 
     const logOut = () => {
@@ -251,19 +252,6 @@ body {
   }
   .el-message-box {
     --el-messagebox-width: auto;
-  }
-  .ant-anchor-link-title {
-    color: #fff !important;
-  }
-  .ant-drawer-content-wrapper,
-  .ant-drawer-content {
-    background-color: rgba(255,255,255,0.2) !important;
-  }
-  .el-affix {
-    height: 0 !important;
-    width: 0 !important;
-    position: relative !important;
-    z-index: 99;
   }
 }
 * {
@@ -1090,22 +1078,6 @@ body {
   .el-dialog--center,
   .el-dialog {
     --el-dialog-width: 80% !important;
-  }
-  .normal-breadcrumb {
-    height: 120px !important;
-  }
-  .normal__breadcrumb__text h2 {
-    font-size: 27px !important;
-  }
-  .normal__breadcrumb__text p {
-    font-size: 17px !important;
-  }
-  .comment-actions ol,
-  ul {
-    padding-left: 0 !important;
-  }
-  main {
-    margin-bottom: 40px;
   }
 }
 </style>

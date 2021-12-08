@@ -943,38 +943,36 @@ export default {
       });
 
       // Fetch recommendation movies
-      UserApi.getRecommandationById(movieid.value)
-        .then((response) => {
-          const randomMovie = response.data.data;
-          if (randomMovie.length) {
-            recommendationMovies.value = ToolMethod.RandomNumBoth(
-              randomMovie,
-              randomMovie.length > 4 ? 5 : randomMovie.length
-            );
-          }
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+      UserApi.getRecommandationById(movieid.value).then((response) => {
+        const randomMovie = response.data.data;
+        if (randomMovie.length) {
+          recommendationMovies.value = ToolMethod.RandomNumBoth(
+            randomMovie,
+            randomMovie.length > 4 ? 5 : randomMovie.length
+          );
+        }
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
+      });
 
       // Fetch setRecommendation
       UserApi.setRecommendation(
         movieid.value,
         currentUser.value === null ? "" : currentUser.value.data.userId
-      )
-        .then((response) => {
-          console.log("setRecommandation");
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+      ).then((response) => {
+        console.log("setRecommandation");
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
+      });
 
       //Fetch trailer
       UserApi.getMovieTrailer(movieid.value).then((response) => {
@@ -1887,21 +1885,6 @@ export default {
   .filter-select {
     position: initial !important;
     margin-top: 30px;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .amdb-details {
-    padding-top: 20px !important;
-  }
-  .amdb__details__pic {
-    height: 250px !important;
-  }
-  .amdb__details__title {
-    padding-right: 0 !important;
-  }
-  .amdb__details__text p {
-    font-size: 15px !important;
   }
 }
 </style>
