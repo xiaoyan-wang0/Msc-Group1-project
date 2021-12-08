@@ -18,7 +18,6 @@ export default {
 
 <style lang="scss">
 .div-main {
-  float: left;
   width: 100%;
   margin: auto;
   margin-top: 10px;
