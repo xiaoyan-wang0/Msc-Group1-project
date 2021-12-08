@@ -32,7 +32,7 @@
           <inbox-outlined></inbox-outlined>
         </p>
         <p class="ant-upload-text">
-          Click or drag image to this area to upload
+          Click or drag image to upload
         </p>
         <p class="ant-upload-hint">
           Support for a image upload. tranfer to text.

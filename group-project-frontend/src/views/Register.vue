@@ -458,4 +458,5 @@ export default defineComponent({
   margin: 0;
   text-align: center;
 }
+
 </style>

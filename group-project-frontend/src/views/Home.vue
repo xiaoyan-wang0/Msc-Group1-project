@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="feature-card">
-      <div class="search">
+      <div id="search-div" class="search">
         <form class="search-model-form" @submit.prevent="SearchMovies()">
            <input
             type="text"
@@ -140,5 +140,12 @@ export default {
       }
     }
   }
+}
+
+@media only screen and (max-width: 600px) {
+   .feature-card .search-model-form input{
+     width: 85% !important;
+     font-size: 27px !important;
+   }
 }
 </style>
