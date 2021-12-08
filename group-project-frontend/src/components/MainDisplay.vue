@@ -1,12 +1,38 @@
 <template>
-  <section class="product spad">
+  <section class="product spad maindisplay">
+    <div class="affix-div">
+      <el-affix :offset="50" target=".maindisplay">
+        <el-button type="primary" @click="isShowDrawer = true"
+          >Offset top 120px</el-button
+        >
+      </el-affix>
+      <a-drawer
+        v-model:visible="isShowDrawer"
+        class="custom-class"
+        style="color: red"
+        title=""
+        placement="right"
+      >
+        <a-anchor>
+          <a-anchor-link href="#search-div" title="Search" />
+          <a-anchor-link href="#1" title="carousel" />
+          <a-anchor-link href="#popularMovie" title="Popular Movie" />
+          <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
+          <a-anchor-link href="#imdbbot" title="IMDB Bottom Movies" />
+          <a-anchor-link
+            href="#mainpage-recommendations"
+            title="Recommendation movies"
+          />
+        </a-anchor>
+      </a-drawer>
+    </div>
     <div class="feature-card">
       <div id="1" style="">
         <div class="home-carousel-div" style="">
           <div class="home-carousel-left" id="2" style="">
             <div class="main-carousel" v-if="upComingMovieData">
               <el-carousel
-                class="carousel-div"
+                class="carousel-div-defualt"
                 :interval="3000"
                 direction="vertical"
                 height="400px"
@@ -23,22 +49,25 @@
                     </div>
                   </router-link>
                 </el-carousel-item>
-                <!-- <el-carousel-item
-                    v-for="item in upComingMovieData.slice(0, 3)"
-                    :key="item.id"
-                  > 
-                  <el-carousel-item v-for="item in fackePic" :key="item.id">
-                    <router-link :to="'/movie/' + item.id">
-                      <img
-                        :src="moviePoster + item.backdrop_path"
-                        :alt="item.title"
-                        class="featured-img"
-                      />
-                      <div class="detail">
-                        <p>{{ item.title }}</p>
-                      </div>
-                    </router-link>
-                  </el-carousel-item> -->
+              </el-carousel>
+              <el-carousel
+                class="carousel-div-small"
+                :interval="3000"
+                direction="vertical"
+                height="150px"
+              >
+                <el-carousel-item v-for="item in fackePic" :key="item.id">
+                  <router-link :to="'/movie/' + item.id">
+                    <img
+                      :src="item.backdrop_path"
+                      :alt="item.title"
+                      class="featured-img"
+                    />
+                    <div class="detail">
+                      <p>{{ item.title }}</p>
+                    </div>
+                  </router-link>
+                </el-carousel-item>
               </el-carousel>
             </div>
           </div>
@@ -91,6 +120,7 @@
         <div class="col-lg-8">
           <!-- Upcoming movies -->
           <Showpart
+            id="popularMovie"
             :itemdata="popularMovieData"
             spacename="Popular Movies"
             isPopularorHighScore="1"
@@ -98,6 +128,7 @@
 
           <!-- High score movies -->
           <Showpart
+            id="hignScoreMovie"
             :itemdata="hignScoreMovieData"
             spacename="High Score Movie"
             isPopularorHighScore="2"
@@ -106,14 +137,17 @@
           <!-- IMDB bot 10 movies  -->
           <div class="trending__product">
             <div class="row">
-              <div class="col-lg-8 col-md-8 col-sm-8">
+              <div class="col-lg-8 col-md-8 col-sm-8" id="imdbbot">
                 <div class="section-title">
                   <h4>IMDB Bottom Movies</h4>
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="btn__all">
-                  <a id="ImdbBotMore" @click="showResultPage()" class="primary-btn"
+                  <a
+                    id="ImdbBotMore"
+                    @click="showResultPage()"
+                    class="primary-btn"
                     >View All <span class="arrow_right"></span
                   ></a>
                 </div>
@@ -159,7 +193,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-8">
+        <div id="mainpage-recommendations" class="col-lg-4 col-md-6 col-sm-8">
           <div class="product__sidebar">
             <div class="product__sidebar__comment">
               <div class="section-title">
@@ -272,8 +306,11 @@ export default {
     const mostRecommendationMovies = ref([]);
     const recentRecommendationMovies = ref([]);
     const moviePoster = ref("");
+    const isShowDrawer = ref(false);
     moviePoster.value = env.tmdbpic;
-    const currentUser = computed(() => JSON.parse(localStorage.getItem("user")));
+    const currentUser = computed(() =>
+      JSON.parse(localStorage.getItem("user"))
+    );
     const poster = ref("");
     poster.value = env.tmdbpic;
     fackePic.value = [
@@ -311,33 +348,35 @@ export default {
       });
 
       // IMDB BOT 10 movies
-      UserApi.getImdbBotMovies(6).then((response) => {
-        imdbBotMovies.value = response.data.data;
-      })
-      .catch((error) => {
-        console.log("error");
-        console.log(error);
-        console.log("error");
-        showErroeMessage();
-      });
+      UserApi.getImdbBotMovies(6)
+        .then((response) => {
+          imdbBotMovies.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
 
       // Fetch the most comments recommendation movies
-      UserApi.getMostCommentsMovies().then((response) => {
-        console.log("getMostComments  recommendation movies");
-        console.log(response.data);
-        mostRecommendationMovies.value = response.data.data;
-      })
-      .catch((error) => {
-        console.log("error");
-        console.log(error);
-        console.log("error");
-        showErroeMessage();
-      });
+      UserApi.getMostCommentsMovies()
+        .then((response) => {
+          console.log("getMostComments  recommendation movies");
+          console.log(response.data);
+          mostRecommendationMovies.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
 
       // fetch getRecommandationByTags
       if (currentUser.value !== null) {
-        UserApi.getRecommandationByTags(currentUser.value.data.userId).then(
-          (response) => {
+        UserApi.getRecommandationByTags(currentUser.value.data.userId)
+          .then((response) => {
             const randomMovie = response.data.data;
             if (randomMovie.length) {
               recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
@@ -345,14 +384,13 @@ export default {
                 randomMovie.length > 4 ? 5 : randomMovie.length
               );
             }
-          }
-        )
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
+          })
+          .catch((error) => {
+            console.log("error");
+            console.log(error);
+            console.log("error");
+            showErroeMessage();
+          });
       } else {
         recentRecommendationMovies.value = [];
       }
@@ -361,7 +399,7 @@ export default {
     const showErroeMessage = () => {
       return message.error("Server is busy, try again later");
     };
-  
+
     //show Result Page
     const showResultPage = () => {
       localStorage.setItem("resultResource", 5);
@@ -390,6 +428,7 @@ export default {
       upComingMovieData,
       fackePic,
       poster,
+      isShowDrawer,
       moviePoster,
       showResultPage,
       showResultPage2,
@@ -399,6 +438,9 @@ export default {
 </script>
 
 <style lang="scss" >
+.affix-div {
+  display: none;
+}
 .testmain {
   transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -824,7 +866,7 @@ export default {
   .featured-img {
     display: block;
     width: 100%;
-    height: 500px;
+    height: 400px;
     object-fit: cover;
     position: relative;
     z-index: 0;
@@ -984,11 +1026,43 @@ export default {
       }
     }
   }
+  .carousel-div-small {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 798px) {
   .home-carousel-right {
     display: none !important;
+  }
+  .featured-img {
+    height: 150px !important;
+  }
+  .carousel-div-defualt {
+    display: none !important;
+  }
+  .carousel-div-small {
+    display: block !important;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .affix-div {
+    position: relative;
+    top: -40px;
+    left: -32px;
+    display: block !important;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .product__item {
+    width: 50% !important;
+  }
+  .product__item__pic {
+    height: 160px !important;
+  }
+  .product__item__text h5 a {
+    line-height: 17px !important;
+    font-size: 15px !important;
   }
 }
 </style>
