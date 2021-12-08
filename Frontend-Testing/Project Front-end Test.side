@@ -472,6 +472,220 @@
       ],
       "value": ""
     }]
+  }, {
+    "id": "0d7446f2-b4b2-4d1e-98b3-b8b48a39f7e8",
+    "name": "detection_page",
+    "commands": [{
+      "id": "403a3071-47fc-4d7b-ad33-5723fc990c9a",
+      "comment": "",
+      "command": "open",
+      "target": "/main/home/maindisplay",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8d1a99a6-799c-48ec-b498-7f871f8b16d6",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1056",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "33c34b4e-1861-453f-8e7c-a3ee057ba48c",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Detector",
+      "targets": [
+        ["linkText=Detector", "linkText"],
+        ["css=li:nth-child(3) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Detector')]", "xpath:link"],
+        ["xpath=//div[@id='app']/div/header/div/section/div/nav/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/main/detector')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Detector')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d9aa5285-6712-464d-a3c3-8ab17ad4fa9a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b9a35ca3-4f8f-42ef-bf6b-4119c2b11ef0",
+      "comment": "",
+      "command": "type",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "l like the movie"
+    }, {
+      "id": "2230850b-78ec-411e-bbbc-f7ac3e84e055",
+      "comment": "",
+      "command": "click",
+      "target": "css=.detect-button",
+      "targets": [
+        ["css=.detect-button", "css:finder"],
+        ["xpath=//button[@type='primary']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "39bc98d8-f60c-4029-85eb-b18f67326d4d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9a94e7c6-c63f-44b2-9f6a-c31889f9cccb",
+      "comment": "",
+      "command": "type",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "l like this movie"
+    }, {
+      "id": "d4b05ba0-9184-49e8-b7dd-6f0cce6509cf",
+      "comment": "",
+      "command": "click",
+      "target": "css=.detect-button",
+      "targets": [
+        ["css=.detect-button", "css:finder"],
+        ["xpath=//button[@type='primary']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d3278db9-fb9e-43d3-aec0-373e7959fd03",
+      "comment": "",
+      "command": "click",
+      "target": "css=.detector-div",
+      "targets": [
+        ["css=.detector-div", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div", "xpath:idRelative"],
+        ["xpath=//div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "746f9a96-3828-44a2-8f93-a7e98bfeeef5",
+      "comment": "",
+      "command": "type",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "shit movie"
+    }, {
+      "id": "e643abe5-26be-4bd4-b098-7e5cdc14e6ac",
+      "comment": "",
+      "command": "click",
+      "target": "css=.detect-button",
+      "targets": [
+        ["css=.detect-button", "css:finder"],
+        ["xpath=//button[@type='primary']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9a8ab384-6604-4684-be83-ad75de99aaed",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3e64ab43-88f9-4332-8e67-ad7a0707f4bd",
+      "comment": "",
+      "command": "type",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "i like this movie"
+    }, {
+      "id": "3e61c97d-1275-4f06-9914-fc9221c96bff",
+      "comment": "",
+      "command": "click",
+      "target": "css=.detect-button",
+      "targets": [
+        ["css=.detect-button", "css:finder"],
+        ["xpath=//button[@type='primary']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0f9e7254-bbbb-4df5-8919-c515a2e0df80",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d1f3fc5c-c029-4ae0-82a1-f0803115ec43",
+      "comment": "",
+      "command": "type",
+      "target": "css=.ant-input",
+      "targets": [
+        ["css=.ant-input", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "I like this movie"
+    }, {
+      "id": "d36565c3-985a-4b86-9e7e-3b1b1785149f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.detect-button",
+      "targets": [
+        ["css=.detect-button", "css:finder"],
+        ["xpath=//button[@type='primary']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c2ba1ad0-1104-4ded-a068-7eb15a0f3110",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-upload-drag-icon",
+      "targets": [
+        ["css=.ant-upload-drag-icon", "css:finder"],
+        ["xpath=//div[@id='app']/div/main/div/div/div/div/span/div/span/div/p", "xpath:idRelative"],
+        ["xpath=//span/div/p", "xpath:position"]
+      ],
+      "value": ""
+    }]
   }],
   "suites": [{
     "id": "668777d8-7b1d-44a0-92da-21f1611ab2b1",
