@@ -303,8 +303,6 @@ export default {
       // Popular movies
       UserApi.getPopularMovies().then((response) => {
         popularMovieData.value = response.data;
-        // console.log("popularMovieData.results");
-        // console.log(popularMovieData.value.results);
       });
 
       // High score moveis
@@ -315,37 +313,31 @@ export default {
       // IMDB BOT 10 movies
       UserApi.getImdbBotMovies(6).then((response) => {
         imdbBotMovies.value = response.data.data;
-        // console.log("IMDB BOT 10 Movies");
-        // console.log(imdbBotMovies.value);
       })
-      // .catch((error) => {
-      //   console.log("error");
-      //   console.log(error);
-      //   console.log("error");
-      //   showErroeMessage();
-      // });
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
+      });
 
       // Fetch the most comments recommendation movies
       UserApi.getMostCommentsMovies().then((response) => {
         console.log("getMostComments  recommendation movies");
         console.log(response.data);
         mostRecommendationMovies.value = response.data.data;
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
       });
-      // .catch((error) => {
-      //   console.log("error");
-      //   console.log(error);
-      //   console.log("error");
-      //   showErroeMessage();
-      // });
 
       // fetch getRecommandationByTags
       if (currentUser.value !== null) {
         UserApi.getRecommandationByTags(currentUser.value.data.userId).then(
           (response) => {
-            // console.log(
-            //   "recently recommendation movies recentRecommendationMovies"
-            // );
-            // console.log(response.data);
             const randomMovie = response.data.data;
             if (randomMovie.length) {
               recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
@@ -354,21 +346,21 @@ export default {
               );
             }
           }
-        );
-        // .catch((error) => {
-        //   console.log("error");
-        //   console.log(error);
-        //   console.log("error");
-        //   showErroeMessage();
-        // });
+        )
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
       } else {
         recentRecommendationMovies.value = [];
       }
     });
 
-    // const showErroeMessage = () => {
-    //   return message.error("Server is busy, try again later");
-    // };
+    const showErroeMessage = () => {
+      return message.error("Server is busy, try again later");
+    };
   
     //show Result Page
     const showResultPage = () => {

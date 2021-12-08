@@ -3,6 +3,8 @@ import tools from '@/tools'
 import env from '@/env'
 import UserService from '@/services/user.service.js'
 import Authheader from '@/services/auth-header.js'
+import Authmodule from '@/store/auth.module.js'
+import AuthmoduleIndex from '@/store/Index.js'
 
 describe('tools.vue', () => {
   it('tools ', () => {
@@ -109,4 +111,18 @@ describe('Authheader', () => {
     Authheader();
   })
 })
+
+describe('Authmodule index', () => {
+  it('Authmodule ', () => {
+    AuthmoduleIndex;
+  })
+})
+
+
+describe('Authmodule', () => {
+  it('Authmodule ', () => {
+    Authmodule.actions.login;
+  })
+})
+
 

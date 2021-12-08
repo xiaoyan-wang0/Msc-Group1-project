@@ -951,13 +951,13 @@ export default {
             randomMovie.length > 4 ? 5 : randomMovie.length
           );
         }
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
       });
-      // .catch((error) => {
-      //   console.log("error");
-      //   console.log(error);
-      //   console.log("error");
-      //   showErroeMessage();
-      // });
 
       // Fetch setRecommendation
       UserApi.setRecommendation(
@@ -966,13 +966,13 @@ export default {
       ).then((response) => {
         console.log("setRecommandation");
         console.log(response.data);
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+        console.log("error");
+        showErroeMessage();
       });
-      // .catch((error) => {
-      //   console.log("error");
-      //   console.log(error);
-      //   console.log("error");
-      //   showErroeMessage();
-      // });
 
       //Fetch trailer
       UserApi.getMovieTrailer(movieid.value).then((response) => {
@@ -987,8 +987,6 @@ export default {
       //Fetch casts
       UserApi.getMovieCasts(movieid.value).then((response) => {
         casts.value = response.data;
-        // console.log("casts detail");
-        // console.log(casts.value);
         crewList = casts.value.crew;
         addCrewToCast();
         if (response.data.cast.length <= 6) {
@@ -1048,9 +1046,6 @@ export default {
         .then((response) => {
           amdbreview.value = response.data.data;
           amdbAllreview.value = response.data.data;
-          // console.log("amdbreview detail");
-          // console.log(response.data);
-          // console.log(amdbreview.value);
           commentLoading.value = false;
         })
         .catch((error) => {
