@@ -9,19 +9,15 @@ class AuthService {
     return axios({
       method: "post",
       url: API_URL + "login",
-      data: user, 
+      data: user,
       // withCredentials: true,
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(response => {
         // if (response.data.accessToken) {
         console.log("2222222");
+        console.log(response);
         if (response.data.code != -1) {
-          console.log("11111");
-          console.log(response["Set-Cookie"]);
-          console.log(response.cookies);
-          console.log(response.headers);
-          console.log(response);
           localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;
@@ -39,8 +35,8 @@ class AuthService {
       url: API_URL + "reg",
       data: user,
       headers: { "Content-Type": "multipart/form-data" },
-    }, 
-    // { withCredentials: true }
+    },
+      // { withCredentials: true }
     )
       .then(response => {
         // if (response.data.accessToken) {

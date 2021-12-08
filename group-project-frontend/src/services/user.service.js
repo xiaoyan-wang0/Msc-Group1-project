@@ -1,5 +1,4 @@
 import myAxios from './AmdbAxios.js';
-import authHeader from './auth-header';
 import env from "@/env.js";
 
 const API_URL = '/api/';
@@ -294,7 +293,6 @@ class UserService {
   **/
 
   //  Detect user Comment
-
 
 
   /**
