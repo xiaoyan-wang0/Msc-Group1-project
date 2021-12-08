@@ -52,11 +52,6 @@ export default {
       }
     };
 
-    //Select menu event
-    const handleSelect = (key, keyPath) => {
-      console.log(key, keyPath);
-    };
-
     onBeforeMount(() => {});
 
     return {
@@ -65,7 +60,6 @@ export default {
       itemdata,
       lastestMovieData,
       showRouterView,
-      handleSelect,
       SearchMovies,
     };
   },

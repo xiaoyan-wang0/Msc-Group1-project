@@ -113,7 +113,7 @@
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="btn__all">
-                  <a @click="showResultPage()" class="primary-btn"
+                  <a id="ImdbBotMore" @click="showResultPage()" class="primary-btn"
                     >View All <span class="arrow_right"></span
                   ></a>
                 </div>
@@ -273,7 +273,7 @@ export default {
     const recentRecommendationMovies = ref([]);
     const moviePoster = ref("");
     moviePoster.value = env.tmdbpic;
-    const currentUser = computed(() => store.state.auth.user);
+    const currentUser = computed(() => JSON.parse(localStorage.getItem("user")));
     const poster = ref("");
     poster.value = env.tmdbpic;
     fackePic.value = [
@@ -318,12 +318,12 @@ export default {
         // console.log("IMDB BOT 10 Movies");
         // console.log(imdbBotMovies.value);
       })
-      .catch((error) => {
-        console.log("error");
-        console.log(error);
-        console.log("error");
-        showErroeMessage();
-      });
+      // .catch((error) => {
+      //   console.log("error");
+      //   console.log(error);
+      //   console.log("error");
+      //   showErroeMessage();
+      // });
 
       // Fetch the most comments recommendation movies
       UserApi.getMostCommentsMovies().then((response) => {
@@ -366,21 +366,10 @@ export default {
       }
     });
 
-    const showErroeMessage = () => {
-      return message.error("Server is busy, try again later");
-    };
-
-    const findCategary = (genres) => {
-      let categary = [];
-      for (let id of genres) {
-        for (const genrn of JSON.parse(localStorage.getItem("genreList"))) {
-          if (genrn.id == id) {
-            categary.push(genrn.name);
-          }
-        }
-      }
-      return categary;
-    };
+    // const showErroeMessage = () => {
+    //   return message.error("Server is busy, try again later");
+    // };
+  
     //show Result Page
     const showResultPage = () => {
       localStorage.setItem("resultResource", 5);
@@ -412,7 +401,6 @@ export default {
       moviePoster,
       showResultPage,
       showResultPage2,
-      findCategary,
     };
   },
 };

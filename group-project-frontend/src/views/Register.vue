@@ -187,6 +187,8 @@ export default defineComponent({
         form.addEventListener(
           "submit",
           function (event) {
+            console.log(".requires-validation");
+            console.log(form);
             if (!form.checkValidity()) {
               event.preventDefault();
               event.stopPropagation();
