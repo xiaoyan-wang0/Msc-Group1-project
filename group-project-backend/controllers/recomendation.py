@@ -117,6 +117,10 @@ def getRecommandation():
 
         if result:
             for lis in result:
+
+                movie = Final.query.filter_by( movieId = lis[0] ).first()
+                if movie is None:
+                    continue
                 rec = getRecomendation(int(lis[0]), 6)
                 list2.append(rec[0])
                 list2.append(rec[1])
