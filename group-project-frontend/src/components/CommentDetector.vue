@@ -31,9 +31,7 @@
         <p class="ant-upload-drag-icon">
           <inbox-outlined></inbox-outlined>
         </p>
-        <p class="ant-upload-text">
-          Click or drag image to upload
-        </p>
+        <p class="ant-upload-text">Click or drag image to upload</p>
         <p class="ant-upload-hint">
           Support for a image upload. tranfer to text.
         </p>
@@ -119,7 +117,7 @@ export default {
     const submitDetect = () => {
       //  Comment detect
       if (commentValue.value !== "") {
-          UserApi.detectUserComment(commentValue.value)
+        UserApi.detectUserComment(commentValue.value)
           .then((response) => {
             commentStatus.value = response.data.data;
             toxicPercent.value = Number(

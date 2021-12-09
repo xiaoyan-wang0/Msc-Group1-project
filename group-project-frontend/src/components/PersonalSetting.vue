@@ -404,8 +404,7 @@ export default {
           console.log(response);
           if (response.data.code == 200) {
             message.success("Update successfully!");
-            
-              UserApi.getUserInfo(userId.value)
+            UserApi.getUserInfo(userId.value)
               .then((response) => {
                 console.log("setting getUserInfo");
                 console.log(response);

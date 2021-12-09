@@ -52,7 +52,8 @@
       </div>
     </header>
     <main>
-      <router-view :key="$route.fullPath" />
+      <!-- :key="$route.fullPath" -->
+      <router-view  />
       <div>wxy</div>
     </main>
 
@@ -257,13 +258,16 @@ body {
   }
   .ant-drawer-content-wrapper,
   .ant-drawer-content {
-    background-color: rgba(255,255,255,0.2) !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
   }
   .el-affix {
     height: 0 !important;
     width: 0 !important;
     position: relative !important;
     z-index: 99;
+  }
+  .ant-anchor-link-title{
+    font-size: 20px;
   }
 }
 * {
