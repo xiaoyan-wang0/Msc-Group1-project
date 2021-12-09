@@ -107,6 +107,67 @@
               </div>
             </div>
           </div>
+
+          <div class="col-lg-8">
+            <!-- IMDB bot 10 movies  -->
+            <div class="trending__product" id="imdbbot">
+              <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                  <div class="section-title">
+                    <h4>The Worst Movies</h4>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                  <div class="btn__all">
+                    <a
+                      id="ImdbBotMore"
+                      @click="showResultPage()"
+                      class="primary-btn"
+                      >View All <span class="arrow_right"></span
+                    ></a>
+                  </div>
+                </div>
+              </div>
+              <div class="row" v-if="imdbBotMovies.length > 0">
+                <div
+                  class="col-lg-4 col-md-6 col-sm-6"
+                  v-for="item in imdbBotMovies"
+                  :key="item.id"
+                >
+                  <router-link :to="'/movie/' + item.tmdb_Id">
+                    <div class="product__item">
+                      <div
+                        v-bind:style="{
+                          'background-image': 'url(' + item.posters[0] + ')',
+                        }"
+                        class="product__item__pic set-bg testmain"
+                      >
+                        <div class="ep">
+                          {{ Number(item.rating).toFixed(1) }} / 10
+                        </div>
+                        <div class="view">
+                          <i class="fa fa-eye"></i> {{ item.year }}
+                        </div>
+                      </div>
+                      <div class="product__item__text">
+                        <ul>
+                          <li
+                            v-for="genre in item.genres.slice(0, 2)"
+                            :key="genre.id"
+                          >
+                            {{ genre }}
+                          </li>
+                        </ul>
+                        <h5>
+                          <a href="#">{{ item.movie_title }}</a>
+                        </h5>
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -114,11 +175,43 @@
 </template>
 
 <script>
+import { ref, onBeforeMount } from "vue";
+import router from "@/router";
+import UserApi from "../services/user.service";
 export default {
   name: "AboutUs",
   components: {},
   setup() {
-    return {};
+    const imdbBotMovies = ref([]);
+    onBeforeMount(() => {
+      // IMDB BOT 10 movies
+      UserApi.getImdbBotMovies(6)
+        .then((response) => {
+          imdbBotMovies.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+        });
+    });
+
+    const showErroeMessage = () => {
+      return message.error("Server is busy, try again later");
+    };
+
+    //show Result Page
+    const showResultPage = () => {
+      localStorage.setItem("resultResource", 5);
+      router.push({
+        name: "ResultDisplay",
+        params: {
+          isPopularorHighScore: 5,
+        },
+      });
+    };
+    return { imdbBotMovies, showResultPage };
   },
 };
 </script>
@@ -139,10 +232,6 @@ div .t {
 .spad {
   padding-top: 100px;
   padding-bottom: 100px;
-}
-
-.blog-details {
-  padding-top: 70px;
 }
 
 .blog__details__title {
@@ -218,5 +307,33 @@ div .t {
   font-size: 17px;
   line-height: 30px;
   margin-bottom: 0;
+}
+
+@media only screen and (max-width: 480px) {
+  .spad {
+    padding-bottom: 20px;
+  }
+  .blog-details {
+    padding-top: 10px;
+  }
+  .about-us-div {
+    .blog__details__title h2 {
+      line-height: 30px !important;
+    }
+    .blog__details__text p {
+      font-size: 13px;
+      line-height: 17px;
+    }
+    .blog__details__item__text h4 {
+      margin-bottom: 0px;
+    }
+    .blog__details__item__text p {
+      font-size: 13px;
+      line-height: 17px;
+    }
+    .blog__details__item__text img {
+      margin-bottom: 0px;
+    }
+  }
 }
 </style>

@@ -2,9 +2,10 @@
   <section class="product spad maindisplay">
     <div class="affix-div">
       <el-affix :offset="50" target=".maindisplay">
-        <el-button type="primary" @click="isShowDrawer = true"
-          >Offset top 120px</el-button
-        >
+        <!-- <el-button type="primary" @click="isShowDrawer = true"> -->
+        <div class="anchor-div" @click="isShowDrawer = true"></div>
+
+        <!-- </el-button> -->
       </el-affix>
       <a-drawer
         v-model:visible="isShowDrawer"
@@ -13,12 +14,11 @@
         title=""
         placement="right"
       >
-        <a-anchor>
+        <a-anchor :affix="false" @change="onChange">
           <a-anchor-link href="#search-div" title="Search" />
-          <a-anchor-link href="#1" title="carousel" />
+          <a-anchor-link href="#carousel" title="carousel" />
           <a-anchor-link href="#popularMovie" title="Popular Movie" />
           <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
-          <a-anchor-link href="#imdbbot" title="IMDB Bottom Movies" />
           <a-anchor-link
             href="#mainpage-recommendations"
             title="Recommendation movies"
@@ -27,7 +27,7 @@
       </a-drawer>
     </div>
     <div class="feature-card">
-      <div id="1" style="">
+      <div id="carousel" style="">
         <div class="home-carousel-div" style="">
           <div class="home-carousel-left" id="2" style="">
             <div class="main-carousel" v-if="upComingMovieData">
@@ -77,7 +77,7 @@
                 <h4>
                   <span style="margin-left: 5px">Upcoming</span>
                   <a
-                    @click="showResultPage2()"
+                    @click="showResultPage()"
                     class="primary-btn"
                     style="float: right; margin-top: 2px"
                     >View All <span class="arrow_right"></span
@@ -119,78 +119,21 @@
       <div class="row">
         <div class="col-lg-8">
           <!-- Upcoming movies -->
-          <Showpart
-            id="popularMovie"
-            :itemdata="popularMovieData"
-            spacename="Popular Movies"
-            isPopularorHighScore="1"
-          />
+          <div id="popularMovie">
+            <Showpart
+              :itemdata="popularMovieData"
+              spacename="Popular Movies"
+              isPopularorHighScore="1"
+            />
+          </div>
 
           <!-- High score movies -->
-          <Showpart
-            id="hignScoreMovie"
-            :itemdata="hignScoreMovieData"
-            spacename="High Score Movie"
-            isPopularorHighScore="2"
-          />
-
-          <!-- IMDB bot 10 movies  -->
-          <div class="trending__product">
-            <div class="row">
-              <div class="col-lg-8 col-md-8 col-sm-8" id="imdbbot">
-                <div class="section-title">
-                  <h4>IMDB Bottom Movies</h4>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="btn__all">
-                  <a
-                    id="ImdbBotMore"
-                    @click="showResultPage()"
-                    class="primary-btn"
-                    >View All <span class="arrow_right"></span
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="row" v-if="imdbBotMovies !== undefined">
-              <div
-                class="col-lg-4 col-md-6 col-sm-6"
-                v-for="item in imdbBotMovies"
-                :key="item.id"
-              >
-                <router-link :to="'/movie/' + item.tmdb_Id">
-                  <div class="product__item">
-                    <div
-                      v-bind:style="{
-                        'background-image': 'url(' + item.posters[0] + ')',
-                      }"
-                      class="product__item__pic set-bg testmain"
-                    >
-                      <div class="ep">
-                        {{ Number(item.rating).toFixed(1) }} / 10
-                      </div>
-                      <div class="view">
-                        <i class="fa fa-eye"></i> {{ item.year }}
-                      </div>
-                    </div>
-                    <div class="product__item__text">
-                      <ul>
-                        <li
-                          v-for="genre in item.genres.slice(0, 2)"
-                          :key="genre.id"
-                        >
-                          {{ genre }}
-                        </li>
-                      </ul>
-                      <h5>
-                        <a href="#">{{ item.movie_title }}</a>
-                      </h5>
-                    </div>
-                  </div>
-                </router-link>
-              </div>
-            </div>
+          <div id="hignScoreMovie">
+            <Showpart
+              :itemdata="hignScoreMovieData"
+              spacename="High Score Movie"
+              isPopularorHighScore="2"
+            />
           </div>
         </div>
         <div id="mainpage-recommendations" class="col-lg-4 col-md-6 col-sm-8">
@@ -283,7 +226,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed } from "vue";
+import { ref, onBeforeMount, computed, nextTick } from "vue";
 import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
@@ -299,7 +242,6 @@ export default {
   setup() {
     const popularMovieData = ref([]);
     const hignScoreMovieData = ref([]);
-    const imdbBotMovies = ref([]);
     const upComingMovieData = ref([]);
     const fackePic = ref([]);
     const store = useStore();
@@ -347,18 +289,6 @@ export default {
         hignScoreMovieData.value = response.data;
       });
 
-      // IMDB BOT 10 movies
-      UserApi.getImdbBotMovies(6)
-        .then((response) => {
-          imdbBotMovies.value = response.data.data;
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
-          showErroeMessage();
-        });
-
       // Fetch the most comments recommendation movies
       UserApi.getMostCommentsMovies()
         .then((response) => {
@@ -402,27 +332,27 @@ export default {
 
     //show Result Page
     const showResultPage = () => {
-      localStorage.setItem("resultResource", 5);
-      router.push({
-        name: "ResultDisplay",
-        params: {
-          isPopularorHighScore: 5,
-        },
-      });
-    };
-    //show Result Page
-    const showResultPage2 = () => {
       localStorage.setItem("resultResource", 3);
       router.push({
         name: "ResultDisplay",
         params: {},
       });
     };
+    const onChange = (link) => {
+      console.log("Anchor:OnChange", link);
+      isShowDrawer.value = false;
+      // nextTick(() =>
+      //   setTimeout(() => {
+      //     let company = document.querySelector(link);
+      //     document.documentElement.scrollTop = company.offsetTop; //苹果滚动
+      //     document.body.scrollTop = company.offsetTop; //安卓滚动
+      //   }, 300)
+      // );
+    };
 
     return {
       popularMovieData,
       hignScoreMovieData,
-      imdbBotMovies,
       mostRecommendationMovies,
       recentRecommendationMovies,
       upComingMovieData,
@@ -431,7 +361,7 @@ export default {
       isShowDrawer,
       moviePoster,
       showResultPage,
-      showResultPage2,
+      onChange,
     };
   },
 };
@@ -440,6 +370,12 @@ export default {
 <style lang="scss" >
 .affix-div {
   display: none;
+  .anchor-div {
+    height: 50px;
+    width: 50px;
+    background-image: url("../assets/test.gif");
+    background-size: cover;
+  }
 }
 .testmain {
   transition: all 0.4s;
@@ -1045,15 +981,13 @@ export default {
     display: block !important;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 480px) {
   .affix-div {
     position: relative;
-    top: -40px;
-    left: -32px;
+    top: -50px;
+    left: -44px;
     display: block !important;
   }
-}
-@media only screen and (max-width: 480px) {
   .product__item {
     width: 50% !important;
   }
