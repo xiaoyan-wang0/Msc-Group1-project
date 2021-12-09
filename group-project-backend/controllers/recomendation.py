@@ -102,16 +102,17 @@ def getRecommandation():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
 
-    type = str(2)
-    textsql = " 1=1 and userId = '"+str(userId)+"' and type = "+ type 
-    result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
-    if  result:
-        return ops_renderJSON( msg = "get recommendation successfully!",data = result.content)
+    # type = str(2)
+    # textsql = " 1=1 and userId = '"+str(userId)+"' and type = "+ type 
+    # result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
+    # if  result:
+    #     return ops_renderJSON( msg = "get recommendation successfully!",data = result.content)
 
     list2 = []
     if userId !="":
         #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
-        sql = 'SELECT distinct a.movieId FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  limit 5 ;'
+        #sql = 'SELECT distinct a.movieId FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  limit 5 ;'
+        sql = 'SELECT a.movieId,a.id FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  order by a.id desc limit 5;'
         result = db.session.execute(text(sql)).fetchall()
 
         if result:
@@ -127,14 +128,14 @@ def getRecommandation():
 
     
 
-    model_rec = Rec()
-    model_rec.content = list2
-    model_rec.userId = userId
-    model_rec.type = 2
-    db.session.add( model_rec )
-    db.session.commit()
-    db.session.close()
-    db.engine.dispose()
+    # model_rec = Rec()
+    # model_rec.content = list2
+    # model_rec.userId = userId
+    # model_rec.type = 2
+    # db.session.add( model_rec )
+    # db.session.commit()
+    # db.session.close()
+    # db.engine.dispose()
 
     return ops_renderJSON( msg = "get recommandation successfully!",data = list2)
 
