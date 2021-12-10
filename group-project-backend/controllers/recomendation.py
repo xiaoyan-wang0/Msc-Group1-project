@@ -129,7 +129,7 @@ def getRecommandation():
                 list2.append(rec[4])
         db.session.close()
         db.engine.dispose()
-
+        list(set(list2))
     
 
     # model_rec = Rec()
