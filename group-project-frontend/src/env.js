@@ -1,5 +1,5 @@
 export default {
-    slash_string:"/",
+    slash_string: "/",
     omdbapi: "http://www.omdbapi.com/?apikey=",
     omdbapisearch: "&s=",
     omdbkey: "fd925a13",
@@ -16,9 +16,10 @@ export default {
     tmdbvideo: "/videos?",
     tmdbquery: "&query=",
     tmdbgenrelist: "https://api.themoviedb.org/3/genre/movie/list?",
-    
+
     tmdbperson: "https://api.themoviedb.org/3/person/",
     tmdbSearch: "https://api.themoviedb.org/3/search/movie?",
 
-    AMDBAPI: "http://52.56.129.115/"
+    // AMDBAPI: "http://52.56.129.115/"
+    AMDBAPI: "/api"
 }

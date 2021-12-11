@@ -90,12 +90,11 @@ class UserService {
   }
 
   // set Recommendation
-  setRecommendation(movieid, userId) {
+  setRecommendation(movieid, userId, tag) {
     console.log("setRecommendation");
     return myAxios.amdbAxios({
-      url: "rec/setRecommandation?movieId=" +
-        movieid + "&userId=" + userId
-      ,
+      url: "rec/setRecommandation?movieId=" + movieid
+        + "&userId=" + userId + "&tagId=" + tag,
       method: 'get',
     });
   }
