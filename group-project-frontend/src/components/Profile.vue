@@ -378,7 +378,7 @@ export default {
         }
       )
         .then(() => {
-          UserApi.deleteUserCommentList(record.Id)
+          UserApi.deleteUserCommentList(record.id)
             .then((response) => {
               console.log("deleteMovieLikes");
               console.log(response.data);

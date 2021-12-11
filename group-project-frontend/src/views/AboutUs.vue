@@ -24,7 +24,6 @@
               </div>
               <div class="blog__details__item__text">
                 <h4>Comment detector:</h4>
-                <img src="img/blog/details/bd-item-1.jpg" alt="" />
                 <p>
                   For AMDb, when users post their comment on AMDb platform, it
                   will be reminded this comment’s toxic rate and sentiment
@@ -109,13 +108,29 @@
           </div>
 
           <div class="col-lg-8">
+            <div class="blog__details__item__text">
+              <h4>The worst movies</h4>
+              <p>
+                Why we have worst rated movie information’s in our system?
+                <br />
+                In our website we have a part where we are getting worst rated
+                movies from Imdb, there are two reasons why we are doing that.
+                First Reason is people are generally interested in best rated
+                movies, but they are also curious about worst rated movies and
+                most people find that interesting. Another reason to have worst
+                rated movies in our system is, it is a great way to represent
+                capabilities of our toxicity analyses and sentimental analyses
+                since worst rated movies generally include harsh and negative
+                reviews.
+              </p>
+            </div>
             <!-- IMDB bot 10 movies  -->
             <div class="trending__product" id="imdbbot">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
-                  <div class="section-title">
+                  <!-- <div class="section-title">
                     <h4>The Worst Movies</h4>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4">
                   <div class="btn__all">

@@ -7,13 +7,13 @@
         :closable="false"
         :footer="null"
         :destroyOnClose="true"
-        :width="700"
+        :width="trailerWidth"
         @cancel="handleCancel"
       >
         <YoutubeVue3
           ref="youtube"
           :videoid="video_id"
-          :width="700"
+          :width="trailerWidth"
           :autoplay="0"
           :height="400"
         />
@@ -182,7 +182,7 @@
                           type="primary"
                           @click="isShowCastDetail = false"
                         >
-                          Cancle
+                          Close
                         </el-button>
                       </span>
                     </template>
@@ -858,7 +858,7 @@
 </template> 
 
 <script>
-import { ref, inject, onBeforeMount, computed, h, onMounted } from "vue";
+import { ref, onBeforeMount, computed, h, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import { useStore } from "vuex";
@@ -922,6 +922,7 @@ export default {
     const video_id = ref("");
     const emptyprofile = ref("");
     const isShowTrailer = ref(false);
+    const trailerWidth = ref(700);
     const commentLoading = ref(false);
     const isShowCastDetail = ref(false);
     const AMDBAPI = ref(env.AMDBAPI);
@@ -934,9 +935,9 @@ export default {
     const comments = ref([]);
     const submitting = ref(false);
     const commentsValue = ref("");
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       // fetch movie detail
-      UserApi.getMovieDetail(movieid.value).then((response) => {
+      await UserApi.getMovieDetail(movieid.value).then((response) => {
         movie.value = response.data;
         start.value = movie.value.vote_average / 2;
         imdbmovieid.value = response.data.imdb_id;
@@ -963,7 +964,8 @@ export default {
       // Fetch setRecommendation
       UserApi.setRecommendation(
         movieid.value,
-        currentUser.value === null ? "" : currentUser.value.data.userId
+        currentUser.value === null ? "" : currentUser.value.data.userId,
+        movie.value.genres
       )
         .then((response) => {
           console.log("setRecommandation");
@@ -1039,6 +1041,15 @@ export default {
           });
         });
       })(jQuery);
+
+      window.onresize = () => {
+        let w = window.innerWidth;
+        if (w > 700) {
+          trailerWidth.value = 700;
+        } else {
+          trailerWidth.value = w - 10;
+        }
+      };
     });
 
     const getAMDBComments = () => {
@@ -1543,6 +1554,7 @@ export default {
       twitterreview,
       castDetail,
       isShowCastDetail,
+      trailerWidth,
       ellipsis: ref(true),
       judgeBadWord,
       judgeBadWordOther,

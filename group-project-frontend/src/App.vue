@@ -53,7 +53,7 @@
     </header>
     <main>
       <!-- :key="$route.fullPath" -->
-      <router-view  />
+      <router-view  :key="$route.fullPath"/>
       <div>wxy</div>
     </main>
 
@@ -178,7 +178,7 @@ export default {
 <style lang="scss">
 body {
   background-color: #101018 !important;
-  min-width: 400px;
+  min-width: 375px;
   .ant-modal-body {
     padding: 0 !important;
     background-color: black;

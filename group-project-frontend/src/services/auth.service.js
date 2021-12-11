@@ -2,7 +2,7 @@ import axios from 'axios';
 import env from "@/env.js";
 
 // const API_URL = '/api/member/';
-const API_URL = env.AMDBAPI + 'member/';
+const API_URL = env.AMDBAPI + '/member/';
 
 class AuthService {
   login(user) {
@@ -27,6 +27,14 @@ class AuthService {
 
   logout() {
     localStorage.removeItem('user');
+    return axios({
+      method: "get",
+      url: API_URL + "logout",
+    })
+      .then(response => {
+        // if (response.data.accessToken) {
+        return response.data;
+      });
   }
 
   register(user) {
