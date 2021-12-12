@@ -173,7 +173,7 @@ export default {
           itemtotal.value = response.data.total_results;
         });
       } else if (resource == 2) {
-        resultName.value = "High score moveis Result";
+        resultName.value = "Top Rated Movies Result";
         // High score moveis
         UserApi.getHighScoreMovies().then((response) => {
           itemdata.value = response.data.results;

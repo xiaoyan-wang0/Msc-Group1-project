@@ -248,6 +248,15 @@ class UserService {
     });
   }
 
+    // Get history list
+    getHistoryList(userId) {
+      console.log("getHistoryList");
+      return myAxios.amdbAxios({
+        url: "rec/showHistory?userId=" + userId,
+        method: 'get',
+      });
+    }
+
   // Get like list
   getLikeList(userId) {
     console.log("getLikeList");
