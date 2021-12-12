@@ -4,7 +4,9 @@
       <el-affix :offset="50" target=".maindisplay">
         <!-- <el-button type="primary" @click="isShowDrawer = true"> -->
         <div class="anchor-div" @click="isShowDrawer = true"></div>
-
+        <div class="anchor-div-text" @click="isShowDrawer = true">
+          Navigate to..
+        </div>
         <!-- </el-button> -->
       </el-affix>
       <a-drawer
@@ -13,11 +15,11 @@
         style="color: red"
         title=""
         placement="right"
-        >
-        <h5>Go section you like</h5>
-        <a-anchor  @change="onChange">
-          <a-anchor-link href="#search-div" title="Search" />
-          <a-anchor-link href="#carousel" title="Carousel" />
+      >
+        <h5>Gurde to your favorite section</h5>
+        <a-anchor @change="onChange">
+          <!-- <a-anchor-link href="#search-div" title="Search" /> -->
+          <!-- <a-anchor-link href="#carousel" title="Carousel" /> -->
           <a-anchor-link href="#popularMovie" title="Popular Movie" />
           <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
           <a-anchor-link
@@ -76,7 +78,7 @@
             <div class="home-carousel-right-title" style="">
               <div class="section-title">
                 <h4>
-                  <span style="margin-left: 5px">Upcoming</span>
+                  <span style="margin-left: 5px">Upcoming Movies</span>
                   <a
                     @click="showResultPage()"
                     class="primary-btn"
@@ -132,7 +134,7 @@
           <div id="hignScoreMovie">
             <Showpart
               :itemdata="hignScoreMovieData"
-              spacename="High Score Movie"
+              spacename="Top Rated Movies"
               isPopularorHighScore="2"
             />
           </div>
@@ -141,7 +143,7 @@
           <div class="product__sidebar">
             <div class="product__sidebar__comment">
               <div class="section-title">
-                <h5>The Most Comments movies</h5>
+                <h5>AMDb Popular Movies</h5>
               </div>
               <a-empty v-if="mostRecommendationMovies.length < 1">
                 <template #description>
@@ -227,7 +229,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed, nextTick } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
@@ -376,6 +378,12 @@ export default {
     width: 50px;
     background-image: url("../assets/arrow.gif");
     background-size: cover;
+  }
+  .anchor-div-text {
+    padding-left: 10px;
+    color: #fff;
+    width: 50px;
+    font-size: 0.5px;
   }
 }
 .testmain {
@@ -989,14 +997,21 @@ export default {
     display: block !important;
   }
   .product__item {
-    width: 50% !important;
+    width: 60% !important;
   }
   .product__item__pic {
-    height: 160px !important;
+    height: 220px !important;
   }
   .product__item__text h5 a {
     line-height: 17px !important;
     font-size: 15px !important;
+  }
+  .feature-card {
+    margin-bottom: 0px !important;
+  }
+  .movie-content {
+    text-align: center;
+    text-align: -webkit-center;
   }
 }
 </style>

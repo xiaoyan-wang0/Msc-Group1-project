@@ -145,7 +145,7 @@
               </div>
               <div class="row" v-if="imdbBotMovies.length > 0">
                 <div
-                  class="col-lg-4 col-md-6 col-sm-6"
+                  class="col-lg-4 col-md-6 col-sm-6 movie-content"
                   v-for="item in imdbBotMovies"
                   :key="item.id"
                 >

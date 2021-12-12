@@ -305,7 +305,7 @@ body {
       float: left;
       .span1 {
         padding-top: 5555px;
-        margin: 0 0 0 50px;
+        margin: 0 0 0 20px;
         color: #fff;
         vertical-align: middle;
         font-size: 30px;
