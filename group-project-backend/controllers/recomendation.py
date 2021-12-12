@@ -98,6 +98,25 @@ def setRecommandation():
             db.engine.dispose()
     return ops_renderJSON( msg = "set recommandation successfully!")
 
+@rec_page.route("/showHistory")
+def showHistory():
+    
+    req = request.values
+    userId = req['userId'] if "userId" in req else ""
+
+    if userId !="":
+        sql = 'SELECT a.movieId,a.id FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  order by a.id desc limit 5;'
+        result = db.session.execute(text(sql)).fetchall()
+
+        movieList = []
+        for lis in result:
+            movieInfoDictionary = getTmdbInfo(str(lis[0]), lis[0])
+            if movieInfoDictionary:
+                movieList.append(movieInfoDictionary)
+
+
+    return ops_renderJSON( msg = "show history successfully!",data = movieList)
+
 @rec_page.route("/getRecommandation")
 def getRecommandation():
 
