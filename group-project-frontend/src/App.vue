@@ -1,6 +1,13 @@
 <template>
   <div>
-    <header>
+    <header
+      v-if="
+        $route.fullPath !== '/admin/user' &&
+        $route.fullPath !== '/admin/comments' &&
+        $route.fullPath !== '/admin/reports' &&
+        $route.fullPath !== '/adminLogin'
+      "
+    >
       <div class="navbar-div">
         <section class="navigation">
           <div class="nav-container">
@@ -53,12 +60,19 @@
     </header>
     <main>
       <!-- :key="$route.fullPath" -->
-      <router-view  :key="$route.fullPath"/>
-      <div>wxy</div>
+      <router-view :key="$route.path" />
     </main>
 
     <!-- Footer Section Begin -->
-    <footer class="footer">
+    <footer
+      class="footer"
+      v-if="
+        $route.fullPath !== '/admin/user' &&
+        $route.fullPath !== '/admin/comments' &&
+        $route.fullPath !== '/admin/reports' &&
+        $route.fullPath !== '/adminLogin'
+      "
+    >
       <div class="page-up">
         <a href="#" id="scrollToTopButton"
           ><span class="arrow_carrot-up fa fa-angle-up"></span
@@ -266,8 +280,8 @@ body {
     position: relative !important;
     z-index: 99;
   }
-  .ant-anchor-link-title{
-    font-size: 20px;
+  .ant-anchor-link-title {
+    font-size: 18px;
   }
 }
 * {

@@ -13,15 +13,16 @@
         style="color: red"
         title=""
         placement="right"
-      >
-        <a-anchor :affix="false" @change="onChange">
+        >
+        <h5>Go section you like</h5>
+        <a-anchor  @change="onChange">
           <a-anchor-link href="#search-div" title="Search" />
-          <a-anchor-link href="#carousel" title="carousel" />
+          <a-anchor-link href="#carousel" title="Carousel" />
           <a-anchor-link href="#popularMovie" title="Popular Movie" />
           <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
           <a-anchor-link
             href="#mainpage-recommendations"
-            title="Recommendation movies"
+            title="Recommendations"
           />
         </a-anchor>
       </a-drawer>
@@ -373,7 +374,7 @@ export default {
   .anchor-div {
     height: 50px;
     width: 50px;
-    background-image: url("../assets/test.gif");
+    background-image: url("../assets/arrow.gif");
     background-size: cover;
   }
 }
@@ -591,7 +592,6 @@ export default {
   position: relative;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-image: url("../assets/trend-1.jpg");
 }
 
 .product__sidebar__view__item .ep {

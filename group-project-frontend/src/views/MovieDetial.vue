@@ -965,7 +965,7 @@ export default {
       UserApi.setRecommendation(
         movieid.value,
         currentUser.value === null ? "" : currentUser.value.data.userId,
-        movie.value.genres
+        movie.value.genres[0].id
       )
         .then((response) => {
           console.log("setRecommandation");
