@@ -125,7 +125,7 @@ def getRecommandation():
     userId = req['userId'] if "userId" in req else ""
 
     if userId !="":
-        sql = 'SELECT a.tagId,a.id FROM(select tagId, MAX(id) as id from recommandation WHERE userId = ' + userId +' group by movieId) a  order by a.id desc limit 5;'
+        sql = 'SELECT tagId,id,movieId FROM recommandation WHERE id IN (select MAX(id) AS id from recommandation WHERE userId = ' + userId +'  group by movieId) order by id desc limit 5;'
         result = db.session.execute(text(sql)).fetchall()
 
         num_to_label = {
