@@ -133,7 +133,8 @@ def getRecommandation():
         movie = []
 
         if result:
-            for lis in result:                
+            for lis in result:
+                print(lis[0])                
                 tagName = num_to_label[lis[0]]
                 movies = getTagMovies(tagName, 8)
                 taglist = movies.to_dict('list')['id']
