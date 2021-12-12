@@ -8,6 +8,8 @@ import ElementPlus from 'element-plus'
 import VueAxios from 'vue-axios'
 import 'element-plus/dist/index.css'
 import 'ant-design-vue/dist/antd.css';;
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js/auto'
 
 //fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -35,4 +37,5 @@ app.config.productionTip = false;
 app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios);  // provide 'axios'
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(Chartkick.use(Chart));
 app.use(store).use(router).use(Antd).use(ElementPlus).mount('#app')

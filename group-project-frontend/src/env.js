@@ -21,5 +21,5 @@ export default {
     tmdbSearch: "https://api.themoviedb.org/3/search/movie?",
 
     // AMDBAPI: "http://52.56.129.115/"
-    AMDBAPI: "/api"
+    AMDBAPI: "/api/"
 }
