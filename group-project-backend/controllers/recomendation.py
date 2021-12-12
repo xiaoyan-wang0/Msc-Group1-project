@@ -83,6 +83,7 @@ def setRecommandation():
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
     userId = req['userId'] if "userId" in req else ""
+    tagId = req['tagId'] if "tagId" in req else ""
 
     if userId != "":
         user = User.query.filter_by( userId = userId ).first()
@@ -90,6 +91,7 @@ def setRecommandation():
             model_rec = Recommandation()
             model_rec.movieId = movieId
             model_rec.userId = userId
+            model_rec.tagId = tagId
             db.session.add( model_rec )
             db.session.commit()
             db.session.close()
@@ -102,46 +104,50 @@ def getRecommandation():
     req = request.values
     userId = req['userId'] if "userId" in req else ""
 
-    # type = str(2)
-    # textsql = " 1=1 and userId = '"+str(userId)+"' and type = "+ type 
-    # result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
-    # if  result:
-    #     return ops_renderJSON( msg = "get recommendation successfully!",data = result.content)
-
-    list2 = []
     if userId !="":
-        #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
-        #sql = 'SELECT distinct a.movieId FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  limit 5 ;'
-        sql = 'SELECT a.movieId,a.id FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  order by a.id desc limit 5;'
+        sql = 'SELECT a.tagId,a.id FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  order by a.id desc limit 5;'
         result = db.session.execute(text(sql)).fetchall()
 
+        num_to_label = {
+        '28':'Action',
+        '12':'Adventure',
+        '16':'Animation',
+        '35':'Comedy',
+        '80':'Crime',
+        '99':'Documentary',
+        '18':'Drama',
+        '10751':'Family',
+        '14':'Fantasy',
+        '36':'History',
+        '27':'Horror',
+        '10402':'Music',
+        '9648':'Mystery',
+        '10749':'Romance',
+        '878':'Science Fiction',
+        '10770':'TV Movie',
+        '53':'Thriller',
+        '10752':'War',
+        '37':'Western'
+        }
+
+        movie = []
+
         if result:
-            for lis in result:
+            for lis in result:                
+                tagName = num_to_label[lis[0]]
+                movies = getTagMovies(tagName, 8)
+                taglist = movies.to_dict('list')['id']
+                movie.extend(taglist)
+        movie=list(set(movie))
 
-                movie = Final.query.filter_by( movieId = lis[0] ).first()
-                if movie is None:
-                    continue
-                rec = getRecomendation(int(lis[0]), 6)
-                list2.append(rec[0])
-                list2.append(rec[1])
-                list2.append(rec[2])
-                list2.append(rec[3])
-                list2.append(rec[4])
-        db.session.close()
-        db.engine.dispose()
-        #list(set(list2))
-    
+        movieList = []
+        for lis in movie:
+            movieInfoDictionary = getTmdbInfo(str(lis), lis)
+            if movieInfoDictionary:
+                movieList.append(movieInfoDictionary)
 
-    # model_rec = Rec()
-    # model_rec.content = list2
-    # model_rec.userId = userId
-    # model_rec.type = 2
-    # db.session.add( model_rec )
-    # db.session.commit()
-    # db.session.close()
-    # db.engine.dispose()
 
-    return ops_renderJSON( msg = "get recommandation successfully!",data = list2)
+    return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
 
 @rec_page.route("/getRecommandationByTags")
 def getRecommandationByTags():
@@ -201,7 +207,8 @@ def getRecommandationByTags():
     movieList = []
     for lis in movie:
         movieInfoDictionary = getTmdbInfo(str(lis), lis)
-        movieList.append(movieInfoDictionary)
+        if movieInfoDictionary:
+            movieList.append(movieInfoDictionary)
 
 
 
@@ -267,7 +274,8 @@ def getRecomendation(movieId, number):
         movieId = int(theId)
         # I am using a Python Library for the TMDB API which is very convinient and easy to use.
         movieInfoDictionary = getTmdbInfo(theId, movieId)
-        list.append(movieInfoDictionary)
+        if movieInfoDictionary:
+            list.append(movieInfoDictionary)
     return list
 
 def getTmdbInfo(theId, movieId):
@@ -284,42 +292,46 @@ def getTmdbInfo(theId, movieId):
         'https://api.themoviedb.org/3/movie/' + theId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1',
         'https://api.themoviedb.org/3/movie/' + theId + '/credits?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1'
     ]
+    try:
+        counter = 0
+        with FuturesSession() as session:
+            futures = [session.get(url) for url in urls]
+            for future in futures:
+                if counter == 0:
+                    genres = jsonpath(future.result().json(),'$..genres')
+                # elif counter == 1:
+                #     cast = jsonpath(future.result().json(),'$..cast')
+                counter = counter + 1
 
-    counter = 0
-    with FuturesSession() as session:
-        futures = [session.get(url) for url in urls]
-        for future in futures:
-            if counter == 0:
-                genres = jsonpath(future.result().json(),'$..genres')
-            # elif counter == 1:
-            #     cast = jsonpath(future.result().json(),'$..cast')
-            counter = counter + 1
+        m = movie.details(movieId)
+        imdb_id = m.imdb_id
+        id = m.id
+        backdrop_path = m.backdrop_path
+        title = m.title
+        overview = m.overview
+        poster = m.poster_path
+        vote_average = m.vote_average
+        year = m.release_date
+        runtime = m.runtime
+        popularity = m.popularity
 
-    m = movie.details(movieId)
-    imdb_id = m.imdb_id
-    id = m.id
-    backdrop_path = m.backdrop_path
-    title = m.title
-    overview = m.overview
-    poster = m.poster_path
-    vote_average = m.vote_average
-    year = m.release_date
-    runtime = m.runtime
-    popularity = m.popularity
+        movieInfoDictionary = {
+            "id": id,
+            "backdrop_path": backdrop_path,
+            "title": title,
+            "genres": genres,
+            "overview": overview,
+            "imdb_Id": imdb_id,
+            "release_date": year,
+            "poster": poster,
+            "vote_average": vote_average,
+            "runtime": runtime,
+            "popularity": popularity,
+        }
+    
+    except Exception:
+        return
 
-    movieInfoDictionary = {
-        "id": id,
-        "backdrop_path": backdrop_path,
-        "title": title,
-        "genres": genres,
-        "overview": overview,
-        "imdb_Id": imdb_id,
-        "release_date": year,
-        "poster": poster,
-        "vote_average": vote_average,
-        "runtime": runtime,
-        "popularity": popularity,
-    }
     return movieInfoDictionary
 
 # def get_recomendation(indeces, id, consine_sim, train_movies_1):

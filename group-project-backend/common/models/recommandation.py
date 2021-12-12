@@ -13,6 +13,7 @@ class Recommandation(db.Model):
     movieId = db.Column(db.String(16))
     userId = db.Column(db.Integer)
     createTime = db.Column(db.DateTime, server_default=db.FetchedValue())
+    tagId = db.Column(db.Integer)
 
 
     def serialize(self):
