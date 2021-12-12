@@ -105,7 +105,7 @@ def showHistory():
     userId = req['userId'] if "userId" in req else ""
 
     if userId !="":
-        sql = 'SELECT a.movieId,a.id FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  order by a.id desc limit 5;'
+        sql = 'SELECT a.movieId,a.id FROM(select movieId, MAX(id) as id from recommandation WHERE userId = ' + userId +' group by movieId) a  order by a.id desc limit 5;'
         result = db.session.execute(text(sql)).fetchall()
 
         movieList = []
@@ -113,6 +113,7 @@ def showHistory():
             movieInfoDictionary = getTmdbInfo(str(lis[0]), lis[0])
             if movieInfoDictionary:
                 movieList.append(movieInfoDictionary)
+                
 
 
     return ops_renderJSON( msg = "show history successfully!",data = movieList)
@@ -124,7 +125,7 @@ def getRecommandation():
     userId = req['userId'] if "userId" in req else ""
 
     if userId !="":
-        sql = 'SELECT a.tagId,a.id FROM(select * from recommandation WHERE userId = ' +userId+ ' order by id desc) a  order by a.id desc limit 5;'
+        sql = 'SELECT a.tagId,a.id FROM(select tagId, MAX(id) as id from recommandation WHERE userId = ' + userId +' group by movieId) a  order by a.id desc limit 5;'
         result = db.session.execute(text(sql)).fetchall()
 
         num_to_label = {
