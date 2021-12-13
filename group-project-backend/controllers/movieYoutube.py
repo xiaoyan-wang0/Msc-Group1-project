@@ -88,9 +88,9 @@ def review():
         db.session.commit()
         db.session.close()
         db.engine.dispose()
-        
+
     except Exception:
-        return ops_renderJSON(msg = "Show Successfull!")
+        return ops_renderJSON(msg = "Show Successfull!", data = [])
 
 
     return ops_renderJSON(msg = "Show Successfull!", data = list)

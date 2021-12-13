@@ -74,7 +74,7 @@ def review():
         db.engine.dispose()
     
     except Exception:
-        return ops_renderJSON(msg = "Show Successfull!")
+        return ops_renderJSON(msg = "Show Successfull!", data = [])
     
 
     return ops_renderJSON(msg = "Show Comments Successfull!", data = dic2)
