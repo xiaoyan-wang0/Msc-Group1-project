@@ -439,8 +439,12 @@
                               <a-avatar
                                 :src="
                                   item.author_details.avatar_path
-                                    ? moviePoster +
-                                      item.author_details.avatar_path
+                                    ? linkCheck(item.author_details.avatar_path)
+                                      ? checkLink(
+                                          item.author_details.avatar_path
+                                        )
+                                      : moviePoster +
+                                        item.author_details.avatar_path
                                     : emptyprofile
                                 "
                               />
@@ -1533,6 +1537,14 @@ export default {
       return ToolMethod.judgeBadWordOther(str);
     };
 
+    const linkCheck = (item) => {
+      return item.includes("http");
+    };
+
+    const checkLink = (item) => {
+      return item.slice(1, item.length);
+    };
+
     return {
       movie,
       start,
@@ -1570,6 +1582,8 @@ export default {
       trailerWidth,
       ellipsis: ref(true),
       judgeBadWord,
+      linkCheck,
+      checkLink,
       judgeBadWordOther,
       amdbReport,
       handleCancel,
