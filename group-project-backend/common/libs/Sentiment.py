@@ -30,8 +30,6 @@ def get_result():
 
 def sentiment(title):
 
-    with open('tokenizer_4.pickle', 'rb') as f:
-         tokenizer = pickle.load(f)
 
 
     input_data_json = json.dumps({"signature_name": "serving_default",
@@ -41,10 +39,16 @@ def sentiment(title):
     
     #response = requests.post('http://0.0.0.0:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
     #response = requests.post('http://localhost:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
-    response = requests.post('http://172.26.14.197:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
+    response = requests.post('http://172.26.9.231:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
     text1 =  title
 
-    label =  json.loads(response.text)['predictions'][0]
+    label =  json.loads(response.text)['predictions']
+
+    label = np.float64(np.argmax(label))
+
+    # 'positive':1, 
+    # 'negative':0,
+    # 'neutral':2, 
 
     result = {'title' : text1, 'tag' :  label}
     

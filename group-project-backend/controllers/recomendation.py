@@ -115,7 +115,8 @@ def showHistory():
                 movieList.append(movieInfoDictionary)
                 
 
-
+    db.session.close()
+    db.engine.dispose()
     return ops_renderJSON( msg = "show history successfully!",data = movieList)
 
 @rec_page.route("/getRecommandation")
@@ -166,7 +167,8 @@ def getRecommandation():
             if movieInfoDictionary:
                 movieList.append(movieInfoDictionary)
 
-
+    db.session.close()
+    db.engine.dispose()
     return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
 
 @rec_page.route("/getRecommandationByTags")
