@@ -983,7 +983,7 @@ export default {
 }
 
 .follow-btn {
-  font-size: 0.5px;
+  font-size: 5px;
   color: #ffffff;
   background: #e53637;
   display: inline-block;
@@ -1017,7 +1017,7 @@ export default {
   .affix-div {
     position: relative;
     top: -50px;
-    left: -44px;
+    left: -40px;
     display: block !important;
   }
   .product__item {

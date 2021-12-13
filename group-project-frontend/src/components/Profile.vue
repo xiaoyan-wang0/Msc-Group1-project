@@ -67,6 +67,7 @@
                     :columns="historyColumns"
                     :data-source="historyListData"
                     :scroll="{ x: 700 }"
+                    :customRow="onSelectFunction"
                   >
                     <template #name="{ text }">
                       <a>{{ text }}</a>
@@ -504,6 +505,24 @@ export default {
       });
     };
 
+    // const onSelectFunction = (record, selected, selectedRows, nativeEvent) => {
+    //   console.log("onSelectFunction");
+    //   console.log(record);
+    //   console.log(selected);
+    //   console.log(selectedRows);
+    //   console.log(nativeEvent);
+    //   onChange: (selectedRowKeys, selectedRows) => {
+    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    //   },
+    // };
+    const onSelectFunction = (record) => {
+      return {
+        onClick: (event) => {
+          console.log("click row", record);
+        },
+      };
+    };
+
     const showErroeMessage = () => {
       return message.error("Server is busy, try again later");
     };
@@ -529,6 +548,7 @@ export default {
       deleteLike,
       deleteComment,
       showSettingPage,
+      onSelectFunction,
     };
   },
 };

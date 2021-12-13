@@ -6,27 +6,43 @@
           <div class="col-lg-8">
             <div class="blog__details__title">
               <h6>Last update date <span>- Nov 25th, 2021</span></h6>
-              <h2>For Authentic Movie Database(AMDB) Beginners:</h2>
-              <h6>Customised Multi-Sourced Movie Guide</h6>
+              <h2>AMDB for Beginners:</h2>
+              <h6>CUSTOMISED MULTI-SOURCED MOVIE GUIDE</h6>
             </div>
           </div>
           <div class="col-lg-8">
             <div class="blog__details__content">
               <div class="blog__details__text">
                 <p>
-                  AMDb (Authentic Movie Database) is a movie review platform
-                  with a movies recommender system and an authentic comment
-                  detector which could filter toxic comments and analyze the
-                  sentiment of movie reviews. All the users can view or share
-                  some related movie comments in a fair and authentic
-                  environment by using AMDb.
+                  AMDb (Authentic Movie Database) is a customised multi-sourced
+                  movie evaluation system. Thanks to our system rather than
+                  visiting all the different sources out there to have an
+                  understanding about a movie, people can simply visit our
+                  website to have an opinion about a movie since we are
+                  gathering movie reviews and people's opinions about a movie
+                  from different sources like imdb, tmdb, Twitter and YouTube.
+                  But our system doesn't stop there, we have created a toxicity
+                  detector and sentimental detector thanks to these technologies
+                  users can sort reviews according to how much toxicity they
+                  include, and they can customize in a way that they don't see
+                  any toxic comments plus thanks to our sentimental detector we
+                  can gather information about a movie from Twitter and YouTube
+                  and use our sentimental analyses to detect if comments about a
+                  movie is positive, negative or neutral. But that's not all for
+                  our system we are also offering customized movie
+                  recommendations according to our users' favourite genres and
+                  liked movies. Another benefit of our system is; since we have
+                  the toxicity detector when a user comments within our system
+                  unlike other systems, we don't need an actual human to check
+                  if the comment includes toxicity or not, so it is more
+                  convenient and less costly.
                 </p>
               </div>
               <div class="blog__details__item__text">
                 <h4>Comment detector:</h4>
                 <p>
                   For AMDb, when users post their comment on AMDb platform, it
-                  will be reminded this comment’s toxic rate and sentiment
+                  will be reminded this comment's toxic rate and sentiment
                   result to users. Users can filter comments based on their
                   tolerance for the toxic level or emotional bias. In this way,
                   a relatively non-toxic and fair communication environment can
@@ -111,7 +127,7 @@
             <div class="blog__details__item__text">
               <h4>The worst movies</h4>
               <p>
-                Why we have worst rated movie information’s in our system?
+                Why we have worst rated movie information's in our system?
                 <br />
                 In our website we have a part where we are getting worst rated
                 movies from Imdb, there are two reasons why we are doing that.
