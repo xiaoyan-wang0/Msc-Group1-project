@@ -38,55 +38,59 @@ def review():
     if  result:
         return ops_renderJSON(msg = "Show Successfull!", data = result.content)
 
+    try:
+        #There are daily limits for the keys
+        key1 = 'AIzaSyCL_TmpbiATD9nisVU-TAbXCOZ6n1mu__E'
+        key2 = 'AIzaSyC6cz_fRdiwLhdlPBpkhyr0MXzF0PXMA4o'
 
-    #There are daily limits for the keys
-    key1 = 'AIzaSyCL_TmpbiATD9nisVU-TAbXCOZ6n1mu__E'
-    key2 = 'AIzaSyC6cz_fRdiwLhdlPBpkhyr0MXzF0PXMA4o'
+        response = requests.get('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=' + str(movieName) + ' trailer' + '&type=video&key=' + key2)
+        trailerId = jsonpath(response.json(),'$..videoId')
 
-    response = requests.get('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=' + str(movieName) + ' trailer' + '&type=video&key=' + key2)
-    trailerId = jsonpath(response.json(),'$..videoId')
+        print(trailerId)
 
-    print(trailerId)
+        trailerIdToString = str(trailerId)[2:13]
 
-    trailerIdToString = str(trailerId)[2:13]
+        response2 = requests.get('https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=' + trailerIdToString + '&key=' + key2)
+        reviews = jsonpath(response2.json(),'$..textDisplay')
+        names = jsonpath(response2.json(),'$..authorDisplayName')
+        profileImages = jsonpath(response2.json(),'$..authorProfileImageUrl')
+        times = jsonpath(response2.json(),'$..publishedAt')
+        
 
-    response2 = requests.get('https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=' + trailerIdToString + '&key=' + key2)
-    reviews = jsonpath(response2.json(),'$..textDisplay')
-    names = jsonpath(response2.json(),'$..authorDisplayName')
-    profileImages = jsonpath(response2.json(),'$..authorProfileImageUrl')
-    times = jsonpath(response2.json(),'$..publishedAt')
-    
+        list = []
 
-    list = []
+        #item_dict = json.loads(names)
 
-    #item_dict = json.loads(names)
+        #print(len(item_dict['authorDisplayName']))
+        #aList = json.loads(names)
 
-    #print(len(item_dict['authorDisplayName']))
-    #aList = json.loads(names)
+        #return response2.json()
+        #for i in range(0, iter(names)):
+        for i in range(0, len(names)):
+            content = [reviews[i]]
+            result = detector(content)
+            senti = sentiment(content)
+            youtubeInfoDictionary = {
+            "username": names[i],
+            "review": reviews[i],
+            "toxic": result['tag'],
+            "sentiment": senti['tag'],
+            "profile_picture": profileImages[i],
+            "time": times[i]
+            }
+            list.append(youtubeInfoDictionary)
 
-    #return response2.json()
-    #for i in range(0, iter(names)):
-    for i in range(0, len(names)):
-        content = [reviews[i]]
-        result = detector(content)
-        senti = sentiment(content)
-        youtubeInfoDictionary = {
-        "username": names[i],
-        "review": reviews[i],
-        "toxic": result['tag'],
-        "sentiment": senti['tag'],
-        "profile_picture": profileImages[i],
-        "time": times[i]
-        }
-        list.append(youtubeInfoDictionary)
+        model_reviews = Review()
+        model_reviews.content = list
+        model_reviews.movieId = movieId
+        model_reviews.type = 3
+        db.session.add( model_reviews )
+        db.session.commit()
+        db.session.close()
+        db.engine.dispose()
+        
+    except Exception:
+        return ops_renderJSON(msg = "Show Successfull!")
 
-    model_reviews = Review()
-    model_reviews.content = list
-    model_reviews.movieId = movieId
-    model_reviews.type = 3
-    db.session.add( model_reviews )
-    db.session.commit()
-    db.session.close()
-    db.engine.dispose()
 
     return ops_renderJSON(msg = "Show Successfull!", data = list)
