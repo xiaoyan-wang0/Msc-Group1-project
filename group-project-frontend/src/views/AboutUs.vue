@@ -77,7 +77,7 @@
                 </div>
               </div>
               <div class="blog__details__item__text">
-                <h4>sentiment Level Icons and Explanation</h4>
+                <h4>Sentiment Level Icons and Explanation</h4>
                 <div class="M" style="">
                   <div class="t">
                     <img

@@ -36,7 +36,7 @@
             <el-table-column label="User ID" prop="userId" />
             <el-table-column label="Date" prop="createTime" sortable />
             <el-table-column label="Content" prop="comment"  width="300px"/>
-            <el-table-column label="MovieId" prop="movieId" />
+            <el-table-column label="MovieId" prop="movieId" width="110px"/>
             <el-table-column label="Toxic Rate" prop="toxic" sortable />
             <el-table-column
               label="Sentiment Rate"

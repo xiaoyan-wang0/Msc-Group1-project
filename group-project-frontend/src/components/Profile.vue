@@ -314,6 +314,7 @@ export default {
         dataIndex: "comment",
         key: "comment",
         minWidth: 100,
+        ellipsis: true,
       },
       {
         title: "Toxic rate",
@@ -553,36 +554,6 @@ export default {
   color: #b7b7b7;
   font-size: 18px;
   line-height: 30px;
-}
-
-.amdb__details__pic {
-  height: 440px;
-  border-radius: 5px;
-  position: relative;
-}
-
-.amdb__details__pic .comment {
-  font-size: 13px;
-  color: #ffffff;
-  background: #3d3d3d;
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 4px;
-  position: absolute;
-  left: 10px;
-  bottom: 25px;
-}
-
-.amdb__details__pic .view {
-  font-size: 13px;
-  color: #ffffff;
-  background: #3d3d3d;
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 4px;
-  position: absolute;
-  right: 10px;
-  bottom: 25px;
 }
 
 .amdb__details__title {

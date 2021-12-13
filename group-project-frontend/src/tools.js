@@ -1,28 +1,27 @@
 class ToolMethod {
     showToxicText(rate) {
-        if (rate > 0 && rate <= 0.53) {
-            return "Non toxic";
-        } else if (rate > 0.53 && rate < 0.9) {
-            return "Toxic";
+        if (rate > 0.54) {
+            return " Toxic";
         } else {
-            return "Severe toxic";
+            return " Non toxic";
         }
     }
+
     showToxicImg(rate) {
-        if (rate > 0 && rate <= 0.53) {
-            return "/img/toxic-green.31dbd2c6.png";
-        } else if (rate > 0.53 && rate < 0.9) {
-            return "/img/toxic-yellow.4f83d804.png";
+        if (rate > 0 && rate <= 0.54) {
+            return require("@/assets/toxic-green.png");
         } else {
-            return "/img/toxic-red.7e1e0c69.png";
+            return require("@/assets/toxic-red.png");
         }
     }
 
     showSentiemntText(rate) {
-        if (rate > 0.5) {
-            return "Positive";
+        if (rate < 0.5) {
+            return " Negative";
+        } else if (rate > 0.5 && rate < 1.5) {
+            return " Positive";
         } else {
-            return "Negative";
+            return " Neutral";
         }
     }
 

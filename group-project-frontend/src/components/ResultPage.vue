@@ -379,6 +379,7 @@ export default {
 }
 
 .result-pagiantion {
+  height: 50px;
   .result-pagiantion-content {
     justify-content: center;
     margin: auto;

@@ -2,7 +2,7 @@
   <section class="amdb-details spad">
     <div class="">
       <a-modal
-        :visible="isShowTrailer"
+        :visible="isShowTrailer && video_id.length > 0"
         :maskClosable="true"
         :closable="false"
         :footer="null"
@@ -73,7 +73,7 @@
                 :src="moviePoster + movie.poster_path"
                 alt="Movie Poster"
                 class="amdb__details__pic set-bg"
-                @click="isShowTrailer = true"
+                @click="ShowTrailer()"
               />
             </div>
           </div>
@@ -193,7 +193,7 @@
                 <a @click="addLikeList()" class="follow-btn">
                   <i class="fa fa-heart"></i> ADD Like list
                 </a>
-                <a @click="isShowTrailer = true" class="follow-btn"
+                <a @click="ShowTrailer()" class="follow-btn"
                   ><i class="fa fa-play"></i> <span>Watch trailer</span>
                 </a>
                 <a class="follow-btn fb_share_btn"
@@ -242,9 +242,6 @@
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
                             >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
-                            >
                           </a-select-opt-group>
                           <a-select-opt-group>
                             <template #label>
@@ -252,6 +249,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -302,7 +302,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            v-html="judgeBadWord(item.comment)"
+                            :content="judgeBadWordOther(item.comment)"
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">
@@ -310,8 +310,10 @@
                             </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic) }} :
-                                {{ changeToPercent(item.toxic) }}
+                                {{
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic)
+                                }}
                                 <img
                                   :src="showToxicImg(item.toxic)"
                                   style="height: 30px"
@@ -319,8 +321,7 @@
                                 />
                               </li>
                               <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment) }} :
-                                {{ changeToPercent(item.sentiment) }}
+                                {{ showSentiemntText(item.sentiment) }}
                                 <img
                                   :src="showSentimentImg(item.sentiment)"
                                   style="height: 30px"
@@ -352,7 +353,12 @@
                       </template>
                       <template #content>
                         <a-form-item>
-                          <a-textarea v-model:value="commentsValue" :rows="4" />
+                          <a-textarea
+                            v-model:value="commentsValue"
+                            :rows="4"
+                            :maxlength="5000"
+                            show-count
+                          />
                         </a-form-item>
                         <a-form-item>
                           <button
@@ -393,9 +399,6 @@
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
                             >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
-                            >
                           </a-select-opt-group>
                           <a-select-opt-group>
                             <template #label>
@@ -403,6 +406,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -458,9 +464,13 @@
                             </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
+                                {{
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
                                 }}
+                                <!-- :{{
+                                  changeToPercent(item.toxic)
+                                }} -->
                                 <img
                                   :src="showToxicImg(item.toxic)"
                                   style="height: 30px"
@@ -468,10 +478,9 @@
                                 />
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
+                                {{ showSentiemntText(item.sentiment) }}
                                 <img
-                                  :src="showSentimentImg(item.sentiment[0])"
+                                  :src="showSentimentImg(item.sentiment)"
                                   style="height: 30px"
                                   alt=""
                                 />
@@ -506,9 +515,6 @@
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
                             >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
-                            >
                           </a-select-opt-group>
                           <a-select-opt-group>
                             <template #label>
@@ -516,6 +522,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -562,8 +571,9 @@
                             <div class="comment-date">{{ item.date }}</div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
+                                {{
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
                                 }}
                                 <img
                                   :src="showToxicImg(item.toxic)"
@@ -578,10 +588,9 @@
                                     : 'report'
                                 "
                               >
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
+                                {{ showSentiemntText(item.sentiment) }}
                                 <img
-                                  :src="showSentimentImg(item.sentiment[0])"
+                                  :src="showSentimentImg(item.sentiment)"
                                   style="height: 30px"
                                   alt=""
                                 />
@@ -621,9 +630,6 @@
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
                             >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
-                            >
                           </a-select-opt-group>
                           <a-select-opt-group>
                             <template #label>
@@ -631,6 +637,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -679,8 +688,9 @@
                             </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
+                                {{
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
                                 }}
                                 <img
                                   :src="showToxicImg(item.toxic)"
@@ -689,10 +699,9 @@
                                 />
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
+                                {{ showSentiemntText(item.sentiment) }}
                                 <img
-                                  :src="showSentimentImg(item.sentiment[0])"
+                                  :src="showSentimentImg(item.sentiment)"
                                   style="height: 30px"
                                   alt=""
                                 />
@@ -728,9 +737,6 @@
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
                             >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
-                            >
                           </a-select-opt-group>
                           <a-select-opt-group>
                             <template #label>
@@ -738,6 +744,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -782,8 +791,9 @@
                           <div class="bottom-comment">
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
+                                {{
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
                                 }}
                                 <img
                                   :src="showToxicImg(item.toxic)"
@@ -792,10 +802,9 @@
                                 />
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
+                                {{ showSentiemntText(item.sentiment) }}
                                 <img
-                                  :src="showSentimentImg(item.sentiment[0])"
+                                  :src="showSentimentImg(item.sentiment)"
                                   style="height: 30px"
                                   alt=""
                                 />
@@ -830,7 +839,6 @@
             >
               <router-link
                 :to="{ path: '/movie/' + item.id, query: { id: item.tmdb_Id } }"
-                @click.native="fleshMovie"
               >
                 <div class="product__sidebar__comment__item__pic">
                   <img
@@ -1099,20 +1107,20 @@ export default {
     };
 
     const showToxicImg = (rate) => {
-      if (rate > 0 && rate <= 0.53) {
-        return require("@/assets/toxic-green.png");
-      } else if (rate > 0.53 && rate < 0.9) {
-        return require("@/assets/toxic-yellow.png");
-      } else {
+      if (rate > 0.54) {
         return require("@/assets/toxic-red.png");
+      } else {
+        return require("@/assets/toxic-green.png");
       }
     };
 
     const showSentimentImg = (rate) => {
-      if (rate > 0.5) {
+      if (rate < 0.5) {
+        return require("@/assets/sentiment-red.png");
+      } else if (rate > 0.5 && rate < 1.5) {
         return require("@/assets/sentiment-green.png");
       } else {
-        return require("@/assets/sentiment-red.png");
+        return require("@/assets/sentiment-yellow.png");
       }
     };
 
@@ -1265,11 +1273,7 @@ export default {
           Number(commentStatus.toxic[0] * 100).toFixed(1) +
           "%)";
         popSentimentText.value =
-          "Sentiment is " +
-          showSentiemntText(commentStatus.sentiment[0]) +
-          "(" +
-          Number(commentStatus.sentiment[0] * 100).toFixed(1) +
-          "%).";
+          "Sentiment is " + showSentiemntText(commentStatus.sentiment[0]);
         commentConfirmLoading.value = false;
         if (commentStatus.toxic[0] > 0.9) {
           popHightToxicText.value =
@@ -1281,12 +1285,13 @@ export default {
     const confirmAddComment = () => {
       commentLoading.value = true;
       addCommentsDialog.value = false;
+
+      const postFormData = new FormData();
+      postFormData.append("movieId", movieid.value);
+      postFormData.append("comment", commentsValue.value);
+      postFormData.append("userId", currentUser.value.data.userId);
       // Post comments
-      UserApi.postUserComment(
-        movieid.value,
-        commentsValue.value,
-        currentUser.value.data.userId
-      ).then((response) => {
+      UserApi.postUserComment(postFormData).then((response) => {
         // tmdbreview.value = response.data;
         console.log("Add comments ");
         console.log(response.data);
@@ -1317,11 +1322,11 @@ export default {
       return ToolMethod.changeToPercent(value);
     };
 
-    const fleshMovie = (to, from) => {
-      // window.location.reload()
-      // if (router.query) {
-      //   router.go(0);
-      // }
+    const ShowTrailer = () => {
+      isShowTrailer.value = true;
+      if (video_id.value.length < 1) {
+        message.error("Sorry，  trailer is not available now!");
+      }
     };
 
     const showCastDetail = (id) => {
@@ -1382,21 +1387,21 @@ export default {
             comments.push(i);
           }
         }
-      } else if (filter === "severetoxic") {
-        for (let i of value) {
-          if (i.toxic >= 0.9) {
-            comments.push(i);
-          }
-        }
       } else if (filter === "positive") {
         for (let i of value) {
-          if (i.sentiment >= 0.5) {
+          if (i.sentiment > 0.5 && i.sentiment < 1.5) {
             comments.push(i);
           }
         }
       } else if (filter === "negative") {
         for (let i of value) {
           if (i.sentiment < 0.5) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "neutral") {
+        for (let i of value) {
+          if (i.sentiment > 1.5) {
             comments.push(i);
           }
         }
@@ -1424,21 +1429,21 @@ export default {
             comments.push(i);
           }
         }
-      } else if (filter === "severetoxic") {
-        for (let i of value) {
-          if (i.toxic[0] >= 0.9) {
-            comments.push(i);
-          }
-        }
       } else if (filter === "positive") {
         for (let i of value) {
-          if (i.sentiment[0] >= 0.5) {
+          if (i.sentiment > 0.5 && i.sentiment < 1.5) {
             comments.push(i);
           }
         }
       } else if (filter === "negative") {
         for (let i of value) {
-          if (i.sentiment[0] < 0.5) {
+          if (i.sentiment < 0.5) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "neutral") {
+        for (let i of value) {
+          if (i.sentiment > 1.5) {
             comments.push(i);
           }
         }
@@ -1570,6 +1575,7 @@ export default {
       handleCancel,
       handleSubmit,
       showCastDetail,
+      ShowTrailer,
       showToxicText,
       showSentiemntText,
       cancelAddComment,
@@ -1586,7 +1592,6 @@ export default {
       handleYoutubeFilterChange,
       handleTwitterFilterChange,
       changeCommentTab,
-      fleshMovie,
     };
   },
 };
@@ -1605,6 +1610,9 @@ export default {
   padding: 2px 12px;
   margin-bottom: 10px;
   border-radius: 4px;
+}
+.notrailer {
+  color: #fff;
 }
 .product__sidebar__comment__item__text ul {
   padding-left: 0 !important;
@@ -1628,7 +1636,7 @@ export default {
 }
 
 .amdb__details__pic {
-  height: 440px;
+  max-height: 440px;
   border-radius: 5px;
   position: relative;
 }
