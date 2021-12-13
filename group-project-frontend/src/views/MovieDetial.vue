@@ -454,7 +454,7 @@
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">
-                              {{ item.created_at }}
+                              {{ formatDate(item.created_at) }}
                             </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
@@ -467,7 +467,7 @@
                                   alt=""
                                 />
                               </li>
-                              <li class="sentiemnt-rate">
+                              <li class="report">
                                 {{ showSentiemntText(item.sentiment[0]) }} :
                                 {{ changeToPercent(item.sentiment[0]) }}
                                 <img
@@ -571,7 +571,13 @@
                                   alt=""
                                 />
                               </li>
-                              <li class="sentiemnt-rate">
+                              <li
+                                :class="
+                                  item.warningSpoilers
+                                    ? 'sentiemnt-rate'
+                                    : 'report'
+                                "
+                              >
                                 {{ showSentiemntText(item.sentiment[0]) }} :
                                 {{ changeToPercent(item.sentiment[0]) }}
                                 <img
@@ -580,9 +586,9 @@
                                   alt=""
                                 />
                               </li>
-                              <li class="report">
+                              <li class="report" v-if="item.warningSpoilers">
                                 {{
-                                  item.warningSpoilers ? "warningSpoilers" : ""
+                                  item.warningSpoilers ? "Spoiler warning " : ""
                                 }}
                               </li>
                             </ul>
@@ -668,7 +674,9 @@
                             :content="judgeBadWordOther(item.review)"
                           />
                           <div class="bottom-comment">
-                            <div class="comment-date">{{ item.time }}</div>
+                            <div class="comment-date">
+                              {{ formatDate(item.time) }}
+                            </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{ showToxicText(item.toxic[0]) }}:{{
@@ -680,7 +688,7 @@
                                   alt=""
                                 />
                               </li>
-                              <li class="sentiemnt-rate">
+                              <li class="report">
                                 {{ showSentiemntText(item.sentiment[0]) }} :
                                 {{ changeToPercent(item.sentiment[0]) }}
                                 <img
@@ -783,7 +791,7 @@
                                   alt=""
                                 />
                               </li>
-                              <li class="sentiemnt-rate">
+                              <li class="report">
                                 {{ showSentiemntText(item.sentiment[0]) }} :
                                 {{ changeToPercent(item.sentiment[0]) }}
                                 <img

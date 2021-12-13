@@ -4,9 +4,9 @@
       <el-affix :offset="50" target=".maindisplay">
         <!-- <el-button type="primary" @click="isShowDrawer = true"> -->
         <div class="anchor-div" @click="isShowDrawer = true"></div>
-        <div class="anchor-div-text" @click="isShowDrawer = true">
-          Navigate to..
-        </div>
+        <!-- <div class="anchor-div-text" @click="isShowDrawer = true">
+          
+        </div> -->
         <!-- </el-button> -->
       </el-affix>
       <a-drawer
@@ -16,12 +16,14 @@
         title=""
         placement="right"
       >
-        <h5>Gurde to your favorite section</h5>
+        <h5 class="anchor-drawer" style="color: white">
+          Navigate to your favorite section
+        </h5>
         <a-anchor @change="onChange">
           <!-- <a-anchor-link href="#search-div" title="Search" /> -->
           <!-- <a-anchor-link href="#carousel" title="Carousel" /> -->
-          <a-anchor-link href="#popularMovie" title="Popular Movie" />
-          <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
+          <a-anchor-link href="#popularMovie" title="Popular Movies" />
+          <a-anchor-link href="#hignScoreMovie" title="Top Rated Movies" />
           <a-anchor-link
             href="#mainpage-recommendations"
             title="Recommendations"
@@ -385,6 +387,10 @@ export default {
     width: 50px;
     font-size: 0.5px;
   }
+}
+.anchor-drawer {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .testmain {
   transition: all 0.4s;
@@ -997,10 +1003,10 @@ export default {
     display: block !important;
   }
   .product__item {
-    width: 60% !important;
+    width: 75% !important;
   }
   .product__item__pic {
-    height: 220px !important;
+    height: 280px !important;
   }
   .product__item__text h5 a {
     line-height: 17px !important;
