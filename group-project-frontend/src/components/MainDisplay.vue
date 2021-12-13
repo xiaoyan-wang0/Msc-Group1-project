@@ -2,12 +2,13 @@
   <section class="product spad maindisplay">
     <div class="affix-div">
       <el-affix :offset="50" target=".maindisplay">
-        <!-- <el-button type="primary" @click="isShowDrawer = true"> -->
-        <div class="anchor-div" @click="isShowDrawer = true"></div>
-        <!-- <div class="anchor-div-text" @click="isShowDrawer = true">
+        <button class="follow-btn" @click="isShowDrawer = true">
+          <!-- <div class="anchor-div" @click="isShowDrawer = true"></div> -->
+          <!-- <div class="anchor-div-text" @click="isShowDrawer = true">
           
         </div> -->
-        <!-- </el-button> -->
+          Navigate to..
+        </button>
       </el-affix>
       <a-drawer
         v-model:visible="isShowDrawer"
@@ -467,7 +468,7 @@ export default {
 }
 
 .trending__product {
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .popular__product {
@@ -981,6 +982,23 @@ export default {
   }
 }
 
+.follow-btn {
+  font-size: 0.5px;
+  color: #ffffff;
+  background: #e53637;
+  display: inline-block;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 5px;
+  border-radius: 54px;
+}
+
+@media only screen and (min-width: 975px) and (max-width: 1200px) {
+  .product__item__pic {
+    height: 250px !important;
+  }
+}
+
 @media only screen and (max-width: 798px) {
   .home-carousel-right {
     display: none !important;
@@ -995,7 +1013,7 @@ export default {
     display: block !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 560px) {
   .affix-div {
     position: relative;
     top: -50px;

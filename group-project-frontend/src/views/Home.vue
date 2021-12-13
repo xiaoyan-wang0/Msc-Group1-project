@@ -142,7 +142,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1000px) {
   .feature-card .search-model-form input {
     width: 85% !important;
     font-size: 27px !important;
