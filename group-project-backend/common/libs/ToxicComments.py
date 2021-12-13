@@ -29,7 +29,7 @@ def detector(title):
 
     #response = requests.post('http://0.0.0.0:8501/v1/models/mymodel:predict', data=input_data_json,headers=headers)
     #response = requests.post('http://localhost:8501/v1/models/mymodel:predict', data=input_data_json,headers=headers)
-    response = requests.post('http://172.26.9.231:8501/v1/models/mymodel:predict', data=input_data_json,headers=headers)
+    response = requests.post('http://172.26.4.154:8501/v1/models/mymodel:predict', data=input_data_json,headers=headers)
 
     text1 =  title
 
