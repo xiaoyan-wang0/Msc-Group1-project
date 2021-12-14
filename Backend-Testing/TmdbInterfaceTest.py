@@ -103,7 +103,7 @@ class TestStringMethods(unittest.TestCase):
 # Performance testing in terms of runtime
 
     def test_TmdbReviewRuntime(self):
-        self.assertLessEqual(Time1, 5) 
+        self.assertLessEqual(Time1, 15) 
 
 
 if __name__ == '__main__':

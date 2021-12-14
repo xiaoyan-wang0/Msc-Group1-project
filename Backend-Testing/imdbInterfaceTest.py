@@ -3,7 +3,7 @@ import requests
 from jsonpath import jsonpath
 import timeit
 
-imdbId = 'tt0096895'
+imdbId = 'tt0047478'
 
 response1 = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + imdbId)
 year = jsonpath(response1.json(),'$..year')
@@ -83,7 +83,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(ImdbRating, ImdbRating2[0])
 
     def test_plot(self):
-        self.assertEqual(plot[0], plot2[0])
+        self.assertEqual(plot, plot2)
 
     def test_cast(self):
         self.assertEqual(cast, cast2[0])    
@@ -105,7 +105,7 @@ class TestStringMethods(unittest.TestCase):
     def test_reviews4(self):
         self.assertEqual(reviews[7], reviews2[7]) 
 
-#Testing movieImdbBottomInfo part of the Interface
+# #Testing movieImdbBottomInfo part of the Interface
 
     def test_bottom1(self):
         self.assertEqual(titles[2], 'Kod Adi KOZ') 
@@ -142,7 +142,7 @@ class TestStringMethods(unittest.TestCase):
 #Testing performance of movieImdbReview part of the Interface in terms of runtime.
 
     def test_ImdbReviewRuntime(self):
-        self.assertLessEqual(Time1, 12) 
+        self.assertLessEqual(Time1, 15) 
 
 #Testing performance of worst raated movies part of the Interface in terms of runtime.
 
