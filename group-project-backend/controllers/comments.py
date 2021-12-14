@@ -33,7 +33,7 @@ def addComments():
     user = User.query.filter_by( userId = userId ).first()
     if user:
         if user.ifBlocked == 1:
-            return ops_renderErrJSON( msg = "use have been blocked" )
+            return ops_renderErrJSON( msg = "user have been blocked" )
 
     #userId = str(current_user.userId)
     comment = req['comment'] if "comment" in req else ""
