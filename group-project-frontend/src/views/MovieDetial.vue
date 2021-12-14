@@ -237,7 +237,7 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
@@ -311,22 +311,58 @@
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{
+                                  "Toxicity rate: " +
                                   changeToPercent(item.toxic) +
                                   showToxicText(item.toxic)
                                 }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                <a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                  />
+                                </a-popover>
                               </li>
                               <li class="sentiemnt-rate">
                                 {{ showSentiemntText(item.sentiment) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                <a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                  />
+                                </a-popover>
                               </li>
                               <li class="report">
                                 <a @click="amdbReport(item)">Report</a>
@@ -394,7 +430,7 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
@@ -469,25 +505,57 @@
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{
+                                  "Toxicity rate: " +
                                   changeToPercent(item.toxic) +
                                   showToxicText(item.toxic[0])
                                 }}
-                                <!-- :{{
-                                  changeToPercent(item.toxic)
-                                }} -->
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                <a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                  />
+                                </a-popover>
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                             </ul>
                           </div>
@@ -514,7 +582,7 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
@@ -576,14 +644,29 @@
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{
+                                  "Toxicity rate: " +
                                   changeToPercent(item.toxic) +
                                   showToxicText(item.toxic[0])
-                                }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                }}<a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                               <li
                                 :class="
@@ -592,12 +675,30 @@
                                     : 'report'
                                 "
                               >
-                                {{ showSentiemntText(item.sentiment) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                               <li class="report" v-if="item.warningSpoilers">
                                 {{
@@ -629,7 +730,7 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
@@ -693,22 +794,55 @@
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{
+                                  "Toxicity rate: " +
                                   changeToPercent(item.toxic) +
                                   showToxicText(item.toxic[0])
-                                }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                }}<a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                             </ul>
                           </div>
@@ -736,7 +870,7 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
@@ -796,22 +930,55 @@
                             <ul class="comment-actions">
                               <li class="toxicrate">
                                 {{
+                                  "Toxicity rate: " +
                                   changeToPercent(item.toxic) +
                                   showToxicText(item.toxic[0])
-                                }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                }}<a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                             </ul>
                           </div>
@@ -1052,9 +1219,7 @@ export default {
           FB.ui({
             method: "feed",
             name: "Facebook Dialogs",
-            link:
-              "http://amdb-frontend.s3-website-eu-west-1.amazonaws.com/movie/" +
-              movieid.value,
+            link: "http://amdbmovie.com/movie/" + movieid.value,
             picture: "http://fbrell.com/f8.jpg",
             caption: "wwwwwwwwwwwwwwwwwww",
             description: "yyyyyyyyyyyyyyyyyyyy",
@@ -1279,7 +1444,7 @@ export default {
         popSentimentText.value =
           "Sentiment is " + showSentiemntText(commentStatus.sentiment[0]);
         commentConfirmLoading.value = false;
-        if (commentStatus.toxic[0] > 0.9) {
+        if (commentStatus.toxic[0] > 0.54) {
           popHightToxicText.value =
             "Your comment is SEVERE TOXIC. If you post too much, the administrator will block your account.";
         }
@@ -1381,13 +1546,13 @@ export default {
       let comments = [];
       if (filter === "notoxic") {
         for (let i of value) {
-          if (i.toxic < 0.53) {
+          if (i.toxic <= 0.54) {
             comments.push(i);
           }
         }
       } else if (filter === "toxic") {
         for (let i of value) {
-          if (i.toxic >= 0.53 && i.toxic < 0.9) {
+          if (i.toxic > 0.54) {
             comments.push(i);
           }
         }
@@ -1423,13 +1588,13 @@ export default {
       let comments = [];
       if (filter === "notoxic") {
         for (let i of value) {
-          if (i.toxic[0] < 0.53) {
+          if (i.toxic[0] <= 0.54) {
             comments.push(i);
           }
         }
       } else if (filter === "toxic") {
         for (let i of value) {
-          if (i.toxic[0] >= 0.53 && i.toxic < 0.9) {
+          if (i.toxic[0] > 0.54) {
             comments.push(i);
           }
         }
