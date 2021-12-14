@@ -1,4 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AdminHome from '../admin/AdminHome.vue'
+import UserTable from '../admin/User.vue'
+import CommentTable from '../admin/Comment.vue'
+import ReportTable from '../admin/Report.vue'
+import AdminLogin from '../admin/AdminLogin.vue'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
@@ -77,6 +82,34 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+
+  {
+    path: '/admin',
+    name: 'adminHome',
+    component: AdminHome,
+    children: [
+      {
+        path: 'user',
+        name: 'User',
+        component: UserTable
+      }, {
+        path: 'comments',
+        name: 'Comments',
+        component: CommentTable
+      }, {
+        path: 'reports',
+        name: 'Reports',
+        component: ReportTable
+      },
+    ],
+    redirect: '/admin/user',
+  },
+
+  {
+    path: '/adminLogin',
+    name: 'adminLogin',
+    component: AdminLogin
   },
 
   {

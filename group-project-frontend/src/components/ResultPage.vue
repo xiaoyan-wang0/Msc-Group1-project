@@ -19,7 +19,7 @@
         </a-empty>
         <div class="row" v-if="itemdata !== undefined">
           <div
-            class="col-lg-3 col-md-6 col-sm-6"
+            class="col-lg-3 col-md-6 col-sm-6 movie-content"
             v-for="item in itemdata"
             :key="item.id"
           >
@@ -79,7 +79,7 @@
         </a-empty>
         <div class="row" v-if="itemdata !== []">
           <div
-            class="col-lg-3 col-md-6 col-sm-6"
+            class="col-lg-3 col-md-6 col-sm-6 movie-content"
             v-for="item in itemdata"
             :key="item.tmdb_Id"
           >
@@ -173,7 +173,7 @@ export default {
           itemtotal.value = response.data.total_results;
         });
       } else if (resource == 2) {
-        resultName.value = "High score moveis Result";
+        resultName.value = "Top Rated Movies Result";
         // High score moveis
         UserApi.getHighScoreMovies().then((response) => {
           itemdata.value = response.data.results;
@@ -379,6 +379,7 @@ export default {
 }
 
 .result-pagiantion {
+  height: 50px;
   .result-pagiantion-content {
     justify-content: center;
     margin: auto;
@@ -402,5 +403,9 @@ export default {
   -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
   box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
   cursor: pointer;
+}
+.movie-content {
+  text-align: center;
+  text-align: -webkit-center;
 }
 </style>

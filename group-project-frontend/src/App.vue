@@ -1,6 +1,13 @@
 <template>
   <div>
-    <header>
+    <header
+      v-if="
+        $route.fullPath !== '/admin/user' &&
+        $route.fullPath !== '/admin/comments' &&
+        $route.fullPath !== '/admin/reports' &&
+        $route.fullPath !== '/adminLogin'
+      "
+    >
       <div class="navbar-div">
         <section class="navigation">
           <div class="nav-container">
@@ -53,12 +60,19 @@
     </header>
     <main>
       <!-- :key="$route.fullPath" -->
-      <router-view  />
-      <div>wxy</div>
+      <router-view :key="$route.path" />
     </main>
 
     <!-- Footer Section Begin -->
-    <footer class="footer">
+    <footer
+      class="footer"
+      v-if="
+        $route.fullPath !== '/admin/user' &&
+        $route.fullPath !== '/admin/comments' &&
+        $route.fullPath !== '/admin/reports' &&
+        $route.fullPath !== '/adminLogin'
+      "
+    >
       <div class="page-up">
         <a href="#" id="scrollToTopButton"
           ><span class="arrow_carrot-up fa fa-angle-up"></span
@@ -81,7 +95,7 @@
             <div class="footer__nav">
               <ul>
                 <li class="active"><a href="/">Homepage</a></li>
-                <li><a href="#">Contacts</a></li>
+                <li><a href="/main/aboutus#teaminfo">Contacts</a></li>
               </ul>
             </div>
           </div>
@@ -89,7 +103,7 @@
             <p>
               Copyright All rights reserved | This website is made with
               <i class="fa fa-heart" aria-hidden="true"></i> by
-              <a href="#" target="_blank">TEAM 1</a>
+              <a href="/main/aboutus#teaminfo">TEAM 1</a>
             </p>
           </div>
         </div>
@@ -178,7 +192,7 @@ export default {
 <style lang="scss">
 body {
   background-color: #101018 !important;
-  min-width: 400px;
+  min-width: 375px;
   .ant-modal-body {
     padding: 0 !important;
     background-color: black;
@@ -266,8 +280,16 @@ body {
     position: relative !important;
     z-index: 99;
   }
-  .ant-anchor-link-title{
-    font-size: 20px;
+  .ant-anchor-link-title {
+    font-size: 18px;
+  }
+  .ant-popover-inner {
+    background-color: rgba(53, 51, 51, 0.9) !important;
+  }
+  .ant-popover-title,
+  .ant-popover-inner-content p {
+    color: #fff !important;
+    font-size: 10px !important;
   }
 }
 * {
@@ -291,7 +313,7 @@ body {
       float: left;
       .span1 {
         padding-top: 5555px;
-        margin: 0 0 0 50px;
+        margin: 0 0 0 20px;
         color: #fff;
         vertical-align: middle;
         font-size: 30px;

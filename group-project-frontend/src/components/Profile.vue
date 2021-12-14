@@ -59,38 +59,85 @@
             </div>
             <div class="amdb__details__form">
               <div class="section-title">
+                <h5>My history List</h5>
+                <p></p>
+                <div class="movie-like-list" v-loading="isLoading">
+                  <!-- <el-scrollbar> -->
+                  <a-table
+                    :columns="historyColumns"
+                    :data-source="historyListData"
+                    :scroll="{ x: 700 }"
+                    :customRow="onSelectFunction"
+                  >
+                    <template #name="{ text }">
+                      <a>{{ text }}</a>
+                    </template>
+                    <template #customTitle>
+                      <span>
+                        <smile-outlined />
+                        Name
+                      </span>
+                    </template>
+                    <template #genres="{ text: genres }">
+                      <span>
+                        <a-tag
+                          v-for="tag in genres[0]"
+                          :key="tag"
+                          :color="'volcano'"
+                        >
+                          {{ tag.name.toUpperCase() }}
+                        </a-tag>
+                      </span>
+                    </template>
+                    <template #action="{ record }">
+                      <span>
+                        <a @click="deleteLike(record)">Delete</a>
+                      </span>
+                    </template>
+                  </a-table>
+                  <!-- </el-scrollbar> -->
+                </div>
+              </div>
+            </div>
+            <div class="amdb__details__form">
+              <div class="section-title">
                 <h5>My Movie List</h5>
                 <p></p>
                 <div class="movie-like-list" v-loading="isLoading">
-                  <el-scrollbar>
-                    <a-table :columns="likeColumns" :data-source="likeListData">
-                      <template #name="{ text }">
-                        <a>{{ text }}</a>
-                      </template>
-                      <template #customTitle>
-                        <span>
-                          <smile-outlined />
-                          Name
-                        </span>
-                      </template>
-                      <template #tags="{ text: tags }">
-                        <span>
-                          <a-tag
-                            v-for="tag in tags"
-                            :key="tag"
-                            :color="'volcano'"
-                          >
-                            {{ tag.toUpperCase() }}
-                          </a-tag>
-                        </span>
-                      </template>
-                      <template #action="{ record }">
-                        <span>
-                          <a @click="deleteLike(record)">Delete</a>
-                        </span>
-                      </template>
-                    </a-table>
-                  </el-scrollbar>
+                  <!-- <el-scrollbar> -->
+                  <a-table
+                    :columns="likeColumns"
+                    :data-source="likeListData"
+                    :scroll="{ x: 700 }"
+                    :customRow="onSelectFunction"
+                  >
+                    <template #name="{ text }">
+                      <a>{{ text }}</a>
+                    </template>
+                    <template #customTitle>
+                      <span>
+                        <smile-outlined />
+                        Name
+                      </span>
+                    </template>
+                    <template #genres="{ text: genres }">
+                      <span>
+                        <a-tag
+                          v-for="tag in genres[0]"
+                          :key="tag"
+                          :color="'volcano'"
+                        >
+                          {{ tag.name.toUpperCase() }}
+                        </a-tag>
+                      </span>
+                    </template>
+                    <template #action="{ record }">
+                      <span>
+                        <a @click="deleteLike(record)">Delete</a>
+                      </span>
+                    </template>
+                  </a-table>
+                  <!-- </el-scrollbar> -->
                 </div>
               </div>
             </div>
@@ -99,38 +146,39 @@
                 <h5>My Comments</h5>
                 <p></p>
                 <div class="movie-like-list" v-loading="isLoading">
-                  <el-scrollbar>
-                    <a-table
-                      :columns="commentsColumns"
-                      :data-source="commentsData"
-                    >
-                      <template #name="{ text }">
-                        <a>{{ text }}</a>
-                      </template>
-                      <template #customTitle>
-                        <span>
-                          <smile-outlined />
-                          Name
-                        </span>
-                      </template>
-                      <template #tags="{ text: tags }">
-                        <span>
-                          <a-tag
-                            v-for="tag in tags"
-                            :key="tag"
-                            :color="'volcano'"
-                          >
-                            {{ tag.toUpperCase() }}
-                          </a-tag>
-                        </span>
-                      </template>
-                      <template #action="{ record }">
-                        <span>
-                          <a @click="deleteComment(record)">Delete</a>
-                        </span>
-                      </template>
-                    </a-table>
-                  </el-scrollbar>
+                  <!-- <el-scrollbar> -->
+                  <a-table
+                    :columns="commentsColumns"
+                    :data-source="commentsData"
+                    :scroll="{ x: 700 }"
+                  >
+                    <template #name="{ text }">
+                      <a>{{ text }}</a>
+                    </template>
+                    <template #customTitle>
+                      <span>
+                        <smile-outlined />
+                        Name
+                      </span>
+                    </template>
+                    <template #tags="{ text: tags }">
+                      <span>
+                        <a-tag
+                          v-for="tag in tags"
+                          :key="tag"
+                          :color="'volcano'"
+                        >
+                          {{ tag.toUpperCase() }}
+                        </a-tag>
+                      </span>
+                    </template>
+                    <template #action="{ record }">
+                      <span>
+                        <a @click="deleteComment(record)">Delete</a>
+                      </span>
+                    </template>
+                  </a-table>
+                  <!-- </el-scrollbar> -->
                 </div>
               </div>
             </div>
@@ -196,25 +244,56 @@ export default {
     const commentsData = ref([]);
     const isLoading = ref(false);
     const likeListData = ref([]);
+    const historyListData = ref([]);
     const recentRecommendationMovies = ref([]);
     const poster = ref("");
     poster.value = env.tmdbpic;
     env.AMDBAPI;
 
     const AMDBAPI = ref(env.AMDBAPI);
+    const historyColumns = ref([
+      {
+        title: "Movie name",
+        dataIndex: "title",
+        key: "title",
+        minWidth: 100,
+      },
+      {
+        title: "Release date",
+        dataIndex: "release_date",
+        key: "release_date",
+        minWidth: 100,
+      },
+      {
+        title: "Tags",
+        key: "genres",
+        dataIndex: "genres",
+        minWidth: 150,
+        slots: {
+          customRender: "genres",
+        },
+      },
+    ]);
     const likeColumns = ref([
       {
         title: "Movie name",
         dataIndex: "title",
         key: "title",
+        minWidth: 100,
       },
       {
         title: "Tags",
+        key: "genres",
+        dataIndex: "genres",
+        minWidth: 150,
+        slots: {
+          customRender: "genres",
+        },
+      },
+      {
+        title: "Rate",
         key: "vote_average",
         dataIndex: "vote_average",
-        slots: {
-          customRender: "vote_average",
-        },
       },
       {
         title: "Action",
@@ -230,11 +309,14 @@ export default {
         title: "Movie name",
         dataIndex: "title",
         key: "title",
+        minWidth: 100,
       },
       {
         title: "Comment",
         dataIndex: "comment",
         key: "comment",
+        minWidth: 300,
+        ellipsis: true,
       },
       {
         title: "Toxic rate",
@@ -250,6 +332,7 @@ export default {
         title: "Date",
         dataIndex: "createTime",
         key: "createTime",
+        minWidth: 100,
       },
       {
         title: "Action",
@@ -270,6 +353,22 @@ export default {
       user.value = JSON.parse(localStorage.getItem("user")).data;
       console.log("profile user.value");
       console.log(user.value);
+
+      // fetch history List
+      UserApi.getHistoryList(user.value.userId)
+        .then((response) => {
+          console.log("getHistoryList");
+          console.log(response.data.data);
+          historyListData.value = response.data.data;
+          isLoading.value = false;
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+          console.log("error");
+          showErroeMessage();
+          isLoading.value = false;
+        });
 
       // fetch like List
       fetchMovieLike();
@@ -378,7 +477,7 @@ export default {
         }
       )
         .then(() => {
-          UserApi.deleteUserCommentList(record.Id)
+          UserApi.deleteUserCommentList(record.id)
             .then((response) => {
               console.log("deleteMovieLikes");
               console.log(response.data);
@@ -407,6 +506,23 @@ export default {
       });
     };
 
+    const onSelectFunction = (record) => {
+      return {
+        onClick: (event) => {
+          console.log("click row", record);
+          if (record.id > -1) {
+            router.push({
+              path: "/movie/" + record.id,
+            });
+          } else if (record.movieId) {
+            router.push({
+              path: "/movie/" + record.movieId,
+            });
+          }
+        },
+      };
+    };
+
     const showErroeMessage = () => {
       return message.error("Server is busy, try again later");
     };
@@ -421,15 +537,18 @@ export default {
       user,
       isLoading,
       likeColumns,
+      historyColumns,
       commentsColumns,
       commentsData,
       likeListData,
+      historyListData,
       AMDBAPI,
       poster,
       recentRecommendationMovies,
       deleteLike,
       deleteComment,
       showSettingPage,
+      onSelectFunction,
     };
   },
 };
@@ -455,36 +574,6 @@ export default {
   color: #b7b7b7;
   font-size: 18px;
   line-height: 30px;
-}
-
-.amdb__details__pic {
-  height: 440px;
-  border-radius: 5px;
-  position: relative;
-}
-
-.amdb__details__pic .comment {
-  font-size: 13px;
-  color: #ffffff;
-  background: #3d3d3d;
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 4px;
-  position: absolute;
-  left: 10px;
-  bottom: 25px;
-}
-
-.amdb__details__pic .view {
-  font-size: 13px;
-  color: #ffffff;
-  background: #3d3d3d;
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 4px;
-  position: absolute;
-  right: 10px;
-  bottom: 25px;
 }
 
 .amdb__details__title {

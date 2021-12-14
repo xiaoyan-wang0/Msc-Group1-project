@@ -39,7 +39,7 @@ def sentiment(title):
     
     #response = requests.post('http://0.0.0.0:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
     #response = requests.post('http://localhost:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
-    response = requests.post('http://172.26.4.154:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
+    response = requests.post('http://172.26.9.231:8501/v1/models/mymodel2:predict', data=input_data_json,headers=headers)
     text1 =  title
 
     label =  json.loads(response.text)['predictions']

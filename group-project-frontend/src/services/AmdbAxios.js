@@ -3,7 +3,7 @@ import env from "@/env.js";
 class myAxios {
     amdbAxios(axiosConfig) {
         const service = axios.create({
-            baseURL: env.AMDBAPI, // amdb api
+            baseURL: "/api", // amdb api
             timeout: 20000, // time out
             headers: { 'Content-Type': 'multipart/form-data' }
         });

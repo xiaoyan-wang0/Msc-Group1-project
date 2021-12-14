@@ -93,12 +93,13 @@ def getSentimentRate():
     req = request.values
     
     #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
-    sql = 'SELECT SUM(case WHEN sentiment >= 0.5 then 1 else 0 end ) as positive,  SUM(case WHEN sentiment < 0.5 then 1 else 0 end ) as negative FROM usercomments ;'
+    sql = 'SELECT SUM(case WHEN sentiment = 1 then 1 else 0 end ) as positive,  SUM(case WHEN sentiment = 0 then 1 else 0 end ) as negative, SUM(case WHEN sentiment = 2 then 1 else 0 end ) as neutral FROM usercomments ;'
     result = db.session.execute(text(sql)).fetchall()
     List = {}
     for lis in result:
         List['positive'] = str(lis[0])
         List['negative'] = str(lis[1])
+        List['neutral'] = str(lis[2])
     return ops_renderJSON( msg = "get SentimentRate successfully!",data = List)
 
 @admin_page.route("/getToxicRate")

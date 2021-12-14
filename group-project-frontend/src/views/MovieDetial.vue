@@ -2,18 +2,18 @@
   <section class="amdb-details spad">
     <div class="">
       <a-modal
-        :visible="isShowTrailer"
+        :visible="isShowTrailer && video_id.length > 0"
         :maskClosable="true"
         :closable="false"
         :footer="null"
         :destroyOnClose="true"
-        :width="700"
+        :width="trailerWidth"
         @cancel="handleCancel"
       >
         <YoutubeVue3
           ref="youtube"
           :videoid="video_id"
-          :width="700"
+          :width="trailerWidth"
           :autoplay="0"
           :height="400"
         />
@@ -73,7 +73,7 @@
                 :src="moviePoster + movie.poster_path"
                 alt="Movie Poster"
                 class="amdb__details__pic set-bg"
-                @click="isShowTrailer = true"
+                @click="ShowTrailer()"
               />
             </div>
           </div>
@@ -182,7 +182,7 @@
                           type="primary"
                           @click="isShowCastDetail = false"
                         >
-                          Cancle
+                          Close
                         </el-button>
                       </span>
                     </template>
@@ -193,7 +193,7 @@
                 <a @click="addLikeList()" class="follow-btn">
                   <i class="fa fa-heart"></i> ADD Like list
                 </a>
-                <a @click="isShowTrailer = true" class="follow-btn"
+                <a @click="ShowTrailer()" class="follow-btn"
                   ><i class="fa fa-play"></i> <span>Watch trailer</span>
                 </a>
                 <a class="follow-btn fb_share_btn"
@@ -237,13 +237,10 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
-                            >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
                             >
                           </a-select-opt-group>
                           <a-select-opt-group>
@@ -252,6 +249,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -302,7 +302,7 @@
                                 ? { rows: 5, expandable: true, symbol: 'more' }
                                 : false
                             "
-                            v-html="judgeBadWord(item.comment)"
+                            :content="judgeBadWordOther(item.comment)"
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">
@@ -310,22 +310,59 @@
                             </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic) }} :
-                                {{ changeToPercent(item.toxic) }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{
+                                  "Toxicity rate: " +
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic)
+                                }}
+                                <a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                  />
+                                </a-popover>
                               </li>
                               <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment) }} :
-                                {{ changeToPercent(item.sentiment) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{ showSentiemntText(item.sentiment) }}
+                                <a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                  />
+                                </a-popover>
                               </li>
                               <li class="report">
                                 <a @click="amdbReport(item)">Report</a>
@@ -352,7 +389,12 @@
                       </template>
                       <template #content>
                         <a-form-item>
-                          <a-textarea v-model:value="commentsValue" :rows="4" />
+                          <a-textarea
+                            v-model:value="commentsValue"
+                            :rows="4"
+                            :maxlength="5000"
+                            show-count
+                          />
                         </a-form-item>
                         <a-form-item>
                           <button
@@ -388,13 +430,10 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
-                            >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
                             >
                           </a-select-opt-group>
                           <a-select-opt-group>
@@ -403,6 +442,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -433,8 +475,12 @@
                               <a-avatar
                                 :src="
                                   item.author_details.avatar_path
-                                    ? moviePoster +
-                                      item.author_details.avatar_path
+                                    ? linkCheck(item.author_details.avatar_path)
+                                      ? checkLink(
+                                          item.author_details.avatar_path
+                                        )
+                                      : moviePoster +
+                                        item.author_details.avatar_path
                                     : emptyprofile
                                 "
                               />
@@ -454,27 +500,62 @@
                           />
                           <div class="bottom-comment">
                             <div class="comment-date">
-                              {{ item.created_at }}
+                              {{ formatDate(item.created_at) }}
                             </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
+                                {{
+                                  "Toxicity rate: " +
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
                                 }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                <a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                  />
+                                </a-popover>
                               </li>
-                              <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment[0])"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                              <li class="report">
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                             </ul>
                           </div>
@@ -501,13 +582,10 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
-                            >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
                             >
                           </a-select-opt-group>
                           <a-select-opt-group>
@@ -516,6 +594,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -562,27 +643,66 @@
                             <div class="comment-date">{{ item.date }}</div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
-                                }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
-                              </li>
-                              <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment[0])"
-                                  style="height: 30px"
-                                  alt=""
-                                />
-                              </li>
-                              <li class="report">
                                 {{
-                                  item.warningSpoilers ? "warningSpoilers" : ""
+                                  "Toxicity rate: " +
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
+                                }}<a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                /></a-popover>
+                              </li>
+                              <li
+                                :class="
+                                  item.warningSpoilers
+                                    ? 'sentiemnt-rate'
+                                    : 'report'
+                                "
+                              >
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
+                              </li>
+                              <li class="report" v-if="item.warningSpoilers">
+                                {{
+                                  item.warningSpoilers ? "Spoiler warning " : ""
                                 }}
                               </li>
                             </ul>
@@ -610,13 +730,10 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
-                            >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
                             >
                           </a-select-opt-group>
                           <a-select-opt-group>
@@ -625,6 +742,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -668,26 +788,61 @@
                             :content="judgeBadWordOther(item.review)"
                           />
                           <div class="bottom-comment">
-                            <div class="comment-date">{{ item.time }}</div>
+                            <div class="comment-date">
+                              {{ formatDate(item.time) }}
+                            </div>
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
-                                }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{
+                                  "Toxicity rate: " +
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
+                                }}<a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                /></a-popover>
                               </li>
-                              <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment[0])"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                              <li class="report">
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                             </ul>
                           </div>
@@ -715,13 +870,10 @@
                               <span> Toxic Degree </span>
                             </template>
                             <a-select-option value="notoxic"
-                              >Non toxic</a-select-option
+                              >Non Toxic</a-select-option
                             >
                             <a-select-option value="toxic"
                               >Toxic</a-select-option
-                            >
-                            <a-select-option value="severetoxic"
-                              >Severe toxic</a-select-option
                             >
                           </a-select-opt-group>
                           <a-select-opt-group>
@@ -730,6 +882,9 @@
                             </template>
                             <a-select-option value="positive"
                               >Positive</a-select-option
+                            >
+                            <a-select-option value="neutral"
+                              >Neutral</a-select-option
                             >
                             <a-select-option value="negative"
                               >Negative</a-select-option
@@ -774,23 +929,56 @@
                           <div class="bottom-comment">
                             <ul class="comment-actions">
                               <li class="toxicrate">
-                                {{ showToxicText(item.toxic[0]) }}:{{
-                                  changeToPercent(item.toxic)
-                                }}
-                                <img
-                                  :src="showToxicImg(item.toxic)"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                                {{
+                                  "Toxicity rate: " +
+                                  changeToPercent(item.toxic) +
+                                  showToxicText(item.toxic[0])
+                                }}<a-popover title="Toxicity">
+                                  <template #content>
+                                    <p>
+                                      Green Skull:
+                                      <br />
+                                      0-53 Percent of Toxicity Chance - Most
+                                      likely Non-Toxic
+                                    </p>
+                                    <p>
+                                      Red Skull:
+                                      <br />
+                                      Above 54 Percent of Toxicity Chance -
+                                      Almost Certainly Toxic
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showToxicImg(item.toxic)"
+                                    style="height: 30px"
+                                    alt=""
+                                /></a-popover>
                               </li>
-                              <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment[0]) }} :
-                                {{ changeToPercent(item.sentiment[0]) }}
-                                <img
-                                  :src="showSentimentImg(item.sentiment[0])"
-                                  style="height: 30px"
-                                  alt=""
-                                />
+                              <li class="report">
+                                {{ showSentiemntText(item.sentiment)
+                                }}<a-popover title="Sentimental">
+                                  <template #content>
+                                    <p>
+                                      Green Similing Face:
+                                      <br />
+                                      Most Likely Positive
+                                    </p>
+                                    <p>
+                                      Yellow Normal Face:
+                                      <br />
+                                      Most Likely Neutral
+                                    </p>
+                                    <p>
+                                      Red Sad Face:
+                                      <br />
+                                      Most Likely Negative
+                                    </p>
+                                  </template>
+                                  <img
+                                    :src="showSentimentImg(item.sentiment)"
+                                    style="height: 30px; margin-left: 5px"
+                                    alt=""
+                                /></a-popover>
                               </li>
                             </ul>
                           </div>
@@ -822,7 +1010,6 @@
             >
               <router-link
                 :to="{ path: '/movie/' + item.id, query: { id: item.tmdb_Id } }"
-                @click.native="fleshMovie"
               >
                 <div class="product__sidebar__comment__item__pic">
                   <img
@@ -858,7 +1045,7 @@
 </template> 
 
 <script>
-import { ref, inject, onBeforeMount, computed, h, onMounted } from "vue";
+import { ref, onBeforeMount, computed, h, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import { useStore } from "vuex";
@@ -922,6 +1109,7 @@ export default {
     const video_id = ref("");
     const emptyprofile = ref("");
     const isShowTrailer = ref(false);
+    const trailerWidth = ref(700);
     const commentLoading = ref(false);
     const isShowCastDetail = ref(false);
     const AMDBAPI = ref(env.AMDBAPI);
@@ -934,9 +1122,9 @@ export default {
     const comments = ref([]);
     const submitting = ref(false);
     const commentsValue = ref("");
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       // fetch movie detail
-      UserApi.getMovieDetail(movieid.value).then((response) => {
+      await UserApi.getMovieDetail(movieid.value).then((response) => {
         movie.value = response.data;
         start.value = movie.value.vote_average / 2;
         imdbmovieid.value = response.data.imdb_id;
@@ -963,7 +1151,8 @@ export default {
       // Fetch setRecommendation
       UserApi.setRecommendation(
         movieid.value,
-        currentUser.value === null ? "" : currentUser.value.data.userId
+        currentUser.value === null ? "" : currentUser.value.data.userId,
+        movie.value.genres[0].id
       )
         .then((response) => {
           console.log("setRecommandation");
@@ -1030,15 +1219,22 @@ export default {
           FB.ui({
             method: "feed",
             name: "Facebook Dialogs",
-            link:
-              "http://amdb-frontend.s3-website-eu-west-1.amazonaws.com/movie/" +
-              movieid.value,
+            link: "http://amdbmovie.com/movie/" + movieid.value,
             picture: "http://fbrell.com/f8.jpg",
             caption: "wwwwwwwwwwwwwwwwwww",
             description: "yyyyyyyyyyyyyyyyyyyy",
           });
         });
       })(jQuery);
+
+      window.onresize = () => {
+        let w = window.innerWidth;
+        if (w > 700) {
+          trailerWidth.value = 700;
+        } else {
+          trailerWidth.value = w - 10;
+        }
+      };
     });
 
     const getAMDBComments = () => {
@@ -1080,20 +1276,20 @@ export default {
     };
 
     const showToxicImg = (rate) => {
-      if (rate > 0 && rate <= 0.53) {
-        return require("@/assets/toxic-green.png");
-      } else if (rate > 0.53 && rate < 0.9) {
-        return require("@/assets/toxic-yellow.png");
-      } else {
+      if (rate > 0.54) {
         return require("@/assets/toxic-red.png");
+      } else {
+        return require("@/assets/toxic-green.png");
       }
     };
 
     const showSentimentImg = (rate) => {
-      if (rate > 0.5) {
+      if (rate < 0.5) {
+        return require("@/assets/sentiment-red.png");
+      } else if (rate > 0.5 && rate < 1.5) {
         return require("@/assets/sentiment-green.png");
       } else {
-        return require("@/assets/sentiment-red.png");
+        return require("@/assets/sentiment-yellow.png");
       }
     };
 
@@ -1246,13 +1442,9 @@ export default {
           Number(commentStatus.toxic[0] * 100).toFixed(1) +
           "%)";
         popSentimentText.value =
-          "Sentiment is " +
-          showSentiemntText(commentStatus.sentiment[0]) +
-          "(" +
-          Number(commentStatus.sentiment[0] * 100).toFixed(1) +
-          "%).";
+          "Sentiment is " + showSentiemntText(commentStatus.sentiment[0]);
         commentConfirmLoading.value = false;
-        if (commentStatus.toxic[0] > 0.9) {
+        if (commentStatus.toxic[0] > 0.54) {
           popHightToxicText.value =
             "Your comment is SEVERE TOXIC. If you post too much, the administrator will block your account.";
         }
@@ -1262,12 +1454,13 @@ export default {
     const confirmAddComment = () => {
       commentLoading.value = true;
       addCommentsDialog.value = false;
+
+      const postFormData = new FormData();
+      postFormData.append("movieId", movieid.value);
+      postFormData.append("comment", commentsValue.value);
+      postFormData.append("userId", currentUser.value.data.userId);
       // Post comments
-      UserApi.postUserComment(
-        movieid.value,
-        commentsValue.value,
-        currentUser.value.data.userId
-      ).then((response) => {
+      UserApi.postUserComment(postFormData).then((response) => {
         // tmdbreview.value = response.data;
         console.log("Add comments ");
         console.log(response.data);
@@ -1298,11 +1491,11 @@ export default {
       return ToolMethod.changeToPercent(value);
     };
 
-    const fleshMovie = (to, from) => {
-      // window.location.reload()
-      // if (router.query) {
-      //   router.go(0);
-      // }
+    const ShowTrailer = () => {
+      isShowTrailer.value = true;
+      if (video_id.value.length < 1) {
+        message.error("Sorry，  trailer is not available now!");
+      }
     };
 
     const showCastDetail = (id) => {
@@ -1353,31 +1546,31 @@ export default {
       let comments = [];
       if (filter === "notoxic") {
         for (let i of value) {
-          if (i.toxic < 0.53) {
+          if (i.toxic <= 0.54) {
             comments.push(i);
           }
         }
       } else if (filter === "toxic") {
         for (let i of value) {
-          if (i.toxic >= 0.53 && i.toxic < 0.9) {
-            comments.push(i);
-          }
-        }
-      } else if (filter === "severetoxic") {
-        for (let i of value) {
-          if (i.toxic >= 0.9) {
+          if (i.toxic > 0.54) {
             comments.push(i);
           }
         }
       } else if (filter === "positive") {
         for (let i of value) {
-          if (i.sentiment >= 0.5) {
+          if (i.sentiment > 0.5 && i.sentiment < 1.5) {
             comments.push(i);
           }
         }
       } else if (filter === "negative") {
         for (let i of value) {
           if (i.sentiment < 0.5) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "neutral") {
+        for (let i of value) {
+          if (i.sentiment > 1.5) {
             comments.push(i);
           }
         }
@@ -1395,31 +1588,31 @@ export default {
       let comments = [];
       if (filter === "notoxic") {
         for (let i of value) {
-          if (i.toxic[0] < 0.53) {
+          if (i.toxic[0] <= 0.54) {
             comments.push(i);
           }
         }
       } else if (filter === "toxic") {
         for (let i of value) {
-          if (i.toxic[0] >= 0.53 && i.toxic < 0.9) {
-            comments.push(i);
-          }
-        }
-      } else if (filter === "severetoxic") {
-        for (let i of value) {
-          if (i.toxic[0] >= 0.9) {
+          if (i.toxic[0] > 0.54) {
             comments.push(i);
           }
         }
       } else if (filter === "positive") {
         for (let i of value) {
-          if (i.sentiment[0] >= 0.5) {
+          if (i.sentiment > 0.5 && i.sentiment < 1.5) {
             comments.push(i);
           }
         }
       } else if (filter === "negative") {
         for (let i of value) {
-          if (i.sentiment[0] < 0.5) {
+          if (i.sentiment < 0.5) {
+            comments.push(i);
+          }
+        }
+      } else if (filter === "neutral") {
+        for (let i of value) {
+          if (i.sentiment > 1.5) {
             comments.push(i);
           }
         }
@@ -1509,6 +1702,14 @@ export default {
       return ToolMethod.judgeBadWordOther(str);
     };
 
+    const linkCheck = (item) => {
+      return item.includes("http");
+    };
+
+    const checkLink = (item) => {
+      return item.slice(1, item.length);
+    };
+
     return {
       movie,
       start,
@@ -1543,13 +1744,17 @@ export default {
       twitterreview,
       castDetail,
       isShowCastDetail,
+      trailerWidth,
       ellipsis: ref(true),
       judgeBadWord,
+      linkCheck,
+      checkLink,
       judgeBadWordOther,
       amdbReport,
       handleCancel,
       handleSubmit,
       showCastDetail,
+      ShowTrailer,
       showToxicText,
       showSentiemntText,
       cancelAddComment,
@@ -1566,7 +1771,6 @@ export default {
       handleYoutubeFilterChange,
       handleTwitterFilterChange,
       changeCommentTab,
-      fleshMovie,
     };
   },
 };
@@ -1585,6 +1789,9 @@ export default {
   padding: 2px 12px;
   margin-bottom: 10px;
   border-radius: 4px;
+}
+.notrailer {
+  color: #fff;
 }
 .product__sidebar__comment__item__text ul {
   padding-left: 0 !important;
@@ -1608,7 +1815,7 @@ export default {
 }
 
 .amdb__details__pic {
-  height: 440px;
+  max-height: 440px;
   border-radius: 5px;
   position: relative;
 }

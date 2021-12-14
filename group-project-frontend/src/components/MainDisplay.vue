@@ -2,10 +2,13 @@
   <section class="product spad maindisplay">
     <div class="affix-div">
       <el-affix :offset="50" target=".maindisplay">
-        <!-- <el-button type="primary" @click="isShowDrawer = true"> -->
-        <div class="anchor-div" @click="isShowDrawer = true"></div>
-
-        <!-- </el-button> -->
+        <button class="follow-btn" @click="isShowDrawer = true">
+          <!-- <div class="anchor-div" @click="isShowDrawer = true"></div> -->
+          <!-- <div class="anchor-div-text" @click="isShowDrawer = true">
+          
+        </div> -->
+          Navigate to..
+        </button>
       </el-affix>
       <a-drawer
         v-model:visible="isShowDrawer"
@@ -14,14 +17,17 @@
         title=""
         placement="right"
       >
-        <a-anchor :affix="false" @change="onChange">
-          <a-anchor-link href="#search-div" title="Search" />
-          <a-anchor-link href="#carousel" title="carousel" />
-          <a-anchor-link href="#popularMovie" title="Popular Movie" />
-          <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
+        <h5 class="anchor-drawer" style="color: white">
+          Navigate to your favorite section
+        </h5>
+        <a-anchor @change="onChange">
+          <!-- <a-anchor-link href="#search-div" title="Search" /> -->
+          <!-- <a-anchor-link href="#carousel" title="Carousel" /> -->
+          <a-anchor-link href="#popularMovie" title="Popular Movies" />
+          <a-anchor-link href="#hignScoreMovie" title="Top Rated Movies" />
           <a-anchor-link
             href="#mainpage-recommendations"
-            title="Recommendation movies"
+            title="Recommendations"
           />
         </a-anchor>
       </a-drawer>
@@ -75,7 +81,7 @@
             <div class="home-carousel-right-title" style="">
               <div class="section-title">
                 <h4>
-                  <span style="margin-left: 5px">Upcoming</span>
+                  <span style="margin-left: 5px">Upcoming Movies</span>
                   <a
                     @click="showResultPage()"
                     class="primary-btn"
@@ -131,7 +137,7 @@
           <div id="hignScoreMovie">
             <Showpart
               :itemdata="hignScoreMovieData"
-              spacename="High Score Movie"
+              spacename="Top Rated Movies"
               isPopularorHighScore="2"
             />
           </div>
@@ -140,7 +146,7 @@
           <div class="product__sidebar">
             <div class="product__sidebar__comment">
               <div class="section-title">
-                <h5>The Most Comments movies</h5>
+                <h5>AMDb Popular Movies</h5>
               </div>
               <a-empty v-if="mostRecommendationMovies.length < 1">
                 <template #description>
@@ -226,7 +232,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed, nextTick } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
@@ -373,9 +379,19 @@ export default {
   .anchor-div {
     height: 50px;
     width: 50px;
-    background-image: url("../assets/test.gif");
+    background-image: url("../assets/arrow.gif");
     background-size: cover;
   }
+  .anchor-div-text {
+    padding-left: 10px;
+    color: #fff;
+    width: 50px;
+    font-size: 0.5px;
+  }
+}
+.anchor-drawer {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .testmain {
   transition: all 0.4s;
@@ -452,7 +468,7 @@ export default {
 }
 
 .trending__product {
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .popular__product {
@@ -591,7 +607,6 @@ export default {
   position: relative;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-image: url("../assets/trend-1.jpg");
 }
 
 .product__sidebar__view__item .ep {
@@ -967,6 +982,23 @@ export default {
   }
 }
 
+.follow-btn {
+  font-size: 5px;
+  color: #ffffff;
+  background: #e53637;
+  display: inline-block;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 5px;
+  border-radius: 54px;
+}
+
+@media only screen and (min-width: 975px) and (max-width: 1200px) {
+  .product__item__pic {
+    height: 250px !important;
+  }
+}
+
 @media only screen and (max-width: 798px) {
   .home-carousel-right {
     display: none !important;
@@ -981,22 +1013,29 @@ export default {
     display: block !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 560px) {
   .affix-div {
     position: relative;
     top: -50px;
-    left: -44px;
+    left: -40px;
     display: block !important;
   }
   .product__item {
-    width: 50% !important;
+    width: 75% !important;
   }
   .product__item__pic {
-    height: 160px !important;
+    height: 280px !important;
   }
   .product__item__text h5 a {
     line-height: 17px !important;
     font-size: 15px !important;
+  }
+  .feature-card {
+    margin-bottom: 0px !important;
+  }
+  .movie-content {
+    text-align: center;
+    text-align: -webkit-center;
   }
 }
 </style>

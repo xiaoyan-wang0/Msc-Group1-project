@@ -90,12 +90,11 @@ class UserService {
   }
 
   // set Recommendation
-  setRecommendation(movieid, userId) {
+  setRecommendation(movieid, userId, tag) {
     console.log("setRecommendation");
     return myAxios.amdbAxios({
-      url: "rec/setRecommandation?movieId=" +
-        movieid + "&userId=" + userId
-      ,
+      url: "rec/setRecommandation?movieId=" + movieid
+        + "&userId=" + userId + "&tagId=" + tag,
       method: 'get',
     });
   }
@@ -172,19 +171,28 @@ class UserService {
   // Detect user Comment
   detectUserComment(commentsValue) {
     console.log("detectUserComment");
+    const detectFormData = new FormData();
+    detectFormData.append("title", commentsValue);
     return myAxios.amdbAxios({
-      url: "/comments/toxic?title=" + commentsValue,
+      url: "/comments/toxic",
+      data: detectFormData,
       method: 'post',
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
     });
   }
 
   // Post user Comment
-  postUserComment(movieid, commentsValue, userId) {
+  postUserComment(data) {
     console.log("postUserComment");
     return myAxios.amdbAxios({
-      url: "comments/addComments?movieId=" + movieid +
-        "&comment=" + commentsValue + "&userId=" + userId,
+      url: "comments/addComments",
+      data: data,
       method: 'post',
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
     });
   }
 
@@ -245,6 +253,15 @@ class UserService {
     console.log("getRecentRecommendation");
     return myAxios.amdbAxios({
       url: "rec/getRecommandation?userId=" + userId,
+      method: 'get',
+    });
+  }
+
+  // Get history list
+  getHistoryList(userId) {
+    console.log("getHistoryList");
+    return myAxios.amdbAxios({
+      url: "rec/showHistory?userId=" + userId,
       method: 'get',
     });
   }

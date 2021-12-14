@@ -31,44 +31,50 @@ def review():
     if  result:
         return ops_renderJSON(msg = "Show Successfull!", data = result.content)
 
-    consumer_key="BtNMua2cnczTyaCIQ0ZKA01xV"
-    consumer_secret="dWWqv17X6XKVYm9SrfLr10WrJQHYCYhUjAhxw8DBKdoHBqaTTZ"
-    access_token="1444319826399408130-F8gWnTYETTKv5pEXlNSkPoGgDOc0dm"
-    access_token_secret="8D4vBQZrcsN3g1wPyfxUItcybcOctf8fioTtbuyfxEfKz"
+    try:
+    
+        consumer_key="BtNMua2cnczTyaCIQ0ZKA01xV"
+        consumer_secret="dWWqv17X6XKVYm9SrfLr10WrJQHYCYhUjAhxw8DBKdoHBqaTTZ"
+        access_token="1444319826399408130-F8gWnTYETTKv5pEXlNSkPoGgDOc0dm"
+        access_token_secret="8D4vBQZrcsN3g1wPyfxUItcybcOctf8fioTtbuyfxEfKz"
 
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-    api = tweepy.API(auth)
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+        api = tweepy.API(auth)
 
-    # To be added: Search tweets according to page number...
-    cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended", lang='en').items(20)
+        # To be added: Search tweets according to page number...
+        cursor = tweepy.Cursor(api.search_tweets, q=str(movieName), tweet_mode="extended", lang='en').items(20)
 
-    list = []
-
-
-    # for c in cursor:
-    #     list.append(c.full_text)
-
-    dic2= []
-    for c in cursor:
-        dic = {}
-        content =  [c.full_text]
-        dic['content'] = c.full_text
-        result = detector(content)
-        dic['toxic'] = result['tag']
-        senti = sentiment(content)
-        dic['sentiment'] = senti['tag']
-        dic2.append(dic)
+        list = []
 
 
-    model_reviews = Review()
-    model_reviews.content = dic2
-    model_reviews.movieId = movieId
-    model_reviews.type = 4
+        # for c in cursor:
+        #     list.append(c.full_text)
 
-    db.session.add( model_reviews )
-    db.session.commit()
-    db.session.close()
-    db.engine.dispose()
+        dic2= []
+        for c in cursor:
+            dic = {}
+            content =  [c.full_text]
+            dic['content'] = c.full_text
+            result = detector(content)
+            dic['toxic'] = result['tag']
+            senti = sentiment(content)
+            dic['sentiment'] = senti['tag']
+            dic2.append(dic)
+
+
+        model_reviews = Review()
+        model_reviews.content = dic2
+        model_reviews.movieId = movieId
+        model_reviews.type = 4
+
+        db.session.add( model_reviews )
+        db.session.commit()
+        db.session.close()
+        db.engine.dispose()
+    
+    except Exception:
+        return ops_renderJSON(msg = "Show Successfull!", data = [])
+    
 
     return ops_renderJSON(msg = "Show Comments Successfull!", data = dic2)

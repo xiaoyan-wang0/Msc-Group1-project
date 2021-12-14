@@ -16,7 +16,7 @@
     </div>
     <div class="row" v-if="itemdata.results !== undefined">
       <div
-        class="col-lg-4 col-md-6 col-sm-6"
+        class="col-lg-4 col-md-6 col-sm-6 movie-content"
         v-for="item in itemdata.results.slice(0, 6)"
         :key="item.id"
       >
@@ -78,8 +78,7 @@ export default {
       localStorage.setItem("resultResource", props.isPopularorHighScore);
       router.push({
         name: "ResultDisplay",
-        params: {
-        },
+        params: {},
       });
     };
 
