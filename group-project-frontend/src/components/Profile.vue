@@ -109,6 +109,7 @@
                     :columns="likeColumns"
                     :data-source="likeListData"
                     :scroll="{ x: 700 }"
+                    :customRow="onSelectFunction"
                   >
                     <template #name="{ text }">
                       <a>{{ text }}</a>
@@ -314,7 +315,7 @@ export default {
         title: "Comment",
         dataIndex: "comment",
         key: "comment",
-        minWidth: 100,
+        minWidth: 300,
         ellipsis: true,
       },
       {
@@ -505,20 +506,19 @@ export default {
       });
     };
 
-    // const onSelectFunction = (record, selected, selectedRows, nativeEvent) => {
-    //   console.log("onSelectFunction");
-    //   console.log(record);
-    //   console.log(selected);
-    //   console.log(selectedRows);
-    //   console.log(nativeEvent);
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    // };
     const onSelectFunction = (record) => {
       return {
         onClick: (event) => {
           console.log("click row", record);
+          if (record.id > -1) {
+            router.push({
+              path: "/movie/" + record.id,
+            });
+          } else if (record.movieId) {
+            router.push({
+              path: "/movie/" + record.movieId,
+            });
+          }
         },
       };
     };

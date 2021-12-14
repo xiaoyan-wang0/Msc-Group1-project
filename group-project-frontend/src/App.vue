@@ -95,7 +95,7 @@
             <div class="footer__nav">
               <ul>
                 <li class="active"><a href="/">Homepage</a></li>
-                <li><a href="#">Contacts</a></li>
+                <li><a href="/main/aboutus#teaminfo">Contacts</a></li>
               </ul>
             </div>
           </div>
@@ -103,7 +103,7 @@
             <p>
               Copyright All rights reserved | This website is made with
               <i class="fa fa-heart" aria-hidden="true"></i> by
-              <a href="#" target="_blank">TEAM 1</a>
+              <a href="/main/aboutus#teaminfo">TEAM 1</a>
             </p>
           </div>
         </div>
@@ -282,6 +282,14 @@ body {
   }
   .ant-anchor-link-title {
     font-size: 18px;
+  }
+  .ant-popover-inner {
+    background-color: rgba(53, 51, 51, 0.9) !important;
+  }
+  .ant-popover-title,
+  .ant-popover-inner-content p {
+    color: #fff !important;
+    font-size: 10px !important;
   }
 }
 * {

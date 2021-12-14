@@ -3,7 +3,7 @@ class ToolMethod {
         if (rate > 0.54) {
             return " Toxic";
         } else {
-            return " Non toxic";
+            return " Non Toxic";
         }
     }
 
@@ -36,7 +36,7 @@ class ToolMethod {
     }
 
     changeToPercent(number) {
-        return Number(number * 100).toFixed(2) + "%";
+        return Number.parseInt(number * 100) + "%";
     }
 
     formatDate(string) {
