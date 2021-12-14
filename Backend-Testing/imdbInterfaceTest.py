@@ -1,8 +1,9 @@
 import unittest
 import requests
 from jsonpath import jsonpath
+import timeit
 
-imdbId = 'tt0096895'
+imdbId = 'tt0047478'
 
 response1 = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + imdbId)
 year = jsonpath(response1.json(),'$..year')
@@ -41,14 +42,22 @@ response6 = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + imd
 reviews = jsonpath(response6.json(),'$.items..content')
 #reviews = response6.json()
 
+start = timeit.default_timer()
 response6_2 = requests.get('http://127.0.0.1:5000/movieImdb/movieImdbReviews?movieId=' + imdbId)
 reviews2 = jsonpath(response6_2.json(),'$..content')
+stop = timeit.default_timer()
+Time1 = stop - start
+print('Time: ', Time1) 
 
-response7 = requests.get('http://127.0.0.1:5000/movieImdb/movieImdbBottomInfo?numberOfMovies=5')
+start = timeit.default_timer()
+response7 = requests.get('http://127.0.0.1:5000/movieImdb/movieImdbBottomInfo?numberOfMovies=10')
 titles = jsonpath(response7.json(),'$..movie_title')
 imdbRatings = jsonpath(response7.json(),'$..Imdb_Rating')
 years = jsonpath(response7.json(),'$..year')
 posters = jsonpath(response7.json(),'$..posters')
+stop = timeit.default_timer()
+Time2 = stop - start
+print('Time: ', Time2) 
 
 response8 = requests.get('http://127.0.0.1:5000/movieImdb/movieImdbLoadWorstComments?movieId=tt0096895')
 reviewsWorst = jsonpath(response8.json(),'$..review')
@@ -74,7 +83,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(ImdbRating, ImdbRating2[0])
 
     def test_plot(self):
-        self.assertEqual(plot[0], plot2[0])
+        self.assertEqual(plot, plot2)
 
     def test_cast(self):
         self.assertEqual(cast, cast2[0])    
@@ -84,22 +93,40 @@ class TestStringMethods(unittest.TestCase):
 
 #Testing movieImdbReview part of the Interface:
 
-    def test_reviews(self):
-        self.assertEqual(reviews, reviews2) 
+    def test_reviews1(self):
+        self.assertEqual(reviews[0], reviews2[0]) 
 
-#Testing movieImdbBottomInfo part of the Interface
+    def test_reviews2(self):
+        self.assertEqual(reviews[1], reviews2[1]) 
+
+    def test_reviews3(self):
+        self.assertEqual(reviews[10], reviews2[10]) 
+
+    def test_reviews4(self):
+        self.assertEqual(reviews[7], reviews2[7]) 
+
+# #Testing movieImdbBottomInfo part of the Interface
 
     def test_bottom1(self):
-        self.assertEqual(titles[2], 'Manos: The Hands of Fate') 
+        self.assertEqual(titles[2], 'Kod Adi KOZ') 
 
     def test_bottom2(self):
-        self.assertEqual(imdbRatings[0][0], '1.9')
+        self.assertEqual(titles[3], 'Manos: The Hands of Fate') 
 
     def test_bottom3(self):
-        self.assertEqual(years[1], '2004')
+        self.assertEqual(titles[7], 'House of the Dead') 
 
     def test_bottom4(self):
-        self.assertEqual(posters[3][0], 'https://imdb-api.com/posters/original/dqMj3H7yfF8TMueSlzAi5xHbxoF.jpg')
+        self.assertEqual(imdbRatings[0][0], '1.9')
+
+    def test_bottom5(self):
+        self.assertEqual(years[1], '2004')
+
+    def test_bottom6(self):
+        self.assertEqual(years[2], '2015')
+
+    def test_bottom7(self):
+        self.assertEqual(years[7], '2003')
 
 #Testing movieImdbLoadWorstComments part of the Interface
 
@@ -111,6 +138,16 @@ class TestStringMethods(unittest.TestCase):
         
     def test_worst2(self):
         self.assertEqual(ratingsWorst[3], '1/10')   
+
+#Testing performance of movieImdbReview part of the Interface in terms of runtime.
+
+    def test_ImdbReviewRuntime(self):
+        self.assertLessEqual(Time1, 15) 
+
+#Testing performance of worst raated movies part of the Interface in terms of runtime.
+
+    def test_worstRuntime(self):
+        self.assertLessEqual(Time2, 10) 
 
 
 if __name__ == '__main__':

@@ -3,6 +3,7 @@ import requests
 from jsonpath import jsonpath
 from tmdbv3api import TMDb
 from tmdbv3api import Movie
+import timeit
 
 tmdbId = '49026'
 
@@ -11,10 +12,14 @@ reviews = jsonpath(response1.json(),'$..content')
 authors = jsonpath(response1.json(),'$..author')
 urls = jsonpath(response1.json(),'$..url')
 
+start = timeit.default_timer()
 response1_2 = requests.get('http://127.0.0.1:5000/movieTmdb/movieTmdbReviews?movieId=' + tmdbId)
 reviews2 = jsonpath(response1_2.json(),'$..content')
 authors2 = jsonpath(response1_2.json(),'$..author')
 urls2 = jsonpath(response1_2.json(),'$..url')
+stop = timeit.default_timer()
+Time1 = stop - start
+print(Time1)
 
 tmdb = TMDb()
 tmdb.language = 'en'
@@ -46,13 +51,34 @@ class TestStringMethods(unittest.TestCase):
 #Testing movieTmdbReviews part of the Interface:
 
     def test_movieTmdbReviews1(self):
-        self.assertEqual(reviews, reviews2)
+        self.assertEqual(reviews[0], reviews2[0])
 
     def test_movieTmdbReviews2(self):
-        self.assertEqual(authors, authors2)
+        self.assertEqual(reviews[3], reviews2[3])
 
     def test_movieTmdbReviews3(self):
-        self.assertEqual(urls, urls2)
+        self.assertEqual(reviews[5], reviews2[5])
+
+    def test_movieTmdbReviews4(self):
+        self.assertEqual(reviews[1], reviews2[1])
+
+    def test_movieTmdbReviews5(self):
+        self.assertEqual(reviews[4], reviews2[4])
+
+    def test_movieTmdbReviews6(self):
+        self.assertEqual(authors[0], authors2[0])
+
+    def test_movieTmdbReviews7(self):
+        self.assertEqual(authors[2], authors2[2])
+
+    def test_movieTmdbReviews8(self):
+        self.assertEqual(authors[1], authors2[1])
+
+    def test_movieTmdbReviews9(self):
+        self.assertEqual(urls[0], urls2[0])
+
+    def test_movieTmdbReviews10(self):
+        self.assertEqual(urls[1], urls2[1])
 
 # Testing movieTmdbInfo part of the Interface: 
 
@@ -73,6 +99,11 @@ class TestStringMethods(unittest.TestCase):
         
     def test_movieTmdbInfo6(self):
         self.assertEqual(imdb_id, imdb_id2[0])   
+
+# Performance testing in terms of runtime
+
+    def test_TmdbReviewRuntime(self):
+        self.assertLessEqual(Time1, 15) 
 
 
 if __name__ == '__main__':
