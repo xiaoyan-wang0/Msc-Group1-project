@@ -4,6 +4,9 @@ from flask import  request,g
 from common.models.user import User
 from common.libs.UserService import UserService
 
+'''
+set cookie
+'''
 @app.before_request
 def before_request():
     app.logger.info( "--------before_request--------" )
@@ -24,6 +27,7 @@ def after_request( response ):
 if user is login
 '''
 def check_login():
+    #
     cookies = request.cookies
     cookie_name = app.config['AUTH_COOKIE_NAME']
     auth_cookie = cookies[cookie_name] if cookie_name in cookies else None
