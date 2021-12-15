@@ -1446,7 +1446,7 @@ export default {
         commentConfirmLoading.value = false;
         if (commentStatus.toxic[0] > 0.54) {
           popHightToxicText.value =
-            "Your comment is SEVERE TOXIC. If you post too much, the administrator will block your account.";
+            "Your comment is maybe TOXIC. If you post too much, the administrator will block your account.";
         }
       });
     };
@@ -1494,7 +1494,7 @@ export default {
     const ShowTrailer = () => {
       isShowTrailer.value = true;
       if (video_id.value.length < 1) {
-        message.error("Sorry，  trailer is not available now!");
+        message.error("Sorry, trailer is not available now!");
       }
     };
 
@@ -1664,7 +1664,7 @@ export default {
 
     const confirmReportComment = () => {
       // report comments
-      UserApi.addLikeList(reportCommentId, currentUser.value.data.userId)
+      UserApi.reportComment(reportCommentId, currentUser.value.data.userId)
         .then((response) => {
           console.log("confirmReportComment ");
           console.log(response.data);
