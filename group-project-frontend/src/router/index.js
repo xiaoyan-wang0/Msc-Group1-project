@@ -20,23 +20,23 @@ const routes = [
   {
     path: '/main',
     name: 'Main',
-    component: MainPage,
+    component: () => import('../views/MainPage.vue'),
     children: [
       {
         path: 'home',
         name: 'Home',
-        component: Home,
+        component: () => import('../views/Home.vue'),
         children: [
           {
             path: 'maindisplay',
             name: 'MainDisplay',
-            component: MainDisplay,
+            component: () => import('../components/MainDisplay.vue'),
             props: true
           },
           {
             path: 'result',
             name: 'ResultDisplay',
-            component: ResultDisplay,
+            component: () => import('../components/ResultPage.vue'),
             props: true
           },
 
@@ -46,61 +46,61 @@ const routes = [
       {
         path: '/movie/:id',
         name: 'Movie Detail',
-        component: MovieDetial
+        component: () => import('../views/MovieDetial.vue'),
       },
       {
         path: 'profile',
         name: 'Profile',
-        component: Profile,
+        component: () => import('../components/Profile.vue'),
       },
       {
         path: 'setting',
         name: 'Setting',
-        component: PersonalSetting,
+        component: () => import('../components/PersonalSetting.vue'),
       },
       {
         path: 'detector',
         name: 'CommentDetector',
-        component: CommentDetector
+        component: () => import('../components/CommentDetector.vue'),
       },
       {
         path: 'aboutus',
         name: 'AboutUs',
-        component: AboutUs
+        component: () => import('../views/AboutUs.vue'),
       }
     ],
-    redirect: Home
+    redirect: () => import('../views/Home.vue')
   },
 
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: () => import('../views/Login.vue'),
   },
 
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: () => import('../views/Register.vue'),
   },
 
   {
     path: '/admin',
     name: 'adminHome',
-    component: AdminHome,
+    component: () => import('../admin/AdminHome.vue'),
     children: [
       {
         path: 'user',
         name: 'User',
-        component: UserTable
+        component: () => import('../admin/User.vue'),
       }, {
         path: 'comments',
         name: 'Comments',
-        component: CommentTable
+        component: () => import('../admin/Comment.vue'),
       }, {
         path: 'reports',
         name: 'Reports',
-        component: ReportTable
+        component: () => import('../admin/Report.vue'),
       },
     ],
     redirect: '/admin/user',
@@ -109,7 +109,7 @@ const routes = [
   {
     path: '/adminLogin',
     name: 'adminLogin',
-    component: AdminLogin
+    component: () => import('../admin/AdminLogin.vue'),
   },
 
   {
