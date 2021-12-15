@@ -1,0 +1,31 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Status,Text Area 1
+1,Document,,,,,,,,,,Admin User diagram
+2,Page,,,,,,,,,,Page 1
+3,MinimalTextBlock,Standard,2,,,,,,,,Admin User diagram
+4,Actor,UML,2,,,,,,,,Admin User
+5,Use Case,UML,2,,,,,,,,Open AMBb admin
+6,Use Case,UML,2,,,,,,,,User Comments
+7,Use Case,UML,2,,,,,,,,View User information / Homepage
+8,Use Case,UML,2,,,,,,,,Unblock User
+9,Use Case,UML,2,,,,,,,,Login 
+10,Use Case,UML,2,,,,,,,,Block User
+11,Use Case,UML,2,,,,,,,,Report comment
+12,Use Case,UML,2,,,,,,,,Delete Comment
+13,Use Case,UML,2,,,,,,,,View all users
+14,Use Case,UML,2,,,,,,,,View all user comments
+15,Use Case,UML,2,,,,,,,,Logout
+16,Text,Standard,2,,,,,,,,<extend>
+17,Text,Standard,2,,,,,,,,<include>
+18,Text,Standard,2,,,,,,,,<extend>
+19,Line,,2,,,5,9,None,Arrow,,
+20,Line,,2,,,9,7,None,Arrow,,
+21,Line,,2,,,7,13,None,Arrow,,
+22,Line,,2,,,7,14,None,Arrow,,
+23,Line,,2,,,14,6,None,Arrow,,
+24,Line,,2,,,14,11,None,Arrow,,
+25,Line,,2,,,7,15,None,Arrow,,
+26,Line,,2,,,4,5,None,None,,
+27,Line,,2,,,10,7,None,Arrow,,
+28,Line,,2,,,8,7,None,Arrow,,
+29,Line,,2,,,12,6,None,Arrow,,
+30,Line,,2,,,12,11,None,Arrow,,
