@@ -27,7 +27,7 @@ def get_result():
         result.append ({'title': 'The txt you input', 'tag': 'Percentage' })
     return jsonify(result)
 
-
+#call docker model
 def sentiment(title):
 
 

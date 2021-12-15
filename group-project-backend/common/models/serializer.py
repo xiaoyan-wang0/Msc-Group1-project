@@ -1,6 +1,6 @@
 from sqlalchemy.inspection import inspect
 
-
+#JSON process
 class Serializer(object):
 
     def serialize(self):

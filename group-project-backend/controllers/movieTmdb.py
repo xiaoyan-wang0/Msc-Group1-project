@@ -23,17 +23,18 @@ from requests_futures.sessions import FuturesSession
 
 movie_page_Tmdb = Blueprint( "movie_page_Tmdb",__name__ )
 
+'''
+show Comments from TMDb
+
+movieId
+'''   
 @movie_page_Tmdb.route("/movieTmdbReviews")
 def review():
-    '''
-    if 'current_user' in  g:
-        current_user = g.current_user
-    if current_user == None : 
-        return ops_renderErrJSON( msg ="please login first")
-    '''
 
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
+
+    #check cache
     type = str(2)
     textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
     result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
@@ -41,7 +42,7 @@ def review():
         return ops_renderJSON(msg = "Show Successfull!", data = result.content)
 
 
-  # I am using a Python Library for the TMDB API which is very convinient and easy to use.
+    # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
     tmdb.language = 'en'
     tmdb.debug = True
@@ -56,7 +57,7 @@ def review():
     response = requests.get('https://api.themoviedb.org/3/movie/' + theId + '/reviews?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
     reviews = jsonpath(response.json(),'$..results')
     
-
+    #call detector
     for review in reviews[0]:
         content = [review['content']]
         result = detector(content)
@@ -68,6 +69,7 @@ def review():
         "reviews": reviews
     }
 
+    #save to cache
     model_reviews = Review()
     model_reviews.content = movieInfoDictionary
     model_reviews.movieId = movieId
@@ -79,19 +81,20 @@ def review():
 
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
+'''
+show movie Information details
+
+movieId
+userId
+''' 
 @movie_page_Tmdb.route("/movieTmdbInfo")
 def Info():
-    '''
-    if 'current_user' in  g:
-        current_user = g.current_user
-    if current_user == None : 
-        return ops_renderErrJSON( msg ="please login first")
-    '''
 
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
     userId = req['userId'] if "userId" in req else ""
 
+    #save history
     if userId != "":
         user = User.query.filter_by( userId = userId ).first()
         if user:

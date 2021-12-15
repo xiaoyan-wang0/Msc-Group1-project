@@ -24,14 +24,21 @@ import time
 
 admin_page = Blueprint( "admin_page",__name__ )
 
+'''
+Report Comments
+
+userId
+id -> commentsId
+'''
 @admin_page.route("/doReport")
 def doReport():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     id = req['id'] if "id" in req else ""
     result = Usercomment.query.filter_by( id = id ).first()
 
+    #check if reported
     if result and result.ifReport == 0:
         db.session.query(Usercomment).filter(Usercomment.id == id).update({"ifReport":1,"reporterId":userId})
 
@@ -40,21 +47,28 @@ def doReport():
 
     return ops_renderJSON( msg = "report successfully!")
 
-
+'''
+get reported Comments
+'''
 @admin_page.route("/getReportComments")
 def getReportComments():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
-    #req = request.values
-    #userId = req['userId'] if "userId" in req else ""
+
     result = Usercomment.query.filter(Usercomment.ifReport == '1').order_by(Usercomment.id.desc()).all()
     db.session.close()
     db.engine.dispose()
     result = Serializer.serialize_list(result)
+
     return ops_renderJSON( msg = "report successfully!", data = result)
 
+'''
+login in admin page
+
+name
+password
+'''
 @admin_page.route("/adminLogin", methods = ["POST" ])
 def adminLogin():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     name = req['name'] if "name" in req else ""
     password = req['password'] if "password" in req else ""
@@ -64,11 +78,17 @@ def adminLogin():
 
     return ops_renderJSON( msg = "login successfully!")
 
+
+'''
+get all users
+
+'''
 @admin_page.route("/userList")
 def userList():
     
     users = User.query.all()
     List = []
+    #select from database
     for user in users:
         userInfo = Userinfo2.query.filter_by( userId = user.userId ).first()
         db.session.close()
@@ -79,45 +99,68 @@ def userList():
 
     return ops_renderJSON( msg = "login successfully!",data = List)
 
+'''
+get all comments
+
+'''
 @admin_page.route("/commentsList")
 def commentsList():
-    
+
     commentsList = Usercomment.query.all()
     commentsList = Serializer.serialize_list(commentsList)
 
     return ops_renderJSON( msg = "login successfully!",data = commentsList)
 
+'''
+get sentiment chart
+
+'''
 @admin_page.route("/getSentimentRate")
 def getSentimentRate():
     
     req = request.values
-    
-    #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
+
+    #sql code
     sql = 'SELECT SUM(case WHEN sentiment = 1 then 1 else 0 end ) as positive,  SUM(case WHEN sentiment = 0 then 1 else 0 end ) as negative, SUM(case WHEN sentiment = 2 then 1 else 0 end ) as neutral FROM usercomments ;'
     result = db.session.execute(text(sql)).fetchall()
     List = {}
+
+    #set json parameters
     for lis in result:
         List['positive'] = str(lis[0])
         List['negative'] = str(lis[1])
         List['neutral'] = str(lis[2])
+
     return ops_renderJSON( msg = "get SentimentRate successfully!",data = List)
 
+'''
+get toxic chart
+
+'''
 @admin_page.route("/getToxicRate")
 def getToxicRate():
     
     req = request.values
 
-    #sql = 'SELECT DISTINCT movieId,createTime FROM recommandation WHERE userId = ' +userId+ ' ORDER BY createTime DESC LIMIT 5;'
+    #sql code
     sql = 'SELECT SUM(case WHEN toxic <= 0.53 then 1 else 0 end ) as toxic,  SUM(case WHEN toxic > 0.53 AND toxic < 0.9 then 1 else 0 end ) as midToxic, SUM(case WHEN toxic >= 0.9 then 1 else 0 end ) as noneToxic FROM usercomments ;'
     result = db.session.execute(text(sql)).fetchall()
+
+    #set json parameters
     List = {}
     for lis in result:
         List['toxic'] = str(lis[0])
         List['midToxic'] = str(lis[1])
         List['noneToxic'] = str(lis[2])
+
     return ops_renderJSON( msg = "get toxicRate successfully!",data = List)
 
 
+'''
+block user
+
+userId
+'''
 @admin_page.route("/blockUser")
 def blockUser():
     
@@ -126,17 +169,24 @@ def blockUser():
     
     if userId != "":
         user = User.query.filter_by( userId = userId ).first()
+        #check if the user exist
         if user:
             db.session.query(User).filter(User.userId == userId).update({"ifBlocked":1})
             db.session.close()
             db.engine.dispose()
     return ops_renderJSON( msg = "block user successfully!")
 
+'''
+delete comments
+
+id -> comments Id
+'''
 @admin_page.route("/deleteComments")
 def deleteComments():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     id = req['id'] if "id" in req else ""
+
     try:
         db.session.query(Usercomment).filter(Usercomment.id == id).delete()
         db.session.commit()
@@ -146,9 +196,17 @@ def deleteComments():
     finally:
         db.session.close()
         db.engine.dispose()
+    
+    #reduce system concurrent
     time.sleep(1.5)
+
     return ops_renderJSON( msg = "delete comment successfully!")
 
+'''
+unblock comments
+
+userId
+'''
 @admin_page.route("/unBlockUser")
 def unBlockUser():
     
@@ -157,6 +215,8 @@ def unBlockUser():
     
     if userId != "":
         user = User.query.filter_by( userId = userId ).first()
+
+        #check if user exist
         if user:
             db.session.query(User).filter(User.userId == userId).update({"ifBlocked":0})
             db.session.close()
@@ -164,6 +224,12 @@ def unBlockUser():
     
     return ops_renderJSON( msg = "block user successfully!")
 
+
+'''
+get user by email
+
+email
+'''
 @admin_page.route("/getUser")
 def getUser():
     

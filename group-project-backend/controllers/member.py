@@ -25,6 +25,15 @@ import base64
 
 member_page = Blueprint( "member_page",__name__ )
 
+'''
+registration
+POST
+
+userName
+email
+password
+
+'''
 @member_page.route("/reg",methods = [ "POST" ])
 def reg():
 
@@ -43,6 +52,7 @@ def reg():
     if user_info:
         return ops_renderErrJSON( msg ="email already registered")
 
+    #save to database
     model_user = User()
     model_user.userName = userName
     model_user.email = email
@@ -58,6 +68,7 @@ def reg():
         db.session.close()
         db.engine.dispose()
 
+    #save user Information
     newUser = User.query.filter_by( email = email ).first()
 
     model_userInfo = Userinfo()
@@ -68,35 +79,47 @@ def reg():
     userInfo = Userinfo.query.filter_by( userId = newUser.userId ).first()
     userInfo = Userinfo.serialize(userInfo)
     newUser = User.serialize(newUser)
-    # userJson.append(userInfo)
     dictMerged2 = dict( newUser, **userInfo )
     db.session.close()
     db.engine.dispose()
+
     return ops_renderJSON( msg = "register successfully!",data = dictMerged2)
 
+
+'''
+login
+POST
+
+email
+password
+'''
 @member_page.route("/login",methods = ["POST" ])
 def login():
 
     req = request.values
     email = req['email'] if 'email' in req else ''
     password = req['password'] if 'password' in req else ''
+
     if email is None or len( email ) < 1:
         return ops_renderErrJSON(  "Please enter the correct email" )
 
     if password is None or len( password ) < 6:
         return ops_renderErrJSON("Please enter the correct password")
+    
+    #check if user exist
     user = User.query.filter_by( email = email ).first()
     if not user:
         return ops_renderErrJSON("email not exist")
 
     if user.password != UserService.genePwd( password ):
         return ops_renderErrJSON("password error")
-    #userJson = []
-    # userJson.append(User.serialize(user))
+
+    #get user Information
     userInfo = Userinfo.query.filter_by( userId = user.userId ).first()
     userInfo.image = ""
     userInfo = Userinfo.serialize(userInfo)
-    # userJson.append(userInfo)
+
+    #make response
     dictMerged2 = dict( User.serialize(user), **userInfo )
     response = make_response( ops_renderJSON( msg="login successfully!",data = dictMerged2 ) )
     response.set_cookie(app.config['AUTH_COOKIE_NAME'],
@@ -104,25 +127,41 @@ def login():
     
     return response
 
+'''
+logout
+
+'''
 @member_page.route("/logout")
 def logOut():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
+    #move cookie
     response = make_response( ops_renderJSON( msg="logout successfully!" ) )
     response.delete_cookie(  app.config['AUTH_COOKIE_NAME'] )
     return response
 
+
+'''
+add a movie to user like list
+
+userId
+movieId
+'''
 @member_page.route("/movieLikes")
 def movieLikes():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if 'userId' in req else ''
     movieId = req['movieId'] if 'movieId' in req else ''
 
+    #select
     textsql = " 1=1 and movieId = "+ movieId + " and userId = "+ userId + " and type = 1"
     usermovy = Usermovy.query.filter(text(textsql)).all()
+
+    #check if already likes
     if usermovy:
         return ops_renderErrJSON( msg ="user already liked")
 
+    #add to database
     model_movies = Usermovy()
     model_movies.movieId = movieId
     model_movies.userId = userId
@@ -140,15 +179,23 @@ def movieLikes():
 
     return ops_renderJSON(msg = "Show movieLikes Successfull!")
 
+'''
+show movies that the user likes
+
+userId
+movieId
+'''
 @member_page.route("/showMovieLikes")
 def showMovieLikes():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
-    #userId = str(current_user.userId)
     movieId = req['movieId'] if "movieId" in req else ""
+
+    #select database
     textsql = " 1=1 and movieId = "+ movieId + " and userId = "+ userId + " and type = 1"
     result = Usermovy.query.filter(text(textsql)).order_by(Usermovy.Id.desc()).all()
+
     movieLikes = []
     for userMovies in result:
         userMovie = Serializer.serialize(userMovies)
@@ -157,12 +204,19 @@ def showMovieLikes():
 
     return ops_renderJSON( msg = "show movieLikes successfully!",data = movieLikes )
 
+'''
+show movies that the user likes
 
+userId
+movieId
+'''
 @member_page.route("/showMovieList")
 def showMovieList():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
+
+    #select
     textsql = " 1=1 and userId = "+ userId + " and type = 1"
     result = Usermovy.query.filter(text(textsql)).order_by(Usermovy.Id.desc()).all()
     movieLikes = []
@@ -170,6 +224,7 @@ def showMovieList():
         userMovie = Serializer.serialize(userMovies)
         movieInfo = {}
 
+        #call TMDb api to get movie information based on movieId
         response2 = requests.get('https://api.themoviedb.org/3/movie/' + userMovies.movieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1')
         genres = jsonpath(response2.json(),'$..genres')
 
@@ -180,6 +235,7 @@ def showMovieList():
         movie = Movie()
         m = movie.details(userMovies.movieId)
 
+        #Setting JSON parameters
         movieInfo['genres'] = genres
         movieInfo['title'] = m.title
         movieInfo['poster_path'] = "https://image.tmdb.org/t/p/w500" + m.poster_path
@@ -192,22 +248,34 @@ def showMovieList():
 
     return ops_renderJSON( msg = "show movieLikes successfully!",data = movieLikes )
 
+'''
+show the user comments
+
+userId
+movieId
+'''
 @member_page.route("/showCommentList")
 def showCommentList():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     textsql = " 1=1 and userId = "+ userId
     
+    #reduce server concurrent
     time.sleep(1)
+
+    #get from database
     result = Usercomment.query.filter(text(textsql)).order_by(Usercomment.id.desc()).all()
     movieComments = []
+
     for comments in result:
+
         comments.toxic = round(float(comments.toxic), 2)
         comments.sentiment = round(float(comments.sentiment), 2)
         comment = Serializer.serialize(comments)
         movieInfo = {}
 
+        #call TMDb api to get movie information based on movieId
         tmdb = TMDb()
         tmdb.language = 'en'
         tmdb.debug = True
@@ -215,6 +283,7 @@ def showCommentList():
         movie = Movie()
         m = movie.details(comments.movieId)
 
+        #setting JSON parameters
         movieInfo['title'] = m.title
         movieInfo['poster_path'] = "https://image.tmdb.org/t/p/w500"+ m.poster_path
         movieInfo['popularity'] = m.popularity
@@ -225,14 +294,19 @@ def showCommentList():
 
     return ops_renderJSON( msg = "show commentList successfully!",data = movieComments )
 
+'''
+delete the user comments
+
+id -> commentsId
+userId
+movieId
+'''
 @member_page.route("/deleteComment")
 def deleteComment():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     id = req['id'] if "id" in req else ""
-    # result = Usercomment.query.filter(Usercomment.id == id).all()
-    # db.session.close()
-    #if result:
+
+    #delete from database
     try:
         db.session.query(Usercomment).filter(Usercomment.id == id).delete()
         db.session.commit()
@@ -242,16 +316,24 @@ def deleteComment():
     finally:
         db.session.close()
         db.engine.dispose()
+
+    #reduce server concurrent
     time.sleep(1.5)
+
     return ops_renderJSON( msg = "delete comment successfully!")
 
+'''
+delete the user comments
+
+Id -> userMoviesId
+'''
 @member_page.route("/deleteMovieLikes")
 def deleteMovieLikes():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     Id = req['Id'] if "Id" in req else ""
-    #result = Usermovy.query.filter(Usermovy.Id == Id).first()
-    #if result:
+
+    #delete from database
     try:
         db.session.query(Usermovy).filter(Usermovy.Id == Id).delete()
         db.session.commit()
@@ -262,24 +344,32 @@ def deleteMovieLikes():
         db.session.close()
         db.engine.dispose()
 
+    #reduce server concurrent
+    time.sleep(1.5)
+
     return ops_renderJSON( msg = "delete movieLikes successfully!")
 
+
+'''
+Upload images
+POST
+
+userId
+avatar -> image file
+'''
 @member_page.route("/newUserImage",methods = ["POST" ])
 def newUserImage():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     image = req['avatar'] if "avatar" in req else ""
-    #
-    image = request.files['avatar'].read()
-    print(type(image) )
-    print(image)
-    img = base64.b64decode(image)
-    print(img)
-    #img = base64.b64decode(str(image))
-    #image_data = np.fromstring(img, np.uint8)
-    #image_data = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
 
+    #read file
+    image = request.files['avatar'].read()
+
+    img = base64.b64decode(image)
+
+    #update user image
     db.session.query(Userinfo).filter(Userinfo.userId == userId).update({"image":image})
     db.session.commit()
     db.session.close()
@@ -290,21 +380,33 @@ def newUserImage():
     db.session.close()
     db.engine.dispose()
 
-    return ops_renderJSON( msg = "image updata")
+    return ops_renderJSON( msg = "image updated")
 
+'''
+get user image
+
+userId
+'''
 @member_page.route("/getUserImage")
 def getUserImage():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
+
     userInfo = Userinfo.query.filter_by( userId = userId ).first()
+    #check if exist
     if not userInfo:
         return ops_renderErrJSON( msg ="userId not true")
+    
     return Response(userInfo.image, mimetype=userInfo.mimetype)
 
+'''
+get user infomation
+
+userId
+'''
 @member_page.route("/getUserInfo")
 def getUserInfo():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     
@@ -315,12 +417,25 @@ def getUserInfo():
     userInfo.image = ""
     userInfo = Userinfo.serialize(userInfo)
     dictMerged2 = dict( user, **userInfo )
+
     return ops_renderJSON( msg = "getUserInfo",data = dictMerged2)
 
 
+'''
+set user infomation
+POST
+
+userId
+userName
+email
+password
+birthday
+movieTags
+overview
+'''
 @member_page.route("/setUserInfo",methods = ["POST" ])
 def setUserInfo():
-   # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     userId = req['userId'] if "userId" in req else ""
     userName = req['userName'] if "userName" in req else ""
@@ -331,12 +446,15 @@ def setUserInfo():
     overview = req['overview'] if "overview" in req else ""
     
     user = User.query.filter_by( userId = userId ).first()
+
+    #check if user exist
     if userId == "":
         return ops_renderErrJSON( msg ="userId not true")
     
     if not user:
         return ops_renderErrJSON( msg ="userId not true")
 
+    #update user Infomation
     if userName != "":
         db.session.query(User).filter(User.userId == userId).update({"userName":str(userName)})
 

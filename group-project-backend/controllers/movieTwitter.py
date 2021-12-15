@@ -18,12 +18,18 @@ import json
 
 movie_page_Twitter = Blueprint( "movie_page_Twitter",__name__ )
 
+'''
+show Comments from Twitter
+
+movieId
+'''  
 @movie_page_Twitter.route("/movieTwitterReviews")
 def review():
 
     req = request.values
     movieName = req['movieName'] if "movieName" in req else ""
 
+    #check cache
     movieId = req['movieId'] if "movieId" in req else ""
     type = str(4)
     textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
@@ -63,6 +69,7 @@ def review():
             dic2.append(dic)
 
 
+        #save cache
         model_reviews = Review()
         model_reviews.content = dic2
         model_reviews.movieId = movieId

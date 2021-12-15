@@ -2,6 +2,7 @@
 from application import db
 from common.models.serializer import Serializer
 
+#database
 class User(db.Model):
     __tablename__ = 'user'
 
