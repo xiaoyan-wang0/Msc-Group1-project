@@ -29,14 +29,14 @@
         <div class="card-body">
           <el-table :data="tableData" style="width: 100%" max-height="550">
             <el-table-column fixed prop="id" label="ID" />
-            <el-table-column prop="comment" label="Content"  width="300px"/>
+            <el-table-column prop="comment" label="Content" width="300px" />
             <el-table-column prop="userId" label="User Id" />
             <el-table-column prop="movieId" label="Movie Id" />
             <el-table-column prop="toxic" label="Toxic Rate" sortable />
             <el-table-column prop="sentiment" label="Sentiment Rate" sortable />
             <el-table-column prop="createTime" label="Date" sortable />
             <el-table-column fixed="right" label="Operations">
-              <template #default="scope" >
+              <template #default="scope">
                 <el-button
                   type="danger"
                   size="small"
@@ -59,8 +59,8 @@
             </div>
             <bar-chart
               :data="[
-                ['Positive', sentiment.positive],
-                ['Negative', sentiment.negative],
+                [' Non toxic', toxic.toxic],
+                ['Toxic', toxic.midToxic + toxic.noneToxic],
               ]"
               :colors="['#3949AB', '#E53935']"
             ></bar-chart>
@@ -77,9 +77,9 @@
             </div>
             <pie-chart
               :data="[
-                [' Non toxic', toxic.toxic],
-                ['Toxic', toxic.midToxic],
-                [' Severe toxic', toxic.noneToxic],
+                ['Positive', sentiment.positive],
+                ['Neutral', sentiment.neutral],
+                ['Negative', sentiment.negative],
               ]"
               :colors="['#43A047', '#FFB300', '#E53935']"
             ></pie-chart>
@@ -96,7 +96,6 @@
 <script>
 import { ref, inject, onBeforeMount } from "vue";
 import { message, notification } from "ant-design-vue";
-import router from "@/router";
 import env from "@/env.js";
 
 export default {
@@ -116,78 +115,66 @@ export default {
       axios
         .get(env.AMDBAPI + "admin/getToxicRate")
         .then((response) => {
-          console.log("getToxicRate list");
-          console.log(response.data);
           toxic.value = response.data.data;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
       // Fetch Sentiment num
       axios
         .get(env.AMDBAPI + "admin/getSentimentRate")
         .then((response) => {
-          console.log("sentiment list");
-          console.log(response.data);
           sentiment.value = response.data.data;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
       fetchAllCommentsList();
     });
-
+    /**
+     * Get user comments event.
+     */
     const fetchAllCommentsList = () => {
       isLoading.value = true;
       // Fetch  all comments list
       axios
         .get(env.AMDBAPI + "admin/commentsList")
         .then((response) => {
-          console.log("all comments list");
-          console.log(response.data);
           tableData.value = response.data.data;
           deleteDialogVisible.value = false;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           deleteDialogVisible.value = false;
           showErroeMessage();
         });
     };
 
+    /**
+     * Delete comment event.
+     * @index  row index
+     * @data  row data
+     */
     const handleDelete = (index, data) => {
       deleteDialogVisible.value = true;
       deleteId = data[index].id;
-      console.log("deleteId");
-      console.log(deleteId);
     };
 
+    /**
+     * Comfirm delete comment event.
+     */
     const comfirmDelete = () => {
       // Fetch comfirm Block
       // delete comments
       axios
         .get(env.AMDBAPI + "admin/deleteComments?id=" + deleteId)
         .then((response) => {
-          console.log("deleteComments");
-          console.log(response.data);
           if (response.data.code == 200) {
             fetchAllCommentsList();
             openNotificationWithIcon("success");
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     };

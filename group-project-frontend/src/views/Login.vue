@@ -156,7 +156,6 @@ export default defineComponent({
     VFacebookLoginScope,
     VFacebookLogin,
   },
-  methods: {},
   setup() {
     const axios = inject("axios"); // inject axios
     const store = useStore();
@@ -173,33 +172,26 @@ export default defineComponent({
     });
 
     onBeforeMount(() => {
-      console.log("LOGGGGGGG");
-      console.log(localStorage.getItem("user"));
       if (localStorage.getItem("user")) {
         router.push({ name: "Setting" });
       }
     });
 
-    //Login event
+    /**
+     * Login submit event.
+     */
     const onSubmitLogin = () => {
       isLoading.value = true;
       const loginFormData = new FormData();
-      console.log("resploginMes.email");
-      console.log(loginMes.value.email);
-      console.log("loginMes.password");
-      console.log(loginMes.value.password);
       loginFormData.append("email", loginMes.value.email);
       loginFormData.append("password", loginMes.value.password);
 
       store.dispatch("auth/login", loginFormData).then(
         (response) => {
-          console.log("LOGIN");
-          console.log(response);
 
           if (response.code === -1) {
             isLoading.value = false;
             message.error(response.msg, () => {
-              console.log("onClose");
             });
           } else if (response.code === 200) {
             message.success(response.msg + ", Will return in 3s.", () => {
@@ -209,8 +201,6 @@ export default defineComponent({
           }
         },
         (error) => {
-          console.log("login error");
-          console.log(error);
           showErroeMessage();
         }
       );
@@ -238,18 +228,22 @@ export default defineComponent({
       });
     });
 
+    /**
+     * Format img url.
+     * @item  data
+     */
     const faceboogLogin = (value) => {
-      console.log("faceboogLogin");
-      console.log(value);
     };
 
+    /**
+     * Check email exist.
+     * @data  Email
+     */
     const checkEmail = (data) => {
       // Fetch checkEmail
       axios
         .get(env.AMDBAPI + "admin/getUser?email=" + data.email)
         .then((response) => {
-          console.log("checkEmail");
-          console.log(response.data);
           if (response.data.code === -1) {
             const registerFormData = new FormData();
             registerFormData.append("userName", data.name);
@@ -257,43 +251,32 @@ export default defineComponent({
             registerFormData.append("password", "12345678");
             store.dispatch("auth/register", registerFormData).then(
               (response) => {
-                console.log("response");
-                console.log(response);
                 if (response.code === -1) {
                   message.error(response.msg, () => {
-                    console.log("onClose");
                   });
                 } else if (response.code === 200) {
                   message.success(
                     response.msg + ", Will return setting page in 3s.",
                     () => {
                       location.reload();
-                      console.log("onClose");
                     }
                   );
                 }
               },
               (error) => {
-                console.log("error");
-                console.log(error);
                 showErroeMessage();
               }
             );
           } else if (response.data.code === 200) {
             const loginFormData = new FormData();
-            console.log("resploginMes.email");
-            console.log(data.email);
             loginFormData.append("email", data.email);
             loginFormData.append("password", 12345678);
 
             store.dispatch("auth/login", loginFormData).then(
               (response) => {
-                console.log("LOGIN");
-                console.log(response);
 
                 if (response.code === -1) {
                   message.error(response.msg, () => {
-                    console.log("onClose");
                   });
                 } else if (response.code === 200) {
                   message.success(response.msg + ", Will return in 3s.", () => {
@@ -302,17 +285,12 @@ export default defineComponent({
                 }
               },
               (error) => {
-                console.log("login error");
-                console.log(error);
                 showErroeMessage();
               }
             );
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     };
@@ -323,11 +301,8 @@ export default defineComponent({
       window.FB.login(
         function (response) {
           if (response.authResponse) {
-            console.log(response);
             // alert("You are logged in &amp; cookie set!");
             FB.api("/me?fields=id,name,email", function (response) {
-              console.log("Good to see you, " + response.name + ".");
-              console.log(response);
               checkEmail(response);
             });
             window.close();
@@ -385,7 +360,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 .normal-breadcrumb {
   height: 300px;
   display: -webkit-box;

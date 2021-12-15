@@ -1,6 +1,6 @@
 <template>
   <div class="show-items">
-    <div class="trending__product" v-if="!isIMDBBot">
+    <div class="trending__amdb_movies" v-if="!isIMDBBot">
       <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
           <div class="section-title">
@@ -19,14 +19,14 @@
         </a-empty>
         <div class="row" v-if="itemdata !== undefined">
           <div
-            class="col-lg-3 col-md-6 col-sm-6"
+            class="col-lg-3 col-md-6 col-sm-6 movie-content"
             v-for="item in itemdata"
             :key="item.id"
           >
             <router-link :to="'/movie/' + item.id">
-              <div class="product__item">
+              <div class="amdb_movies__item">
                 <div
-                  class="product__item__pic set-bg test"
+                  class="amdb_movies__item__pic set-bg test"
                   v-bind:style="{
                     'background-image':
                       'url(' + poster + item.poster_path + ')',
@@ -40,7 +40,7 @@
                     <i class="fa fa-eye"></i> {{ item.release_date }}
                   </div>
                 </div>
-                <div class="product__item__text">
+                <div class="amdb_movies__item__text">
                   <ul>
                     <li
                       v-for="genre in findCategary(item.genre_ids).slice(0, 2)"
@@ -60,7 +60,7 @@
       </div>
     </div>
     <!-- For imdb bot  -->
-    <div class="trending__product" v-else>
+    <div class="trending__amdb_movies" v-else>
       <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
           <div class="section-title">
@@ -79,14 +79,14 @@
         </a-empty>
         <div class="row" v-if="itemdata !== []">
           <div
-            class="col-lg-3 col-md-6 col-sm-6"
+            class="col-lg-3 col-md-6 col-sm-6 movie-content"
             v-for="item in itemdata"
             :key="item.tmdb_Id"
           >
             <router-link :to="'/movie/' + item.tmdb_Id">
-              <div class="product__item">
+              <div class="amdb_movies__item">
                 <div
-                  class="product__item__pic set-bg test"
+                  class="amdb_movies__item__pic set-bg test"
                   v-bind:style="{
                     'background-image': 'url(' + item.posters[0] + ')',
                   }"
@@ -99,7 +99,7 @@
                     <i class="fa fa-eye"></i> {{ item.year }}
                   </div>
                 </div>
-                <div class="product__item__text">
+                <div class="amdb_movies__item__text">
                   <ul>
                     <li
                       v-for="genre in item.genres.slice(0, 2)"
@@ -143,7 +143,7 @@ export default {
     name: String,
     isPopularorHighScore: Number,
   },
-  setup(props) {
+  setup() {
     const poster = ref("");
     const resultName = ref("Result");
     const itemdata = ref([]);
@@ -154,22 +154,15 @@ export default {
     const searchValue = localStorage.getItem("searchValue");
 
     onBeforeMount(() => {
-      console.log("onBeforeMount");
       resultName.value = "";
-      console.log(resultName.value);
     });
 
     onMounted(() => {
-      console.log("onMounted");
-      console.log("RESULT props.isPopularorHighScore");
-      console.log(localStorage.getItem("resultResource"));
       if (resource == 1) {
         resultName.value = "Popular movies Result";
         // Popular movies
         UserApi.getPopularMovies().then((response) => {
           itemdata.value = response.data.results;
-          console.log("REsult page Popula");
-          console.log(itemdata.value);
           itemtotal.value = response.data.total_results;
         });
       } else if (resource == 2) {
@@ -177,8 +170,6 @@ export default {
         // High score moveis
         UserApi.getHighScoreMovies().then((response) => {
           itemdata.value = response.data.results;
-          console.log("REsult page score moveis Result");
-          console.log(itemdata.value);
           itemtotal.value = response.data.total_results;
         });
       } else if (resource == 3) {
@@ -186,22 +177,14 @@ export default {
         // Upcoming Movies moveis
         UserApi.getUpcomingMovies().then((response) => {
           itemdata.value = response.data.results;
-          console.log("Result page score moveis");
-          console.log(itemdata.value);
-          console.log(itemdata.value);
           itemtotal.value = response.data.total_results;
-          console.log(itemtotal.value);
         });
       } else if (resource == 4) {
         resultName.value = "Search result";
         // Search moveis result
         UserApi.getSearchMoveis(searchValue).then((response) => {
           itemdata.value = response.data.results;
-          console.log("Search moveis result");
-          console.log(itemdata.value);
-          console.log(itemdata.value);
           itemtotal.value = response.data.total_results;
-          console.log(itemtotal.value);
         });
       } else {
         resultName.value = "IMDB BOTTOM result";
@@ -209,67 +192,50 @@ export default {
         UserApi.getImdbBotMovies(20)
           .then((response) => {
             itemdata.value = response.data.data;
-            console.log("IMDB BOT result");
-            console.log(itemdata);
           })
           .catch((error) => {
-            console.log("error");
-            console.log(error);
-            console.log("error");
             showErroeMessage();
           });
       }
     });
 
+    /**
+     * Change page event.
+     * @pageNumber  page number
+     */
     const onChange = (pageNumber) => {
-      console.log("Page: ", pageNumber);
       if (resource == 1) {
         // Popular movies
         resultName.value = "Popular movies Result";
         UserApi.getPopularMovies(pageNumber).then((response) => {
           itemdata.value = response.data.results;
-          console.log("REsult page Popula");
-          console.log(itemdata.value);
         });
       } else if (resource == 2) {
         resultName.value = "High score moveis Result";
         // High score moveis
         UserApi.getHighScoreMovies(pageNumber).then((response) => {
           itemdata.value = response.data.results;
-          console.log("REsult page score moveis Result");
-          console.log(itemdata.value);
         });
       } else if (resource == 3) {
         resultName.value = "Upcoming Movies Result";
         // High score moveis
         UserApi.getUpcomingMovies(pageNumber).then((response) => {
           itemdata.value = response.data.results;
-          console.log("Result page score moveis");
-          console.log(itemdata.value);
         });
       } else if (resource == 4) {
         resultName.value = "Search result";
         // Search moveis result
         UserApi.getSearchMoveis(searchValue, pageNumber).then((response) => {
           itemdata.value = response.data.results;
-          console.log("Search moveis result");
-          console.log(itemdata.value);
-          console.log(itemdata.value);
           itemtotal.value = response.data.total_results;
-          console.log(itemtotal.value);
         });
       } else {
         resultName.value = "IMDB BOTTOM result";
         UserApi.getImdbBotMovies(20)
           .then((response) => {
             itemdata.value = response.data.data;
-            console.log("IMDB BOT result");
-            console.log(itemdata);
           })
           .catch((error) => {
-            console.log("error");
-            console.log(error);
-            console.log("error");
             showErroeMessage();
           });
       }
@@ -290,6 +256,7 @@ export default {
       }
       return categary;
     };
+
     return {
       poster,
       itemdata,
@@ -337,7 +304,7 @@ export default {
       display: flex;
       flex-direction: column;
       height: 100%;
-      .product-image {
+      .amdb_movies-image {
         position: relative;
         display: block;
         img {
@@ -379,6 +346,7 @@ export default {
 }
 
 .result-pagiantion {
+  height: 50px;
   .result-pagiantion-content {
     justify-content: center;
     margin: auto;
@@ -402,5 +370,9 @@ export default {
   -moz-box-shadow: 2px 12px 10px rgba(138, 138, 138, 0.603);
   box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
   cursor: pointer;
+}
+.movie-content {
+  text-align: center;
+  text-align: -webkit-center;
 }
 </style>

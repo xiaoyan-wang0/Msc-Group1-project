@@ -1,13 +1,14 @@
 <template>
-  <section class="product spad maindisplay">
+  <section class="amdb_movies spad maindisplay">
     <div class="affix-div">
       <el-affix :offset="50" target=".maindisplay">
-        <!-- <el-button type="primary" @click="isShowDrawer = true"> -->
-        <div class="anchor-div" @click="isShowDrawer = true"></div>
-        <div class="anchor-div-text" @click="isShowDrawer = true">
+        <button class="follow-btn" @click="isShowDrawer = true">
+          <!-- <div class="anchor-div" @click="isShowDrawer = true"></div> -->
+          <!-- <div class="anchor-div-text" @click="isShowDrawer = true">
+          
+        </div> -->
           Navigate to..
-        </div>
-        <!-- </el-button> -->
+        </button>
       </el-affix>
       <a-drawer
         v-model:visible="isShowDrawer"
@@ -16,12 +17,14 @@
         title=""
         placement="right"
       >
-        <h5>Gurde to your favorite section</h5>
+        <h5 class="anchor-drawer" style="color: white">
+          Navigate to your favorite section
+        </h5>
         <a-anchor @change="onChange">
           <!-- <a-anchor-link href="#search-div" title="Search" /> -->
           <!-- <a-anchor-link href="#carousel" title="Carousel" /> -->
-          <a-anchor-link href="#popularMovie" title="Popular Movie" />
-          <a-anchor-link href="#hignScoreMovie" title="High score Movie" />
+          <a-anchor-link href="#popularMovie" title="Popular Movies" />
+          <a-anchor-link href="#hignScoreMovie" title="Top Rated Movies" />
           <a-anchor-link
             href="#mainpage-recommendations"
             title="Recommendations"
@@ -140,8 +143,8 @@
           </div>
         </div>
         <div id="mainpage-recommendations" class="col-lg-4 col-md-6 col-sm-8">
-          <div class="product__sidebar">
-            <div class="product__sidebar__comment">
+          <div class="amdb_movies__sidebar">
+            <div class="amdb_movies__sidebar__comment">
               <div class="section-title">
                 <h5>AMDb Popular Movies</h5>
               </div>
@@ -153,15 +156,15 @@
                 </template>
               </a-empty>
               <div
-                class="product__sidebar__comment__item"
+                class="amdb_movies__sidebar__comment__item"
                 v-for="item in mostRecommendationMovies"
                 :key="item.id"
               >
                 <router-link :to="'/movie/' + item.id">
-                  <div class="product__sidebar__comment__item__pic">
+                  <div class="amdb_movies__sidebar__comment__item__pic">
                     <img class="pichover" :src="poster + item.poster" alt="" />
                   </div>
-                  <div class="product__sidebar__comment__item__text">
+                  <div class="amdb_movies__sidebar__comment__item__text">
                     <h5>
                       <a class="twoline-ellipsis" style="color: white">{{
                         item.title
@@ -184,22 +187,22 @@
               </div>
             </div>
             <div
-              class="product__sidebar__view"
+              class="amdb_movies__sidebar__view"
               v-if="recentRecommendationMovies.length > 0"
             >
               <div class="section-title">
                 <h5>Recommend to you</h5>
               </div>
               <div
-                class="product__sidebar__comment__item"
+                class="amdb_movies__sidebar__comment__item"
                 v-for="item in recentRecommendationMovies"
                 :key="item.id"
               >
                 <router-link :to="'/movie/' + item.id">
-                  <div class="product__sidebar__comment__item__pic">
+                  <div class="amdb_movies__sidebar__comment__item__pic">
                     <img class="pichover" :src="poster + item.poster" alt="" />
                   </div>
-                  <div class="product__sidebar__comment__item__text">
+                  <div class="amdb_movies__sidebar__comment__item__text">
                     <h5>
                       <a class="twoline-ellipsis" style="color: white">{{
                         item.title
@@ -234,7 +237,6 @@ import { message } from "ant-design-vue";
 import env from "@/env.js";
 import Showpart from "./ShowPart.vue";
 import router from "@/router";
-import { useStore } from "vuex";
 import ToolMethod from "../tools.js";
 import UserApi from "../services/user.service";
 
@@ -247,7 +249,6 @@ export default {
     const hignScoreMovieData = ref([]);
     const upComingMovieData = ref([]);
     const fackePic = ref([]);
-    const store = useStore();
     const mostRecommendationMovies = ref([]);
     const recentRecommendationMovies = ref([]);
     const moviePoster = ref("");
@@ -295,14 +296,9 @@ export default {
       // Fetch the most comments recommendation movies
       UserApi.getMostCommentsMovies()
         .then((response) => {
-          console.log("getMostComments  recommendation movies");
-          console.log(response.data);
           mostRecommendationMovies.value = response.data.data;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
 
@@ -319,9 +315,6 @@ export default {
             }
           })
           .catch((error) => {
-            console.log("error");
-            console.log(error);
-            console.log("error");
             showErroeMessage();
           });
       } else {
@@ -342,15 +335,7 @@ export default {
       });
     };
     const onChange = (link) => {
-      console.log("Anchor:OnChange", link);
       isShowDrawer.value = false;
-      // nextTick(() =>
-      //   setTimeout(() => {
-      //     let company = document.querySelector(link);
-      //     document.documentElement.scrollTop = company.offsetTop; //苹果滚动
-      //     document.body.scrollTop = company.offsetTop; //安卓滚动
-      //   }, 300)
-      // );
     };
 
     return {
@@ -385,6 +370,10 @@ export default {
     width: 50px;
     font-size: 0.5px;
   }
+}
+.anchor-drawer {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .testmain {
   transition: all 0.4s;
@@ -446,12 +435,12 @@ export default {
   box-shadow: 12px 12px 10px rgba(138, 138, 138, 0.603);
   cursor: pointer;
 }
-.product {
+.amdb_movies {
   padding-bottom: 10px;
   padding-top: 10px;
 }
 
-.product-page {
+.amdb_movies-page {
   padding-top: 60px;
 }
 
@@ -460,29 +449,29 @@ export default {
   margin-bottom: 30px;
 }
 
-.trending__product {
+.trending__amdb_movies {
+  margin-bottom: 20px;
+}
+
+.popular__amdb_movies {
   margin-bottom: 50px;
 }
 
-.popular__product {
+.recent__amdb_movies {
   margin-bottom: 50px;
 }
 
-.recent__product {
-  margin-bottom: 50px;
-}
-
-.product__item {
+.amdb_movies__item {
   margin-bottom: 30px;
 }
 
-.product__item__pic {
+.amdb_movies__item__pic {
   height: 325px;
   position: relative;
   border-radius: 5px;
 }
 
-.product__item__pic .ep {
+.amdb_movies__item__pic .ep {
   font-size: 13px;
   color: #ffffff;
   background: #e53637;
@@ -497,7 +486,7 @@ export default {
   background-size: cover;
 }
 
-.product__item__pic .comment {
+.amdb_movies__item__pic .comment {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -509,7 +498,7 @@ export default {
   bottom: 10px;
 }
 
-.product__item__pic .view {
+.amdb_movies__item__pic .view {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -521,16 +510,16 @@ export default {
   bottom: 10px;
 }
 
-.product__item__text {
+.amdb_movies__item__text {
   padding-top: 20px;
 }
 
-.product__item__text ul {
+.amdb_movies__item__text ul {
   margin-bottom: 10px;
   padding-left: 0px !important;
 }
 
-.product__item__text ul li {
+.amdb_movies__item__text ul li {
   list-style: none;
   font-size: 10px;
   color: #ffffff;
@@ -541,13 +530,13 @@ export default {
   display: inline-block;
 }
 
-.product__item__text h5 a {
+.amdb_movies__item__text h5 a {
   color: #ffffff;
   font-weight: 700;
   line-height: 26px;
 }
 
-.product__sidebar .section-title h5 {
+.amdb_movies__sidebar .section-title h5 {
   color: #ffffff;
   font-weight: 600;
   font-family: "Oswald", sans-serif;
@@ -557,7 +546,7 @@ export default {
   position: relative;
 }
 
-.product__sidebar .section-title h5:after {
+.amdb_movies__sidebar .section-title h5:after {
   position: absolute;
   left: 0;
   top: -6px;
@@ -567,18 +556,18 @@ export default {
   content: "";
 }
 
-.product__sidebar__view {
+.amdb_movies__sidebar__view {
   position: relative;
   margin-bottom: 80px;
 }
 
-.product__sidebar__view .filter__controls {
+.amdb_movies__sidebar__view .filter__controls {
   position: absolute;
   right: 0;
   top: -5px;
 }
 
-.product__sidebar__view .filter__controls li {
+.amdb_movies__sidebar__view .filter__controls li {
   list-style: none;
   font-size: 13px;
   color: #b7b7b7;
@@ -587,22 +576,22 @@ export default {
   cursor: pointer;
 }
 
-.product__sidebar__view .filter__controls li.active {
+.amdb_movies__sidebar__view .filter__controls li.active {
   color: #ffffff;
 }
 
-.product__sidebar__view .filter__controls li:last-child {
+.amdb_movies__sidebar__view .filter__controls li:last-child {
   margin-right: 0;
 }
 
-.product__sidebar__view__item {
+.amdb_movies__sidebar__view__item {
   height: 190px;
   position: relative;
   border-radius: 5px;
   margin-bottom: 20px;
 }
 
-.product__sidebar__view__item .ep {
+.amdb_movies__sidebar__view__item .ep {
   font-size: 13px;
   color: #ffffff;
   background: #e53637;
@@ -614,7 +603,7 @@ export default {
   top: 10px;
 }
 
-.product__sidebar__view__item .view {
+.amdb_movies__sidebar__view__item .view {
   font-size: 13px;
   color: #ffffff;
   background: #3d3d3d;
@@ -626,7 +615,7 @@ export default {
   top: 10px;
 }
 
-.product__sidebar__view__item h5 {
+.amdb_movies__sidebar__view__item h5 {
   position: absolute;
   left: 0;
   bottom: 25px;
@@ -634,36 +623,36 @@ export default {
   padding: 0 30px 0 20px;
 }
 
-.product__sidebar__view__item h5 a {
+.amdb_movies__sidebar__view__item h5 a {
   color: #ffffff;
   font-weight: 700;
   line-height: 26px;
 }
 
-.product__sidebar__comment {
+.amdb_movies__sidebar__comment {
   margin-bottom: 35px;
 }
 
-.product__sidebar__comment__item {
+.amdb_movies__sidebar__comment__item {
   margin-bottom: 20px;
   overflow: hidden;
   min-width: 300px;
 }
 
-.product__sidebar__comment__item__pic {
+.amdb_movies__sidebar__comment__item__pic {
   float: left;
   margin-right: 15px;
 }
 
-.product__sidebar__comment__item__text {
+.amdb_movies__sidebar__comment__item__text {
   overflow: hidden;
 }
 
-.product__sidebar__comment__item__text ul {
+.amdb_movies__sidebar__comment__item__text ul {
   margin-bottom: 10px;
 }
 
-.product__sidebar__comment__item__text ul li {
+.amdb_movies__sidebar__comment__item__text ul li {
   list-style: none;
   font-size: 10px;
   color: #ffffff;
@@ -674,44 +663,44 @@ export default {
   display: inline-block;
 }
 
-.product__sidebar__comment__item__text h5 {
+.amdb_movies__sidebar__comment__item__text h5 {
   margin-bottom: 10px;
 }
 
-.product__sidebar__comment__item__text h5 a {
+.amdb_movies__sidebar__comment__item__text h5 a {
   color: #ffffff;
   font-weight: 700;
   line-height: 26px;
 }
 
-.product__sidebar__comment__item__text span {
+.amdb_movies__sidebar__comment__item__text span {
   display: block;
   font-size: 13px;
   color: #b7b7b7;
 }
 
-.product__page__title {
+.amdb_movies__page__title {
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 10px;
   margin-bottom: 30px;
 }
 
-.product__page__title .section-title {
+.amdb_movies__page__title .section-title {
   margin-bottom: 0;
 }
 
-.product__page__title .product__page__filter {
+.amdb_movies__page__title .amdb_movies__page__filter {
   text-align: right;
 }
 
-.product__page__title .product__page__filter p {
+.amdb_movies__page__title .amdb_movies__page__filter p {
   color: #ffffff;
   display: inline-block;
   margin-bottom: 0;
   margin-right: 16px;
 }
 
-.product__page__title .product__page__filter .nice-select {
+.amdb_movies__page__title .amdb_movies__page__filter .nice-select {
   float: none;
   display: inline-block;
   font-size: 15px;
@@ -724,7 +713,7 @@ export default {
   line-height: 32px;
 }
 
-.product__page__title .product__page__filter .nice-select:after {
+.amdb_movies__page__title .amdb_movies__page__filter .nice-select:after {
   border-bottom: 2px solid #111;
   border-right: 2px solid #111;
   height: 8px;
@@ -733,16 +722,16 @@ export default {
   right: 15px;
 }
 
-.product__page__title .product__page__filter .nice-select .list {
+.amdb_movies__page__title .amdb_movies__page__filter .nice-select .list {
   margin-top: 0;
   border-radius: 0;
 }
 
-.product__pagination {
+.amdb_movies__pagination {
   padding-top: 15px;
 }
 
-.product__pagination a {
+.amdb_movies__pagination a {
   display: inline-block;
   font-size: 15px;
   color: #b7b7b7;
@@ -758,15 +747,15 @@ export default {
   transition: all, 0.3s;
 }
 
-.product__pagination a:hover {
+.amdb_movies__pagination a:hover {
   color: #ffffff;
 }
 
-.product__pagination a.current-page {
+.amdb_movies__pagination a.current-page {
   border: 1px solid #ffffff;
 }
 
-.product__pagination a i {
+.amdb_movies__pagination a i {
   color: #b7b7b7;
   font-size: 15px;
 }
@@ -864,7 +853,7 @@ export default {
       display: flex;
       flex-direction: column;
       height: 100%;
-      .product-image {
+      .amdb_movies-image {
         position: relative;
         display: block;
         img {
@@ -975,6 +964,23 @@ export default {
   }
 }
 
+.follow-btn {
+  font-size: 5px;
+  color: #ffffff;
+  background: #e53637;
+  display: inline-block;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 5px;
+  border-radius: 54px;
+}
+
+@media only screen and (min-width: 975px) and (max-width: 1200px) {
+  .amdb_movies__item__pic {
+    height: 250px !important;
+  }
+}
+
 @media only screen and (max-width: 798px) {
   .home-carousel-right {
     display: none !important;
@@ -989,20 +995,20 @@ export default {
     display: block !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 560px) {
   .affix-div {
     position: relative;
     top: -50px;
-    left: -44px;
+    left: -40px;
     display: block !important;
   }
-  .product__item {
-    width: 60% !important;
+  .amdb_movies__item {
+    width: 75% !important;
   }
-  .product__item__pic {
-    height: 220px !important;
+  .amdb_movies__item__pic {
+    height: 280px !important;
   }
-  .product__item__text h5 a {
+  .amdb_movies__item__text h5 a {
     line-height: 17px !important;
     font-size: 15px !important;
   }

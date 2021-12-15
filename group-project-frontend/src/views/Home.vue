@@ -37,10 +37,10 @@ export default {
     const lastestMovieData = ref([]);
     const showRouterView = ref(true);
 
-    //Search event
+    /**
+     * Search event.
+     */
     const SearchMovies = () => {
-      console.log("SearchMovies");
-      console.log(search.value);
       if (search.value != "") {
         showRouterView.value = false;
         nextTick(() => (showRouterView.value = true));
@@ -142,7 +142,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1000px) {
   .feature-card .search-model-form input {
     width: 85% !important;
     font-size: 27px !important;

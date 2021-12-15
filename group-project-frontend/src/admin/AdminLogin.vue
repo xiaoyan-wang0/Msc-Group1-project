@@ -90,13 +90,12 @@ export default {
       username: "",
       password: "",
     });
-    //Login event
+
+    /**
+     * Login event.
+     */
     const onSubmitLogin = () => {
       const loginFormData = new FormData();
-      console.log("resploginMes.username");
-      console.log(loginMes.value.username);
-      console.log("loginMes.password");
-      console.log(loginMes.value.password);
       loginFormData.append("name", loginMes.value.username);
       loginFormData.append("password", loginMes.value.password);
 
@@ -108,8 +107,6 @@ export default {
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then((response) => {
-          console.log("onSubmitLogin");
-          console.log(response);
           if (response.data.code != -1) {
             // message.success("Login Sucessfully");
             localStorage.setItem("AMDBAdmin", JSON.stringify(response.data));
@@ -121,9 +118,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           message.error("Sorry, error accured in server");
         });
     };

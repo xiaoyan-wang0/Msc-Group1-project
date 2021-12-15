@@ -1,5 +1,5 @@
 <template>
-  <div class="trending__product">
+  <div class="trending__amdb_movies">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
         <div class="section-title">
@@ -21,9 +21,9 @@
         :key="item.id"
       >
         <router-link :to="'/movie/' + item.id">
-          <div class="product__item">
+          <div class="amdb_movies__item">
             <div
-              class="product__item__pic set-bg test"
+              class="amdb_movies__item__pic set-bg test"
               v-bind:style="{
                 'background-image': 'url(' + poster + item.poster_path + ')',
               }"
@@ -36,7 +36,7 @@
                 <i class="fa fa-eye"></i> {{ item.release_date }}
               </div>
             </div>
-            <div class="product__item__text">
+            <div class="amdb_movies__item__text">
               <ul>
                 <li
                   v-for="genre in findCategary(item.genre_ids).slice(0, 2)"
@@ -71,10 +71,11 @@ export default {
   setup(props) {
     const poster = ref("");
     poster.value = env.tmdbpic;
-    //show Result Page
+
+    /**
+     * Jump to result page.
+     */
     const showResultPage = () => {
-      console.log("isPopularorHighScore");
-      console.log(props.isPopularorHighScore);
       localStorage.setItem("resultResource", props.isPopularorHighScore);
       router.push({
         name: "ResultDisplay",
@@ -82,6 +83,10 @@ export default {
       });
     };
 
+    /**
+     * Change genres to label.
+     * @genres  genres id from imdb
+     */
     const findCategary = (genres) => {
       let categary = [];
       for (let id of genres) {
@@ -91,7 +96,6 @@ export default {
           }
         }
       }
-      console.log(categary);
       return categary;
     };
     return { poster, showResultPage, findCategary };
@@ -127,7 +131,7 @@ export default {
       display: flex;
       flex-direction: column;
       height: 100%;
-      .product-image {
+      .amdb_movies-image {
         position: relative;
         display: block;
         img {

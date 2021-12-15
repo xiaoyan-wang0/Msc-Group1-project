@@ -92,7 +92,7 @@ class TestStringMethods(unittest.TestCase):
 #Testing performance of Youtube interface in terms of runtime.
 
     def test_YoutubeRuntime(self):
-        self.assertLessEqual(Time1, 10) 
+        self.assertLessEqual(Time1, 15) 
 
 if __name__ == '__main__':
     unittest.main()

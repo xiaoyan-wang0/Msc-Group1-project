@@ -47,7 +47,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(list[2], reviews[2])
 
     def test_Twitter4(self):
-        self.assertEqual(list[3], reviews[4])
+        self.assertEqual(list[3], reviews[3])
 
     def test_Twitter5(self):
         self.assertEqual(list[4], reviews[4])
@@ -71,8 +71,7 @@ class TestStringMethods(unittest.TestCase):
 #Performance test in terms of runtime
 
     def test_ImdbReviewRuntime(self):
-        self.assertLessEqual(Time1, 10) 
-
+        self.assertLessEqual(Time1, 15) 
 
 
 if __name__ == '__main__':

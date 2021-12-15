@@ -74,17 +74,6 @@
         </div>
       </div>
       <div class="detector-sentiemnt">
-        <a-progress
-          :width="150"
-          type="circle"
-          :percent="parseFloat(sentiemntPercent)"
-          :format="(percent) => `${sentiemntPercent} % Sentiment`"
-          :stroke-color="{
-            '0%': 'white',
-            '50%': 'green',
-            '100%': 'red',
-          }"
-        />
         <div class="sentiemnt-rate">
           <div class="">
             <span style="color: white">Sentiment :</span>
@@ -111,11 +100,14 @@ export default {
     const commentStatus = ref();
     const toxicPercent = ref(0);
     const isLoading = ref(false);
-    const toxicText = ref("~");
+    const toxicText = ref(" ~ ");
     const sentiemntPercent = ref(0);
-    const sentiemntText = ref("~");
+    const sentiemntText = ref(" ~ ");
+
+    /**
+     * Comment detect event.
+     */
     const submitDetect = () => {
-      //  Comment detect
       if (commentValue.value !== "") {
         UserApi.detectUserComment(commentValue.value)
           .then((response) => {
@@ -127,19 +119,11 @@ export default {
             toxicText.value = ToolMethod.showToxicText(
               commentStatus.value.toxic[0]
             );
-            sentiemntPercent.value = Number(
-              commentStatus.value.sentiment[0] * 100
-            ).toFixed(2);
             sentiemntText.value = ToolMethod.showSentiemntText(
-              commentStatus.value.sentiment[0]
+              commentStatus.value.sentiment
             );
-            console.log("Comment detect");
-            console.log(response.data);
           })
           .catch((error) => {
-            console.log("error");
-            console.log(error);
-            console.log("error");
             showErroeMessage();
           });
       }
@@ -177,7 +161,6 @@ export default {
       }
       try {
         if (status === "done") {
-          console.log(info.file, info.fileList);
 
           commentValue.value = "";
           if (info.file.response) {
@@ -188,7 +171,6 @@ export default {
             }
           }
 
-          console.log(commentValue.value);
           isLoading.value = false;
           message.success(`${info.file.name} file uploaded successfully.`);
         } else if (status === "error") {
@@ -276,6 +258,7 @@ export default {
     min-width: 150px;
     float: right;
     width: 50%;
+    margin-top: inherit;
     span,
     a {
       font-size: 20px;

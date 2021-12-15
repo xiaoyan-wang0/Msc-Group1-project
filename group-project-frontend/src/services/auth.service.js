@@ -1,10 +1,14 @@
 import axios from 'axios';
 import env from "@/env.js";
 
-// const API_URL = '/api/member/';
 const API_URL = env.AMDBAPI + '/member/';
 
 class AuthService {
+
+  /**
+   * Login event.
+   * @user user data
+   */
   login(user) {
     return axios({
       method: "post",
@@ -25,6 +29,9 @@ class AuthService {
       });
   }
 
+  /**
+   * Login event.
+   */
   logout() {
     localStorage.removeItem('user');
     return axios({
@@ -37,6 +44,10 @@ class AuthService {
       });
   }
 
+  /**
+     * Register event.
+     * @user user data
+     */
   register(user) {
     return axios({
       method: "post",

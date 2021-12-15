@@ -15,7 +15,6 @@
         </div>
       </div>
     </section>
-
     <section class="signup spad">
       <div class="container">
         <div class="row">
@@ -139,44 +138,35 @@ export default defineComponent({
     });
 
     onBeforeMount(() => {
-      console.log("Reggggggggggggg");
-      console.log(localStorage.getItem("user"));
       if (localStorage.getItem("user")) {
         router.push({ name: "Setting" });
       }
     });
 
+    /**
+     * Submit data for register.
+     */
     const submitRegister = () => {
-      console.log("registerMess");
-      console.log(registerMess.value);
       const registerFormData = new FormData();
       registerFormData.append("userName", registerMess.value.username);
       registerFormData.append("email", registerMess.value.email);
       registerFormData.append("password", registerMess.value.password);
       registerFormData.append("gender", registerMess.value.gender);
-      //Register
-
       store.dispatch("auth/register", registerFormData).then(
         (response) => {
-          console.log("response");
-          console.log(response);
           if (response.code === -1) {
             message.error(response.msg, () => {
-              console.log("onClose");
             });
           } else if (response.code === 200) {
             message.success(
               response.msg + ", Will return setting page in 3s.",
               () => {
                 location.reload();
-                console.log("onClose");
               }
             );
           }
         },
         (error) => {
-          console.log("error");
-          console.log(error);
         }
       );
     };
@@ -187,8 +177,6 @@ export default defineComponent({
         form.addEventListener(
           "submit",
           function (event) {
-            console.log(".requires-validation");
-            console.log(form);
             if (!form.checkValidity()) {
               event.preventDefault();
               event.stopPropagation();
@@ -210,13 +198,7 @@ export default defineComponent({
 });
 </script>
 
-
-
 <style lang="scss" scoped>
-/*---------------------
-    Normal Breadcrumb
------------------------*/
-
 .normal-breadcrumb {
   height: 300px;
   display: -webkit-box;
@@ -458,5 +440,4 @@ export default defineComponent({
   margin: 0;
   text-align: center;
 }
-
 </style>
