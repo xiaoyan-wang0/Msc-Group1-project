@@ -1,4 +1,8 @@
 class ToolMethod {
+    /** 
+     * Show sentiment label 
+     * @rate  toxic rate.
+     */
     showToxicText(rate) {
         if (rate > 0.54) {
             return " Toxic";
@@ -7,15 +11,11 @@ class ToolMethod {
         }
     }
 
-    showToxicImg(rate) {
-        if (rate > 0 && rate <= 0.54) {
-            return require("@/assets/toxic-green.png");
-        } else {
-            return require("@/assets/toxic-red.png");
-        }
-    }
-
-    showSentiemntText(rate) {
+    /** 
+     * Show sentiment label 
+     * @rate  sentiment rate.
+     */
+    showSentimentText(rate) {
         if (rate < 0.5) {
             return " Negative";
         } else if (rate > 0.5 && rate < 1.5) {
@@ -25,30 +25,31 @@ class ToolMethod {
         }
     }
 
-    showSentiemntImg(rate) {
-        if (rate > 0.4 && rate <= 0.6) {
-            return "Neutral";
-        } else if (rate > 0.6) {
-            return "Positive";
-        } else {
-            return "Negative";
-        }
-    }
-
+    /** 
+     * Format float number to number
+     * @number Number (from toxic and sentiment rate.)
+     */
     changeToPercent(number) {
         return Number.parseInt(number * 100) + "%";
     }
 
+    /** 
+     * Format date 
+     * @string date
+     */
     formatDate(string) {
         const date = new Date(string);
         return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     }
 
+    /**
+     * Traverse sentences and convert bad words into *** whith color. 
+     * @valuel The sentences
+     */
     judgeBadWord(valuel) {
-        //trim() 方法不会改变原始字符串 去掉首尾空白符
         this.contents = valuel.trim()
         var re = ''
-        //正则过滤 模版字符串 \b 是一个整单词
+        // Regular expression filtering
         for (var i = 0; i < badWords.length; i++) {
             if (i == badWords.length - 1)
                 re += `\\b${badWords[i]}\\b`
@@ -58,19 +59,15 @@ class ToolMethod {
         var reg = new RegExp(re, "gi")
         this.contents = this.contents.replace(reg, '<font color="red">' + " *** " + '</font>')
         return this.contents
-
-        // const value2 = badWords;
-        // (value2 || []).map(function (item) {
-        //     let reg = new RegExp(item, 'g');
-        //     valuel = valuel.replace(reg, '<font color="red" >' + " *** " + '</font>');
-        // });
-        // return valuel;
     }
 
+    /**
+     * Traverse sentences and convert bad words into ***.
+     * @valuel The sentences
+     */
     judgeBadWordOther(valuel) {
         this.contents = valuel.trim()
         var re = ''
-        //正则过滤 模版字符串 \b 是一个整单词
         for (var i = 0; i < badWords.length; i++) {
             if (i == badWords.length - 1)
                 re += `\\b${badWords[i]}\\b`
@@ -80,16 +77,13 @@ class ToolMethod {
         var reg = new RegExp(re, "gi")
         this.contents = this.contents.replace(reg, " *** ")
         return this.contents
-
-        // const value2 = badWords;
-        // (value2 || []).map(function (item) {
-        //     let reg = new RegExp(item, 'g');
-        //     valuel = valuel.replace(reg, " *** ");
-        // });
-        // return valuel;
     }
 
-    //取出随机数, maxNum为 取出随机数的个数
+    /**
+     * Randomly extract the array from the array
+     * @arr The array to be traversed
+     * @maxNum Maximum number of random numbers
+     */
     RandomNumBoth(arr, maxNum) {
         var numArr = [];
         //最大的循环次数
@@ -109,9 +103,10 @@ class ToolMethod {
         }
     }
 
-    // add more
+    // Add more function
 }
 
+// Really bad words
 const badWords = [
     '2g1c', '2 girls 1 cup', 'acrotomophilia', 'alabama hot pocket', 'alaskan pipeline', 'anal', 'damn', 'sh!t',
     'anilingus', 'anus', 'apeshit', 'arsehole', 'ass', 'asshole', 'assmunch', 'auto erotic', 'autoerotic',

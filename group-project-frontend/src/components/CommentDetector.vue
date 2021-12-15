@@ -100,11 +100,14 @@ export default {
     const commentStatus = ref();
     const toxicPercent = ref(0);
     const isLoading = ref(false);
-    const toxicText = ref("~");
+    const toxicText = ref(" ~ ");
     const sentiemntPercent = ref(0);
-    const sentiemntText = ref("~");
+    const sentiemntText = ref(" ~ ");
+
+    /**
+     * Comment detect event.
+     */
     const submitDetect = () => {
-      //  Comment detect
       if (commentValue.value !== "") {
         UserApi.detectUserComment(commentValue.value)
           .then((response) => {
@@ -116,19 +119,11 @@ export default {
             toxicText.value = ToolMethod.showToxicText(
               commentStatus.value.toxic[0]
             );
-            // sentiemntPercent.value = Number(
-            //   commentStatus.value.sentiment[0] * 100
-            // ).toFixed(2);
             sentiemntText.value = ToolMethod.showSentiemntText(
               commentStatus.value.sentiment
             );
-            console.log("Comment detect");
-            console.log(response.data);
           })
           .catch((error) => {
-            console.log("error");
-            console.log(error);
-            console.log("error");
             showErroeMessage();
           });
       }
@@ -166,7 +161,6 @@ export default {
       }
       try {
         if (status === "done") {
-          console.log(info.file, info.fileList);
 
           commentValue.value = "";
           if (info.file.response) {
@@ -177,7 +171,6 @@ export default {
             }
           }
 
-          console.log(commentValue.value);
           isLoading.value = false;
           message.success(`${info.file.name} file uploaded successfully.`);
         } else if (status === "error") {

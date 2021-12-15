@@ -191,15 +191,15 @@
               <h5>Recommendation based on history</h5>
             </div>
             <div
-              class="product__sidebar__comment__item"
+              class="amdb_movies__sidebar__comment__item"
               v-for="item in recentRecommendationMovies"
               :key="item.id"
             >
               <router-link :to="'/movie/' + item.id">
-                <div class="product__sidebar__comment__item__pic">
+                <div class="amdb_movies__sidebar__comment__item__pic">
                   <img class="pichover" :src="poster + item.poster" alt="" />
                 </div>
-                <div class="product__sidebar__comment__item__text">
+                <div class="amdb_movies__sidebar__comment__item__text">
                   <h5>
                     <a class="twoline-ellipsis" style="color: white">{{
                       item.title
@@ -351,21 +351,14 @@ export default {
         return;
       }
       user.value = JSON.parse(localStorage.getItem("user")).data;
-      console.log("profile user.value");
-      console.log(user.value);
 
       // fetch history List
       UserApi.getHistoryList(user.value.userId)
         .then((response) => {
-          console.log("getHistoryList");
-          console.log(response.data.data);
           historyListData.value = response.data.data;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
           isLoading.value = false;
         });
@@ -378,8 +371,6 @@ export default {
       //  Fetch recently recommendation movies
       UserApi.getRecentRecommendation(user.value.userId)
         .then((response) => {
-          console.log("getRecommandationByTags");
-          console.log(response.data.data);
           const randomMovie = response.data.data;
           if (randomMovie.length) {
             recentRecommendationMovies.value = ToolMethod.RandomNumBoth(
@@ -389,55 +380,50 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
           isLoading.value = false;
         });
     });
 
+    /**
+     * Get movie likes event.
+     */
     const fetchMovieLike = () => {
       isLoading.value = true;
       // fetch like List
       UserApi.getLikeList(user.value.userId)
         .then((response) => {
-          console.log("showMovieList");
-          console.log(response.data.data);
           likeListData.value = response.data.data;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
           isLoading.value = false;
         });
     };
 
+    /**
+     * Get comments event.
+     */
     const fetchCommentList = () => {
       isLoading.value = true;
       // fetch comment List
       UserApi.getUserCommentList(user.value.userId)
         .then((response) => {
-          console.log("showCommentList");
-          console.log(response.data.data);
           commentsData.value = response.data.data;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
           isLoading.value = false;
         });
     };
 
+    /**
+     * Delete movie likes event.
+     * @record  row data
+     */
     const deleteLike = (record) => {
-      console.log("record");
-      console.log(record);
       ElMessageBox.confirm("Do you confirm to delete this item?", "Warning", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
@@ -446,27 +432,23 @@ export default {
         .then(() => {
           UserApi.deleteLikeList(record.Id)
             .then((response) => {
-              console.log("deleteMovieLikes");
-              console.log(response.data);
               if (response.data.code == 200) {
                 deleteSuccessful();
                 fetchMovieLike();
               }
             })
             .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
               showErroeMessage();
             });
         })
         .catch(() => {});
     };
 
+    /**
+     * Delete comment event.
+     * @record  row data
+     */
     const deleteComment = (record) => {
-      console.log("record");
-      console.log(record);
-
       ElMessageBox.confirm(
         "Do you confirm to delete this comment?",
         "Warning",
@@ -479,17 +461,12 @@ export default {
         .then(() => {
           UserApi.deleteUserCommentList(record.id)
             .then((response) => {
-              console.log("deleteMovieLikes");
-              console.log(response.data);
               if (response.data.code == 200) {
                 deleteSuccessful();
                 fetchCommentList();
               }
             })
             .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
               showErroeMessage();
             });
         })
@@ -506,10 +483,13 @@ export default {
       });
     };
 
+    /**
+     * Select movie likes event.
+     * @record  row data
+     */
     const onSelectFunction = (record) => {
       return {
         onClick: (event) => {
-          console.log("click row", record);
           if (record.id > -1) {
             router.push({
               path: "/movie/" + record.id,
@@ -534,6 +514,7 @@ export default {
     };
 
     return {
+      AMDBAPI,
       user,
       isLoading,
       likeColumns,
@@ -542,7 +523,6 @@ export default {
       commentsData,
       likeListData,
       historyListData,
-      AMDBAPI,
       poster,
       recentRecommendationMovies,
       deleteLike,

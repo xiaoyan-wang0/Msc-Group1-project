@@ -35,8 +35,8 @@
             <el-table-column label="ID" prop="id" />
             <el-table-column label="User ID" prop="userId" />
             <el-table-column label="Date" prop="createTime" sortable />
-            <el-table-column label="Content" prop="comment"  width="300px"/>
-            <el-table-column label="MovieId" prop="movieId" width="110px"/>
+            <el-table-column label="Content" prop="comment" width="300px" />
+            <el-table-column label="MovieId" prop="movieId" width="110px" />
             <el-table-column label="Toxic Rate" prop="toxic" sortable />
             <el-table-column
               label="Sentiment Rate"
@@ -84,22 +84,20 @@ export default {
       return message.error("Sorry, error accured in server");
     };
 
+    /**
+     * Get all report comment event.
+     */
     const fetchAllCommentsList = () => {
       isLoading.value = true;
       // Fetch comments reported
       axios
         .get(env.AMDBAPI + "admin/getReportComments")
         .then((response) => {
-          console.log("getReportComments");
-          console.log(response.data);
           tableData.value = response.data.data;
           deleteDialogVisible.value = false;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           deleteDialogVisible.value = false;
           showErroeMessage();
         });
@@ -107,16 +105,19 @@ export default {
 
     const handleEdit = (a, b) => {};
 
+    /**
+     * Delete reported comment event.
+     * @index  row index
+     * @data  row data
+     */
     const handleDelete = (index, data) => {
-      console.log("data[index]");
-      console.log(data.id);
-      console.log(index);
-      deleteDialogVisible.value = true;
+      e = true;
       deleteId = data.id;
-      console.log("deleteId");
-      console.log(deleteId);
     };
 
+    /**
+     * Comfirm delete reported comments event.
+     */
     const comfirmDelete = () => {
       // Fetch comfirm Block
       // delete comments

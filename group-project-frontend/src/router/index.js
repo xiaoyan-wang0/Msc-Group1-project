@@ -1,20 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AdminHome from '../admin/AdminHome.vue'
-import UserTable from '../admin/User.vue'
-import CommentTable from '../admin/Comment.vue'
-import ReportTable from '../admin/Report.vue'
-import AdminLogin from '../admin/AdminLogin.vue'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
-import MovieDetial from '../views/MovieDetial.vue'
 import MainPage from '../views/MainPage.vue'
-import AboutUs from '../views/AboutUs.vue'
-import Profile from '../components/Profile.vue'
-import PersonalSetting from '../components/PersonalSetting.vue'
-import CommentDetector from '../components/CommentDetector.vue'
-import MainDisplay from '../components/MainDisplay.vue'
-import ResultDisplay from '../components/ResultPage.vue'
 
 const routes = [
   {

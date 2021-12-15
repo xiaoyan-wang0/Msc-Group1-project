@@ -37,10 +37,10 @@ export default {
     const lastestMovieData = ref([]);
     const showRouterView = ref(true);
 
-    //Search event
+    /**
+     * Search event.
+     */
     const SearchMovies = () => {
-      console.log("SearchMovies");
-      console.log(search.value);
       if (search.value != "") {
         showRouterView.value = false;
         nextTick(() => (showRouterView.value = true));

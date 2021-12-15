@@ -115,78 +115,66 @@ export default {
       axios
         .get(env.AMDBAPI + "admin/getToxicRate")
         .then((response) => {
-          console.log("getToxicRate list");
-          console.log(response.data);
           toxic.value = response.data.data;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
       // Fetch Sentiment num
       axios
         .get(env.AMDBAPI + "admin/getSentimentRate")
         .then((response) => {
-          console.log("sentiment list");
-          console.log(response.data);
           sentiment.value = response.data.data;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
       fetchAllCommentsList();
     });
-
+    /**
+     * Get user comments event.
+     */
     const fetchAllCommentsList = () => {
       isLoading.value = true;
       // Fetch  all comments list
       axios
         .get(env.AMDBAPI + "admin/commentsList")
         .then((response) => {
-          console.log("all comments list");
-          console.log(response.data);
           tableData.value = response.data.data;
           deleteDialogVisible.value = false;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           deleteDialogVisible.value = false;
           showErroeMessage();
         });
     };
 
+    /**
+     * Delete comment event.
+     * @index  row index
+     * @data  row data
+     */
     const handleDelete = (index, data) => {
       deleteDialogVisible.value = true;
       deleteId = data[index].id;
-      console.log("deleteId");
-      console.log(deleteId);
     };
 
+    /**
+     * Comfirm delete comment event.
+     */
     const comfirmDelete = () => {
       // Fetch comfirm Block
       // delete comments
       axios
         .get(env.AMDBAPI + "admin/deleteComments?id=" + deleteId)
         .then((response) => {
-          console.log("deleteComments");
-          console.log(response.data);
           if (response.data.code == 200) {
             fetchAllCommentsList();
             openNotificationWithIcon("success");
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     };

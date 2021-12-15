@@ -170,6 +170,7 @@ export default {
         }); // end DOM ready
       })(jQuery); // end jQuery
     });
+
     onBeforeMount(() => {
       // Get the list of official genres for movies.
       axios
@@ -836,7 +837,7 @@ body {
   .login__social__links ul li a {
     width: 380px;
   }
-  .blog__item__text {
+  .amdb_aboutus__item__text {
     padding: 0 50px;
   }
 }
@@ -889,7 +890,7 @@ body {
     background: transparent;
     color: #111111;
   }
-  .product__sidebar {
+  .amdb_movies__sidebar {
     padding-top: 50px;
   }
   .footer__logo {
@@ -974,7 +975,7 @@ body {
     background: transparent;
     color: #111111;
   }
-  .product__sidebar {
+  .amdb_movies__sidebar {
     padding-top: 50px;
   }
   .footer__logo {
@@ -987,7 +988,7 @@ body {
   .footer__copyright__text {
     text-align: center;
   }
-  .blog__details__title h2 {
+  .amdb_aboutus__details__title h2 {
     font-size: 34px !important;
     line-height: normal;
   }
@@ -1000,10 +1001,10 @@ body {
   .btn__all {
     text-align: left;
   }
-  .product__page__title .section-title {
+  .amdb_movies__page__title .section-title {
     margin-bottom: 30px;
   }
-  .product__page__title .product__page__filter {
+  .amdb_movies__page__title .amdb_movies__page__filter {
     text-align: left;
   }
   .amdb__details__rating {
@@ -1011,10 +1012,10 @@ body {
     position: relative;
     margin-bottom: 20px;
   }
-  .blog__details__social {
+  .amdb_aboutus__details__social {
     overflow: hidden;
   }
-  .blog__details__title .blog__details__social a {
+  .amdb_aboutus__details__title .amdb_aboutus__details__social a {
     margin-right: 10px;
     margin-bottom: 10px;
     width: calc(50% - 10px);
@@ -1039,10 +1040,10 @@ body {
   .login__social__links ul li a {
     width: auto;
   }
-  .blog__item__text {
+  .amdb_aboutus__item__text {
     padding: 0 30px;
   }
-  .product__sidebar__view .filter__controls li {
+  .amdb_movies__sidebar__view .filter__controls li {
     margin-right: 2px;
   }
   .login__register {
@@ -1067,20 +1068,20 @@ body {
   .amdb__details__widget ul li span {
     width: 85px;
   }
-  .blog__details__title h2 {
+  .amdb_aboutus__details__title h2 {
     font-size: 30px !important;
     line-height: normal;
   }
-  .blog__details__title .blog__details__social a {
+  .amdb_aboutus__details__title .amdb_aboutus__details__social a {
     padding: 16px 25px 14px 20px;
   }
-  .blog__details__comment__item.blog__details__comment__item--reply {
+  .amdb_aboutus__details__comment__item .amdb_aboutus__details__comment__item--reply {
     padding-left: 0;
   }
-  .blog__details__comment__item__pic {
+  .amdb_aboutus__details__comment__item__pic {
     margin-right: 25px;
   }
-  .blog__details__comment__item__text a {
+  .amdb_aboutus__details__comment__item__text a {
     margin-right: 6px;
   }
   .login__social__links ul li a i {

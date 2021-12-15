@@ -347,10 +347,11 @@ export default {
       onInitial();
     });
 
+    /**
+     * Page initial event
+     */
     const onInitial = () => {
       const user = JSON.parse(localStorage.getItem("user"));
-      console.log("setting user.data");
-      console.log(user);
       userId.value = user.data.userId;
       uploadImgAct.value = env.AMDBAPI + "member/newUserImage";
       userName.value = user.data.userName;
@@ -361,7 +362,6 @@ export default {
         selectValue.value = user.data.movieTags.split(",");
       }
       overViewValue.value = user.data.overView;
-      console.log(user.data.birthday);
       if (!user.data.birthday) {
         birthday.value = new Date().toDateString();
       } else {
@@ -372,10 +372,11 @@ export default {
     };
 
     const popupScroll = () => {
-      console.log("popupScroll");
-      console.log(selectValue.value);
     };
 
+    /**
+     * Submit setting change event.
+     */
     const submitChange = () => {
       if (userName.value == "" || password.value == "") {
         message.success("Sorry, username and password can not be empty!");
@@ -383,44 +384,32 @@ export default {
       }
 
       const settingFormData = new FormData();
-      console.log("settingFormData");
       settingFormData.append("userId", userId.value);
       settingFormData.append("userName", userName.value);
 
       if (password.value !== initialPassword) {
-        console.log("password.value == initialPassword");
-        console.log(password.value == initialPassword);
         settingFormData.append("password", password.value);
       }
 
       settingFormData.append("birthday", formatDate(birthday.value));
       settingFormData.append("movieTags", selectValue.value);
       settingFormData.append("overview", overViewValue.value);
-      console.log(settingFormData);
 
       UserApi.updateUserInfo(settingFormData)
         .then((response) => {
-          console.log("setting submitChange");
-          console.log(response);
           if (response.data.code == 200) {
             message.success("Update successfully!");
             UserApi.getUserInfo(userId.value)
               .then((response) => {
-                console.log("setting getUserInfo");
-                console.log(response);
                 localStorage.setItem("user", JSON.stringify(response.data));
                 location.reload();
               })
               .catch((error) => {
-                console.log("error");
-                console.log(error);
                 showErroeMessage();
               });
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
           showErroeMessage();
         });
     };
@@ -432,18 +421,21 @@ export default {
     const showErroeMessage = () => {
       return message.error("Server is busy, try again later");
     };
+
     const handleChange = () => {
-      console.log("handleChange");
-      console.log(selectValue.value);
     };
+
     const returnFun = () => {
       router.push({
         name: "Profile",
       });
     };
+
+    /**
+     * Img upload event.
+     * @info  file data
+     */
     const handleUploadChange = (info) => {
-      console.log("handleUploadChange");
-      console.log(info);
       if (info.file.status === "uploading") {
         loading.value = true;
         return;
@@ -463,20 +455,20 @@ export default {
       }
     };
 
+    /**
+     * Before img upload event.
+     * @file  file data
+     */
     const beforeUpload = (file) => {
       const isJpgOrPng =
         file.type === "image/jpeg" || file.type === "image/png";
-
       if (!isJpgOrPng) {
         message.error("You can only upload JPG file!");
       }
-
       const isLtKB = file.size / 1024 < 100;
-
       if (!isLtKB) {
         message.error("Image must smaller than 100kb!");
       }
-
       return isJpgOrPng && isLtKB;
     };
 
