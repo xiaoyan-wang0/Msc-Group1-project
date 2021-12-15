@@ -16,22 +16,21 @@ from common.models.reviews import Review
 
 movie_page_Youtube = Blueprint( "movie_page_Youtube",__name__ )
 
+'''
+show Comments from Youtube
+
+movieId
+'''  
 @movie_page_Youtube.route("/movieYoutubeReviews")
 def review():
 
     import json
 
-    # if 'current_user' in  g:
-    #     current_user = g.current_user
-    # if current_user == None : 
-    #     return ops_renderErrJSON( msg ="please login first")
-
-    # Time, user name, user image, comments
-
     req = request.values
     movieName = req['movieName'] 
-
     movieId = req['movieId'] if "movieId" in req else ""
+
+    #check cache
     type = str(3)
     textsql = " 1=1 and movieId = "+movieId+" and type = "+ type
     result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
@@ -59,13 +58,7 @@ def review():
 
         list = []
 
-        #item_dict = json.loads(names)
-
-        #print(len(item_dict['authorDisplayName']))
-        #aList = json.loads(names)
-
-        #return response2.json()
-        #for i in range(0, iter(names)):
+        #setting parameters
         for i in range(0, len(names)):
             content = [reviews[i]]
             result = detector(content)
@@ -80,6 +73,7 @@ def review():
             }
             list.append(youtubeInfoDictionary)
 
+        #save to cache
         model_reviews = Review()
         model_reviews.content = list
         model_reviews.movieId = movieId

@@ -5,7 +5,7 @@ from common.models.serializer import Serializer
 db = SQLAlchemy()
 
 
-
+#database
 class Final(db.Model):
     __tablename__ = 'final'
 

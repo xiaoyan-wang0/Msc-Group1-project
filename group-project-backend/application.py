@@ -11,9 +11,7 @@ manager = Manager( app )
 
 app.config.from_pyfile( "config/base_setting.py" )
 app.config.from_pyfile( "config/local_setting.py" )
-#ops_config=local|production
-#linux export ops_config=local|production
-#windows set ops_config=local|production
+
 
 #do not use this config currently
 if "ops_config" in os.environ:

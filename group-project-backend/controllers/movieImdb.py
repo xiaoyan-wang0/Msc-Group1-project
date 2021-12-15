@@ -23,21 +23,20 @@ import re
 
 movie_page_Imdb = Blueprint( "movie_page_Imdb",__name__ )
 
+'''
+show Comments from IMDb
+
+movieId
+'''
 @movie_page_Imdb.route("/movieImdbReviews")
 def review():
     import json
     from jsonpath import jsonpath
     
-    '''
-    if 'current_user' in  g:
-        current_user = g.current_user
-    if current_user == None : 
-        return ops_renderErrJSON( msg ="please login first")
-    ''' 
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
-
+    #check cache
     type = str(1)
     textsql = " 1=1 and movieId = '"+str(movieId)+"' and type = "+ type
     result = Review.query.filter(text(textsql)).order_by(Review.reviewId.desc()).limit(1).first()
@@ -46,10 +45,11 @@ def review():
 
     exampleMovieId = 'tt1375666'
 
+    #call api
     response = requests.get('https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + movieId)
-    #reviews = jsonpath(response.json(),'$..items')
     reviews = response.json()
 
+    #call detector
     for review in reviews['items']:
         content = [review['content']]
         result = detector(content)
@@ -61,6 +61,7 @@ def review():
         "reviews": reviews
     }
 
+    #save to cache
     model_reviews = Review()
     model_reviews.content = movieReviewsDictionary
     model_reviews.movieId = movieId
@@ -71,22 +72,23 @@ def review():
     db.engine.dispose()
     
     return ops_renderJSON(msg = "Show Successfull!", data = movieReviewsDictionary)
-    
+
+'''
+show movie Information from IMDb
+
+movieId
+'''   
 @movie_page_Imdb.route("/movieImdbInfo")
 def Info():
     import json
     from jsonpath import jsonpath
-    '''
-    if 'current_user' in  g:
-        current_user = g.current_user
-    if current_user == None : 
-        return ops_renderErrJSON( msg ="please login first")
-    '''    
+
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
     #exampleMovieId = 'tt1375666'
 
+    #call urls
     urls = [
     'https://imdb-api.com/en/API/Reviews/k_ds7a1ynu/' + movieId,
     'https://imdb-api.com/en/API/Title/k_ds7a1ynu/' + movieId,
@@ -94,8 +96,9 @@ def Info():
     'https://imdb-api.com/en/API/FullCast/k_ds7a1ynu/' + movieId,
     'https://imdb-api.com/API/Posters/k_ds7a1ynu/' + movieId,
     'https://api.themoviedb.org/3/movie/' + movieId + '?api_key=11fd5ef69d961d91f0f010d0407fd094&language=en-US&page=1'
-]
+    ]
 
+    #call api
     counter = 0
     with FuturesSession() as session:
         futures = [session.get(url) for url in urls]
@@ -136,6 +139,11 @@ def Info():
 
     return ops_renderJSON(msg = "Show Successfull!", data = movieInfoDictionary)
 
+'''
+show movie bottom 10 from IMDb
+
+numberOfMovies
+'''   
 @movie_page_Imdb.route("/movieImdbBottomInfo")
 def bottom():
 
@@ -214,6 +222,11 @@ def bottom():
     
     return ops_renderJSON(msg = "Show Comments Successfull!", data = list)
 
+'''
+show worst comments
+
+
+'''   
 @movie_page_Imdb.route("/movieImdbLoadWorstComments")
 def worst():
     req = request.values

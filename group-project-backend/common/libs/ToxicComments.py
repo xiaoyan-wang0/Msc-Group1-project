@@ -18,7 +18,7 @@ def do_pe(rs):
 
     return pr
 
-
+#call docker model
 def detector(title):
     data = do_pe(title)
 

@@ -5,7 +5,7 @@ from common.models.serializer import Serializer
 db = SQLAlchemy()
 
 
-
+#database
 class Review(db.Model):
     __tablename__ = 'reviews'
 

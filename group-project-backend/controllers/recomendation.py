@@ -30,12 +30,18 @@ import random
 
 rec_page = Blueprint( "rec_page",__name__ )
 
+'''
+get recommendation by a specific movie
+
+movieId
+''' 
 @rec_page.route("/getRecommendationById")
 def getRecommadationById():
-    # response = make_response( redirect( UrlManager.buildUrl("/") ) )
+
     req = request.values
     movieId = req['movieId'] if "movieId" in req else ""
 
+    #check cache
     type = str(1)
     textsql = " 1=1 and movieId = '"+str(movieId)+"' and type = "+ type
     result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
@@ -46,12 +52,15 @@ def getRecommadationById():
     movieId = int(movieId)
     number = 16
 
+    #check dataset
     movie = Final.query.filter_by( movieId = movieId ).first()
     if movie is None:
         return ops_renderErrJSON( msg ="movie doesn't find")
 
+    #call recommendation method
     list = getRecomendation(movieId, number)
 
+    #save to cache
     model_rec = Rec()
     model_rec.content = list
     model_rec.movieId = movieId
@@ -60,23 +69,37 @@ def getRecommadationById():
     db.session.commit()
     db.session.close()
     db.engine.dispose()
+
     return ops_renderJSON( msg = "get recommendation successfully!",data = list)
 
+'''
+get recommendation by comments numbers
+
+''' 
 @rec_page.route("/getMostComments")
 def getMostComments():
     
+    #select database
     sql = 'SELECT movieId FROM usercomments GROUP BY movieId ORDER BY SUM(1) DESC LIMIT 3'
     result = db.session.execute(text(sql)).fetchall()
 
     list = []
+    # call TMDb API
     for lis in result:
         movieInfoDictionary = getTmdbInfo(lis[0], lis[0])
         list.append(movieInfoDictionary)
     db.session.close()
     db.engine.dispose()
+
     return ops_renderJSON( msg = "get most comments successfully!",data = list)
 
+'''
+set movie history 
 
+movieId
+userId
+tagId
+''' 
 @rec_page.route("/setRecommandation")
 def setRecommandation():
     
@@ -87,7 +110,9 @@ def setRecommandation():
 
     if userId != "":
         user = User.query.filter_by( userId = userId ).first()
+        #check if user exist
         if user:
+            #save history record
             model_rec = Recommandation()
             model_rec.movieId = movieId
             model_rec.userId = userId
@@ -96,8 +121,14 @@ def setRecommandation():
             db.session.commit()
             db.session.close()
             db.engine.dispose()
+    
     return ops_renderJSON( msg = "set recommandation successfully!")
 
+'''
+show movie history recently 5
+
+userId
+''' 
 @rec_page.route("/showHistory")
 def showHistory():
     
@@ -108,17 +139,23 @@ def showHistory():
         sql = 'SELECT a.movieId,a.id FROM(select movieId, MAX(id) as id from recommandation WHERE userId = ' + userId +' group by movieId) a  order by a.id desc limit 5;'
         result = db.session.execute(text(sql)).fetchall()
 
+        #call TMDb to get movie Infomation
         movieList = []
         for lis in result:
             movieInfoDictionary = getTmdbInfo(str(lis[0]), lis[0])
             if movieInfoDictionary:
                 movieList.append(movieInfoDictionary)
                 
-
     db.session.close()
     db.engine.dispose()
+
     return ops_renderJSON( msg = "show history successfully!",data = movieList)
 
+'''
+get recommandation based on recently history records
+
+userId
+''' 
 @rec_page.route("/getRecommandation")
 def getRecommandation():
 
@@ -153,6 +190,7 @@ def getRecommandation():
 
         movie = []
 
+        #recommendation by tag
         if result:
             for lis in result:             
                 tagName = num_to_label[str(lis[0])]
@@ -169,8 +207,14 @@ def getRecommandation():
 
     db.session.close()
     db.engine.dispose()
+
     return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
 
+'''
+get recommandation by tags user set
+
+userId
+''' 
 @rec_page.route("/getRecommandationByTags")
 def getRecommandationByTags():
 
@@ -178,6 +222,7 @@ def getRecommandationByTags():
     userId = req['userId'] if "userId" in req else ""
     userInfo = Userinfo2.query.filter_by( userId = userId ).first()
 
+    #check cache
     type = str(3)
     textsql = " 1=1 and userId = '"+str(userId)+"' and type = "+ type 
     result = Rec.query.filter(text(textsql)).order_by(Rec.id.desc()).limit(1).first()
@@ -207,7 +252,7 @@ def getRecommandationByTags():
     '37':'Western'
     }
     movie = []
-    #if num_to_label:
+    # recommendate by tag
     if userInfo:
         tag = userInfo.movieTags
         #tag = "28,99,37"
@@ -233,7 +278,7 @@ def getRecommandationByTags():
             movieList.append(movieInfoDictionary)
 
 
-
+    #cache saving
     model_rec = Rec()
     model_rec.content = movieList
     model_rec.userId = userId
@@ -246,6 +291,13 @@ def getRecommandationByTags():
     
     return ops_renderJSON( msg = "get recommandation successfully!",data = movieList)
 
+'''
+get recommandation by tags 
+core method
+
+tagName
+number
+''' 
 def getTagMovies(tagName, number):
     import pandas as pd
     from pandas import DataFrame,Series
@@ -259,19 +311,17 @@ def getTagMovies(tagName, number):
     return movies
 
 
+'''
+get recommandation - cotent based
+core method
+
+movieId
+number - how many movie to recommend
+''' 
 def getRecomendation(movieId, number):
     #train_movies_1 = pd.read_csv('C:/final.csv')
+    #path on ubuntu(AWS)
     train_movies_1 = pd.read_csv('~/Msc-Group1-project/group-project-backend/database/final.csv')
-    #print(type(train_movies_1))
-    # train_movies_1.dtypes
-    # train_movies_1.isnull().sum(axis=0)
-    # train_movies_1.dropna()
-    # train_movies_1.drop(["Unnamed: 0","Unnamed: 0.1",'genre_ids'], axis = 1,inplace = True)
-    # #train_movies_1
-    #train_movies_1=train_movies_1.drop_duplicates()
-    # #train_movies_1
-    #train_movies_1=train_movies_1.reset_index(drop=True)
-    #train_movies_1
 
     tf=TfidfVectorizer(stop_words="english")
     tf_matrix= tf.fit_transform(train_movies_1['overview'])
@@ -285,8 +335,6 @@ def getRecomendation(movieId, number):
     sim_score= sorted (sim_score, key=lambda x: x[1], reverse= True)
     sim_score=sim_score[1:number]
     sim_index=[i[0] for i in sim_score]
-    # print(train_movies_1["id"].iloc[sim_index])
-    # print(type(train_movies_1["id"].iloc[sim_index]))
 
     dic = train_movies_1["id"].iloc[sim_index]
     list = []
@@ -298,8 +346,16 @@ def getRecomendation(movieId, number):
         movieInfoDictionary = getTmdbInfo(theId, movieId)
         if movieInfoDictionary:
             list.append(movieInfoDictionary)
+            
     return list
 
+'''
+get TMDb Information
+core method
+
+theId
+movieId
+''' 
 def getTmdbInfo(theId, movieId):
     # I am using a Python Library for the TMDB API which is very convinient and easy to use.
     tmdb = TMDb()
