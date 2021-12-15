@@ -1,0 +1,57 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Status,Text Area 1
+1,Document,,,,,,,,,,Guest Use Case Diagram
+2,Page,,,,,,,,,,Page 1
+3,Text,Standard,2,,,,,,,,Guest Use Case Diagram
+4,Actor,UML,2,,,,,,,,Guest User
+5,Use Case,UML,2,,,,,,,,Visit AMDB
+6,Use Case,UML,2,,,,,,,,Sign in
+7,Use Case,UML,2,,,,,,,,View popular movies
+8,Use Case,UML,2,,,,,,,,View upcoming movies
+9,Use Case,UML,2,,,,,,,,Recommend AMDb popular movies
+10,Use Case,UML,2,,,,,,,,Search movies
+11,Use Case,UML,2,,,,,,,,Detect image/comment
+12,Use Case,UML,2,,,,,,,,About Us Page
+13,Use Case,UML,2,,,,,,,,Movie detail page
+14,Use Case,UML,2,,,,,,,,Homepage
+15,Use Case,UML,2,,,,,,,,Detector Page
+16,Use Case,UML,2,,,,,,,,Click the movie poster
+17,Use Case,UML,2,,,,,,,,Movie Recommendation - A
+18,Use Case,UML,2,,,,,,,,Movie Recommendation - B
+19,Use Case,UML,2,,,,,,,,View similar movies
+20,Use Case,UML,2,,,,,,,,view the worst movies
+21,Use Case,UML,2,,,,,,,,Registration
+22,Text,Standard,2,,,,,,,,<include>
+23,Use Case,UML,2,,,,,,,,Invalid Email/Password
+24,Text,Standard,2,,,,,,,,<extend>
+25,Use Case,UML,2,,,,,,,,Result page
+26,Text,Standard,2,,,,,,,,<extend>
+27,Text,Standard,2,,,,,,,,<include>
+28,Text,Standard,2,,,,,,,,
+29,Text,Standard,2,,,,,,,,<extend>
+30,Text,Standard,2,,,,,,,,<include>
+31,Text,Standard,2,,,,,,,,<include>
+32,Line,,2,,,4,5,None,None,,
+33,Line,,2,,,5,14,None,Arrow,,
+34,Line,,2,,,14,6,None,Arrow,,
+35,Line,,2,,,14,10,None,Arrow,,
+36,Line,,2,,,14,16,None,Arrow,,
+37,Line,,2,,,14,8,None,Arrow,,
+38,Line,,2,,,14,7,None,Arrow,,
+39,Line,,2,,,14,17,None,Arrow,,
+40,Line,,2,,,5,15,None,Arrow,,
+41,Line,,2,,,5,12,None,Arrow,,
+42,Line,,2,,,17,9,None,Arrow,,
+43,Line,,2,,,12,20,None,Arrow,,
+44,Line,,2,,,18,19,None,Arrow,,
+45,Line,,2,,,8,16,None,Arrow,,
+46,Line,,2,,,7,16,None,Arrow,,
+47,Line,,2,,,19,16,None,Arrow,,
+48,Line,,2,,,9,16,None,Arrow,,
+49,Line,,2,,,20,16,None,Arrow,,
+50,Line,,2,,,6,21,None,Arrow,,
+51,Line,,2,,,23,21,None,Arrow,,
+52,Line,,2,,,25,16,None,Arrow,,
+53,Line,,2,,,25,10,None,Arrow,,
+54,Line,,2,,,13,16,None,Arrow,,
+55,Line,,2,,,13,18,None,Arrow,,
+56,Line,,2,,,15,11,None,Arrow,,
