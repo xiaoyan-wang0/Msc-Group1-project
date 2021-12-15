@@ -21,5 +21,6 @@ npm run build
 npm run test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Link
+http://amdbmovie.com/
+http://amdbmovie.com/admin
