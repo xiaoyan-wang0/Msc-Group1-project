@@ -1,18 +1,18 @@
 <template>
   <div class="about-us-div">
-    <section class="blog-details spad">
+    <section class="amdb_aboutus-details spad">
       <div class="container">
         <div class="row d-flex justify-content-center">
           <div class="col-lg-8">
-            <div class="blog__details__title">
+            <div class="amdb_aboutus__details__title">
               <h6>Last update date <span>- Nov 25th, 2021</span></h6>
               <h2>AMDB for Beginners:</h2>
               <h6>CUSTOMISED MULTI-SOURCED MOVIE GUIDE</h6>
             </div>
           </div>
           <div class="col-lg-8">
-            <div class="blog__details__content">
-              <div class="blog__details__text">
+            <div class="amdb_aboutus__details__content">
+              <div class="amdb_aboutus__details__text">
                 <p>
                   AMDb (Authentic Movie Database) is a customised multi-sourced
                   movie evaluation system. By using AMDb, people can simply
@@ -43,7 +43,7 @@
                   systems.
                 </p>
               </div>
-              <div class="blog__details__item__text">
+              <div class="amdb_aboutus__details__item__text">
                 <h4>Comment detector:</h4>
                 <p>
                   For AMDb, when users post their comment on AMDb platform, it
@@ -60,7 +60,7 @@
                   comment box.
                 </p>
               </div>
-              <div class="blog__details__item__text">
+              <div class="amdb_aboutus__details__item__text">
                 <h4>Toxic Level Icons and Explanation</h4>
                 <div class="M" style="">
                   <div class="t">
@@ -88,7 +88,7 @@
                   </p>
                 </div>
               </div>
-              <div class="blog__details__item__text">
+              <div class="amdb_aboutus__details__item__text">
                 <h4>Sentiment Level Icons and Explanation</h4>
                 <div class="M" style="">
                   <div class="t">
@@ -113,7 +113,7 @@
           </div>
 
           <div class="col-lg-8">
-            <div class="blog__details__item__text">
+            <div class="amdb_aboutus__details__item__text">
               <h4>The worst movies</h4>
               <p>
                 On AMDb, there has a section where we are getting the
@@ -128,7 +128,7 @@
               </p>
             </div>
             <!-- IMDB bot 10 movies  -->
-            <div class="trending__product" id="imdbbot">
+            <div class="trending__amdb_movies" id="imdbbot">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8"></div>
                 <div class="col-lg-4 col-md-4 col-sm-4">
@@ -149,12 +149,12 @@
                   :key="item.id"
                 >
                   <router-link :to="'/movie/' + item.tmdb_Id">
-                    <div class="product__item">
+                    <div class="amdb_movies__item">
                       <div
                         v-bind:style="{
                           'background-image': 'url(' + item.posters[0] + ')',
                         }"
-                        class="product__item__pic set-bg testmain"
+                        class="amdb_movies__item__pic set-bg testmain"
                       >
                         <div class="ep">
                           {{ Number(item.rating).toFixed(1) }} / 10
@@ -163,7 +163,7 @@
                           <i class="fa fa-eye"></i> {{ item.year }}
                         </div>
                       </div>
-                      <div class="product__item__text">
+                      <div class="amdb_movies__item__text">
                         <ul>
                           <li
                             v-for="genre in item.genres.slice(0, 2)"
@@ -183,8 +183,8 @@
             </div>
           </div>
           <div id="teaminfo" class="col-lg-8 teaminfo">
-            <div class="blog__details__content">
-              <div class="blog__details__text">
+            <div class="amdb_aboutus__details__content">
+              <div class="amdb_aboutus__details__text">
                 <div class="section-title">
                   <h4>Our Team</h4>
                 </div>
@@ -240,9 +240,6 @@ export default {
           imdbBotMovies.value = response.data.data;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     });
@@ -276,7 +273,7 @@ div .t {
   width: 150px;
 }
 
-.blog-details {
+.amdb_aboutus-details {
   padding-top: 70px;
 }
 
@@ -285,12 +282,12 @@ div .t {
   padding-bottom: 100px;
 }
 
-.blog__details__title {
+.amdb_aboutus__details__title {
   text-align: center;
   margin-bottom: 70px;
 }
 
-.blog__details__title h6 {
+.amdb_aboutus__details__title h6 {
   font-size: 15px;
   color: #ffffff;
   font-weight: 700;
@@ -298,13 +295,13 @@ div .t {
   margin-bottom: 30px;
 }
 
-.blog__details__title h6 span {
+.amdb_aboutus__details__title h6 span {
   color: #b7b7b7;
   font-weight: 400;
   text-transform: none;
 }
 
-.blog__details__title h2 {
+.amdb_aboutus__details__title h2 {
   color: #ffffff;
   font-size: 48px;
   font-weight: 700;
@@ -312,7 +309,7 @@ div .t {
   margin-bottom: 38px;
 }
 
-.blog__details__title .blog__details__social a {
+.amdb_aboutus__details__title .amdb_aboutus__details__social a {
   display: inline-block;
   font-size: 15px;
   color: #ffffff;
@@ -320,40 +317,40 @@ div .t {
   border-radius: 2px;
   margin-right: 6px;
 }
-.blog__details__pic {
+.amdb_aboutus__details__pic {
   margin-bottom: 30px;
 }
 
-.blog__details__pic img {
+.amdb_aboutus__details__pic img {
   min-width: 100%;
 }
 
-.blog__details__text {
+.amdb_aboutus__details__text {
   margin-bottom: 40px;
 }
 
-.blog__details__text p {
+.amdb_aboutus__details__text p {
   color: #ffffff;
   font-size: 17px;
   line-height: 30px;
 }
 
-.blog__details__item__text {
+.amdb_aboutus__details__item__text {
   margin-bottom: 42px;
 }
 
-.blog__details__item__text h4 {
+.amdb_aboutus__details__item__text h4 {
   color: #ffffff;
   font-weight: 700;
   margin-bottom: 35px;
 }
 
-.blog__details__item__text img {
+.amdb_aboutus__details__item__text img {
   min-width: 100%;
   margin-bottom: 26px;
 }
 
-.blog__details__item__text p {
+.amdb_aboutus__details__item__text p {
   color: #ffffff;
   font-size: 17px;
   line-height: 30px;
@@ -367,25 +364,25 @@ div .t {
   .spad {
     padding-bottom: 20px;
   }
-  .blog-details {
+  .amdb_aboutus-details {
     padding-top: 10px;
   }
   .about-us-div {
-    .blog__details__title h2 {
+    .amdb_aboutus__details__title h2 {
       line-height: 30px !important;
     }
-    .blog__details__text p {
+    .amdb_aboutus__details__text p {
       font-size: 13px;
       line-height: 17px;
     }
-    .blog__details__item__text h4 {
+    .amdb_aboutus__details__item__text h4 {
       margin-bottom: 0px;
     }
-    .blog__details__item__text p {
+    .amdb_aboutus__details__item__text p {
       font-size: 13px;
       line-height: 17px;
     }
-    .blog__details__item__text img {
+    .amdb_aboutus__details__item__text img {
       margin-bottom: 0px;
     }
   }

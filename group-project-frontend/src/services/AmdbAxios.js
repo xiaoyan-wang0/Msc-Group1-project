@@ -7,7 +7,6 @@ class myAxios {
             timeout: 20000, // time out
             headers: { 'Content-Type': 'multipart/form-data' }
         });
-
         return service(axiosConfig)
     }
 
@@ -15,9 +14,7 @@ class myAxios {
         const service = axios.create({
             baseURL: env.tmdbmovieapi, // tmdb api
             timeout: 20000, // time out
-
         });
-
         return service(axiosConfig)
     }
 }

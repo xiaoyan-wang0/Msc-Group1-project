@@ -31,12 +31,11 @@
               sortable
             />
             <el-table-column prop="userName" label="UserName" />
-            <el-table-column prop="email" label="Email" width="150px"/>
+            <el-table-column prop="email" label="Email" width="150px" />
             <el-table-column prop="movieTags" label="Genres" />
             <el-table-column prop="ifBlocked" label="Block" />
-            <el-table-column prop="overView" label="Overview"  width="300px"/>
-            <el-table-column fixed="right" label="Operations" 
-              width="175px">
+            <el-table-column prop="overView" label="Overview" width="300px" />
+            <el-table-column fixed="right" label="Operations" width="175px">
               <template #default="scope">
                 <el-button
                   type="danger"
@@ -62,7 +61,6 @@
 <script>
 import { ref, inject, onBeforeMount } from "vue";
 import { message, notification } from "ant-design-vue";
-import router from "@/router";
 import env from "@/env.js";
 
 export default {
@@ -76,17 +74,20 @@ export default {
     const dialogContent = ref("");
     let blockUserId = "";
     let isblockorUn = 0;
+
     onBeforeMount(() => {
       fetchUserList();
     });
 
+    /**
+     * Block user event.
+     * @index  row index
+     * @data  row data
+     * @isblock  check block
+     */
     const handleClickBlock = (index, data, isblock) => {
       blockDialogVisible.value = true;
       blockUserId = data[index].userId;
-      console.log("handleClickBlock");
-      console.log(index);
-      console.log(blockUserId);
-      console.log(data);
       if (isblock === 0) {
         isblockorUn = 0;
         dialogContent.value = "Are you sure to block this user?";
@@ -96,33 +97,32 @@ export default {
       }
     };
 
+    /**
+     * get user info event.
+     */
     const fetchUserList = () => {
       isLoading.value = true;
       // Fetch  all user list
       axios
         .get(env.AMDBAPI + "admin/userList")
         .then((response) => {
-          console.log("get userList");
-          console.log(response.data);
           tableData.value = response.data.data;
           isLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     };
 
+    /**
+     * Comform block user event.
+     */
     const comfirmBlock = () => {
       if (isblockorUn === 0) {
         // Fetch comfirm Block
         axios
           .get(env.AMDBAPI + "admin/blockUser?userId=" + blockUserId)
           .then((response) => {
-            console.log("blockUser");
-            console.log(response.data);
             if (response.data.code == 200) {
               blockDialogVisible.value = false;
               openNotificationWithIcon("success", "block");
@@ -131,9 +131,6 @@ export default {
           })
           .catch((error) => {
             blockDialogVisible.value = false;
-            console.log("error");
-            console.log(error);
-            console.log("error");
             showErroeMessage();
           });
       } else {
@@ -141,13 +138,14 @@ export default {
       }
     };
 
+    /**
+     * Unblock user event.
+     */
     const handleClicUnblock = () => {
       // Fetch comfirm Block
       axios
         .get(env.AMDBAPI + "admin/unBlockUser?userId=" + blockUserId)
         .then((response) => {
-          console.log("blockUser");
-          console.log(response.data);
           if (response.data.code == 200) {
             blockDialogVisible.value = false;
             openNotificationWithIcon("success", "unblock");
@@ -156,9 +154,6 @@ export default {
         })
         .catch((error) => {
           blockDialogVisible.value = false;
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     };

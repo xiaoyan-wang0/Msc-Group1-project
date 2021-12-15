@@ -338,7 +338,7 @@
                                 </a-popover>
                               </li>
                               <li class="sentiemnt-rate">
-                                {{ showSentiemntText(item.sentiment) }}
+                                {{ showSentimentText(item.sentiment) }}
                                 <a-popover title="Sentimental">
                                   <template #content>
                                     <p>
@@ -532,7 +532,7 @@
                                 </a-popover>
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment)
+                                {{ showSentimentText(item.sentiment)
                                 }}<a-popover title="Sentimental">
                                   <template #content>
                                     <p>
@@ -675,7 +675,7 @@
                                     : 'report'
                                 "
                               >
-                                {{ showSentiemntText(item.sentiment)
+                                {{ showSentimentText(item.sentiment)
                                 }}<a-popover title="Sentimental">
                                   <template #content>
                                     <p>
@@ -819,7 +819,7 @@
                                 /></a-popover>
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment)
+                                {{ showSentimentText(item.sentiment)
                                 }}<a-popover title="Sentimental">
                                   <template #content>
                                     <p>
@@ -955,7 +955,7 @@
                                 /></a-popover>
                               </li>
                               <li class="report">
-                                {{ showSentiemntText(item.sentiment)
+                                {{ showSentimentText(item.sentiment)
                                 }}<a-popover title="Sentimental">
                                   <template #content>
                                     <p>
@@ -1004,21 +1004,21 @@
               </template>
             </a-empty>
             <div
-              class="product__sidebar__comment__item"
+              class="amdb_movies__sidebar__comment__item"
               v-for="item in recommendationMovies"
               :key="item.id"
             >
               <router-link
                 :to="{ path: '/movie/' + item.id, query: { id: item.tmdb_Id } }"
               >
-                <div class="product__sidebar__comment__item__pic">
+                <div class="amdb_movies__sidebar__comment__item__pic">
                   <img
                     class="pichover"
                     :src="moviePoster + item.poster"
                     alt=""
                   />
                 </div>
-                <div class="product__sidebar__comment__item__text">
+                <div class="amdb_movies__sidebar__comment__item__text">
                   <h5>
                     <a class="twoline-ellipsis" style="color: white">{{
                       item.title
@@ -1081,7 +1081,6 @@ export default {
     const movie = ref({});
     const casts = ref({});
     const castList = ref([]);
-    let crewList = [];
     const castDetail = ref({});
     const start = ref(0);
     const route = useRoute();
@@ -1113,6 +1112,8 @@ export default {
     const commentLoading = ref(false);
     const isShowCastDetail = ref(false);
     const AMDBAPI = ref(env.AMDBAPI);
+    let reportCommentId = "";
+    let crewList = [];
     let youtube = ref(null);
     moviePoster.value = env.tmdbpic;
     movieid.value = route.params.id;
@@ -1142,9 +1143,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
 
@@ -1155,24 +1153,16 @@ export default {
         movie.value.genres[0].id
       )
         .then((response) => {
-          console.log("setRecommandation");
-          console.log(response.data);
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
 
       //Fetch trailer
       UserApi.getMovieTrailer(movieid.value).then((response) => {
         const video = response.data.results;
-        console.log("video_id");
-        console.log(video);
         // TODO no videos
         video_id.value = video[0].key;
-        console.log(video_id.value);
       });
 
       //Fetch casts
@@ -1237,6 +1227,9 @@ export default {
       };
     });
 
+    /**
+     * Get AMDB comments.
+     */
     const getAMDBComments = () => {
       commentLoading.value = true;
       //Fetch AMDB Comments
@@ -1247,21 +1240,17 @@ export default {
           commentLoading.value = false;
         })
         .catch((error) => {
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
           commentLoading.value = false;
         });
     };
 
+    /**
+     * Add  Director to cast list.
+     */
     const addCrewToCast = () => {
-      console.log("crewList");
-      console.log(crewList);
       for (let item of crewList) {
         if (item.job == "Director") {
-          console.log("Director");
-          console.log(item);
           castList.value.push(item);
         }
       }
@@ -1275,6 +1264,10 @@ export default {
       return ToolMethod.showToxicText(rate);
     };
 
+    /**
+     * Show toxic image
+     * @rate  toxic rate.
+     */
     const showToxicImg = (rate) => {
       if (rate > 0.54) {
         return require("@/assets/toxic-red.png");
@@ -1283,6 +1276,10 @@ export default {
       }
     };
 
+    /**
+     * Show sentiment image
+     * @rate  sentiment rate.
+     */
     const showSentimentImg = (rate) => {
       if (rate < 0.5) {
         return require("@/assets/sentiment-red.png");
@@ -1293,8 +1290,8 @@ export default {
       }
     };
 
-    const showSentiemntText = (rate) => {
-      return ToolMethod.showSentiemntText(rate);
+    const showSentimentText = (rate) => {
+      return ToolMethod.showSentimentText(rate);
     };
 
     const formatDate = (value) => {
@@ -1309,11 +1306,11 @@ export default {
       return message.error("Server is busy, try again later");
     };
 
+    /**
+     * Change tab function.
+     * @value  tab name
+     */
     const changeCommentTab = (value) => {
-      console.log("changeCommentTab");
-      console.log(value);
-      console.log(tmdbAllreview.value.length);
-      console.log(tmdbAllreview.value.length > 0);
       commentLoading.value = true;
       switch (value) {
         case "tmdb": //Fetch TMDB Comments
@@ -1327,14 +1324,9 @@ export default {
                 tmdbreview.value = response.data.data.reviews[0];
                 tmdbAllreview.value = response.data.data.reviews[0];
               }
-              console.log("tmdbreview detail");
-              console.log(tmdbreview.value);
               commentLoading.value = false;
             })
             .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
               showErroeMessage();
               commentLoading.value = false;
             });
@@ -1351,16 +1343,10 @@ export default {
               if (response.data.data.reviews.items) {
                 imdbreview.value = response.data.data.reviews.items;
                 imdbAllreview.value = response.data.data.reviews.items;
-                console.log("imdbreview detail");
-                console.log(imdbreview.value);
-                console.log(response.data.data.reviews.items);
               }
               commentLoading.value = false;
             })
             .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
               showErroeMessage();
               commentLoading.value = false;
             });
@@ -1376,16 +1362,10 @@ export default {
               if (response.data.data) {
                 youtubereview.value = response.data.data;
                 youtubeAllreview.value = response.data.data;
-                console.log("youtubereview detail");
-                console.log(youtubereview.value);
-                console.log(response.data.data);
               }
               commentLoading.value = false;
             })
             .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
               showErroeMessage();
               commentLoading.value = false;
             });
@@ -1402,16 +1382,9 @@ export default {
                 twitterreview.value = response.data.data;
                 twitterAllreview.value = response.data.data;
               }
-              console.log("twitterreview detail");
-              console.log(response);
-              console.log(response.data.data);
-              console.log(twitterreview.value);
               commentLoading.value = false;
             })
             .catch((error) => {
-              console.log("error");
-              console.log(error);
-              console.log("error");
               showErroeMessage();
               commentLoading.value = false;
             });
@@ -1422,7 +1395,9 @@ export default {
       }
     };
 
-    // comments
+    /**
+     * Check before post comment.
+     */
     const handleSubmit = () => {
       if (!authLogin() || !commentsValue.value) {
         return;
@@ -1442,7 +1417,7 @@ export default {
           Number(commentStatus.toxic[0] * 100).toFixed(1) +
           "%)";
         popSentimentText.value =
-          "Sentiment is " + showSentiemntText(commentStatus.sentiment[0]);
+          "Sentiment is " + showSentimentText(commentStatus.sentiment[0]);
         commentConfirmLoading.value = false;
         if (commentStatus.toxic[0] > 0.54) {
           popHightToxicText.value =
@@ -1451,6 +1426,9 @@ export default {
       });
     };
 
+    /**
+     *  Post comments.
+     */
     const confirmAddComment = () => {
       commentLoading.value = true;
       addCommentsDialog.value = false;
@@ -1462,8 +1440,6 @@ export default {
       // Post comments
       UserApi.postUserComment(postFormData).then((response) => {
         // tmdbreview.value = response.data;
-        console.log("Add comments ");
-        console.log(response.data);
         submitting.value = false;
         commentsValue.value = "";
         commentLoading.value = false;
@@ -1500,49 +1476,43 @@ export default {
 
     const showCastDetail = (id) => {
       isShowCastDetail.value = true;
-      console.log("showCastDetail");
-      console.log(id);
       //Fetch Cast Detials
       UserApi.getMovieCastsDetail(id).then((response) => {
         castDetail.value = response.data;
-        console.log("castDetail detail");
-        console.log(castDetail.value);
       });
     };
 
     //AMDB filter change
     const handleFilterChange = (value) => {
-      console.log("handleFilterChange");
       amdbreview.value = commentsFilter(amdbAllreview.value, value);
     };
 
     //TMDB filter change
     const handleTMDBFilterChange = (value) => {
-      console.log("handleFilterChange2");
       tmdbreview.value = commentsFilter2(tmdbAllreview.value, value);
     };
 
     //IMDB filter change
     const handleIMDBFilterChange = (value) => {
-      console.log("handleFilterChange2");
       imdbreview.value = commentsFilter2(imdbAllreview.value, value);
     };
 
     //Youtube filter change
     const handleYoutubeFilterChange = (value) => {
-      console.log("handleFilterChange2");
       youtubereview.value = commentsFilter2(youtubeAllreview.value, value);
     };
 
     //Twitter filter change
     const handleTwitterFilterChange = (value) => {
-      console.log("handleFilterChange2");
       twitterreview.value = commentsFilter2(twitterAllreview.value, value);
     };
 
+    /**
+     * Filter function based on toxic or sentiment label.
+     * @value  data
+     * @filter label
+     */
     const commentsFilter = (value, filter) => {
-      console.log("commentsFilter");
-      console.log(value);
       let comments = [];
       if (filter === "notoxic") {
         for (let i of value) {
@@ -1577,14 +1547,14 @@ export default {
       } else {
         comments = value;
       }
-      console.log("..............comments");
-      console.log(comments);
       return comments;
     };
-
+    /**
+     * Filter function based on toxic or sentiment label.
+     * @value  data
+     * @filter label
+     */
     const commentsFilter2 = (value, filter) => {
-      console.log("commentsFilter");
-      console.log(value);
       let comments = [];
       if (filter === "notoxic") {
         for (let i of value) {
@@ -1619,21 +1589,18 @@ export default {
       } else {
         comments = value;
       }
-      console.log("..............comments");
-      console.log(comments);
       return comments;
     };
 
-    // Add to like list
+    /**
+     * Add to like list
+     */
     const addLikeList = () => {
       if (!authLogin()) {
         return;
       }
       UserApi.addLikeList(movieid.value, currentUser.value.data.userId).then(
         (response) => {
-          // tmdbreview.value = response.data;
-          console.log("Add like list ");
-          console.log(response.data);
           if (response.data.code == 200) {
             notification.open({
               duration: 2,
@@ -1652,8 +1619,10 @@ export default {
       );
     };
 
-    // Report AMDB comments
-    let reportCommentId = "";
+    /**
+     * Report AMDB comments
+     * @item  data
+     */
     const amdbReport = (item) => {
       if (!authLogin()) {
         return;
@@ -1666,8 +1635,6 @@ export default {
       // report comments
       UserApi.reportComment(reportCommentId, currentUser.value.data.userId)
         .then((response) => {
-          console.log("confirmReportComment ");
-          console.log(response.data);
           reportCommentsDialog.value = false;
           if (response.data.code === 200) {
             message.success("Thanks for your report!");
@@ -1675,14 +1642,13 @@ export default {
         })
         .catch((error) => {
           reportCommentsDialog.value = false;
-          console.log("error");
-          console.log(error);
-          console.log("error");
           showErroeMessage();
         });
     };
 
-    // Need log in
+    /**
+     * Check wheth need to login
+     */
     const authLogin = () => {
       if (!localStorage.getItem("user")) {
         router.push({
@@ -1702,10 +1668,18 @@ export default {
       return ToolMethod.judgeBadWordOther(str);
     };
 
+    /**
+     * Check img url.
+     * @item  data
+     */
     const linkCheck = (item) => {
       return item.includes("http");
     };
 
+    /**
+     * Format img url.
+     * @item  data
+     */
     const checkLink = (item) => {
       return item.slice(1, item.length);
     };
@@ -1756,7 +1730,7 @@ export default {
       showCastDetail,
       ShowTrailer,
       showToxicText,
-      showSentiemntText,
+      showSentimentText,
       cancelAddComment,
       confirmAddComment,
       confirmReportComment,
@@ -1793,7 +1767,7 @@ export default {
 .notrailer {
   color: #fff;
 }
-.product__sidebar__comment__item__text ul {
+.amdb_movies__sidebar__comment__item__text ul {
   padding-left: 0 !important;
 }
 .amdb-details {
@@ -1878,7 +1852,6 @@ export default {
 .amdb__details__rating span {
   display: block;
   font-size: 18px;
-  // color: #b7b7b7;
 }
 
 .amdb__details__widget {
